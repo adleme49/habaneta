@@ -7,7 +7,7 @@ import TilesPreviewLayout from '../tilesPreview/TilesPreviewLayout.component';
 const MainLayaout: React.FC = () => {
   return (
     <Fragment>
-      <IonGrid>
+      <IonGrid style={{ height: '100%' }}>
         <IonRow>
           <IonCol>
             <TilesBrowserLayout />
