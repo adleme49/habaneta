@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonRow, IonCol } from '@ionic/react';
 
 const TilesBrowserLayout: React.FC = () => {
   return (
