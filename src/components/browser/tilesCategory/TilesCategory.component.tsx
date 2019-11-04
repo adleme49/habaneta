@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { IonList, IonListHeader, IonLabel, IonItem } from '@ionic/react';
+import { IonList, IonListHeader, IonLabel } from '@ionic/react';
 import TilesCategoryItem from './TilesCategoryItem.component';
 
 const TilesCategory: React.FC<{ title: string }> = ({ title }) => {

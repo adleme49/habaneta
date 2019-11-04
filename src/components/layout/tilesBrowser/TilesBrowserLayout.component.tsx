@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { IonRow, IonCol } from '@ionic/react';
 import TilesCategory from '../../browser/tilesCategory/TilesCategory.component';
+import TilesSelector from '../../browser/tilesSelector/TilesSelector.component';
 
 const TilesBrowserLayout: React.FC = () => {
   return (
@@ -9,11 +10,13 @@ const TilesBrowserLayout: React.FC = () => {
         <h2>Buscador de Lozas</h2>
       </IonRow>
       <IonRow>
-        <IonCol size='8'>
+        <IonCol size='7 '>
           <TilesCategory title={'TILES'} />
           <TilesCategory title={'BORDER'} />
         </IonCol>
-        <IonCol>Loza</IonCol>
+        <IonCol>
+          <TilesSelector />
+        </IonCol>
       </IonRow>
     </Fragment>
   );
