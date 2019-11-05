@@ -1,15 +1,20 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { IonList } from '@ionic/react';
 import TileItem from './TileItem.component';
+import GeneralContext from '../../../context/global/general.context';
+
 const TilesSelector: React.FC = () => {
-  const tiles = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const { selectedCategory } = useContext(GeneralContext);
+  const tiles = ['a', 'b', 'c'];
   return (
     <Fragment>
-      <IonList>
-        {tiles.map(tile => (
-          <TileItem key={tile} />
-        ))}
-      </IonList>
+      {selectedCategory !== null ? (
+        <IonList>
+          {tiles.map(tile => (
+            <TileItem key={tile} />
+          ))}
+        </IonList>
+      ) : null}
     </Fragment>
   );
 };

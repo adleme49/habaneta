@@ -1,11 +1,24 @@
-import React from 'react';
-import { IonItem } from '@ionic/react';
+import React, { useContext } from 'react';
+import { IonItem, IonLabel } from '@ionic/react';
 import { borderCategory, tileCategory } from '../../../context/interfaces';
+import GeneralContext from '../../../context/global/general.context';
 
 const CategoryItem: React.FC<{
   categoryItem: borderCategory | tileCategory;
 }> = ({ categoryItem }) => {
-  return <IonItem>{categoryItem.name}</IonItem>;
+  const { setCurrentCategory } = useContext(GeneralContext);
+  const handleClick = (
+    event: React.MouseEvent<HTMLIonItemElement, MouseEvent>
+  ) => {
+    console.log('touch');
+    setCurrentCategory(categoryItem);
+  };
+
+  return (
+    <IonItem button onClick={handleClick}>
+      <IonLabel>{categoryItem.name}</IonLabel>
+    </IonItem>
+  );
 };
 
 export default CategoryItem;

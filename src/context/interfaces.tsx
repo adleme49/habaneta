@@ -33,7 +33,7 @@ const tilesCat: tileCategory[] = [
     tilesTypes: [
       { name: 'Traditional 1' },
       { name: 'Traditional 2' },
-      { name: 'Traditional 3' }
+      { name: 'Traditional 4' }
     ]
   }
 ];

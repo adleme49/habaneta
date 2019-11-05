@@ -8,14 +8,6 @@ const Category: React.FC<{
   tileCat?: tileCategory[];
   borderCat?: borderCategory[];
 }> = ({ title, tileCat, borderCat }) => {
-  const items = [
-    'Tradicional',
-    'Tradicional 2',
-    'Tradicional 3',
-    'Tradicional 4',
-    'Tradicional 5',
-    'Tradicional 6'
-  ];
   return (
     <Fragment>
       <IonList>
