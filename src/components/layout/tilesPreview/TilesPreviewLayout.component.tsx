@@ -1,5 +1,8 @@
 import React, { Fragment } from 'react';
 import { IonRow } from '@ionic/react';
+import TileRecent from '../../preview/recent/TileRecent.component';
+import TileGrid from '../../preview/grid/TileGrid.component';
+import TilePreviewActions from '../../preview/actions/TilePreviewActions.component';
 
 const TilesPreviewLayout: React.FC = () => {
   return (
@@ -7,14 +10,14 @@ const TilesPreviewLayout: React.FC = () => {
       <IonRow>
         <h2>Preview</h2>
       </IonRow>
-      <IonRow>
-        <h3>Recientes</h3>
+      <IonRow align-items-center>
+        <TileRecent />
       </IonRow>
+
+      <TileGrid />
+
       <IonRow>
-        <h3>Preview</h3>
-      </IonRow>
-      <IonRow>
-        <h3>Acciones</h3>
+        <TilePreviewActions />
       </IonRow>
     </Fragment>
   );

@@ -9,8 +9,8 @@ const TilesBrowserLayout: React.FC = () => {
       <IonRow>
         <h2>Buscador de Lozas</h2>
       </IonRow>
-      <IonRow>
-        <IonCol size='7 '>
+      <IonRow align-self-start>
+        <IonCol size='7'>
           <TilesCategory title={'TILES'} />
           <TilesCategory title={'BORDER'} />
         </IonCol>
