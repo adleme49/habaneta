@@ -1,10 +1,11 @@
 import React from 'react';
 import { IonItem } from '@ionic/react';
+import { borderCategory, tileCategory } from '../../../context/interfaces';
 
-const TilesCategoryItem: React.FC<{ categoryItem: string | {} }> = ({
-  categoryItem
-}) => {
-  return <IonItem>{categoryItem}</IonItem>;
+const CategoryItem: React.FC<{
+  categoryItem: borderCategory | tileCategory;
+}> = ({ categoryItem }) => {
+  return <IonItem>{categoryItem.name}</IonItem>;
 };
 
-export default TilesCategoryItem;
+export default CategoryItem;

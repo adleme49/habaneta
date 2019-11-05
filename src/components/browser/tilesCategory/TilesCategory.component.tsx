@@ -1,8 +1,13 @@
 import React, { Fragment } from 'react';
 import { IonList, IonListHeader, IonLabel } from '@ionic/react';
-import TilesCategoryItem from './TilesCategoryItem.component';
+import CategoryItem from './TilesCategoryItem.component';
+import { tileCategory, borderCategory } from '../../../context/interfaces';
 
-const TilesCategory: React.FC<{ title: string }> = ({ title }) => {
+const Category: React.FC<{
+  title: string;
+  tileCat?: tileCategory[];
+  borderCat?: borderCategory[];
+}> = ({ title, tileCat, borderCat }) => {
   const items = [
     'Tradicional',
     'Tradicional 2',
@@ -17,12 +22,19 @@ const TilesCategory: React.FC<{ title: string }> = ({ title }) => {
         <IonListHeader>
           <IonLabel>{title}</IonLabel>
         </IonListHeader>
-        {items.map(item => (
-          <TilesCategoryItem key={item} categoryItem={item} />
-        ))}
+        {tileCat
+          ? tileCat.map((item: tileCategory) => (
+              <CategoryItem key={item.name} categoryItem={item} />
+            ))
+          : null}
+        {borderCat
+          ? borderCat.map((item: borderCategory) => (
+              <CategoryItem key={item.name} categoryItem={item} />
+            ))
+          : null}
       </IonList>
     </Fragment>
   );
 };
 
-export default TilesCategory;
+export default Category;

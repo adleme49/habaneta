@@ -15,7 +15,7 @@ const MainLayaout: React.FC = () => {
           <IonCol>
             <TilesEditorLayout />
           </IonCol>
-          <IonCol size='6'>
+          <IonCol size='5'>
             <TilesPreviewLayout />
           </IonCol>
         </IonRow>
