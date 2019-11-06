@@ -5,6 +5,7 @@ export interface iGeneralState {
   borderCategory: borderCategory[];
   selectedCategory: null | tileCategory | borderCategory;
   selectedType: null | Tile | Border;
+  recentsUsed: null | [] | Array<Tile | Border>;
 }
 
 export interface tileCategory {
@@ -59,6 +60,7 @@ export const initialDomivalues: iGeneralState = {
   tilesCategory: tilesCat,
   borderCategory: bordersCat,
   selectedCategory: null,
+  recentsUsed: null,
   error: null,
   selectedType: null
 };

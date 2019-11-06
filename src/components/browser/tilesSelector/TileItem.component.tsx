@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { useContext } from 'react';
 import { IonItem, IonImg } from '@ionic/react';
 import Pic102 from '../../../theme/102.png';
 import { Tile, Border } from '../../../context/interfaces';

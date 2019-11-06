@@ -30,6 +30,7 @@ const GeneralState = (props: any): JSX.Element => {
         tilesCategory: state.tilesCategory,
         borderCategory: state.borderCategory,
         selectedCategory: state.selectedCategory,
+        recentsUsed: state.recentsUsed,
         setCurrentCategory,
         setCurrentType
       }}

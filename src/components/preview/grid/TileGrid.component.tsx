@@ -116,10 +116,13 @@ const TileGrid: React.FC = () => {
     <Fragment>
       {grid.map((fila, i) => {
         return (
-          <IonRow key={i} align-items-center>
+          <IonRow key={i} align-items-center style={{ padding: '0px' }}>
             {grid[i].map((columna, j) => {
               return (
-                <IonCol key={columna + j}>
+                <IonCol
+                  key={columna + j}
+                  style={{ padding: '0px', border: 'solid 0.8px' }}
+                >
                   <IonImg src={Pic102} />
                   {/* <IonLabel class='ion-text-wrap'>{columna}</IonLabel> */}
                 </IonCol>
