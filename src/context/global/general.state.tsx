@@ -3,11 +3,13 @@ import {
   iGeneralState,
   initialDomivalues,
   borderCategory,
-  tileCategory
+  tileCategory,
+  Tile,
+  Border
 } from '../interfaces';
 import GeneralContext from './general.context';
 import GeneralReducer from './general.reducer';
-import { SET_CURRENT_CATEGORY } from '../types';
+import { SET_CURRENT_CATEGORY, SET_CURRENT_TYPE } from '../types';
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: iGeneralState = initialDomivalues;
@@ -17,6 +19,9 @@ const GeneralState = (props: any): JSX.Element => {
   const setCurrentCategory = (current: tileCategory | borderCategory) => {
     dispatch({ type: SET_CURRENT_CATEGORY, payload: current });
   };
+  const setCurrentType = (current: Tile | Border) => {
+    dispatch({ type: SET_CURRENT_TYPE, payload: current });
+  };
   return (
     <GeneralContext.Provider
       value={{
@@ -25,7 +30,8 @@ const GeneralState = (props: any): JSX.Element => {
         tilesCategory: state.tilesCategory,
         borderCategory: state.borderCategory,
         selectedCategory: state.selectedCategory,
-        setCurrentCategory
+        setCurrentCategory,
+        setCurrentType
       }}
     >
       {props.children}

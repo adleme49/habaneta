@@ -1,15 +1,14 @@
 import React, { Fragment } from 'react';
-import { IonCol } from '@ionic/react';
-import TileItem from '../../browser/tilesSelector/TileItem.component';
-
+import { IonCol, IonImg } from '@ionic/react';
+import Pic102 from '../../../theme/102.png';
 const TileRecent: React.FC = () => {
-  const recentTiles = [1, 2, 3, 4];
+  const recentTiles = [1, 2, 3, 4, 5];
   return (
     <Fragment>
       {recentTiles.map(tile => {
         return (
-          <IonCol key={tile} size='3'>
-            <TileItem />
+          <IonCol key={tile}>
+            <IonImg src={Pic102} />
           </IonCol>
         );
       })}

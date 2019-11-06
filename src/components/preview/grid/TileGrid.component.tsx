@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { IonRow, IonCol, IonLabel, IonImg } from '@ionic/react';
+import { IonRow, IonCol, IonImg } from '@ionic/react';
 import Pic102 from '../../../theme/102.png';
 const TileGrid: React.FC = () => {
   const grid = [
