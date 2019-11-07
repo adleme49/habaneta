@@ -121,7 +121,7 @@ const TileGrid: React.FC = () => {
       {selectedType !== null && preview
         ? grid.map((fila, i) => {
             return (
-              <IonRow key={i} align-items-center style={{ padding: '0px' }}>
+              <IonRow key={i} align-items-center className='ion-no-padding'>
                 {grid[i].map((columna, j) => {
                   return columna.includes('floor') ? (
                     <IonCol
