@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { IonItem, IonImg, IonBadge } from '@ionic/react';
+import { IonItem, IonImg } from '@ionic/react';
 import Pic102 from '../../../theme/102.png';
 import { Tile, Border } from '../../../context/interfaces';
 import GeneralContext from '../../../context/global/general.context';

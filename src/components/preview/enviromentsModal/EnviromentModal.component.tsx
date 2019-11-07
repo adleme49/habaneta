@@ -1,5 +1,5 @@
-import React, { useState, Fragment, useContext } from 'react';
-import { IonModal, IonButton, IonContent } from '@ionic/react';
+import React, { Fragment, useContext } from 'react';
+import { IonModal } from '@ionic/react';
 import GeneralContext from '../../../context/global/general.context';
 import EnviromentModalContent from './EnviromentModalContent.component';
 

@@ -1,4 +1,4 @@
-import { IonCol, IonImg, IonBadge, IonItem } from '@ionic/react';
+import { IonCol, IonImg, IonBadge } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
 import GeneralContext from '../../../context/global/general.context';
 import { Border, Tile } from '../../../context/interfaces';
@@ -7,7 +7,6 @@ import empty from '../../../theme/empty.png';
 
 const TileRecent: React.FC = () => {
   const { recentUsed } = useContext(GeneralContext);
-  const fixedRecent = [1, 2, 3, 4, 5];
   const handleDelete = () => {
     console.log('deletePresed');
   };

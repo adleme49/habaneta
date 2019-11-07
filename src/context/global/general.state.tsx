@@ -17,7 +17,6 @@ import {
   ADD_TO_RECENT,
   SHOW_MODAL
 } from '../types';
-import { type } from 'os';
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: iGeneralState = initialDomivalues;
