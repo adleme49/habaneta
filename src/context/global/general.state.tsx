@@ -14,7 +14,8 @@ import {
   SET_CURRENT_TYPE,
   SET_COLOR,
   SET_PREVIEW,
-  ADD_TO_RECENT
+  ADD_TO_RECENT,
+  SHOW_MODAL
 } from '../types';
 import { type } from 'os';
 
@@ -37,14 +38,19 @@ const GeneralState = (props: any): JSX.Element => {
   const setPreview = () => {
     dispatch({ type: SET_PREVIEW });
   };
+
   const addToRecent = (current: Tile | Border) => {
     dispatch({ type: ADD_TO_RECENT, payload: current });
+  };
+  const setShowModal = () => {
+    dispatch({ type: SHOW_MODAL });
   };
 
   return (
     <GeneralContext.Provider
       value={{
         loading: state.loading,
+        showModal: state.showModal,
         error: state.error,
         tilesCategory: state.tilesCategory,
         borderCategory: state.borderCategory,
@@ -53,6 +59,7 @@ const GeneralState = (props: any): JSX.Element => {
         recentUsed: state.recentsUsed,
         selectedColor: state.selectedColor,
         preview: state.preview,
+        setShowModal,
         setCurrentCategory,
         setCurrentType,
         setColor,

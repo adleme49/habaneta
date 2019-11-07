@@ -4,7 +4,8 @@ import {
   SET_CURRENT_TYPE,
   SET_COLOR,
   SET_PREVIEW,
-  ADD_TO_RECENT
+  ADD_TO_RECENT,
+  SHOW_MODAL
 } from '../types';
 
 const GeneralReducer = (state: iGeneralState, action: iAction) => {
@@ -28,6 +29,11 @@ const GeneralReducer = (state: iGeneralState, action: iAction) => {
       return {
         ...state,
         preview: true
+      };
+    case SHOW_MODAL:
+      return {
+        ...state,
+        showModal: !state.showModal
       };
     case ADD_TO_RECENT: {
       let empty: any[] = [];

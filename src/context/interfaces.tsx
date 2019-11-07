@@ -1,5 +1,6 @@
 export interface iGeneralState {
   loading: boolean;
+  showModal: boolean;
   error: null | any;
   tilesCategory: tileCategory[];
   borderCategory: borderCategory[];
@@ -59,6 +60,7 @@ const bordersCat: borderCategory[] = [
 
 export const initialDomivalues: iGeneralState = {
   loading: false,
+  showModal: false,
   tilesCategory: tilesCat,
   borderCategory: bordersCat,
   selectedCategory: null,
