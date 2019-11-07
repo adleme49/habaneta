@@ -1,5 +1,5 @@
 import { iGeneralState, iAction } from '../interfaces';
-import { SET_CURRENT_CATEGORY, SET_CURRENT_TYPE } from '../types';
+import { SET_CURRENT_CATEGORY, SET_CURRENT_TYPE, SET_COLOR } from '../types';
 
 const GeneralReducer = (state: iGeneralState, action: iAction) => {
   switch (action.type) {
@@ -12,6 +12,11 @@ const GeneralReducer = (state: iGeneralState, action: iAction) => {
       return {
         ...state,
         selectedType: action.payload
+      };
+    case SET_COLOR:
+      return {
+        ...state,
+        selectedColor: action.payload
       };
     default:
       return state;

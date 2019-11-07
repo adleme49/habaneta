@@ -1,5 +1,8 @@
 import React, { Fragment } from 'react';
 import { IonRow } from '@ionic/react';
+import SelectedColor from '../../editor/selectedColor/SelectedColor.component';
+import ColorPallete from '../../editor/colorPallete/ColorPallete.component';
+import TileEditor from '../../editor/tileEditor/TileEditor.component';
 
 const TilesEditorLayout: React.FC = () => {
   return (
@@ -8,13 +11,13 @@ const TilesEditorLayout: React.FC = () => {
         <h2>Editor</h2>
       </IonRow>
       <IonRow>
-        <h3>Paleta de colores</h3>
+        <ColorPallete />
+      </IonRow>
+      <IonRow align-items-center>
+        <SelectedColor />
       </IonRow>
       <IonRow>
-        <h3>Current color</h3>
-      </IonRow>
-      <IonRow>
-        <h3>Imagen del tile</h3>
+        <TileEditor />
       </IonRow>
     </Fragment>
   );

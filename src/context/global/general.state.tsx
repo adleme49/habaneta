@@ -9,7 +9,7 @@ import {
 } from '../interfaces';
 import GeneralContext from './general.context';
 import GeneralReducer from './general.reducer';
-import { SET_CURRENT_CATEGORY, SET_CURRENT_TYPE } from '../types';
+import { SET_CURRENT_CATEGORY, SET_CURRENT_TYPE, SET_COLOR } from '../types';
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: iGeneralState = initialDomivalues;
@@ -22,6 +22,10 @@ const GeneralState = (props: any): JSX.Element => {
   const setCurrentType = (current: Tile | Border) => {
     dispatch({ type: SET_CURRENT_TYPE, payload: current });
   };
+
+  const setColor = (color: string) => {
+    dispatch({ type: SET_COLOR, payload: color });
+  };
   return (
     <GeneralContext.Provider
       value={{
@@ -30,9 +34,12 @@ const GeneralState = (props: any): JSX.Element => {
         tilesCategory: state.tilesCategory,
         borderCategory: state.borderCategory,
         selectedCategory: state.selectedCategory,
+        selectedType: state.selectedType,
         recentsUsed: state.recentsUsed,
+        selectedColor: state.selectedColor,
         setCurrentCategory,
-        setCurrentType
+        setCurrentType,
+        setColor
       }}
     >
       {props.children}
