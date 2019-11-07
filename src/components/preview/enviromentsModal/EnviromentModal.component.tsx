@@ -1,15 +1,24 @@
 import React, { useState, Fragment, useContext } from 'react';
 import { IonModal, IonButton, IonContent } from '@ionic/react';
 import GeneralContext from '../../../context/global/general.context';
+import EnviromentModalContent from './EnviromentModalContent.component';
 
 export const EnviromentModal: React.FC = () => {
   const { showModal, setShowModal } = useContext(GeneralContext);
 
+  const handelDismiss = () => {
+    setShowModal();
+  };
+
   return (
     <Fragment>
-      <IonModal isOpen={showModal} animated showBackdrop>
-        <p>This is modal content</p>
-        <IonButton onClick={() => setShowModal()}>Close Modal</IonButton>
+      <IonModal
+        isOpen={showModal}
+        animated
+        showBackdrop
+        onDidDismiss={handelDismiss}
+      >
+        <EnviromentModalContent />
       </IonModal>
     </Fragment>
   );
