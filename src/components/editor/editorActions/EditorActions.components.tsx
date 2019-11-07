@@ -1,14 +1,24 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
+import GeneralContext from '../../../context/global/general.context';
 
 const EditorActions: React.FC = () => {
+  const { setPreview, addToRecent, selectedType } = useContext(GeneralContext);
+
+  const handlePreview = () => {
+    setPreview();
+  };
+  const handleAddtoRecent = () => {
+    addToRecent(selectedType);
+  };
+
   return (
     <Fragment>
-      <IonSegment onIonChange={e => console.log('Pressed', e.detail.value)}>
-        <IonSegmentButton value='Recent'>
+      <IonSegment>
+        <IonSegmentButton onClick={handleAddtoRecent} value='Recent'>
           <IonLabel>Salvar a recientes</IonLabel>
         </IonSegmentButton>
-        <IonSegmentButton value='Preview'>
+        <IonSegmentButton value='Preview' onClick={handlePreview}>
           <IonLabel>Preview</IonLabel>
         </IonSegmentButton>
       </IonSegment>

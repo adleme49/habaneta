@@ -115,10 +115,10 @@ const TileGrid: React.FC = () => {
       'border bottom right'
     ]
   ];
-  const { selectedType } = useContext(GeneralContext);
+  const { selectedType, preview } = useContext(GeneralContext);
   return (
     <Fragment>
-      {selectedType !== null
+      {selectedType !== null && preview
         ? grid.map((fila, i) => {
             return (
               <IonRow key={i} align-items-center style={{ padding: '0px' }}>

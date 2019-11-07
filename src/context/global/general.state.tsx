@@ -9,7 +9,14 @@ import {
 } from '../interfaces';
 import GeneralContext from './general.context';
 import GeneralReducer from './general.reducer';
-import { SET_CURRENT_CATEGORY, SET_CURRENT_TYPE, SET_COLOR } from '../types';
+import {
+  SET_CURRENT_CATEGORY,
+  SET_CURRENT_TYPE,
+  SET_COLOR,
+  SET_PREVIEW,
+  ADD_TO_RECENT
+} from '../types';
+import { type } from 'os';
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: iGeneralState = initialDomivalues;
@@ -26,6 +33,14 @@ const GeneralState = (props: any): JSX.Element => {
   const setColor = (color: string) => {
     dispatch({ type: SET_COLOR, payload: color });
   };
+
+  const setPreview = () => {
+    dispatch({ type: SET_PREVIEW });
+  };
+  const addToRecent = (current: Tile | Border) => {
+    dispatch({ type: ADD_TO_RECENT, payload: current });
+  };
+
   return (
     <GeneralContext.Provider
       value={{
@@ -35,11 +50,14 @@ const GeneralState = (props: any): JSX.Element => {
         borderCategory: state.borderCategory,
         selectedCategory: state.selectedCategory,
         selectedType: state.selectedType,
-        recentsUsed: state.recentsUsed,
+        recentUsed: state.recentsUsed,
         selectedColor: state.selectedColor,
+        preview: state.preview,
         setCurrentCategory,
         setCurrentType,
-        setColor
+        setColor,
+        setPreview,
+        addToRecent
       }}
     >
       {props.children}

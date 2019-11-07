@@ -5,7 +5,8 @@ export interface iGeneralState {
   borderCategory: borderCategory[];
   selectedCategory: null | tileCategory | borderCategory;
   selectedType: null | Tile | Border;
-  recentsUsed: null | [] | Array<Tile | Border>;
+  recentsUsed: Array<Tile | Border>;
+  preview: boolean;
   selectedColor: string;
 }
 
@@ -61,8 +62,15 @@ export const initialDomivalues: iGeneralState = {
   tilesCategory: tilesCat,
   borderCategory: bordersCat,
   selectedCategory: null,
-  recentsUsed: null,
+  recentsUsed: [
+    { name: 'empty' },
+    { name: 'empty' },
+    { name: 'empty' },
+    { name: 'empty' },
+    { name: 'empty' }
+  ],
   error: null,
   selectedType: null,
+  preview: false,
   selectedColor: 'grey'
 };
