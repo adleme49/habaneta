@@ -30,15 +30,9 @@ const GeneralReducer = (state: iGeneralState, action: iAction) => {
         ...state,
         preview: true
       };
-    case SHOW_MODAL:
-      return {
-        ...state,
-        showModal: !state.showModal
-      };
     case ADD_TO_RECENT: {
       let empty: any[] = [];
       let recents: any[] = [];
-
       state.recentsUsed.filter((current: { name: string }) => {
         return current.name === 'empty'
           ? empty.push(current)
@@ -58,6 +52,12 @@ const GeneralReducer = (state: iGeneralState, action: iAction) => {
         recentsUsed: newRecent
       };
     }
+    case SHOW_MODAL:
+      console.log('es aki');
+      return {
+        ...state,
+        showModal: !state.showModal
+      };
     default:
       return state;
   }

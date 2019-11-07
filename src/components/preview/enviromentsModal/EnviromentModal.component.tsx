@@ -12,12 +12,7 @@ export const EnviromentModal: React.FC = () => {
 
   return (
     <Fragment>
-      <IonModal
-        isOpen={showModal}
-        animated
-        showBackdrop
-        onDidDismiss={handelDismiss}
-      >
+      <IonModal isOpen={showModal} onDidDismiss={handelDismiss}>
         <EnviromentModalContent />
       </IonModal>
     </Fragment>

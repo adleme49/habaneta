@@ -1,22 +1,22 @@
 import React, { useReducer } from 'react';
 import {
+  Border,
+  borderCategory,
   iGeneralState,
   initialDomivalues,
-  borderCategory,
-  tileCategory,
   Tile,
-  Border
+  tileCategory
 } from '../interfaces';
-import GeneralContext from './general.context';
-import GeneralReducer from './general.reducer';
 import {
+  ADD_TO_RECENT,
+  SET_COLOR,
   SET_CURRENT_CATEGORY,
   SET_CURRENT_TYPE,
-  SET_COLOR,
   SET_PREVIEW,
-  ADD_TO_RECENT,
   SHOW_MODAL
 } from '../types';
+import GeneralContext from './general.context';
+import GeneralReducer from './general.reducer';
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: iGeneralState = initialDomivalues;
@@ -41,6 +41,7 @@ const GeneralState = (props: any): JSX.Element => {
   const addToRecent = (current: Tile | Border) => {
     dispatch({ type: ADD_TO_RECENT, payload: current });
   };
+
   const setShowModal = () => {
     dispatch({ type: SHOW_MODAL });
   };
@@ -58,12 +59,12 @@ const GeneralState = (props: any): JSX.Element => {
         recentUsed: state.recentsUsed,
         selectedColor: state.selectedColor,
         preview: state.preview,
+        addToRecent,
         setShowModal,
         setCurrentCategory,
         setCurrentType,
         setColor,
-        setPreview,
-        addToRecent
+        setPreview
       }}
     >
       {props.children}
