@@ -5,13 +5,13 @@ import border from '../../../theme/border.png';
 import EditorActions from '../editorActions/EditorActions.components';
 
 const TileEditor: React.FC = () => {
-  const { selectedType } = useContext(GeneralContext);
+  const { selectedTile } = useContext(GeneralContext);
   return (
     <Fragment>
-      {selectedType !== null ? (
+      {selectedTile !== null ? (
         <IonRow>
           <IonCol size='8' offset='2'>
-            <IonImg src={border} alt={selectedType.name} />
+            <IonImg src={border} alt={selectedTile.name} />
           </IonCol>
           <IonCol size='12'>
             <EditorActions />

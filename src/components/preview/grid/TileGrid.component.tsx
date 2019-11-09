@@ -8,10 +8,10 @@ import { Vgrid } from './grid';
 
 const TileGrid: React.FC = () => {
   const grid = Vgrid;
-  const { selectedType, preview } = useContext(GeneralContext);
+  const { selectedTile, preview } = useContext(GeneralContext);
   return (
     <Fragment>
-      {selectedType !== null && preview
+      {selectedTile !== null && preview
         ? grid.map((fila, i) => {
             return (
               <IonRow key={i} align-items-center className='ion-no-padding'>
@@ -21,7 +21,7 @@ const TileGrid: React.FC = () => {
                       key={columna + j}
                       style={{ padding: '0px', border: 'solid 0.8px' }}
                     >
-                      <IonImg src={floor} alt={selectedType.name} />
+                      <IonImg src={floor} alt={selectedTile.name} />
                     </IonCol>
                   ) : (
                     <IonCol

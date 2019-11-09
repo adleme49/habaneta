@@ -1,7 +1,7 @@
 import { IGeneralState, IAction } from '../interfaces';
 import {
-  SET_CURRENT_CATEGORY,
-  SET_CURRENT_TYPE,
+  SET_CURRENT_FAMILY,
+  SET_CURRENT_TILE,
   SET_COLOR,
   SET_PREVIEW,
   ADD_TO_RECENT,
@@ -10,15 +10,15 @@ import {
 
 const GeneralReducer = (state: IGeneralState, action: IAction) => {
   switch (action.type) {
-    case SET_CURRENT_CATEGORY:
+    case SET_CURRENT_FAMILY:
       return {
         ...state,
-        selectedCategory: action.payload
+        selectedFamily: action.payload
       };
-    case SET_CURRENT_TYPE:
+    case SET_CURRENT_TILE:
       return {
         ...state,
-        selectedType: action.payload
+        selectedTile: action.payload
       };
     case SET_COLOR:
       return {
@@ -33,7 +33,7 @@ const GeneralReducer = (state: IGeneralState, action: IAction) => {
     case ADD_TO_RECENT: {
       let empty: any[] = [];
       let recents: any[] = [];
-      state.recentsUsed.filter((current: { name: string }) => {
+      state.recentsUsed.filter((current: any) => {
         return current.name === 'empty'
           ? empty.push(current)
           : recents.push(current);

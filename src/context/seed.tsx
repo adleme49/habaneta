@@ -1,4 +1,4 @@
-import { IColor, IBorderFamily, ITileFamily } from './interfaces';
+import { IColor, IBorderFamily, ITileFamily, IFloor } from './interfaces';
 
 export const DomiColors: IColor[] = [
   { name: 'red', code: '#F44336' },
@@ -46,10 +46,21 @@ export const tilesFamilys: ITileFamily[] = [
       { name: 'Traditional 2' },
       { name: 'Traditional 4' }
     ]
+  },
+  {
+    name: 'Contemporary',
+    types: [
+      { name: 'Contemporary 1' },
+      { name: 'Contemporary 2' },
+      { name: 'Contemporary 3' },
+      { name: 'Contemporary 4' },
+      { name: 'Contemporary 5' },
+      { name: 'Contemporary 6' }
+    ]
   }
 ];
 
-export const recentUsed = [
+export const recentsUsed = [
   { name: 'empty' },
   { name: 'empty' },
   { name: 'empty' },

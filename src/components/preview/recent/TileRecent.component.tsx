@@ -6,15 +6,16 @@ import Pic102 from '../../../theme/102.png';
 import empty from '../../../theme/empty.png';
 
 const TileRecent: React.FC = () => {
-  const { recentUsed } = useContext(GeneralContext);
+  const { recentsUsed } = useContext(GeneralContext);
+
   const handleDelete = () => {
     console.log('deletePresed');
   };
 
   return (
     <Fragment>
-      {recentUsed
-        ? recentUsed.map((tile: IBorder | IFloor, index: number) => {
+      {recentsUsed
+        ? recentsUsed.map((tile: IBorder | IFloor, index: number) => {
             return !tile.name.includes('empty') ? (
               <IonCol key={index}>
                 <IonImg src={Pic102} alt={tile.name} />

@@ -5,13 +5,13 @@ import GeneralContext from '../../../context/global/general.context';
 import { IBorder, IFloor } from '../../../context/interfaces';
 
 const TilesSelector: React.FC = () => {
-  const { selectedCategory } = useContext(GeneralContext);
+  const { selectedFamily } = useContext(GeneralContext);
 
   return (
     <Fragment>
-      {selectedCategory !== null ? (
+      {selectedFamily !== null ? (
         <IonList>
-          {selectedCategory.types.map((type: IFloor | IBorder) => (
+          {selectedFamily.types.map((type: IFloor | IBorder) => (
             <TileItem key={type.name} type={type} />
           ))}
         </IonList>

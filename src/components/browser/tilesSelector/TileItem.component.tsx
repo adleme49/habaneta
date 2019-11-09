@@ -5,9 +5,9 @@ import { IFloor, IBorder } from '../../../context/interfaces';
 import GeneralContext from '../../../context/global/general.context';
 
 const TileItem: React.FC<{ type: IFloor | IBorder }> = ({ type }) => {
-  const { setCurrentType } = useContext(GeneralContext);
+  const { setCurrentTile } = useContext(GeneralContext);
   const handleClick = () => {
-    setCurrentType(type);
+    setCurrentTile(type);
   };
   return type ? (
     <IonItem detail onClick={handleClick}>

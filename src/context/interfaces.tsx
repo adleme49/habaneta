@@ -1,4 +1,4 @@
-import { DomiColors, tilesFamilys, borderFamilys, recentUsed } from './seed';
+import { DomiColors, tilesFamilys, borderFamilys, recentsUsed } from './seed';
 
 export interface IGeneralState {
   loading: boolean;
@@ -49,7 +49,7 @@ export const initialDomivalues: IGeneralState = {
   tilesFamilys: tilesFamilys,
   borderFamilys: borderFamilys,
   selectedFamily: null,
-  recentsUsed: recentUsed,
+  recentsUsed: recentsUsed,
   error: null,
   selectedTile: null,
   preview: false,

@@ -6,11 +6,11 @@ import GeneralContext from '../../../context/global/general.context';
 const CategoryItem: React.FC<{
   categoryItem: IBorderFamily | ITileFamily;
 }> = ({ categoryItem }) => {
-  const { setCurrentCategory } = useContext(GeneralContext);
+  const { setCurrentFamily } = useContext(GeneralContext);
   const handleClick = (
     event: React.MouseEvent<HTMLIonItemElement, MouseEvent>
   ) => {
-    setCurrentCategory(categoryItem);
+    setCurrentFamily(categoryItem);
   };
 
   return (
