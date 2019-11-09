@@ -1,11 +1,14 @@
+import { DomiColors, tilesFamilys, borderFamilys, recentUsed } from './seed';
+
 export interface IGeneralState {
   loading: boolean;
   showModal: boolean;
   error: null | any;
-  tilesCategory: ITileFamily[];
-  borderCategory: IBorderFamily[];
-  selectedCategory: null | ITileFamily | IBorderFamily;
-  selectedType: null | IFloor | IBorder;
+  tilesFamilys: ITileFamily[];
+  borderFamilys: IBorderFamily[];
+  colors: IColor[];
+  selectedFamily: null | ITileFamily | IBorderFamily;
+  selectedTile: null | IFloor | IBorder;
   recentsUsed: Array<IFloor | IBorder>;
   preview: boolean;
   selectedColor: string;
@@ -30,56 +33,25 @@ export interface IFloor extends ITile {
 export interface IBorder extends ITile {
   corner?: boolean;
 }
-
+export interface IColor {
+  name: string;
+  code: string;
+}
 export interface IAction {
   type: string;
   payload?: any;
 }
 
-const tilesCat: ITileFamily[] = [
-  {
-    name: 'Traditional',
-    types: [
-      { name: 'Traditional 1' },
-      { name: 'Traditional 2' },
-      { name: 'Traditional 4' }
-    ]
-  }
-];
-const bordersCat: IBorderFamily[] = [
-  {
-    name: 'TraditionalB',
-    types: [
-      { name: 'TraditionalB 1' },
-      { name: 'TraditionalB 2' },
-      { name: 'TraditionalB 3' },
-      { name: 'TraditionalB 4' }
-    ]
-  },
-  {
-    name: 'TraditionalB1',
-    types: [{ name: 'TraditionalB 1' }, { name: 'TraditionalB 2' }]
-  }
-];
-
 export const initialDomivalues: IGeneralState = {
   loading: false,
   showModal: false,
-  tilesCategory: tilesCat,
-  borderCategory: bordersCat,
-  selectedCategory: null,
-  recentsUsed: [
-    { name: 'empty' },
-    { name: 'empty' },
-    { name: 'empty' },
-    { name: 'empty' },
-    { name: 'empty' },
-    { name: 'empty' },
-    { name: 'empty' },
-    { name: 'empty' }
-  ],
+  colors: DomiColors,
+  tilesFamilys: tilesFamilys,
+  borderFamilys: borderFamilys,
+  selectedFamily: null,
+  recentsUsed: recentUsed,
   error: null,
-  selectedType: null,
+  selectedTile: null,
   preview: false,
   selectedColor: 'grey'
 };

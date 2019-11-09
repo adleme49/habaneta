@@ -10,9 +10,9 @@ const TilesEditorLayout: React.FC = () => {
       <IonRow>
         <h2>Editor</h2>
       </IonRow>
-      <IonRow>
-        <ColorPallete />
-      </IonRow>
+
+      <ColorPallete />
+
       <IonRow align-items-center>
         <SelectedColor />
       </IonRow>

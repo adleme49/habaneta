@@ -1,12 +1,12 @@
+import { IonCol, IonRow } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
-import { IonRow, IonCol } from '@ionic/react';
-import Category from '../../browser/tilesCategory/TilesCategory.component';
-import TilesSelector from '../../browser/tilesSelector/TilesSelector.component';
 import GeneralContext from '../../../context/global/general.context';
 import { IGeneralState } from '../../../context/interfaces';
+import Category from '../../browser/tilesCategory/TilesCategory.component';
+import TilesSelector from '../../browser/tilesSelector/TilesSelector.component';
 
 const TilesBrowserLayout: React.FC = () => {
-  const { tilesCategory, borderCategory } = useContext<Partial<IGeneralState>>(
+  const { tilesFamilys, borderFamilys } = useContext<Partial<IGeneralState>>(
     GeneralContext
   );
 
@@ -17,8 +17,8 @@ const TilesBrowserLayout: React.FC = () => {
       </IonRow>
       <IonRow align-self-start>
         <IonCol size='7'>
-          <Category title={'TILES'} tileCat={tilesCategory} />
-          <Category title={'BORDER'} borderCat={borderCategory} />
+          <Category title={'TILES'} tileFamilys={tilesFamilys} />
+          <Category title={'BORDER'} borderFamilys={borderFamilys} />
         </IonCol>
         <IonCol>
           <TilesSelector />

@@ -1,24 +1,21 @@
-import React, { useContext, Fragment } from 'react';
-import { IonItem, IonLabel } from '@ionic/react';
+import { IonCol, IonRow } from '@ionic/react';
+import React, { Fragment, useContext } from 'react';
 import GeneralContext from '../../../context/global/general.context';
+import { IColor } from '../../../context/interfaces';
+import ColorPalleteItem from './ColorPalleteItem.component';
 
 const ColorPallete: React.FC = () => {
-  const { setColor } = useContext(GeneralContext);
-  const handleSetColor = () => {
-    setColor('blue');
-  };
-  const handleSetColorGreen = () => {
-    setColor('green');
-  };
+  const { colors } = useContext(GeneralContext);
 
   return (
     <Fragment>
-      <IonItem button onClick={handleSetColor}>
-        <IonLabel>Cambiar a azul</IonLabel>
-      </IonItem>
-      <IonItem button onClick={handleSetColorGreen}>
-        <IonLabel>Cambiar a verde</IonLabel>
-      </IonItem>
+      <div style={{ border: 'solid 2px black' }}>
+        <IonRow>
+          {colors.map((color: IColor) => (
+            <ColorPalleteItem key={color.code} color={color} />
+          ))}
+        </IonRow>
+      </div>
     </Fragment>
   );
 };

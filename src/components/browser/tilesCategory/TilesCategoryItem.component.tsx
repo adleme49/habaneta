@@ -10,7 +10,6 @@ const CategoryItem: React.FC<{
   const handleClick = (
     event: React.MouseEvent<HTMLIonItemElement, MouseEvent>
   ) => {
-    console.log('touch');
     setCurrentCategory(categoryItem);
   };
 
