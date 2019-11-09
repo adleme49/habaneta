@@ -3,10 +3,10 @@ import { IonRow, IonCol } from '@ionic/react';
 import Category from '../../browser/tilesCategory/TilesCategory.component';
 import TilesSelector from '../../browser/tilesSelector/TilesSelector.component';
 import GeneralContext from '../../../context/global/general.context';
-import { iGeneralState } from '../../../context/interfaces';
+import { IGeneralState } from '../../../context/interfaces';
 
 const TilesBrowserLayout: React.FC = () => {
-  const { tilesCategory, borderCategory } = useContext<Partial<iGeneralState>>(
+  const { tilesCategory, borderCategory } = useContext<Partial<IGeneralState>>(
     GeneralContext
   );
 

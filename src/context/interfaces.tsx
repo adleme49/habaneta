@@ -1,38 +1,42 @@
-export interface iGeneralState {
+export interface IGeneralState {
   loading: boolean;
   showModal: boolean;
   error: null | any;
-  tilesCategory: tileCategory[];
-  borderCategory: borderCategory[];
-  selectedCategory: null | tileCategory | borderCategory;
-  selectedType: null | Tile | Border;
-  recentsUsed: Array<Tile | Border>;
+  tilesCategory: ITileFamily[];
+  borderCategory: IBorderFamily[];
+  selectedCategory: null | ITileFamily | IBorderFamily;
+  selectedType: null | IFloor | IBorder;
+  recentsUsed: Array<IFloor | IBorder>;
   preview: boolean;
   selectedColor: string;
 }
 
-export interface tileCategory {
+export interface ITileFamily {
   name: string;
-  types: Tile[];
+  types: IFloor[];
 }
-export interface borderCategory {
+export interface IBorderFamily {
   name: string;
-  types: Border[];
-}
-
-export interface Tile {
-  name: string;
+  types: IBorder[];
 }
 
-export interface Border {
+export interface ITile {
   name: string;
 }
-export interface iAction {
+export interface IFloor extends ITile {
+  rotation?: boolean;
+}
+
+export interface IBorder extends ITile {
+  corner?: boolean;
+}
+
+export interface IAction {
   type: string;
   payload?: any;
 }
 
-const tilesCat: tileCategory[] = [
+const tilesCat: ITileFamily[] = [
   {
     name: 'Traditional',
     types: [
@@ -42,7 +46,7 @@ const tilesCat: tileCategory[] = [
     ]
   }
 ];
-const bordersCat: borderCategory[] = [
+const bordersCat: IBorderFamily[] = [
   {
     name: 'TraditionalB',
     types: [
@@ -58,13 +62,16 @@ const bordersCat: borderCategory[] = [
   }
 ];
 
-export const initialDomivalues: iGeneralState = {
+export const initialDomivalues: IGeneralState = {
   loading: false,
   showModal: false,
   tilesCategory: tilesCat,
   borderCategory: bordersCat,
   selectedCategory: null,
   recentsUsed: [
+    { name: 'empty' },
+    { name: 'empty' },
+    { name: 'empty' },
     { name: 'empty' },
     { name: 'empty' },
     { name: 'empty' },

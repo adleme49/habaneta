@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react';
 import {
-  Border,
-  borderCategory,
-  iGeneralState,
+  IBorder,
+  IBorderFamily,
+  IGeneralState,
   initialDomivalues,
-  Tile,
-  tileCategory
+  IFloor,
+  ITileFamily
 } from '../interfaces';
 import {
   ADD_TO_RECENT,
@@ -19,14 +19,14 @@ import GeneralContext from './general.context';
 import GeneralReducer from './general.reducer';
 
 const GeneralState = (props: any): JSX.Element => {
-  const initialState: iGeneralState = initialDomivalues;
+  const initialState: IGeneralState = initialDomivalues;
   const [state, dispatch] = useReducer(GeneralReducer, initialState);
 
   // set CurrentCategory
-  const setCurrentCategory = (current: tileCategory | borderCategory) => {
+  const setCurrentCategory = (current: ITileFamily | IBorderFamily) => {
     dispatch({ type: SET_CURRENT_CATEGORY, payload: current });
   };
-  const setCurrentType = (current: Tile | Border) => {
+  const setCurrentType = (current: IFloor | IBorder) => {
     dispatch({ type: SET_CURRENT_TYPE, payload: current });
   };
 
@@ -38,7 +38,7 @@ const GeneralState = (props: any): JSX.Element => {
     dispatch({ type: SET_PREVIEW });
   };
 
-  const addToRecent = (current: Tile | Border) => {
+  const addToRecent = (current: IFloor | IBorder) => {
     dispatch({ type: ADD_TO_RECENT, payload: current });
   };
 

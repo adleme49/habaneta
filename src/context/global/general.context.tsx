@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import { iGeneralState } from '../interfaces';
+import { IGeneralState } from '../interfaces';
 
-const GeneralContext = createContext<iGeneralState | any>({});
+const GeneralContext = createContext<IGeneralState | any>({});
 
 export default GeneralContext;

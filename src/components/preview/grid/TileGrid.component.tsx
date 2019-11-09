@@ -1,120 +1,13 @@
 import React, { Fragment, useContext } from 'react';
 import { IonRow, IonCol, IonImg } from '@ionic/react';
-import Pic102 from '../../../theme/102.png';
+import empty from '../../../theme/empty.png';
 import floor from '../../../theme/floor.png';
 import border from '../../../theme/border.png';
 import GeneralContext from '../../../context/global/general.context';
+import { Vgrid } from './grid';
+
 const TileGrid: React.FC = () => {
-  const grid = [
-    [
-      'border top left',
-      'border',
-      'border',
-      'border',
-      'border',
-      'border',
-      'border',
-      'border',
-      'border',
-      'border top right'
-    ],
-    [
-      'border',
-      'floor top left',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor top right',
-      'border'
-    ],
-    [
-      'border',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'border'
-    ],
-    [
-      'border',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'border'
-    ],
-    [
-      'border',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'border'
-    ],
-    [
-      'border',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'border'
-    ],
-    [
-      'border',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'border'
-    ],
-    [
-      'border',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'floor',
-      'border'
-    ],
-    [
-      'border bottom left',
-      'border',
-      'border',
-      'border',
-      'border',
-      'border',
-      'border',
-      'border',
-      'border',
-      'border bottom right'
-    ]
-  ];
+  const grid = Vgrid;
   const { selectedType, preview } = useContext(GeneralContext);
   return (
     <Fragment>
@@ -151,7 +44,7 @@ const TileGrid: React.FC = () => {
                       key={columna + j}
                       style={{ padding: '0px', border: 'solid 0.8px' }}
                     >
-                      <IonImg src={Pic102} alt={'default'} />
+                      <IonImg src={empty} alt={'default'} />
                     </IonCol>
                   );
                 })}

@@ -13,9 +13,10 @@ const TilesPreviewLayout: React.FC = () => {
       <IonRow align-items-center>
         <TileRecent />
       </IonRow>
-
+      <IonRow align-items-center>
+        <TileRecent />
+      </IonRow>
       <TileGrid />
-
       <IonRow>
         <TilePreviewActions />
       </IonRow>

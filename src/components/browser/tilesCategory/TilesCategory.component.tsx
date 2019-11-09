@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import { IonList, IonListHeader, IonLabel } from '@ionic/react';
 import CategoryItem from './TilesCategoryItem.component';
-import { tileCategory, borderCategory } from '../../../context/interfaces';
+import { ITileFamily, IBorderFamily } from '../../../context/interfaces';
 
 const Category: React.FC<{
   title: string;
-  tileCat?: tileCategory[];
-  borderCat?: borderCategory[];
+  tileCat?: ITileFamily[];
+  borderCat?: IBorderFamily[];
 }> = ({ title, tileCat, borderCat }) => {
   return (
     <Fragment>
@@ -15,12 +15,12 @@ const Category: React.FC<{
           <IonLabel>{title}</IonLabel>
         </IonListHeader>
         {tileCat
-          ? tileCat.map((item: tileCategory) => (
+          ? tileCat.map((item: ITileFamily) => (
               <CategoryItem key={item.name} categoryItem={item} />
             ))
           : null}
         {borderCat
-          ? borderCat.map((item: borderCategory) => (
+          ? borderCat.map((item: IBorderFamily) => (
               <CategoryItem key={item.name} categoryItem={item} />
             ))
           : null}

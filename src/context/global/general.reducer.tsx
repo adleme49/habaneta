@@ -1,4 +1,4 @@
-import { iGeneralState, iAction } from '../interfaces';
+import { IGeneralState, IAction } from '../interfaces';
 import {
   SET_CURRENT_CATEGORY,
   SET_CURRENT_TYPE,
@@ -8,7 +8,7 @@ import {
   SHOW_MODAL
 } from '../types';
 
-const GeneralReducer = (state: iGeneralState, action: iAction) => {
+const GeneralReducer = (state: IGeneralState, action: IAction) => {
   switch (action.type) {
     case SET_CURRENT_CATEGORY:
       return {
