@@ -5,9 +5,9 @@ import GeneralContext from '../../../context/global/general.context';
 const EditorActions: React.FC = () => {
   const { setPreview, addToRecent, selectedTile } = useContext(GeneralContext);
 
-  const handlePreview = () => {
-    setPreview();
-  };
+  // const handlePreview = () => {
+  //   setPreview();
+  // };
   const handleAddtoRecent = () => {
     addToRecent(selectedTile);
   };
@@ -17,9 +17,6 @@ const EditorActions: React.FC = () => {
       <IonSegment>
         <IonSegmentButton onClick={handleAddtoRecent} value='Recent'>
           <IonLabel>Salvar a recientes</IonLabel>
-        </IonSegmentButton>
-        <IonSegmentButton value='Preview' onClick={handlePreview}>
-          <IonLabel>Preview</IonLabel>
         </IonSegmentButton>
       </IonSegment>
     </Fragment>

@@ -5,7 +5,8 @@ import {
   SET_COLOR,
   SET_PREVIEW,
   ADD_TO_RECENT,
-  SHOW_MODAL
+  SHOW_MODAL,
+  DELETE_RECENT
 } from '../types';
 
 const GeneralReducer = (state: IGeneralState, action: IAction) => {
@@ -51,6 +52,14 @@ const GeneralReducer = (state: IGeneralState, action: IAction) => {
         ...state,
         recentsUsed: newRecent
       };
+    }
+    case DELETE_RECENT: {
+      let deletedRecent = state.recentsUsed.slice();
+      deletedRecent.splice(action.payload, 1);
+      deletedRecent.push({ name: 'empty' });
+      console.log(deletedRecent);
+
+      return { ...state, recentsUsed: deletedRecent };
     }
     case SHOW_MODAL:
       console.log('es aki');

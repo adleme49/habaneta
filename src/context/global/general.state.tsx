@@ -13,7 +13,8 @@ import {
   SET_CURRENT_FAMILY,
   SET_PREVIEW,
   SHOW_MODAL,
-  SET_CURRENT_TILE
+  SET_CURRENT_TILE,
+  DELETE_RECENT
 } from '../types';
 import GeneralContext from './general.context';
 import GeneralReducer from './general.reducer';
@@ -40,6 +41,11 @@ const GeneralState = (props: any): JSX.Element => {
 
   const addToRecent = (current: IFloor | IBorder) => {
     dispatch({ type: ADD_TO_RECENT, payload: current });
+    setPreview();
+  };
+
+  const deleteRecent = (pos: number) => {
+    dispatch({ type: DELETE_RECENT, payload: pos });
   };
 
   const setShowModal = () => {
@@ -61,6 +67,7 @@ const GeneralState = (props: any): JSX.Element => {
         selectedColor: state.selectedColor,
         preview: state.preview,
         addToRecent,
+        deleteRecent,
         setShowModal,
         setCurrentFamily,
         setCurrentTile,

@@ -10,7 +10,7 @@ const TileItem: React.FC<{ type: IFloor | IBorder }> = ({ type }) => {
     setCurrentTile(type);
   };
   return type ? (
-    <IonItem detail onClick={handleClick}>
+    <IonItem onClick={handleClick}>
       <IonImg src={Pic102} alt={type.name} />
     </IonItem>
   ) : null;
