@@ -56,9 +56,13 @@ const GeneralReducer = (state: IGeneralState, action: IAction) => {
     case DELETE_RECENT: {
       // Hacer el close preview cuando el deleted y el seleccionado son el mismo
       let deletedRecent = state.recentsUsed.slice();
-      deletedRecent.splice(action.payload, 1);
+      let deletedTile = deletedRecent.splice(action.payload, 1);
       deletedRecent.push({ name: 'empty' });
-
+      if (state.selectedTile) {
+        if (deletedTile[0].name === state.selectedTile.name) {
+          return { ...state, recentsUsed: deletedRecent, selectedTile: null };
+        }
+      }
       return { ...state, recentsUsed: deletedRecent };
     }
     case SHOW_MODAL:

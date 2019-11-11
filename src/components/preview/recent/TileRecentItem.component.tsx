@@ -8,16 +8,24 @@ const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
   tile,
   index
 }) => {
-  const { deleteRecent } = useContext(GeneralContext);
+  const { setCurrentTile, deleteRecent } = useContext(GeneralContext);
 
   const handleDelete = () => {
     deleteRecent(index);
   };
+  const onSetCurrentTile = () => {
+    setCurrentTile(tile);
+  };
+
   return (
     <Fragment>
       <IonCol>
         {tile.imgUrl ? (
-          <IonImg src={tile.imgUrl} alt={tile.name} />
+          <IonImg
+            src={tile.imgUrl}
+            alt={tile.name}
+            onClick={onSetCurrentTile}
+          />
         ) : (
           <IonImg src={Default} alt={tile.name} />
         )}
