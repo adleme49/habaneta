@@ -55,7 +55,30 @@ export const tilesFamilys: ITileFamily[] = [
       { name: 'Contemporary 3' },
       { name: 'Contemporary 4' },
       { name: 'Contemporary 5' },
-      { name: 'Contemporary 6' }
+      { name: 'Contemporary 6' },
+      { name: 'Contemporary 7' },
+      { name: 'Contemporary 8' },
+      { name: 'Contemporary 9' },
+      { name: 'Contemporary 10' },
+      { name: 'Contemporary 11' },
+      { name: 'Contemporary 12' }
+    ]
+  },
+  {
+    name: 'Contemporary A',
+    types: [
+      { name: 'Contemporary 1' },
+      { name: 'Contemporary 2' },
+      { name: 'Contemporary 3' },
+      { name: 'Contemporary 4' },
+      { name: 'Contemporary 5' },
+      { name: 'Contemporary 6' },
+      { name: 'Contemporary 7' },
+      { name: 'Contemporary 8' },
+      { name: 'Contemporary 9' },
+      { name: 'Contemporary 10' },
+      { name: 'Contemporary 11' },
+      { name: 'Contemporary 12' }
     ]
   }
 ];
