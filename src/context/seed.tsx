@@ -24,17 +24,43 @@ export const DomiColors: IColor[] = [
 
 export const borderFamilys: IBorderFamily[] = [
   {
-    name: 'Traditional Border',
+    name: 'Victorian',
+    types: [
+      { name: 'Mod. c66', imgUrl: '../assets/Border/Victorian/c66.png' },
+      { name: 'Mod. c57', imgUrl: '../assets/Border/Victorian/c57.png' },
+      { name: 'Mod. V2' },
+      { name: 'Mod. c28', imgUrl: '../assets/Border/Victorian/c28.png' },
+      { name: 'Mod. c6', imgUrl: '../assets/Border/Victorian/c6.png' },
+      { name: 'Mod. V1' },
+      { name: 'Mod. c4', imgUrl: '../assets/Border/Victorian/c4.png' },
+      { name: 'Mod. V3' }
+    ]
+  },
+  {
+    name: 'Floral',
+    types: [
+      { name: 'Mod. c33', imgUrl: '../assets/Border/Floral/c33.png' },
+      { name: 'Mod. c32', imgUrl: '../assets/Border/Floral/c32.png' },
+      { name: 'Mod. c30', imgUrl: '../assets/Border/Floral/c30.png' },
+      { name: 'Mod. c27', imgUrl: '../assets/Border/Floral/c27.png' },
+      { name: 'Mod. c24', imgUrl: '../assets/Border/Floral/c24.png' },
+      { name: 'Mod. c21', imgUrl: '../assets/Border/Floral/c21.png' },
+      { name: 'Mod. c19', imgUrl: '../assets/Border/Floral/c19.png' },
+      { name: 'Mod. c17', imgUrl: '../assets/Border/Floral/c17.png' },
+      { name: 'Mod. c15', imgUrl: '../assets/Border/Floral/c15.png' },
+      { name: 'Mod. c3', imgUrl: '../assets/Border/Floral/c3.png' }
+    ]
+  },
+  {
+    name: 'Traditional BorderA',
     types: [
       { name: 'TraditionalB 1' },
       { name: 'TraditionalB 2' },
       { name: 'TraditionalB 3' },
-      { name: 'TraditionalB 4' }
+      { name: 'TradB 2' },
+      { name: 'TradB 3' },
+      { name: 'Trad 2' }
     ]
-  },
-  {
-    name: 'Traditional Border1',
-    types: [{ name: 'TraditionalB 1' }, { name: 'TraditionalB 2' }]
   }
 ];
 
@@ -42,43 +68,42 @@ export const tilesFamilys: ITileFamily[] = [
   {
     name: 'Traditional',
     types: [
-      { name: 'Traditional 1' },
-      { name: 'Traditional 2' },
-      { name: 'Traditional 4' }
+      { name: 'Mod. 267', imgUrl: '../assets/Tile/Traditional/267.png' },
+      { name: 'Mod. 248', imgUrl: '../assets/Tile/Traditional/248.png' },
+      { name: 'Mod. 127', imgUrl: '../assets/Tile/Traditional/127.png' },
+      { name: 'Mod. 165', imgUrl: '../assets/Tile/Traditional/165.png' },
+      { name: 'Mod. 143', imgUrl: '../assets/Tile/Traditional/143.png' },
+      { name: 'Mod. 137', imgUrl: '../assets/Tile/Traditional/137.png' }
     ]
   },
   {
     name: 'Contemporary',
     types: [
-      { name: 'Contemporary 1' },
-      { name: 'Contemporary 2' },
-      { name: 'Contemporary 3' },
-      { name: 'Contemporary 4' },
-      { name: 'Contemporary 5' },
-      { name: 'Contemporary 6' },
-      { name: 'Contemporary 7' },
-      { name: 'Contemporary 8' },
-      { name: 'Contemporary 9' },
-      { name: 'Contemporary 10' },
-      { name: 'Contemporary 11' },
-      { name: 'Contemporary 12' }
+      { name: 'Mod. 129', imgUrl: '../assets/Tile/Contemporary/129.png' },
+      { name: 'Mod. 128', imgUrl: '../assets/Tile/Contemporary/128.png' },
+      { name: 'Mod. 114' },
+      { name: 'Mod. 124', imgUrl: '../assets/Tile/Contemporary/124.png' },
+      { name: 'Mod. 117', imgUrl: '../assets/Tile/Contemporary/117.png' },
+      { name: 'Mod. 116', imgUrl: '../assets/Tile/Contemporary/116.png' },
+      { name: 'Mod. 115', imgUrl: '../assets/Tile/Contemporary/115.png' },
+      { name: 'Mod. 110', imgUrl: '../assets/Tile/Contemporary/110.png' },
+      { name: 'Mod. 101', imgUrl: '../assets/Tile/Contemporary/101.png' }
     ]
   },
   {
-    name: 'Contemporary A',
+    name: 'Geometric',
     types: [
-      { name: 'Contemporary 1' },
-      { name: 'Contemporary 2' },
-      { name: 'Contemporary 3' },
-      { name: 'Contemporary 4' },
-      { name: 'Contemporary 5' },
-      { name: 'Contemporary 6' },
-      { name: 'Contemporary 7' },
-      { name: 'Contemporary 8' },
-      { name: 'Contemporary 9' },
-      { name: 'Contemporary 10' },
-      { name: 'Contemporary 11' },
-      { name: 'Contemporary 12' }
+      { name: 'Mod. 167', imgUrl: '../assets/Tile/Geometric/167.png' },
+      { name: 'Mod. 148', imgUrl: '../assets/Tile/Geometric/148.png' },
+      { name: 'Mod. 144', imgUrl: '../assets/Tile/Geometric/144.png' },
+      { name: 'Mod. 135', imgUrl: '../assets/Tile/Geometric/135.png' },
+      { name: 'Mod. 123', imgUrl: '../assets/Tile/Geometric/123.png' },
+      { name: 'Mod. 121', imgUrl: '../assets/Tile/Geometric/121.png' },
+      { name: 'Mod. 111', imgUrl: '../assets/Tile/Geometric/111.png' },
+      { name: 'Mod. 112', imgUrl: '../assets/Tile/Geometric/112.png' },
+      { name: 'Mod. 105', imgUrl: '../assets/Tile/Geometric/105.png' },
+      { name: 'Mod. 103', imgUrl: '../assets/Tile/Geometric/103.png' },
+      { name: 'Geometric 1' }
     ]
   }
 ];

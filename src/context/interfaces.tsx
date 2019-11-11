@@ -24,6 +24,7 @@ export interface IBorderFamily {
 }
 
 export interface ITile {
+  imgUrl?: string;
   name: string;
 }
 export interface IFloor extends ITile {

@@ -10,10 +10,10 @@ const TilesSelector: React.FC = () => {
   return (
     <Fragment>
       {selectedFamily !== null ? (
-        <IonContent scrollX style={{ height: '100%' }}>
-          <IonList>
-            {selectedFamily.types.map((type: IFloor | IBorder) => (
-              <TileItem key={type.name} type={type} />
+        <IonContent scrollX style={{ height: '750px' }}>
+          <IonList inset={true}>
+            {selectedFamily.types.map((tile: IFloor | IBorder) => (
+              <TileItem key={tile.name} tile={tile} />
             ))}
           </IonList>
         </IonContent>

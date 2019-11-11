@@ -1,17 +1,22 @@
 import React, { useContext } from 'react';
 import { IonItem, IonImg } from '@ionic/react';
-import Pic102 from '../../../theme/102.png';
+import Default from '../../../theme/102.png';
 import { IFloor, IBorder } from '../../../context/interfaces';
 import GeneralContext from '../../../context/global/general.context';
 
-const TileItem: React.FC<{ type: IFloor | IBorder }> = ({ type }) => {
+const TileItem: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
   const { setCurrentTile } = useContext(GeneralContext);
+
   const handleClick = () => {
-    setCurrentTile(type);
+    setCurrentTile(tile);
   };
-  return type ? (
+  return tile ? (
     <IonItem onClick={handleClick}>
-      <IonImg src={Pic102} alt={type.name} />
+      {tile.imgUrl ? (
+        <IonImg src={tile.imgUrl} alt={tile.name} />
+      ) : (
+        <IonImg src={Default} alt={tile.name} />
+      )}
     </IonItem>
   ) : null;
 };

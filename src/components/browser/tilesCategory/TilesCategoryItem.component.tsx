@@ -7,6 +7,7 @@ const CategoryItem: React.FC<{
   categoryItem: IBorderFamily | ITileFamily;
 }> = ({ categoryItem }) => {
   const { setCurrentFamily } = useContext(GeneralContext);
+
   const handleClick = (
     event: React.MouseEvent<HTMLIonItemElement, MouseEvent>
   ) => {
