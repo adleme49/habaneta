@@ -9,6 +9,8 @@ export interface IGeneralState {
   colors: IColor[];
   selectedFamily: null | ITileFamily | IBorderFamily;
   selectedTile: null | IFloor | IBorder;
+  latestFloor: null | IFloor;
+  latestBorder: null | IBorder;
   recentsUsed: Array<IFloor | IBorder>;
   preview: boolean;
   selectedColor: string;
@@ -56,6 +58,8 @@ export const initialDomivalues: IGeneralState = {
   borderFamilys: borderFamilys,
   selectedFamily: null,
   recentsUsed: recentsUsed,
+  latestFloor: null,
+  latestBorder: null,
   error: null,
   selectedTile: null,
   preview: false,

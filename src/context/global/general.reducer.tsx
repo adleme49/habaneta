@@ -7,7 +7,8 @@ import {
   ADD_TO_RECENT,
   SHOW_MODAL,
   DELETE_RECENT,
-  SET_CURRENT_TILE_FROM_RECENT
+  SET_CURRENT_TILE_FROM_RECENT,
+  SET_LATEST
 } from '../types';
 
 const GeneralReducer = (state: IGeneralState, action: IAction) => {
@@ -29,6 +30,20 @@ const GeneralReducer = (state: IGeneralState, action: IAction) => {
       return {
         ...state,
         selectedTile: action.payload
+      };
+    case SET_LATEST:
+      return {
+        ...state,
+        latestFloor: state.selectedTile
+          ? state.selectedTile.type === 'Floor'
+            ? state.selectedTile
+            : state.latestFloor
+          : null,
+        latestBorder: state.selectedTile
+          ? state.selectedTile.type === 'Border'
+            ? state.selectedTile
+            : state.latestBorder
+          : null
       };
     case SET_COLOR:
       return {

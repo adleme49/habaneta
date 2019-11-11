@@ -15,7 +15,8 @@ import {
   SHOW_MODAL,
   SET_CURRENT_TILE,
   DELETE_RECENT,
-  SET_CURRENT_TILE_FROM_RECENT
+  SET_CURRENT_TILE_FROM_RECENT,
+  SET_LATEST
 } from '../types';
 import GeneralContext from './general.context';
 import GeneralReducer from './general.reducer';
@@ -30,10 +31,12 @@ const GeneralState = (props: any): JSX.Element => {
   };
   const setCurrentTile = (current: IFloor | IBorder) => {
     dispatch({ type: SET_CURRENT_TILE, payload: current });
+    dispatch({ type: SET_LATEST });
   };
 
   const setCurrentTilefromRecent = (current: IFloor | IBorder) => {
     dispatch({ type: SET_CURRENT_TILE_FROM_RECENT, payload: current });
+    dispatch({ type: SET_LATEST });
   };
 
   const setColor = (color: string) => {
@@ -68,6 +71,8 @@ const GeneralState = (props: any): JSX.Element => {
         colors: state.colors,
         selectedFamily: state.selectedFamily,
         selectedTile: state.selectedTile,
+        latestFloor: state.latestFloor,
+        latestBorder: state.latestBorder,
         recentsUsed: state.recentsUsed,
         selectedColor: state.selectedColor,
         preview: state.preview,

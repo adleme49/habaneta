@@ -1,14 +1,14 @@
 import React, { Fragment, useContext } from 'react';
 import { IonRow, IonCol, IonImg } from '@ionic/react';
 import empty from '../../../theme/empty.png';
-import floor from '../../../theme/floor.png';
-import border from '../../../theme/border.png';
 import GeneralContext from '../../../context/global/general.context';
 import { Vgrid } from './grid';
 
 const TileGrid: React.FC = () => {
   const grid = Vgrid;
-  const { selectedTile, preview } = useContext(GeneralContext);
+  const { selectedTile, latestFloor, latestBorder, preview } = useContext(
+    GeneralContext
+  );
   return (
     <Fragment>
       {selectedTile !== null && preview
@@ -26,8 +26,13 @@ const TileGrid: React.FC = () => {
                           src={selectedTile.imgUrl}
                           alt={selectedTile.name}
                         />
+                      ) : latestFloor != !null ? (
+                        <IonImg
+                          src={latestFloor.imgUrl}
+                          alt={latestFloor.name}
+                        />
                       ) : (
-                        <IonImg src={floor} alt={selectedTile.name} />
+                        <IonImg src={empty} alt={selectedTile.name} />
                       )}
                     </IonCol>
                   ) : (
@@ -40,8 +45,13 @@ const TileGrid: React.FC = () => {
                           src={selectedTile.imgUrl}
                           alt={selectedTile.name}
                         />
+                      ) : latestBorder !== null ? (
+                        <IonImg
+                          src={latestBorder.imgUrl}
+                          alt={latestBorder.name}
+                        />
                       ) : (
-                        <IonImg src={border} alt={selectedTile.name} />
+                        <IonImg src={empty} alt={selectedTile.name} />
                       )}
                     </IonCol>
                   );
