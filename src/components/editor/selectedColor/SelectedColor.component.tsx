@@ -5,16 +5,17 @@ const SelectedColor: React.FC = () => {
   const { selectedColor } = useContext(GeneralContext);
   return (
     <Fragment>
-      <IonCol
-        className='border-darken-4'
-        style={{
-          background: `${selectedColor}`,
-          height: '5rem',
-          border: 'solid 2px'
-        }}
-        size='3'
-        offset='4'
-      ></IonCol>
+      <IonCol size='3' offset='4'>
+        <div
+          className='border-darken-4'
+          style={{
+            background: `${selectedColor}`,
+            height: '5rem',
+            border: 'solid 2px',
+            margin: '1rem 0rem'
+          }}
+        ></div>
+      </IonCol>
     </Fragment>
   );
 };
