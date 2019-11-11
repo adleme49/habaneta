@@ -54,10 +54,10 @@ const GeneralReducer = (state: IGeneralState, action: IAction) => {
       };
     }
     case DELETE_RECENT: {
+      // Hacer el close preview cuando el deleted y el seleccionado son el mismo
       let deletedRecent = state.recentsUsed.slice();
       deletedRecent.splice(action.payload, 1);
       deletedRecent.push({ name: 'empty' });
-      console.log(deletedRecent);
 
       return { ...state, recentsUsed: deletedRecent };
     }
