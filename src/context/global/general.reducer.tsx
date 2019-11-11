@@ -6,7 +6,8 @@ import {
   SET_PREVIEW,
   ADD_TO_RECENT,
   SHOW_MODAL,
-  DELETE_RECENT
+  DELETE_RECENT,
+  SET_CURRENT_TILE_FROM_RECENT
 } from '../types';
 
 const GeneralReducer = (state: IGeneralState, action: IAction) => {
@@ -17,6 +18,14 @@ const GeneralReducer = (state: IGeneralState, action: IAction) => {
         selectedFamily: action.payload
       };
     case SET_CURRENT_TILE:
+      return {
+        ...state,
+        selectedTile: {
+          ...action.payload,
+          type: state.selectedFamily ? state.selectedFamily.type : null
+        }
+      };
+    case SET_CURRENT_TILE_FROM_RECENT:
       return {
         ...state,
         selectedTile: action.payload

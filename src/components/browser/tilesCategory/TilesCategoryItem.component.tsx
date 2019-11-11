@@ -8,9 +8,7 @@ const CategoryItem: React.FC<{
 }> = ({ categoryItem }) => {
   const { setCurrentFamily } = useContext(GeneralContext);
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLIonItemElement, MouseEvent>
-  ) => {
+  const handleClick = () => {
     setCurrentFamily(categoryItem);
   };
 

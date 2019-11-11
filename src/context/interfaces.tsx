@@ -14,18 +14,23 @@ export interface IGeneralState {
   selectedColor: string;
 }
 
-export interface ITileFamily {
+export interface ITileFamily extends Family {
   name: string;
   types: IFloor[];
 }
-export interface IBorderFamily {
+export interface IBorderFamily extends Family {
   name: string;
   types: IBorder[];
+}
+
+export interface Family {
+  type: string;
 }
 
 export interface ITile {
   imgUrl?: string;
   name: string;
+  type?: 'Border' | 'Floor';
 }
 export interface IFloor extends ITile {
   rotation?: boolean;

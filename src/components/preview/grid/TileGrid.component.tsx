@@ -21,14 +21,28 @@ const TileGrid: React.FC = () => {
                       key={columna + j}
                       style={{ padding: '0px', border: 'solid 0.8px' }}
                     >
-                      <IonImg src={floor} alt={selectedTile.name} />
+                      {selectedTile.type === 'Floor' ? (
+                        <IonImg
+                          src={selectedTile.imgUrl}
+                          alt={selectedTile.name}
+                        />
+                      ) : (
+                        <IonImg src={floor} alt={selectedTile.name} />
+                      )}
                     </IonCol>
                   ) : (
                     <IonCol
                       key={columna + j}
                       style={{ padding: '0px', border: 'solid 0.8px' }}
                     >
-                      <IonImg src={border} />
+                      {selectedTile.type === 'Border' ? (
+                        <IonImg
+                          src={selectedTile.imgUrl}
+                          alt={selectedTile.name}
+                        />
+                      ) : (
+                        <IonImg src={border} alt={selectedTile.name} />
+                      )}
                     </IonCol>
                   );
                 })}

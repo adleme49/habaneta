@@ -1,4 +1,4 @@
-import { IonCol, IonImg, IonBadge } from '@ionic/react';
+import { IonCol, IonImg } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
 import GeneralContext from '../../../context/global/general.context';
 import { IBorder, IFloor } from '../../../context/interfaces';

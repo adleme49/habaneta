@@ -1,4 +1,4 @@
-import { IonCol, IonRow } from '@ionic/react';
+import { IonRow } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
 import GeneralContext from '../../../context/global/general.context';
 import { IColor } from '../../../context/interfaces';

@@ -1,4 +1,7 @@
-import { IColor, IBorderFamily, ITileFamily, IFloor } from './interfaces';
+import { IColor, IBorderFamily, ITileFamily } from './interfaces';
+
+export const Border = 'Border';
+export const Floor = 'Floor';
 
 export const DomiColors: IColor[] = [
   { name: 'red', code: '#F44336' },
@@ -25,6 +28,7 @@ export const DomiColors: IColor[] = [
 export const borderFamilys: IBorderFamily[] = [
   {
     name: 'Victorian',
+    type: Border,
     types: [
       { name: 'Mod. c66', imgUrl: '../assets/Border/Victorian/c66.png' },
       { name: 'Mod. c57', imgUrl: '../assets/Border/Victorian/c57.png' },
@@ -38,6 +42,7 @@ export const borderFamilys: IBorderFamily[] = [
   },
   {
     name: 'Floral',
+    type: Border,
     types: [
       { name: 'Mod. c33', imgUrl: '../assets/Border/Floral/c33.png' },
       { name: 'Mod. c32', imgUrl: '../assets/Border/Floral/c32.png' },
@@ -53,6 +58,7 @@ export const borderFamilys: IBorderFamily[] = [
   },
   {
     name: 'Traditional BorderA',
+    type: Border,
     types: [
       { name: 'TraditionalB 1' },
       { name: 'TraditionalB 2' },
@@ -67,6 +73,7 @@ export const borderFamilys: IBorderFamily[] = [
 export const tilesFamilys: ITileFamily[] = [
   {
     name: 'Traditional',
+    type: Floor,
     types: [
       { name: 'Mod. 267', imgUrl: '../assets/Tile/Traditional/267.png' },
       { name: 'Mod. 248', imgUrl: '../assets/Tile/Traditional/248.png' },
@@ -78,6 +85,7 @@ export const tilesFamilys: ITileFamily[] = [
   },
   {
     name: 'Contemporary',
+    type: Floor,
     types: [
       { name: 'Mod. 129', imgUrl: '../assets/Tile/Contemporary/129.png' },
       { name: 'Mod. 128', imgUrl: '../assets/Tile/Contemporary/128.png' },
@@ -92,6 +100,7 @@ export const tilesFamilys: ITileFamily[] = [
   },
   {
     name: 'Geometric',
+    type: Floor,
     types: [
       { name: 'Mod. 167', imgUrl: '../assets/Tile/Geometric/167.png' },
       { name: 'Mod. 148', imgUrl: '../assets/Tile/Geometric/148.png' },
