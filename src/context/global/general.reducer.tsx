@@ -8,7 +8,8 @@ import {
   DELETE_RECENT,
   SET_CURRENT_TILE_FROM_RECENT,
   SET_LATEST,
-  SHOW_ENVIROMENT_MODAL
+  SHOW_ENVIROMENT_MODAL,
+  SHOW_SAVE_MODAL
 } from '../types';
 
 const GeneralReducer = (state: IGeneralState, action: IAction) => {
@@ -93,6 +94,11 @@ const GeneralReducer = (state: IGeneralState, action: IAction) => {
       return {
         ...state,
         showEnviromentModal: !state.showEnviromentModal
+      };
+    case SHOW_SAVE_MODAL:
+      return {
+        ...state,
+        showSaveModal: !state.showSaveModal
       };
     default:
       return state;
