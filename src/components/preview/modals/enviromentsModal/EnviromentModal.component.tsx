@@ -1,18 +1,20 @@
 import React, { Fragment, useContext } from 'react';
 import { IonModal } from '@ionic/react';
-import GeneralContext from '../../../context/global/general.context';
+import GeneralContext from '../../../../context/global/general.context';
 import EnviromentModalContent from './EnviromentModalContent.component';
 
 export const EnviromentModal: React.FC = () => {
-  const { showModal, setShowModal } = useContext(GeneralContext);
+  const { showEnviromentModal, setShowEnviromentModal } = useContext(
+    GeneralContext
+  );
 
   const handelDismiss = () => {
-    setShowModal();
+    setShowEnviromentModal();
   };
 
   return (
     <Fragment>
-      <IonModal isOpen={showModal} onDidDismiss={handelDismiss}>
+      <IonModal isOpen={showEnviromentModal} onDidDismiss={handelDismiss}>
         <EnviromentModalContent />
       </IonModal>
     </Fragment>

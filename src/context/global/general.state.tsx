@@ -12,11 +12,12 @@ import {
   SET_COLOR,
   SET_CURRENT_FAMILY,
   SET_PREVIEW,
-  SHOW_MODAL,
   SET_CURRENT_TILE,
   DELETE_RECENT,
   SET_CURRENT_TILE_FROM_RECENT,
-  SET_LATEST
+  SET_LATEST,
+  SHOW_ENVIROMENT_MODAL,
+  SHOW_SAVE_MODAL
 } from '../types';
 import GeneralContext from './general.context';
 import GeneralReducer from './general.reducer';
@@ -56,15 +57,19 @@ const GeneralState = (props: any): JSX.Element => {
     dispatch({ type: DELETE_RECENT, payload: pos });
   };
 
-  const setShowModal = () => {
-    dispatch({ type: SHOW_MODAL });
+  const setShowEnviromentModal = () => {
+    dispatch({ type: SHOW_ENVIROMENT_MODAL });
+  };
+  const setShowSaveModal = () => {
+    dispatch({ type: SHOW_SAVE_MODAL });
   };
 
   return (
     <GeneralContext.Provider
       value={{
         loading: state.loading,
-        showModal: state.showModal,
+        showEnviromentModal: state.showEnviromentModal,
+        showSaveModal: state.showSaveModal,
         error: state.error,
         tilesFamilys: state.tilesFamilys,
         borderFamilys: state.borderFamilys,
@@ -78,7 +83,8 @@ const GeneralState = (props: any): JSX.Element => {
         preview: state.preview,
         addToRecent,
         deleteRecent,
-        setShowModal,
+        setShowSaveModal,
+        setShowEnviromentModal,
         setCurrentFamily,
         setCurrentTile,
         setCurrentTilefromRecent,

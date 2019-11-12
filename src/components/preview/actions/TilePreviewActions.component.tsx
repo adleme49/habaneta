@@ -3,18 +3,15 @@ import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
 import GeneralContext from '../../../context/global/general.context';
 
 const TilePreviewActions: React.FC = () => {
-  const { setShowModal } = useContext(GeneralContext);
+  const { setShowEnviromentModal } = useContext(GeneralContext);
 
   const handleEnviroment = () => {
-    setShowModal();
+    setShowEnviromentModal();
   };
 
   return (
     <Fragment>
-      <IonSegment
-        onIonChange={e => console.log('Save selected', e.detail.value)}
-        style={{ padding: '2rem 0rem' }}
-      >
+      <IonSegment style={{ padding: '2rem 0rem' }}>
         <IonSegmentButton value="Save">
           <IonLabel>Save</IonLabel>
         </IonSegmentButton>

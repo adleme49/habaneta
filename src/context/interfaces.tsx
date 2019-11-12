@@ -2,7 +2,8 @@ import { DomiColors, tilesFamilys, borderFamilys, recentsUsed } from './seed';
 
 export interface IGeneralState {
   loading: boolean;
-  showModal: boolean;
+  showEnviromentModal: boolean;
+  showSaveModal: boolean;
   error: null | any;
   tilesFamilys: ITileFamily[];
   borderFamilys: IBorderFamily[];
@@ -52,7 +53,8 @@ export interface IAction {
 
 export const initialDomivalues: IGeneralState = {
   loading: false,
-  showModal: false,
+  showEnviromentModal: false,
+  showSaveModal: false,
   colors: DomiColors,
   tilesFamilys: tilesFamilys,
   borderFamilys: borderFamilys,

@@ -5,10 +5,10 @@ import {
   SET_COLOR,
   SET_PREVIEW,
   ADD_TO_RECENT,
-  SHOW_MODAL,
   DELETE_RECENT,
   SET_CURRENT_TILE_FROM_RECENT,
-  SET_LATEST
+  SET_LATEST,
+  SHOW_ENVIROMENT_MODAL
 } from '../types';
 
 const GeneralReducer = (state: IGeneralState, action: IAction) => {
@@ -89,11 +89,10 @@ const GeneralReducer = (state: IGeneralState, action: IAction) => {
       }
       return { ...state, recentsUsed: deletedRecent };
     }
-    case SHOW_MODAL:
-      console.log('es aki');
+    case SHOW_ENVIROMENT_MODAL:
       return {
         ...state,
-        showModal: !state.showModal
+        showEnviromentModal: !state.showEnviromentModal
       };
     default:
       return state;
