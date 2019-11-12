@@ -8,7 +8,7 @@ import EnviromentModal from '../../preview/enviromentsModal/EnviromentModal.comp
 const MainLayaout: React.FC = () => {
   return (
     <Fragment>
-      <IonGrid style={{ height: '100%' }}>
+      <IonGrid style={{ height: '100%' }} className="ion-padding">
         <IonRow>
           <IonCol>
             <TilesBrowserLayout />
@@ -16,7 +16,7 @@ const MainLayaout: React.FC = () => {
           <IonCol>
             <TilesEditorLayout />
           </IonCol>
-          <IonCol size='5'>
+          <IonCol size="5">
             <TilesPreviewLayout />
           </IonCol>
         </IonRow>

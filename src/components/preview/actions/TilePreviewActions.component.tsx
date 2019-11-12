@@ -13,14 +13,15 @@ const TilePreviewActions: React.FC = () => {
     <Fragment>
       <IonSegment
         onIonChange={e => console.log('Save selected', e.detail.value)}
+        style={{ padding: '2rem 0rem' }}
       >
-        <IonSegmentButton value='Save'>
+        <IonSegmentButton value="Save">
           <IonLabel>Save</IonLabel>
         </IonSegmentButton>
         <IonSegmentButton onClick={handleEnviroment}>
           <IonLabel>Enviroment</IonLabel>
         </IonSegmentButton>
-        <IonSegmentButton value='delete'>
+        <IonSegmentButton value="delete">
           <IonLabel>Delete</IonLabel>
         </IonSegmentButton>
       </IonSegment>
