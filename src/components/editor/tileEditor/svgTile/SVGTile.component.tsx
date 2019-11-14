@@ -56,7 +56,6 @@ const SVGTile: React.FC = () => {
 export default SVGTile;
 
 const colorSVG = (svg: Element) => (e: Event) => {
-  const { selectedColor } = useContext(GeneralContext);
   const targetClass = (e.target as Element).getAttribute("class");
   const layer = Array.from(svg.childNodes)
     .reduce(
