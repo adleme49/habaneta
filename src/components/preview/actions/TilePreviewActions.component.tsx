@@ -17,14 +17,11 @@ const TilePreviewActions: React.FC = () => {
   return (
     <Fragment>
       <IonSegment style={{ padding: '2rem 0rem' }}>
-        <IonSegmentButton onClick={onSave}>
-          <IonLabel>Save</IonLabel>
-        </IonSegmentButton>
         <IonSegmentButton onClick={onEnviroment}>
           <IonLabel>Enviroment</IonLabel>
         </IonSegmentButton>
-        <IonSegmentButton value="delete">
-          <IonLabel>Delete</IonLabel>
+        <IonSegmentButton onClick={onSave}>
+          <IonLabel>Save</IonLabel>
         </IonSegmentButton>
       </IonSegment>
     </Fragment>
