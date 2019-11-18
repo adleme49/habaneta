@@ -1,8 +1,8 @@
 import React, { Fragment, useContext } from 'react';
 import { IonCol } from '@ionic/react';
-import GeneralContext from '../../../context/global/general.context';
+import EditorContext from '../../../context/editor/editor.context';
 const SelectedColor: React.FC = () => {
-  const { selectedColor } = useContext(GeneralContext);
+  const { selectedColor } = useContext(EditorContext);
   return (
     <Fragment>
       <IonCol size='3' offset='4'>

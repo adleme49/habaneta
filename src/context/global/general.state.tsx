@@ -1,25 +1,11 @@
-import React, { useReducer } from 'react';
-import {
-  IBorder,
-  IBorderFamily,
-  IGeneralState,
-  initialDomivalues,
-  IFloor,
-  ITileFamily
-} from '../interfaces';
-import {
-  ADD_TO_RECENT,
-  SET_COLOR,
-  SET_CURRENT_FAMILY,
-  SET_PREVIEW,
-  SHOW_MODAL,
-  SET_CURRENT_TILE,
-  DELETE_RECENT,
-  SET_CURRENT_TILE_FROM_RECENT,
-  SET_LATEST
-} from '../types';
-import GeneralContext from './general.context';
-import GeneralReducer from './general.reducer';
+import { IGeneralState } from "./general.models";
+import { useReducer } from "react";
+import GeneralReducer from "./general.reducer";
+import { ITileFamily, IBorderFamily, IFloor, IBorder } from "../interfaces";
+import { SET_CURRENT_FAMILY, SET_CURRENT_TILE, SET_LATEST, SET_CURRENT_TILE_FROM_RECENT, SET_PREVIEW, ADD_TO_RECENT, DELETE_RECENT, SHOW_MODAL } from "./general.actions";
+import { SET_COLOR } from "../editor/editor.actions";
+import GeneralContext from "./general.context";
+
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: IGeneralState = initialDomivalues;

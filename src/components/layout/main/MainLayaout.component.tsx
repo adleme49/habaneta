@@ -5,7 +5,7 @@ import TilesEditorLayout from '../tilesEditor/TilesEditorLayout.component';
 import TilesPreviewLayout from '../tilesPreview/TilesPreviewLayout.component';
 import EnviromentModal from '../../preview/enviromentsModal/EnviromentModal.component';
 
-const MainLayaout: React.FC = () => {
+const MainLayout: React.FC = () => {
   return (
     <Fragment>
       <IonGrid style={{ height: '100%' }}>
@@ -26,4 +26,4 @@ const MainLayaout: React.FC = () => {
   );
 };
 
-export default MainLayaout;
+export default MainLayout;

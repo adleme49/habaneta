@@ -23,7 +23,6 @@ const SVGTile: React.FC = () => {
         svg.classList.add("svg-class-name");
         svg.setAttribute("style", "width: 250px; height: 250px");
         svg.addEventListener("click", (e: Event) => {
-          
           const targetClass = (e.target as Element).getAttribute("class");
           const layer = Array.from(svg.childNodes)
             .reduce(
@@ -71,5 +70,5 @@ const colorSVG = (svg: Element) => (e: Event) => {
         node["attributes"]["class"] &&
         node["attributes"]["class"]["nodeValue"] === targetClass
     );
-  layer.forEach((e: any) => e.setAttribute("fill", selectedColor));
+  layer.forEach((e: any) => e.setAttribute("fill", "white"));
 };

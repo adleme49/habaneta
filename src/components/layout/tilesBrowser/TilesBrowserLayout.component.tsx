@@ -1,9 +1,9 @@
 import { IonCol, IonRow } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
 import GeneralContext from '../../../context/global/general.context';
-import { IGeneralState } from '../../../context/interfaces';
 import Category from '../../browser/tilesCategory/TilesCategory.component';
 import TilesSelector from '../../browser/tilesSelector/TilesSelector.component';
+import { IGeneralState } from '../../../context/global/general.models';
 
 const TilesBrowserLayout: React.FC = () => {
   const { tilesFamilys, borderFamilys } = useContext<Partial<IGeneralState>>(
