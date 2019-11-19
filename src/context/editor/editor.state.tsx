@@ -3,10 +3,22 @@ import EditorReducer from "./editor.reducer";
 import EditorContext from "./editor.context";
 import { IEditorState } from "./editor.models";
 import { ITile } from "../interfaces";
-import { SetTile, SetColor } from "./editor.actions";
+import { SetTile, SetColor, PaintLayer } from "./editor.actions";
 
 export const initialStateEditor: IEditorState = {
-  selectedColor: "white"
+  selectedColor: "white",
+  tile: {
+    name: "Test",
+    svgUrl: "../assets/Tile/Contemporary/tile.svg",
+    layers: {
+      "l1": "white",
+      "l2": "white",
+      "l3": "white",
+      "l4": "white",
+      "l5": "white",
+      "l6": "white",
+    }
+  }
 };
 
 const EditorState = (props: any): JSX.Element => {
@@ -19,14 +31,17 @@ const EditorState = (props: any): JSX.Element => {
   const setColor = (color: string) => {
     dispatch(new SetColor(color));
   };
-
+  const paintLayer = (layerId: string) => {
+    dispatch(new PaintLayer(layerId));
+  };
   return (
     <EditorContext.Provider
       value={{
           selectedColor,
           tile,
           setTile,
-          setColor
+          setColor,
+          paintLayer
       }}
     >
       {props.children}

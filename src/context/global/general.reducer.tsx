@@ -11,7 +11,7 @@ import {
   SHOW_MODAL
 } from "./general.actions";
 
-const GeneralReducer = (state: IGeneralState, action: IAction) => {
+const GeneralReducer = (state: IGeneralState, action: IAction): IGeneralState => {
   switch (action.type) {
     case SET_CURRENT_FAMILY:
       return {
@@ -38,12 +38,12 @@ const GeneralReducer = (state: IGeneralState, action: IAction) => {
           ? state.selectedTile.type === "Floor"
             ? state.selectedTile
             : state.latestFloor
-          : null,
+          : undefined,
         latestBorder: state.selectedTile
           ? state.selectedTile.type === "Border"
             ? state.selectedTile
             : state.latestBorder
-          : null
+          : undefined
       };
     case SET_PREVIEW:
       return {
@@ -79,7 +79,7 @@ const GeneralReducer = (state: IGeneralState, action: IAction) => {
       deletedRecent.push({ name: "empty" });
       if (state.selectedTile) {
         if (deletedTile[0].name === state.selectedTile.name) {
-          return { ...state, recentsUsed: deletedRecent, selectedTile: null };
+          return { ...state, recentsUsed: deletedRecent, selectedTile: undefined };
         }
       }
       return { ...state, recentsUsed: deletedRecent };

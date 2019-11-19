@@ -12,7 +12,6 @@ import {
   DELETE_RECENT,
   SHOW_MODAL
 } from "./general.actions";
-import { SET_COLOR } from "../editor/editor.actions";
 import GeneralContext from "./general.context";
 import { DomiColors, tilesFamilys, borderFamilys, recentsUsed } from "../seed";
 

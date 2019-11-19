@@ -11,7 +11,7 @@ const TileGrid: React.FC = () => {
   );
   return (
     <Fragment>
-      {selectedTile !== null && preview
+      {selectedTile && preview
         ? grid.map((fila, i) => {
             return (
               <IonRow key={i} align-items-center className="ion-no-padding">
@@ -45,7 +45,7 @@ const TileGrid: React.FC = () => {
                           src={selectedTile.imgUrl}
                           alt={selectedTile.name}
                         />
-                      ) : latestBorder !== null ? (
+                      ) : latestBorder ? (
                         <IonImg
                           src={latestBorder.imgUrl}
                           alt={latestBorder.name}

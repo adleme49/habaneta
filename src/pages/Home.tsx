@@ -8,7 +8,7 @@ import GeneralContext from '../context/global/general.context';
 
 const Home: React.FC = () => {
   const { loading } = useContext(GeneralContext);
-  const [showToast, setShowToast] = useState(false);
+  const [showToast] = useState(false);
 
   return (
     <IonPage>

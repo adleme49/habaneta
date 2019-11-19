@@ -4,11 +4,9 @@ import GeneralContext from '../../../context/global/general.context';
 
 const EditorActions: React.FC = () => {
   const { addToRecent, selectedTile } = useContext(GeneralContext);
-
   const handleAddtoRecent = () => {
     addToRecent(selectedTile);
   };
-
   return (
     <Fragment>
       <IonSegment>

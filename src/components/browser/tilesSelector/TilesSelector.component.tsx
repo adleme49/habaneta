@@ -9,7 +9,7 @@ const TilesSelector: React.FC = () => {
 
   return (
     <Fragment>
-      {selectedFamily !== null ? (
+      {selectedFamily ? (
         <IonContent scrollX style={{ height: '750px' }}>
           <IonList inset={true}>
             {selectedFamily.types.map((tile: IFloor | IBorder) => (

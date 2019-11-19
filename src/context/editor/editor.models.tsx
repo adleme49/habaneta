@@ -7,5 +7,6 @@ export interface IEditorState {
 export interface IEditorDispatchers {
   setColor: (color: string) => void;
   setTile: (tile: ITile) => void;
+  paintLayer: (layerId: string) => void;
 }
 
