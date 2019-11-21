@@ -22,7 +22,12 @@ export const DomiColors: IColor[] = [
   { name: 'deeporange', code: '#FF5722' },
   { name: 'brown', code: '#795548' },
   { name: 'grey', code: '#9E9E9E' },
-  { name: 'bluegrey', code: '#607D8B' }
+  { name: 'bluegrey', code: '#607D8B' },
+  { name: 'darken_red', code: '#b71c1c' },
+  { name: 'darken_pink', code: '#880e4f' },
+  { name: 'darken_purple', code: '#4a148c' },
+  { name: 'darken_blue', code: '#0d47a1' },
+  { name: 'darken_amber', code: '#ff6f00' }
 ];
 
 export const borderFamilys: IBorderFamily[] = [

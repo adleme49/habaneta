@@ -88,7 +88,12 @@ const GeneralReducer = (state: IGeneralState, action: IAction): IGeneralState =>
       console.log("es aki");
       return {
         ...state,
-        showModal: !state.showModal
+        showEnviromentModal: !state.showEnviromentModal
+      };
+    case SHOW_SAVE_MODAL:
+      return {
+        ...state,
+        showSaveModal: !state.showSaveModal
       };
     default:
       return state;
