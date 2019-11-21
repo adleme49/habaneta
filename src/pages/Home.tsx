@@ -1,24 +1,25 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import React from 'react';
+import { IonContent, IonPage } from '@ionic/react';
+import React, { Fragment, useState, useContext } from 'react';
+import Loading from '../components/layout/loading/Loading.component';
+import MainLayout from '../components/layout/main/MainLayaout.component';
+import NavLayaout from '../components/layout/nav/NavLayout.component';
+import Toast from '../components/layout/toast/Toast.component';
+import GeneralContext from '../context/global/general.context';
 
 const Home: React.FC = () => {
+  const { loading } = useContext(GeneralContext);
+  const [showToast] = useState(false);
+
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Ionic Blank</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="ion-padding">
-        The world is your oyster.
-        <p>
-          If you get lost, the{' '}
-          <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/">
-            docs
-          </a>{' '}
-          will be your guide.
-        </p>
-      </IonContent>
+      <NavLayaout />
+      {loading ? <Loading loading={loading} /> : null}
+      {showToast ? <Toast showToast={showToast} /> : null}
+      <Fragment>
+        <IonContent className='ion-padding'>
+          <MainLayout />
+        </IonContent>
+      </Fragment>
     </IonPage>
   );
 };
