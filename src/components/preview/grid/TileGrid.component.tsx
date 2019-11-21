@@ -14,19 +14,24 @@ const TileGrid: React.FC = () => {
       {selectedTile && preview
         ? grid.map((fila, i) => {
             return (
-              <IonRow key={i} align-items-center className="ion-no-padding">
+              <IonRow
+                key={i}
+                align-items-center
+                className="ion-no-padding ion-no-margin"
+              >
                 {grid[i].map((columna, j) => {
                   return columna.includes('floor') ? (
                     <IonCol
                       key={columna + j}
-                      style={{ padding: '0px', border: 'solid 0.8px' }}
+                      className="ion-no-padding"
+                      style={{ border: 'solid 0.1rem' }}
                     >
                       {selectedTile.type === 'Floor' ? (
                         <IonImg
                           src={selectedTile.imgUrl}
                           alt={selectedTile.name}
                         />
-                      ) : latestFloor !== !null ? (
+                      ) : latestFloor !== null ? (
                         <IonImg
                           src={latestFloor.imgUrl}
                           alt={latestFloor.name}
@@ -38,14 +43,15 @@ const TileGrid: React.FC = () => {
                   ) : (
                     <IonCol
                       key={columna + j}
-                      style={{ padding: '0px', border: 'solid 0.8px' }}
+                      className="ion-no-padding"
+                      style={{ border: 'solid 0.1rem' }}
                     >
                       {selectedTile.type === 'Border' ? (
                         <IonImg
                           src={selectedTile.imgUrl}
                           alt={selectedTile.name}
                         />
-                      ) : latestBorder ? (
+                      ) : latestBorder !== null ? (
                         <IonImg
                           src={latestBorder.imgUrl}
                           alt={latestBorder.name}
@@ -61,14 +67,19 @@ const TileGrid: React.FC = () => {
           })
         : grid.map((fila, i) => {
             return (
-              <IonRow key={i} align-items-center style={{ padding: '0px' }}>
+              <IonRow key={i} className="ion-no-padding ion-no-margin">
                 {grid[i].map((columna, j) => {
                   return (
                     <IonCol
                       key={columna + j}
-                      style={{ padding: '0px', border: 'solid 0.8px' }}
+                      className="ion-no-padding ion-no-margin"
+                      style={{ border: 'solid 0.09rem ' }}
                     >
-                      <IonImg src={empty} alt={'default'} />
+                      <IonImg
+                        src={empty}
+                        alt={'default'}
+                        style={{ width: '100%', height: '100%' }}
+                      />
                     </IonCol>
                   );
                 })}
