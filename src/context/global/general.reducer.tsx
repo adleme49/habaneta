@@ -1,5 +1,5 @@
-import { IGeneralState } from "./general.models";
-import { IAction } from "../interfaces";
+import { IGeneralState } from './general.models';
+import { IAction } from '../interfaces';
 import {
   SET_CURRENT_FAMILY,
   SET_CURRENT_TILE,
@@ -8,10 +8,13 @@ import {
   SET_PREVIEW,
   ADD_TO_RECENT,
   DELETE_RECENT,
-  SHOW_MODAL
-} from "./general.actions";
+  SHOW_SAVE_MODAL
+} from './general.actions';
 
-const GeneralReducer = (state: IGeneralState, action: IAction): IGeneralState => {
+const GeneralReducer = (
+  state: IGeneralState,
+  action: IAction
+): IGeneralState => {
   switch (action.type) {
     case SET_CURRENT_FAMILY:
       return {
@@ -35,12 +38,12 @@ const GeneralReducer = (state: IGeneralState, action: IAction): IGeneralState =>
       return {
         ...state,
         latestFloor: state.selectedTile
-          ? state.selectedTile.type === "Floor"
+          ? state.selectedTile.type === 'Floor'
             ? state.selectedTile
             : state.latestFloor
           : undefined,
         latestBorder: state.selectedTile
-          ? state.selectedTile.type === "Border"
+          ? state.selectedTile.type === 'Border'
             ? state.selectedTile
             : state.latestBorder
           : undefined
@@ -54,7 +57,7 @@ const GeneralReducer = (state: IGeneralState, action: IAction): IGeneralState =>
       let empty: any[] = [];
       let recents: any[] = [];
       state.recentsUsed.filter((current: any) => {
-        return current.name === "empty"
+        return current.name === 'empty'
           ? empty.push(current)
           : recents.push(current);
       });
@@ -76,20 +79,19 @@ const GeneralReducer = (state: IGeneralState, action: IAction): IGeneralState =>
       // Hacer el close preview cuando el deleted y el seleccionado son el mismo
       let deletedRecent = state.recentsUsed.slice();
       let deletedTile = deletedRecent.splice(action.payload, 1);
-      deletedRecent.push({ name: "empty" });
+      deletedRecent.push({ name: 'empty' });
       if (state.selectedTile) {
         if (deletedTile[0].name === state.selectedTile.name) {
-          return { ...state, recentsUsed: deletedRecent, selectedTile: undefined };
+          return {
+            ...state,
+            recentsUsed: deletedRecent,
+            selectedTile: undefined
+          };
         }
       }
       return { ...state, recentsUsed: deletedRecent };
     }
-    case SHOW_MODAL:
-      console.log("es aki");
-      return {
-        ...state,
-        showEnviromentModal: !state.showEnviromentModal
-      };
+
     case SHOW_SAVE_MODAL:
       return {
         ...state,

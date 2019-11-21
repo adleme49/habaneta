@@ -1,4 +1,3 @@
-import { InputChangeEventDetail } from '@ionic/core';
 import {
   IonButton,
   IonButtons,
@@ -12,27 +11,27 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/react';
-import React, { Fragment, useContext, useState } from 'react';
+import React, { Fragment, useContext } from 'react';
 import GeneralContext from '../../../../context/global/general.context';
 
 const SaveModalContent: React.FC = () => {
-  const initialClient = { name: '', phone: '', address: '' };
-  const [client, setClient] = useState(initialClient);
+  // const initialClient = { name: '', phone: '', address: '' };
   const { latestFloor, latestBorder } = useContext(GeneralContext);
-  const { name, phone, address } = client;
+  // const [client, setClient] = useState(initialClient);
+  // const { name, phone, address } = client;
 
   const onSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(event.timeStamp);
   };
 
-  const handleChange = (event: any) => {
-    console.log(event.target.name, event.target.value);
-    // setClient({
-    //   ...client,
-    //   [event.currentTarget.name]: event.currentTarget.value
-    // });
-  };
+  // const handleChange = (event: any) => {
+  //   console.log(event.target.name, event.target.value);
+  //   // setClient({
+  //   //   ...client,
+  //   //   [event.currentTarget.name]: event.currentTarget.value
+  //   // });
+  // };
 
   return (
     <Fragment>

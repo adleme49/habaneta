@@ -1,8 +1,8 @@
-import { IonRow, IonCol } from "@ionic/react";
-import React, { Fragment, useContext } from "react";
-import EditorContext from "../../../context/editor/editor.context";
-import EditorActions from "../editorActions/EditorActions.components";
-import SVGTile from "./svgTile/SVGTile.component";
+import { IonRow, IonCol } from '@ionic/react';
+import React, { Fragment, useContext } from 'react';
+import EditorContext from '../../../context/editor/editor.context';
+import EditorActions from '../editorActions/EditorActions.components';
+import SVGTile from './svgTile/SVGTile.component';
 
 const TileEditor: React.FC = () => {
   const { tile, paintLayer } = useContext(EditorContext);
@@ -13,7 +13,7 @@ const TileEditor: React.FC = () => {
     <Fragment>
       {tile ? (
         <IonRow>
-          <IonCol size="8" offset="2">
+          <IonCol size="8">
             <SVGTile tile={tile} colorLayer={colorLayer} />
           </IonCol>
 

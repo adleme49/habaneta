@@ -1,19 +1,20 @@
-import React, { useReducer } from "react";
-import { IGeneralState } from "./general.models";
-import GeneralReducer from "./general.reducer";
-import { ITileFamily, IBorderFamily, IFloor, IBorder } from "../interfaces";
+import React, { useReducer } from 'react';
+import { IBorder, IBorderFamily, IFloor, ITileFamily } from '../interfaces';
+import { borderFamilys, DomiColors, recentsUsed, tilesFamilys } from '../seed';
 import {
-  SET_CURRENT_FAMILY,
-  SET_CURRENT_TILE,
-  SET_LATEST,
-  SET_CURRENT_TILE_FROM_RECENT,
-  SET_PREVIEW,
   ADD_TO_RECENT,
   DELETE_RECENT,
-  SHOW_MODAL
-} from "./general.actions";
-import GeneralContext from "./general.context";
-import { DomiColors, tilesFamilys, borderFamilys, recentsUsed } from "../seed";
+  SET_CURRENT_FAMILY,
+  SET_CURRENT_TILE,
+  SET_CURRENT_TILE_FROM_RECENT,
+  SET_LATEST,
+  SET_PREVIEW,
+  SHOW_SAVE_MODAL,
+  SHOW_ENVIROMENT_MODAL
+} from './general.actions';
+import GeneralContext from './general.context';
+import { IGeneralState } from './general.models';
+import GeneralReducer from './general.reducer';
 
 const initialDomivalues: IGeneralState = {
   loading: false,
@@ -21,6 +22,8 @@ const initialDomivalues: IGeneralState = {
   colors: DomiColors,
   tilesFamilys: tilesFamilys,
   borderFamilys: borderFamilys,
+  showSaveModal: false,
+  showEnviromentModal: false,
   recentsUsed: recentsUsed,
   error: null,
   preview: false

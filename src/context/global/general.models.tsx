@@ -6,7 +6,7 @@ import {
   IBorder,
   IFloor,
   IFamily
-} from "../interfaces";
+} from '../interfaces';
 
 export interface IGeneralState {
   loading: boolean;
@@ -16,6 +16,8 @@ export interface IGeneralState {
   tilesFamilys: ITileFamily[];
   borderFamilys: IBorderFamily[];
   colors: IColor[];
+  showEnviromentModal: boolean;
+  showSaveModal: boolean;
   recentsUsed: Array<ITile>;
   selectedTile?: ITile;
   latestBorder?: IBorder;
