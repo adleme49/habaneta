@@ -8,7 +8,8 @@ import {
   SET_PREVIEW,
   ADD_TO_RECENT,
   DELETE_RECENT,
-  SHOW_SAVE_MODAL
+  SHOW_SAVE_MODAL,
+  SHOW_ENVIROMENT_MODAL
 } from './general.actions';
 
 const GeneralReducer = (
@@ -91,11 +92,15 @@ const GeneralReducer = (
       }
       return { ...state, recentsUsed: deletedRecent };
     }
-
     case SHOW_SAVE_MODAL:
       return {
         ...state,
         showSaveModal: !state.showSaveModal
+      };
+    case SHOW_ENVIROMENT_MODAL:
+      return {
+        ...state,
+        showEnviromentModal: !state.showEnviromentModal
       };
     default:
       return state;
