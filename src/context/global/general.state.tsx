@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 import { IBorder, IBorderFamily, IFloor, ITileFamily } from '../interfaces';
-import { borderFamilys, DomiColors, recentsUsed, tilesFamilys } from '../seed';
+import { borderFam, DomiColors, recentsUsed, tilesFam } from '../seed';
 import {
   ADD_TO_RECENT,
   DELETE_RECENT,
@@ -20,8 +20,8 @@ const initialDomivalues: IGeneralState = {
   loading: false,
   showModal: false,
   colors: DomiColors,
-  tilesFamilys: tilesFamilys,
-  borderFamilys: borderFamilys,
+  tilesFamilys: tilesFam,
+  borderFamilys: borderFam,
   showSaveModal: false,
   showEnviromentModal: false,
   recentsUsed: recentsUsed,
@@ -31,7 +31,24 @@ const initialDomivalues: IGeneralState = {
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: IGeneralState = initialDomivalues;
-  const [state, dispatch] = useReducer(GeneralReducer, initialState);
+  const [
+    {
+      loading,
+      showEnviromentModal,
+      showSaveModal,
+      error,
+      tilesFamilys,
+      borderFamilys,
+      colors,
+      selectedFamily,
+      selectedTile,
+      latestFloor,
+      latestBorder,
+      recentsUsed,
+      preview
+    },
+    dispatch
+  ] = useReducer(GeneralReducer, initialState);
 
   // set CurrentCategory
   const setCurrentFamily = (current: ITileFamily | IBorderFamily) => {
@@ -56,8 +73,8 @@ const GeneralState = (props: any): JSX.Element => {
     setPreview();
   };
 
-  const deleteRecent = (pos: number) => {
-    dispatch({ type: DELETE_RECENT, payload: pos });
+  const deleteRecent = (index: number) => {
+    dispatch({ type: DELETE_RECENT, payload: index });
   };
 
   const setShowEnviromentModal = () => {
@@ -70,19 +87,19 @@ const GeneralState = (props: any): JSX.Element => {
   return (
     <GeneralContext.Provider
       value={{
-        loading: state.loading,
-        showEnviromentModal: state.showEnviromentModal,
-        showSaveModal: state.showSaveModal,
-        error: state.error,
-        tilesFamilys: state.tilesFamilys,
-        borderFamilys: state.borderFamilys,
-        colors: state.colors,
-        selectedFamily: state.selectedFamily,
-        selectedTile: state.selectedTile,
-        latestFloor: state.latestFloor,
-        latestBorder: state.latestBorder,
-        recentsUsed: state.recentsUsed,
-        preview: state.preview,
+        loading,
+        showEnviromentModal,
+        showSaveModal,
+        error,
+        tilesFamilys,
+        borderFamilys,
+        colors,
+        selectedFamily,
+        selectedTile,
+        latestFloor,
+        latestBorder,
+        recentsUsed,
+        preview,
         addToRecent,
         deleteRecent,
         setShowSaveModal,

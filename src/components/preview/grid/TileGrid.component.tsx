@@ -31,7 +31,7 @@ const TileGrid: React.FC = () => {
                           src={selectedTile.imgUrl}
                           alt={selectedTile.name}
                         />
-                      ) : latestFloor !== null ? (
+                      ) : latestFloor ? (
                         <IonImg
                           src={latestFloor.imgUrl}
                           alt={latestFloor.name}
@@ -51,7 +51,7 @@ const TileGrid: React.FC = () => {
                           src={selectedTile.imgUrl}
                           alt={selectedTile.name}
                         />
-                      ) : latestBorder !== null ? (
+                      ) : latestBorder ? (
                         <IonImg
                           src={latestBorder.imgUrl}
                           alt={latestBorder.name}

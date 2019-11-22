@@ -1,10 +1,70 @@
-// Categorys
-export const SET_CURRENT_FAMILY = 'SET_CURRENT_FAMILY';
-export const SET_CURRENT_TILE = 'SET_CURRENT_TILE';
-export const SET_LATEST = 'SET_LATEST';
-export const SET_CURRENT_TILE_FROM_RECENT = 'SET_CURRENT_TILE_FROM_RECENT';
-export const SET_PREVIEW = 'SET_PREVIEW';
-export const ADD_TO_RECENT = 'ADD_TO_RECENT';
-export const DELETE_RECENT = 'DELETE_RECENT';
-export const SHOW_SAVE_MODAL = 'SHOW_SAVE_MODAL';
-export const SHOW_ENVIROMENT_MODAL = 'SHOW_ENVIROMENT_MODAL';
+import {
+  IAction,
+  ITileFamily,
+  IBorderFamily,
+  IFloor,
+  IBorder
+} from '../interfaces';
+
+export const SET_CURRENT_FAMILY = '[GLOBAL] SET_CURRENT_FAMILY';
+export const SET_CURRENT_TILE = '[GLOBAL] SET_CURRENT_TILE';
+export const SET_LATEST = '[GLOBAL] SET_LATEST';
+export const SET_CURRENT_TILE_FROM_RECENT =
+  '[GLOBAL] SET_CURRENT_TILE_FROM_RECENT';
+export const SET_PREVIEW = '[GLOBAL] SET_PREVIEW';
+export const ADD_TO_RECENT = '[GLOBAL] ADD_TO_RECENT';
+export const DELETE_RECENT = '[GLOBAL] DELETE_RECENT';
+export const SHOW_ENVIROMENT_MODAL = '[GLOBAL] SHOW_ENVIROMENT_MODAL';
+export const SHOW_SAVE_MODAL = '[GLOBAL] SHOW_SAVE_MODAL';
+
+export class SetCurrentFamily implements IAction {
+  readonly type = SET_CURRENT_FAMILY;
+  constructor(public payload: ITileFamily | IBorderFamily) {}
+}
+
+export class SetCurrentTile implements IAction {
+  readonly type = SET_CURRENT_TILE;
+  constructor(public payload: IFloor | IBorder) {}
+}
+
+export class SetCurrentTilefromRecent implements IAction {
+  readonly type = SET_CURRENT_TILE_FROM_RECENT;
+  constructor(public payload: IFloor | IBorder) {}
+}
+
+export class SetPreview implements IAction {
+  readonly type = SET_PREVIEW;
+}
+
+export class SetLatest implements IAction {
+  readonly type = SET_LATEST;
+}
+
+export class AddtoRecent implements IAction {
+  readonly type = ADD_TO_RECENT;
+  constructor(public payload: IFloor | IBorder) {}
+}
+
+export class DeleteRecent implements IAction {
+  readonly type = DELETE_RECENT;
+  constructor(public payload: number) {}
+}
+
+export class SetShowEnviromentModal implements IAction {
+  readonly type = SHOW_ENVIROMENT_MODAL;
+}
+
+export class SetShowSaveModal implements IAction {
+  readonly type = SHOW_SAVE_MODAL;
+}
+
+export type GlobalAction =
+  | SetCurrentFamily
+  | SetCurrentTile
+  | SetPreview
+  | SetLatest
+  | SetCurrentTilefromRecent
+  | AddtoRecent
+  | DeleteRecent
+  | SetShowEnviromentModal
+  | SetShowSaveModal;

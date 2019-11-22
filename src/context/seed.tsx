@@ -30,7 +30,7 @@ export const DomiColors: IColor[] = [
   { name: 'darken_amber', code: '#ff6f00' }
 ];
 
-export const borderFamilys: IBorderFamily[] = [
+export const borderFam: IBorderFamily[] = [
   {
     name: 'Victorian',
     type: Border,
@@ -75,7 +75,7 @@ export const borderFamilys: IBorderFamily[] = [
   }
 ];
 
-export const tilesFamilys: ITileFamily[] = [
+export const tilesFam: ITileFamily[] = [
   {
     name: 'Traditional',
     type: Floor,
