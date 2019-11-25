@@ -6,7 +6,7 @@ export interface IRecentState {
   recent: ITile[];
 }
 export interface IRecentDispatchers {
-  selectFloor: (tile: string) => void;
-  selectBorder: (tile: string) => void;
-  deleteRecent: (tile: string) => void;
+  selectFloor: (tile: IFloor) => void;
+  selectBorder: (tile: IBorder) => void;
+  deleteRecent: (index: number) => void;
 }
