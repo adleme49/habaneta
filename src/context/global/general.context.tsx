@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { IGeneralState } from './general.models';
+import { IGeneralState, IGlobalDispatchers } from './general.models';
 
 const GeneralContext = createContext<Partial<IGeneralState>>({});
 

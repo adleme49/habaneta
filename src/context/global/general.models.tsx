@@ -24,3 +24,14 @@ export interface IGeneralState {
   latestFloor?: IFloor;
   selectedFamily?: IFamily;
 }
+
+export interface IGlobalDispatchers {
+  setCurrentFamily: (current: ITileFamily | IBorderFamily) => void;
+  setCurrentTile: (current: IFloor | IBorder) => void;
+  addToRecent: (current: IFloor | IBorder) => void;
+  deleteRecent: (index: number) => void;
+  setShowSaveModal: () => void;
+  setShowEnviromentModal: () => void;
+  setCurrentTilefromRecent: (current: IFloor | IBorder) => void;
+  setPreview: () => void;
+}

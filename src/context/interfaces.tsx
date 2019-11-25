@@ -10,7 +10,7 @@ export interface IBorderFamily extends IFamily {
 }
 
 export interface IFamily {
-  type: string;
+  type: 'Border' | 'Floor';
 }
 
 export interface ITile {
