@@ -4,7 +4,7 @@ import { IColor } from '../../../context/interfaces';
 import EditorContext from '../../../context/editor/editor.context';
 
 const ColorPalleteItem: React.FC<{ color: IColor }> = ({ color }) => {
-  const { setColor } = useContext(EditorContext);
+  const { setColor } = useContext(EditorContext) as any;
 
   const handleSetColor = () => {
     setColor(color.code);
@@ -12,7 +12,7 @@ const ColorPalleteItem: React.FC<{ color: IColor }> = ({ color }) => {
 
   return (
     <IonCol
-      size='2'
+      size="2"
       style={{ background: color.code, height: '3rem' }}
       onClick={handleSetColor}
     ></IonCol>

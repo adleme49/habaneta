@@ -86,7 +86,7 @@ const GeneralReducer = (
       // Hacer el close preview cuando el deleted y el seleccionado son el mismo
       let deletedRecent = state.recentsUsed.slice();
       let deletedTile = deletedRecent.splice(indexFDeleted, 1);
-      deletedRecent.push({ name: 'empty' });
+      deletedRecent.push({ name: 'empty', id: '1' });
       if (state.selectedTile) {
         if (deletedTile[0].name === state.selectedTile.name) {
           return {

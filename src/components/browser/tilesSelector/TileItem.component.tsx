@@ -5,7 +5,7 @@ import { IFloor, IBorder } from '../../../context/interfaces';
 import GeneralContext from '../../../context/global/general.context';
 
 const TileItem: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
-  const { setCurrentTile } = useContext(GeneralContext);
+  const { setCurrentTile } = useContext(GeneralContext) as any;
 
   const handleClick = () => {
     setCurrentTile(tile);

@@ -26,7 +26,7 @@ export interface IGeneralState {
 }
 
 export interface IGlobalDispatchers {
-  setCurrentFamily: (current: ITileFamily | IBorderFamily) => void;
+  setCurrentFamily: (current: IFamily) => void;
   setCurrentTile: (current: IFloor | IBorder) => void;
   addToRecent: (current: IFloor | IBorder) => void;
   deleteRecent: (index: number) => void;

@@ -3,7 +3,7 @@ import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
 import GeneralContext from '../../../context/global/general.context';
 
 const EditorActions: React.FC = () => {
-  const { addToRecent, selectedTile } = useContext(GeneralContext);
+  const { addToRecent, selectedTile } = useContext(GeneralContext) as any;
   const handleAddtoRecent = () => {
     addToRecent(selectedTile);
   };

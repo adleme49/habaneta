@@ -6,7 +6,7 @@ import GeneralContext from '../../../context/global/general.context';
 const CategoryItem: React.FC<{
   categoryItem: IBorderFamily | ITileFamily;
 }> = ({ categoryItem }) => {
-  const { setCurrentFamily } = useContext(GeneralContext);
+  const { setCurrentFamily } = useContext(GeneralContext) as any;
 
   const handleClick = () => {
     setCurrentFamily(categoryItem);

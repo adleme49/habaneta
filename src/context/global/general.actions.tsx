@@ -1,9 +1,8 @@
 import {
   IAction,
-  ITileFamily,
-  IBorderFamily,
   IFloor,
-  IBorder
+  IBorder,
+  IFamily
 } from '../interfaces';
 
 export const SET_CURRENT_FAMILY = '[GLOBAL] SET_CURRENT_FAMILY';
@@ -19,7 +18,7 @@ export const SHOW_SAVE_MODAL = '[GLOBAL] SHOW_SAVE_MODAL';
 
 export class SetCurrentFamily implements IAction {
   readonly type = SET_CURRENT_FAMILY;
-  constructor(public payload: ITileFamily | IBorderFamily) {}
+  constructor(public payload: IFamily) {}
 }
 
 export class SetCurrentTile implements IAction {

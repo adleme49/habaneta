@@ -5,7 +5,7 @@ import GeneralContext from '../../../context/global/general.context';
 import { IBorder, IFloor } from '../../../context/interfaces';
 
 const TilesSelector: React.FC = () => {
-  const { selectedFamily } = useContext(GeneralContext);
+  const { selectedFamily } = useContext(GeneralContext) as any;
 
   return (
     <Fragment>

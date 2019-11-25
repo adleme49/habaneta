@@ -6,7 +6,7 @@ import EnviromentModalContent from './EnviromentModalContent.component';
 export const EnviromentModal: React.FC = () => {
   const { showEnviromentModal, setShowEnviromentModal } = useContext(
     GeneralContext
-  );
+  ) as any;
 
   const handelDismiss = () => {
     setShowEnviromentModal();

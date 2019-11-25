@@ -8,6 +8,7 @@ import { SetTile, SetColor, PaintLayer } from "./editor.actions";
 export const initialStateEditor: IEditorState = {
   selectedColor: "white",
   tile: {
+    id: '1',
     name: "Test",
     svgUrl: "../assets/Tile/Contemporary/tile.svg",
     layers: {

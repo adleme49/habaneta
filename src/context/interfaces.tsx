@@ -14,8 +14,8 @@ export interface IFamily {
 }
 
 export interface ITile {
-  id: string;
   name: string;
+  id?: string;
   layers?: Dict<string>;
   imgUrl?: string;
   svgUrl?: string;

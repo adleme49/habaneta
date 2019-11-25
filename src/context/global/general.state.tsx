@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { IBorder, IBorderFamily, IFloor, ITileFamily } from '../interfaces';
+import { IBorder, IFloor, IFamily } from '../interfaces';
 import { borderFam, DomiColors, recentsUsed, tilesFam } from '../seed';
 import {
   SetCurrentFamily,
@@ -51,7 +51,7 @@ const GeneralState = (props: any): JSX.Element => {
   ] = useReducer(GeneralReducer, initialState);
 
   // set CurrentCategory
-  const setCurrentFamily = (current: ITileFamily | IBorderFamily) => {
+  const setCurrentFamily = (current: IFamily) => {
     dispatch(new SetCurrentFamily(current));
   };
   const setCurrentTile = (current: IFloor | IBorder) => {

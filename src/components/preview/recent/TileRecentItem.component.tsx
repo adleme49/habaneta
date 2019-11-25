@@ -8,7 +8,9 @@ const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
   tile,
   index
 }) => {
-  const { setCurrentTilefromRecent, deleteRecent } = useContext(GeneralContext);
+  const { setCurrentTilefromRecent, deleteRecent } = useContext(
+    GeneralContext
+  ) as any;
 
   const handleDelete = () => {
     deleteRecent(index);
@@ -38,7 +40,7 @@ const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
             top: '0px',
             right: '0px'
           }}
-          color='danger'
+          color="danger"
         >
           X
         </IonBadge>
