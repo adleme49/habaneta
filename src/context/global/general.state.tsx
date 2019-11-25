@@ -1,16 +1,16 @@
 import React, { useReducer } from 'react';
 import { IBorder, IBorderFamily, IFloor, ITileFamily } from '../interfaces';
-import { borderFamilys, DomiColors, recentsUsed, tilesFamilys } from '../seed';
+import { borderFam, DomiColors, recentsUsed, tilesFam } from '../seed';
 import {
-  ADD_TO_RECENT,
-  DELETE_RECENT,
-  SET_CURRENT_FAMILY,
-  SET_CURRENT_TILE,
-  SET_CURRENT_TILE_FROM_RECENT,
-  SET_LATEST,
-  SET_PREVIEW,
-  SHOW_SAVE_MODAL,
-  SHOW_ENVIROMENT_MODAL
+  SetCurrentFamily,
+  SetCurrentTile,
+  SetLatest,
+  SetCurrentTilefromRecent,
+  SetPreview,
+  AddtoRecent,
+  DeleteRecent,
+  SetShowEnviromentModal,
+  SetShowSaveModal
 } from './general.actions';
 import GeneralContext from './general.context';
 import { IGeneralState } from './general.models';
@@ -20,8 +20,8 @@ const initialDomivalues: IGeneralState = {
   loading: false,
   showModal: false,
   colors: DomiColors,
-  tilesFamilys: tilesFamilys,
-  borderFamilys: borderFamilys,
+  tilesFamilys: tilesFam,
+  borderFamilys: borderFam,
   showSaveModal: false,
   showEnviromentModal: false,
   recentsUsed: recentsUsed,
@@ -31,58 +31,75 @@ const initialDomivalues: IGeneralState = {
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: IGeneralState = initialDomivalues;
-  const [state, dispatch] = useReducer(GeneralReducer, initialState);
+  const [
+    {
+      loading,
+      showEnviromentModal,
+      showSaveModal,
+      error,
+      tilesFamilys,
+      borderFamilys,
+      colors,
+      selectedFamily,
+      selectedTile,
+      latestFloor,
+      latestBorder,
+      recentsUsed,
+      preview
+    },
+    dispatch
+  ] = useReducer(GeneralReducer, initialState);
 
   // set CurrentCategory
   const setCurrentFamily = (current: ITileFamily | IBorderFamily) => {
-    dispatch({ type: SET_CURRENT_FAMILY, payload: current });
+    dispatch(new SetCurrentFamily(current));
   };
   const setCurrentTile = (current: IFloor | IBorder) => {
-    dispatch({ type: SET_CURRENT_TILE, payload: current });
-    dispatch({ type: SET_LATEST });
+    dispatch(new SetCurrentTile(current));
+    dispatch(new SetLatest());
   };
 
   const setCurrentTilefromRecent = (current: IFloor | IBorder) => {
-    dispatch({ type: SET_CURRENT_TILE_FROM_RECENT, payload: current });
-    dispatch({ type: SET_LATEST });
+    dispatch(new SetCurrentTilefromRecent(current));
+    dispatch(new SetLatest());
   };
 
   const setPreview = () => {
-    dispatch({ type: SET_PREVIEW });
+    dispatch(new SetPreview());
   };
 
   const addToRecent = (current: IFloor | IBorder) => {
-    dispatch({ type: ADD_TO_RECENT, payload: current });
+    dispatch(new AddtoRecent(current));
     setPreview();
   };
 
-  const deleteRecent = (pos: number) => {
-    dispatch({ type: DELETE_RECENT, payload: pos });
+  const deleteRecent = (index: number) => {
+    dispatch(new DeleteRecent(index));
   };
 
   const setShowEnviromentModal = () => {
-    dispatch({ type: SHOW_ENVIROMENT_MODAL });
+    dispatch(new SetShowEnviromentModal());
   };
   const setShowSaveModal = () => {
-    dispatch({ type: SHOW_SAVE_MODAL });
+    dispatch(new SetShowSaveModal());
   };
 
   return (
     <GeneralContext.Provider
       value={{
-        loading: state.loading,
-        showEnviromentModal: state.showEnviromentModal,
-        showSaveModal: state.showSaveModal,
-        error: state.error,
-        tilesFamilys: state.tilesFamilys,
-        borderFamilys: state.borderFamilys,
-        colors: state.colors,
-        selectedFamily: state.selectedFamily,
-        selectedTile: state.selectedTile,
-        latestFloor: state.latestFloor,
-        latestBorder: state.latestBorder,
-        recentsUsed: state.recentsUsed,
-        preview: state.preview,
+        loading,
+        showEnviromentModal,
+        showSaveModal,
+        error,
+        tilesFamilys,
+        borderFamilys,
+        colors,
+        selectedFamily,
+        selectedTile,
+        latestFloor,
+        latestBorder,
+        recentsUsed,
+        preview,
         addToRecent,
         deleteRecent,
         setShowSaveModal,

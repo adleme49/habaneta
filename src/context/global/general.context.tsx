@@ -1,6 +1,8 @@
 import { createContext } from 'react';
-import { IGeneralState } from './general.models';
+import { IGeneralState, IGlobalDispatchers } from './general.models';
 
-const GeneralContext = createContext<IGeneralState | any>({});
+const GeneralContext = createContext<
+  (IGeneralState & IGlobalDispatchers) | any
+>({});
 
 export default GeneralContext;

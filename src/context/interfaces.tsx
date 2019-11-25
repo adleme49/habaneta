@@ -10,7 +10,7 @@ export interface IBorderFamily extends IFamily {
 }
 
 export interface IFamily {
-  type: string;
+  type: 'Border' | 'Floor';
 }
 
 export interface ITile {
@@ -18,7 +18,7 @@ export interface ITile {
   layers?: Dict<string>;
   imgUrl?: string;
   svgUrl?: string;
-  type?: "Border" | "Floor";
+  type?: 'Border' | 'Floor';
 }
 export interface IFloor extends ITile {
   rotation?: boolean;
