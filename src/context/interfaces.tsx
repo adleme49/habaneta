@@ -14,11 +14,12 @@ export interface IFamily {
 }
 
 export interface ITile {
+  id: string;
   name: string;
   layers?: Dict<string>;
   imgUrl?: string;
   svgUrl?: string;
-  type?: "Border" | "Floor";
+  type?: 'Border' | 'Floor';
 }
 export interface IFloor extends ITile {
   rotation?: boolean;
