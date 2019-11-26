@@ -3,10 +3,12 @@ import { ITile, IFloor, IBorder } from '../interfaces';
 export interface IRecentState {
   selectedFloor?: IFloor;
   selectedBorder?: IBorder;
+  selectedFloorIndex?: number;
+  selectedBorderIndex?: number;
   recent: ITile[];
 }
 export interface IRecentDispatchers {
-  selectFloor: (tile: IFloor) => void;
-  selectBorder: (tile: IBorder) => void;
+  selectLatest: (index: number) => void;
+  addRecent: (tile: ITile) => void;
   deleteRecent: (index: number) => void;
 }

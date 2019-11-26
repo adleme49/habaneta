@@ -80,7 +80,17 @@ export const tilesFam: ITileFamily[] = [
     name: 'Traditional',
     type: Floor,
     types: [
-      { name: 'Mod. 267', imgUrl: '../assets/Tile/Traditional/267.png' },
+      {
+        name: 'Mod. 267',
+        imgUrl: '../assets/Tile/Contemporary/tile.svg',
+        layers: {
+          l1: 'red',
+          l2: 'green',
+          l3: 'blue',
+          l4: 'black',
+          l5: 'gray',
+        }
+      },
       { name: 'Mod. 248', imgUrl: '../assets/Tile/Traditional/248.png' },
       { name: 'Mod. 127', imgUrl: '../assets/Tile/Traditional/127.png' },
       { name: 'Mod. 165', imgUrl: '../assets/Tile/Traditional/165.png' },
@@ -122,7 +132,7 @@ export const tilesFam: ITileFamily[] = [
   }
 ];
 
-export const recentsUsed = [
+export const recent = [
   { name: 'empty' },
   { name: 'empty' },
   { name: 'empty' },

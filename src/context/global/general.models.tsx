@@ -18,10 +18,7 @@ export interface IGeneralState {
   colors: IColor[];
   showEnviromentModal: boolean;
   showSaveModal: boolean;
-  recentsUsed: Array<ITile>;
   selectedTile?: ITile;
-  latestBorder?: IBorder;
-  latestFloor?: IFloor;
   selectedFamily?: IFamily;
 }
 

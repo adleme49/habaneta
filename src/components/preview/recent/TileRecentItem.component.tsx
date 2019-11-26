@@ -3,20 +3,19 @@ import { IonCol, IonImg, IonBadge } from '@ionic/react';
 import Default from '../../../theme/102.png';
 import { ITile } from '../../../context/interfaces';
 import GeneralContext from '../../../context/global/general.context';
+import RecentContext from '../../../context/recent/recent.context';
 
 const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
   tile,
   index
 }) => {
-  const { setCurrentTilefromRecent, deleteRecent } = useContext(
-    GeneralContext
-  ) as any;
+  const { selectLatest, deleteRecent } = useContext(RecentContext) as any;
 
   const handleDelete = () => {
     deleteRecent(index);
   };
   const onSetCurrentTilefromRecent = () => {
-    setCurrentTilefromRecent(tile);
+    selectLatest(tile);
   };
 
   return (

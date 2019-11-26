@@ -2,11 +2,12 @@ import React, { useReducer } from 'react';
 import RecentReducer from './recent.reducer';
 import RecentContext from './recent.context';
 import { IRecentState } from './recent.models';
-import { SelectFloor, SelectBorder, DeleteRecent } from './recent.actions';
-import { IFloor, IBorder } from '../interfaces';
+import { DeleteRecent, SelectLatest, AddRecent } from './recent.actions';
+import { ITile } from '../interfaces';
+import { recent } from '../seed';
 
 export const initialStateRecent: IRecentState = {
-  recent: []
+  recent
 };
 
 const RecentState = (props: any): JSX.Element => {
@@ -16,11 +17,11 @@ const RecentState = (props: any): JSX.Element => {
     initialState
   );
 
-  const selectFloor = (tile: IFloor) => {
-    dispatch(new SelectFloor(tile));
+  const addRecent = (tile: ITile) => {
+    dispatch(new AddRecent(tile));
   };
-  const selectBorder = (tile: IBorder) => {
-    dispatch(new SelectBorder(tile));
+  const selectLatest = (index: number) => {
+    dispatch(new SelectLatest(index));
   };
   const deleteRecent = (index: number) => {
     dispatch(new DeleteRecent(index));
@@ -31,8 +32,8 @@ const RecentState = (props: any): JSX.Element => {
         selectedBorder,
         selectedFloor,
         recent,
-        selectFloor,
-        selectBorder,
+        addRecent,
+        selectLatest,
         deleteRecent
       }}
     >

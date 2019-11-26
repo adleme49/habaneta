@@ -3,12 +3,9 @@ import React, { Fragment, useContext } from 'react';
 import GeneralContext from '../../../context/global/general.context';
 import Category from '../../browser/tilesCategory/TilesCategory.component';
 import TilesSelector from '../../browser/tilesSelector/TilesSelector.component';
-import { IGeneralState } from '../../../context/global/general.models';
 
 const TilesBrowserLayout: React.FC = () => {
-  const { tilesFamilys, borderFamilys } = useContext<Partial<IGeneralState>>(
-    GeneralContext
-  );
+  const { tilesFamilys, borderFamilys } = useContext(GeneralContext);
 
   return (
     <Fragment>
@@ -16,7 +13,7 @@ const TilesBrowserLayout: React.FC = () => {
         <h2>Buscador de Lozas</h2>
       </IonRow>
       <IonRow align-self-start>
-        <IonCol size='7'>
+        <IonCol size="7">
           <Category title={'TILES'} tileFamilys={tilesFamilys} />
           <Category title={'BORDER'} borderFamilys={borderFamilys} />
         </IonCol>

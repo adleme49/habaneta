@@ -8,7 +8,6 @@ const TileEditor: React.FC = () => {
   const { tile, paintLayer } = useContext(EditorContext) as any;
 
   const colorLayer = (layerId: string) => paintLayer(layerId);
-
   return (
     <Fragment>
       {tile ? (
@@ -27,13 +26,3 @@ const TileEditor: React.FC = () => {
 };
 
 export default TileEditor;
-
-// {selectedTile.imgUrl ? (
-//   <IonCol size='8' offset='2'>
-//     <IonImg src={selectedTile.imgUrl} alt={selectedTile.name} />
-//   </IonCol>
-// ) : (
-//   <IonCol size='8' offset='2'>
-//     <IonImg src={Default} alt={selectedTile.name} />
-//   </IonCol>
-// )}

@@ -7,25 +7,12 @@ import { SetTile, SetColor, PaintLayer } from "./editor.actions";
 
 export const initialStateEditor: IEditorState = {
   selectedColor: "white",
-  tile: {
-    id: '1',
-    name: "Test",
-    svgUrl: "../assets/Tile/Contemporary/tile.svg",
-    layers: {
-      "l1": "white",
-      "l2": "white",
-      "l3": "white",
-      "l4": "white",
-      "l5": "white",
-      "l6": "white",
-    }
-  }
 };
 
 const EditorState = (props: any): JSX.Element => {
   const initialState: IEditorState = initialStateEditor;
   const [{selectedColor, tile}, dispatch] = useReducer(EditorReducer, initialState);
-
+  
   const setTile = (tile: ITile) => {
     dispatch(new SetTile(tile));
   };

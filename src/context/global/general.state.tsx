@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 import { IBorder, IFloor, IFamily } from '../interfaces';
-import { borderFam, DomiColors, recentsUsed, tilesFam } from '../seed';
+import { borderFam, DomiColors, tilesFam } from '../seed';
 import {
   SetCurrentFamily,
   SetCurrentTile,
@@ -24,7 +24,6 @@ const initialDomivalues: IGeneralState = {
   borderFamilys: borderFam,
   showSaveModal: false,
   showEnviromentModal: false,
-  recentsUsed: recentsUsed,
   error: null,
   preview: false
 };
@@ -42,9 +41,6 @@ const GeneralState = (props: any): JSX.Element => {
       colors,
       selectedFamily,
       selectedTile,
-      latestFloor,
-      latestBorder,
-      recentsUsed,
       preview
     },
     dispatch
@@ -96,9 +92,6 @@ const GeneralState = (props: any): JSX.Element => {
         colors,
         selectedFamily,
         selectedTile,
-        latestFloor,
-        latestBorder,
-        recentsUsed,
         preview,
         addToRecent,
         deleteRecent,

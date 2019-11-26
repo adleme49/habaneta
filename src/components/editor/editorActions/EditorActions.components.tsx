@@ -1,11 +1,13 @@
 import React, { Fragment, useContext } from 'react';
 import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
 import GeneralContext from '../../../context/global/general.context';
+import RecentContext from '../../../context/recent/recent.context';
 
 const EditorActions: React.FC = () => {
-  const { addToRecent, selectedTile } = useContext(GeneralContext) as any;
+  const { selectedTile } = useContext(GeneralContext) as any;
+  const { addRecent } = useContext(RecentContext) as any;
   const handleAddtoRecent = () => {
-    addToRecent(selectedTile);
+    addRecent(selectedTile);
   };
   return (
     <Fragment>

@@ -1,22 +1,71 @@
 import { IRecentState } from './recent.models';
 import {
-  SELECT_BORDER,
-  SELECT_FLOOR,
+  RecentAction,
   DELETE_RECENT,
-  RecentAction
+  SELECT_LATEST,
+  ADD_RECENT
 } from './recent.actions';
+import { ITile } from '../interfaces';
 
 const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
   switch (action.type) {
-    case SELECT_BORDER:
-      const selectedBorder = action.payload;
-      return { ...state, selectedBorder };
-    case SELECT_FLOOR:
-      const selectedFloor = action.payload;
-      return { ...state, selectedFloor };
-    case DELETE_RECENT:
-      const recent = state.recent.splice(action.payload)
+    case SELECT_LATEST: {
+      const tile = state.recent[action.payload];
+      if (tile.type === 'Floor') {
+        return { ...state, selectedFloor: tile };
+      }
+      return {
+        ...state,
+        selectedBorder: tile
+      };
+    }
+    case ADD_RECENT: {
+      const tile = action.payload;
+      let empty: any[] = [];
+      let recents: any[] = [];
+      state.recent.filter((current: ITile) => {
+        return current.name === 'empty'
+          ? empty.push(current)
+          : recents.push(current);
+      });
+      if (empty.length > 0) {
+        empty.push(tile);
+        empty.shift();
+        empty.reverse();
+      } else {
+        recents.shift();
+        recents.push(tile);
+      }
+      const recent = [...recents, ...empty];
+      return {
+        ...state,
+        recent
+      };
+    }
+    case DELETE_RECENT: {
+      const index = action.payload;
+      const recent = [
+        ...state.recent.slice().splice(index, 1),
+        { name: 'empty' }
+      ];
+
+      if (index === state.selectedBorderIndex) {
+        return {
+          ...state,
+          recent,
+          selectedBorder: undefined,
+          selectedBorderIndex: undefined
+        };
+      } else if (index === state.selectedFloorIndex) {
+        return {
+          ...state,
+          recent,
+          selectedFloor: undefined,
+          selectedFloorIndex: undefined
+        };
+      }
       return { ...state, recent };
+    }
     default:
       return state;
   }
