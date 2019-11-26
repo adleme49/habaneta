@@ -1,7 +1,8 @@
 import React, { Fragment, useContext } from 'react';
-import { IonModal } from '@ionic/react';
+import { IonModal, IonContent } from '@ionic/react';
 import SaveModalContent from './SaveModalContent.component';
 import GeneralContext from '../../../../context/global/general.context';
+import './../Modal.css';
 
 const SaveModal: React.FC = () => {
   const { showSaveModal, setShowSaveModal } = useContext(GeneralContext) as any;
@@ -13,9 +14,15 @@ const SaveModal: React.FC = () => {
 
   return (
     <Fragment>
-      <IonModal isOpen={showSaveModal} onDidDismiss={handelDismiss}>
-        <SaveModalContent />
-      </IonModal>
+      <IonContent>
+        <IonModal
+          isOpen={showSaveModal}
+          onDidDismiss={handelDismiss}
+          cssClass="saveModal"
+        >
+          <SaveModalContent />
+        </IonModal>
+      </IonContent>
     </Fragment>
   );
 };

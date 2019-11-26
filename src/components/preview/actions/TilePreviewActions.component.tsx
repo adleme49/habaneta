@@ -13,10 +13,16 @@ const TilePreviewActions: React.FC = () => {
   const onSave = () => {
     setShowSaveModal();
   };
+  const onGallery = () => {
+    console.log('setShowGallery()');
+  };
 
   return (
     <Fragment>
       <IonSegment style={{ padding: '2rem 0rem' }}>
+        <IonSegmentButton onClick={onGallery}>
+          <IonLabel>Gallery</IonLabel>
+        </IonSegmentButton>
         <IonSegmentButton onClick={onEnviroment}>
           <IonLabel>Enviroment</IonLabel>
         </IonSegmentButton>
