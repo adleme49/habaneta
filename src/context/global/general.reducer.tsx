@@ -9,7 +9,8 @@ import {
   DELETE_RECENT,
   SHOW_SAVE_MODAL,
   SHOW_ENVIROMENT_MODAL,
-  GlobalAction
+  GlobalAction,
+  SHOW_GALLERY_MODAL
 } from './general.actions';
 
 const GeneralReducer = (
@@ -107,6 +108,11 @@ const GeneralReducer = (
       return {
         ...state,
         showEnviromentModal: !state.showEnviromentModal
+      };
+    case SHOW_GALLERY_MODAL:
+      return {
+        ...state,
+        showGalleryModal: !state.showGalleryModal
       };
     default:
       return state;

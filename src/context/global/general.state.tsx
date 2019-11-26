@@ -1,15 +1,16 @@
 import React, { useReducer } from 'react';
-import { IBorder, IFloor, IFamily } from '../interfaces';
+import { IBorder, IFamily, IFloor } from '../interfaces';
 import { borderFam, DomiColors, recentsUsed, tilesFam } from '../seed';
 import {
-  SetCurrentFamily,
-  SetCurrentTile,
-  SetLatest,
-  SetCurrentTilefromRecent,
-  SetPreview,
   AddtoRecent,
   DeleteRecent,
+  SetCurrentFamily,
+  SetCurrentTile,
+  SetCurrentTilefromRecent,
+  SetLatest,
+  SetPreview,
   SetShowEnviromentModal,
+  SetShowGalleryModal,
   SetShowSaveModal
 } from './general.actions';
 import GeneralContext from './general.context';
@@ -23,6 +24,7 @@ const initialDomivalues: IGeneralState = {
   tilesFamilys: tilesFam,
   borderFamilys: borderFam,
   showSaveModal: false,
+  showGalleryModal: false,
   showEnviromentModal: false,
   recentsUsed: recentsUsed,
   error: null,
@@ -36,6 +38,7 @@ const GeneralState = (props: any): JSX.Element => {
       loading,
       showEnviromentModal,
       showSaveModal,
+      showGalleryModal,
       error,
       tilesFamilys,
       borderFamilys,
@@ -83,6 +86,9 @@ const GeneralState = (props: any): JSX.Element => {
   const setShowSaveModal = () => {
     dispatch(new SetShowSaveModal());
   };
+  const setShowGalleryModal = () => {
+    dispatch(new SetShowGalleryModal());
+  };
 
   return (
     <GeneralContext.Provider
@@ -90,6 +96,7 @@ const GeneralState = (props: any): JSX.Element => {
         loading,
         showEnviromentModal,
         showSaveModal,
+        showGalleryModal,
         error,
         tilesFamilys,
         borderFamilys,
@@ -104,6 +111,7 @@ const GeneralState = (props: any): JSX.Element => {
         deleteRecent,
         setShowSaveModal,
         setShowEnviromentModal,
+        setShowGalleryModal,
         setCurrentFamily,
         setCurrentTile,
         setCurrentTilefromRecent,

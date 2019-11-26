@@ -3,9 +3,11 @@ import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
 import GeneralContext from '../../../context/global/general.context';
 
 const TilePreviewActions: React.FC = () => {
-  const { setShowEnviromentModal, setShowSaveModal } = useContext(
-    GeneralContext
-  ) as any;
+  const {
+    setShowEnviromentModal,
+    setShowSaveModal,
+    setShowGalleryModal
+  } = useContext(GeneralContext) as any;
 
   const onEnviroment = () => {
     setShowEnviromentModal();
@@ -14,7 +16,7 @@ const TilePreviewActions: React.FC = () => {
     setShowSaveModal();
   };
   const onGallery = () => {
-    console.log('setShowGallery()');
+    setShowGalleryModal();
   };
 
   return (

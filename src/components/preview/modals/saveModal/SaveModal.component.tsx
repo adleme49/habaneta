@@ -9,7 +9,6 @@ const SaveModal: React.FC = () => {
 
   const handelDismiss = () => {
     setShowSaveModal();
-    console.log('Dismiss');
   };
 
   return (
