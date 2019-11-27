@@ -18,6 +18,7 @@ export interface IGeneralState {
   colors: IColor[];
   showEnviromentModal: boolean;
   showSaveModal: boolean;
+  isRecent: boolean;
   selectedTile?: ITile;
   selectedFamily?: IFamily;
 }
@@ -29,9 +30,11 @@ export interface IGlobalDispatchers {
   deleteRecent: (index: number) => void;
   setShowSaveModal: () => void;
   setShowEnviromentModal: () => void;
+  enableRecent: () => void;
+  disableRecent: () => void;
   setCurrentTilefromRecent: (current: IFloor | IBorder) => void;
 }
-
+        
 export const initialDomivalues: IGeneralState = {
   loading: false,
   showModal: false,
@@ -40,5 +43,6 @@ export const initialDomivalues: IGeneralState = {
   borderFamilys: borderFam,
   showSaveModal: false,
   showEnviromentModal: false,
+  isRecent: false,
   error: null
 };

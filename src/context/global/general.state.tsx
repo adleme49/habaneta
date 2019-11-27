@@ -7,13 +7,13 @@ import {
   SetCurrentTilefromRecent,
   DeleteRecent,
   SetShowEnviromentModal,
-  SetShowSaveModal
+  SetShowSaveModal,
+  EnableRecent,
+  DisableRecent
 } from './general.actions';
 import GeneralContext from './general.context';
 import { IGeneralState, initialDomivalues } from './general.models';
 import GeneralReducer from './general.reducer';
-
-
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: IGeneralState = initialDomivalues;
@@ -28,6 +28,7 @@ const GeneralState = (props: any): JSX.Element => {
       colors,
       selectedFamily,
       selectedTile,
+      isRecent
     },
     dispatch
   ] = useReducer(GeneralReducer, initialState);
@@ -56,6 +57,12 @@ const GeneralState = (props: any): JSX.Element => {
   const setShowSaveModal = () => {
     dispatch(new SetShowSaveModal());
   };
+  const enableRecent = () => {
+    dispatch(new EnableRecent());
+  };
+  const disableRecent = () => {
+    dispatch(new DisableRecent());
+  };
 
   return (
     <GeneralContext.Provider
@@ -69,12 +76,15 @@ const GeneralState = (props: any): JSX.Element => {
         colors,
         selectedFamily,
         selectedTile,
+        isRecent,
         deleteRecent,
         setShowSaveModal,
         setShowEnviromentModal,
         setCurrentFamily,
         setCurrentTile,
         setCurrentTilefromRecent,
+        enableRecent,
+        disableRecent
       }}
     >
       {props.children}

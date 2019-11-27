@@ -3,7 +3,8 @@ import {
   RecentAction,
   DELETE_RECENT,
   SELECT_LATEST,
-  ADD_RECENT
+  ADD_RECENT,
+  UPDATE_SELECTED
 } from './recent.actions';
 import { ITile } from '../interfaces';
 
@@ -11,18 +12,40 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
   switch (action.type) {
     case SELECT_LATEST: {
       const tile = state.recent[action.payload];
+      const selectedTileIndex = action.payload;
       if (tile.type === 'Floor') {
         return {
           ...state,
+          selectedTileIndex,
           selectedFloor: tile,
           selectedFloorIndex: action.payload
         };
       }
       return {
         ...state,
+        selectedTileIndex,
         selectedBorder: tile,
         selectedBorderIndex: action.payload
       };
+    }
+    case UPDATE_SELECTED: {
+      if (state.selectedTileIndex !== undefined) {
+        const recentCopy = [...state.recent];
+        recentCopy[state.selectedTileIndex] = action.payload;
+        if (state.selectedTileIndex === state.selectedBorderIndex) {
+          return {
+            ...state,
+            recent: recentCopy,
+            selectedBorder: action.payload
+          };
+        }
+        return {
+          ...state,
+          recent: recentCopy,
+          selectedFloor: action.payload
+        }
+      }
+      return state;
     }
     case ADD_RECENT: {
       const tile = action.payload;
@@ -49,7 +72,8 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
           recent,
           count,
           selectedFloor: tile,
-          selectedFloorIndex: count - 1
+          selectedFloorIndex: count - 1,
+          selectedTileIndex: count - 1
         };
       }
       return {
@@ -57,7 +81,8 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
         recent,
         count,
         selectedBorder: tile,
-        selectedBorderIndex: count - 1
+        selectedBorderIndex: count - 1,
+        selectedTileIndex: count - 1
       };
     }
     case DELETE_RECENT: {
@@ -67,6 +92,12 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
         { name: 'empty' }
       ];
       const count = state.count - 1;
+      const selectedTileIndex =
+        state.selectedTileIndex === index
+          ? undefined
+          : state.selectedTileIndex && state.selectedTileIndex > index
+          ? state.selectedTileIndex - 1
+          : state.selectedTileIndex;
       const selectedFloorIndex =
         state.selectedFloorIndex && state.selectedFloorIndex > index
           ? state.selectedFloorIndex - 1
@@ -80,6 +111,7 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
           ...state,
           recent,
           count,
+          selectedTileIndex,
           selectedBorder: undefined,
           selectedBorderIndex: undefined,
           selectedFloorIndex
@@ -89,6 +121,7 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
           ...state,
           recent,
           count,
+          selectedTileIndex,
           selectedFloor: undefined,
           selectedFloorIndex: undefined,
           selectedBorderIndex
@@ -98,6 +131,7 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
         ...state,
         recent,
         count,
+        selectedTileIndex,
         selectedFloorIndex,
         selectedBorderIndex
       };

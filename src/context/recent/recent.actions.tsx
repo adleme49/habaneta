@@ -3,6 +3,7 @@ import { IAction, ITile, IFloor, IBorder } from '../interfaces';
 export const ADD_RECENT = '[Recent] ADD RECENT';
 export const SELECT_LATEST = '[Recent] SELECT LATEST';
 export const DELETE_RECENT = '[Recent] DELETE RECENT';
+export const UPDATE_SELECTED = '[Recent] UPDATE SELECTED';
 
 export class AddRecent implements IAction {
   readonly type = ADD_RECENT;
@@ -16,5 +17,13 @@ export class DeleteRecent implements IAction {
   readonly type = DELETE_RECENT;
   constructor(public payload: number) {}
 }
+export class UpdateSelected implements IAction {
+  readonly type = UPDATE_SELECTED;
+  constructor(public payload: ITile) {}
+}
 
-export type RecentAction = AddRecent | SelectLatest | DeleteRecent;
+export type RecentAction =
+  | AddRecent
+  | SelectLatest
+  | DeleteRecent
+  | UpdateSelected;

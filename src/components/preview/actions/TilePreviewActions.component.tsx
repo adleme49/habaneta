@@ -6,6 +6,7 @@ const TilePreviewActions: React.FC = () => {
   const { setShowEnviromentModal, setShowSaveModal } = useContext(
     GeneralContext
   ) as any;
+ 
 
   const onEnviroment = () => {
     setShowEnviromentModal();

@@ -5,7 +5,9 @@ import {
   SET_CURRENT_TILE_FROM_RECENT,
   SHOW_SAVE_MODAL,
   SHOW_ENVIROMENT_MODAL,
-  GlobalAction
+  GlobalAction,
+  ENABLE_RECENT,
+  DISABLE_RECENT
 } from './general.actions';
 
 const GeneralReducer = (
@@ -43,6 +45,16 @@ const GeneralReducer = (
       return {
         ...state,
         showEnviromentModal: !state.showEnviromentModal
+      };
+    case ENABLE_RECENT:
+      return {
+        ...state,
+        isRecent: true
+      };
+    case DISABLE_RECENT:
+      return {
+        ...state,
+        isRecent: false
       };
     default:
       return state;

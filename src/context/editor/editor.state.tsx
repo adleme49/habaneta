@@ -1,16 +1,17 @@
-import React, { useReducer } from "react";
-import EditorReducer from "./editor.reducer";
-import EditorContext from "./editor.context";
-import { IEditorState, initialStateEditor } from "./editor.models";
-import { ITile } from "../interfaces";
-import { SetTile, SetColor, PaintLayer } from "./editor.actions";
-
-
+import React, { useReducer, useContext } from 'react';
+import EditorReducer from './editor.reducer';
+import EditorContext from './editor.context';
+import { IEditorState, initialStateEditor } from './editor.models';
+import { ITile } from '../interfaces';
+import { SetTile, SetColor, PaintLayer } from './editor.actions';
+import RecentContext from '../recent/recent.context';
 
 const EditorState = (props: any): JSX.Element => {
   const initialState: IEditorState = initialStateEditor;
-  const [{selectedColor, tile}, dispatch] = useReducer(EditorReducer, initialState);
-  
+  const [{ selectedColor, tile }, dispatch] = useReducer(
+    EditorReducer,
+    initialState
+  );
   const setTile = (tile: ITile) => {
     dispatch(new SetTile(tile));
   };
@@ -23,11 +24,11 @@ const EditorState = (props: any): JSX.Element => {
   return (
     <EditorContext.Provider
       value={{
-          selectedColor,
-          tile,
-          setTile,
-          setColor,
-          paintLayer
+        selectedColor,
+        tile,
+        setTile,
+        setColor,
+        paintLayer
       }}
     >
       {props.children}

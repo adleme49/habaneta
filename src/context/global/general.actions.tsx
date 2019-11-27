@@ -14,6 +14,8 @@ export const ADD_TO_RECENT = '[GLOBAL] ADD_TO_RECENT';
 export const DELETE_RECENT = '[GLOBAL] DELETE_RECENT';
 export const SHOW_ENVIROMENT_MODAL = '[GLOBAL] SHOW_ENVIROMENT_MODAL';
 export const SHOW_SAVE_MODAL = '[GLOBAL] SHOW_SAVE_MODAL';
+export const ENABLE_RECENT = '[GLOBAL] ENABLE RECENT';
+export const DISABLE_RECENT = '[GLOBAL] DISABLE RECENT';
 
 export class SetCurrentFamily implements IAction {
   readonly type = SET_CURRENT_FAMILY;
@@ -51,6 +53,12 @@ export class SetShowEnviromentModal implements IAction {
 export class SetShowSaveModal implements IAction {
   readonly type = SHOW_SAVE_MODAL;
 }
+export class EnableRecent implements IAction {
+  readonly type = ENABLE_RECENT;
+}
+export class DisableRecent implements IAction {
+  readonly type = DISABLE_RECENT;
+}
 
 export type GlobalAction =
   | SetCurrentFamily
@@ -59,5 +67,7 @@ export type GlobalAction =
   | SetCurrentTilefromRecent
   | AddtoRecent
   | DeleteRecent
+  | EnableRecent
+  | DisableRecent
   | SetShowEnviromentModal
   | SetShowSaveModal;
