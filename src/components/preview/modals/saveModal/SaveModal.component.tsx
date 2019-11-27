@@ -4,7 +4,7 @@ import SaveModalContent from './SaveModalContent.component';
 import GeneralContext from '../../../../context/global/general.context';
 
 const SaveModal: React.FC = () => {
-  const { showSaveModal, setShowSaveModal } = useContext(GeneralContext) as any;
+  const { showSaveModal, setShowSaveModal } = useContext(GeneralContext);
 
   const handelDismiss = () => {
     setShowSaveModal();

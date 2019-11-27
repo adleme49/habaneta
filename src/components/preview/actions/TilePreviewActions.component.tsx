@@ -5,7 +5,7 @@ import GeneralContext from '../../../context/global/general.context';
 const TilePreviewActions: React.FC = () => {
   const { setShowEnviromentModal, setShowSaveModal } = useContext(
     GeneralContext
-  ) as any;
+  );
  
 
   const onEnviroment = () => {

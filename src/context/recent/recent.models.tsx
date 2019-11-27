@@ -17,6 +17,13 @@ export interface IRecentDispatchers {
   updateSelected: (tile: ITile) => void;
 }
 
+export const initialDispachersRecent: IRecentDispatchers = {
+  selectLatest: (index: number) => {},
+  addRecent: (tile: ITile) => {},
+  deleteRecent: (index: number) => {},
+  updateSelected: (tile: ITile) => {},
+};
+
 export const initialStateRecent: IRecentState = {
   recent,
   count: 0

@@ -5,7 +5,7 @@ import EditorContext from '../../../context/editor/editor.context';
 
 const EditorActions: React.FC = () => {
   const { tile } = useContext(EditorContext);
-  const { addRecent } = useContext(RecentContext) as any;
+  const { addRecent } = useContext(RecentContext);
   const handleAddtoRecent = () => {
     if (tile) {
       addRecent(tile);

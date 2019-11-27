@@ -15,14 +15,14 @@ import GeneralContext from '../global/general.context';
 const RecentState = (props: any): JSX.Element => {
   const initialState: IRecentState = initialStateRecent;
   const [
-    { selectedBorder, selectedFloor, selectedTileIndex, recent },
+    { selectedBorder, selectedFloor, selectedTileIndex, recent, count },
     dispatch
   ] = useReducer(RecentReducer, initialState);
-  const { tile, setTile } = useContext(EditorContext) as any;
-  const { enableRecent, isRecent } = useContext(GeneralContext) as any;
+  const { tile, setTile } = useContext(EditorContext);
+  const { enableRecent, isRecent } = useContext(GeneralContext);
 
   useEffect(() => {
-    if (isRecent && (selectedTileIndex as number) >= 0) {
+    if (tile && isRecent && (selectedTileIndex as number) >= 0) {
       dispatch(new UpdateSelected(tile));
     }
   }, [tile]);
@@ -46,6 +46,7 @@ const RecentState = (props: any): JSX.Element => {
   return (
     <RecentContext.Provider
       value={{
+        count,
         selectedBorder,
         selectedFloor,
         selectedTileIndex,

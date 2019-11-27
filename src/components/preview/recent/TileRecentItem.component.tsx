@@ -9,7 +9,7 @@ const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
   tile,
   index
 }) => {
-  const { selectLatest, deleteRecent } = useContext(RecentContext) as any;
+  const { selectLatest, deleteRecent } = useContext(RecentContext);
 
   const handleDelete = () => {
     deleteRecent(index);

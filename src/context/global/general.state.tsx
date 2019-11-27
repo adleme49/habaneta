@@ -28,7 +28,8 @@ const GeneralState = (props: any): JSX.Element => {
       colors,
       selectedFamily,
       selectedTile,
-      isRecent
+      isRecent,
+      showModal
     },
     dispatch
   ] = useReducer(GeneralReducer, initialState);
@@ -84,7 +85,8 @@ const GeneralState = (props: any): JSX.Element => {
         setCurrentTile,
         setCurrentTilefromRecent,
         enableRecent,
-        disableRecent
+        disableRecent,
+        showModal
       }}
     >
       {props.children}

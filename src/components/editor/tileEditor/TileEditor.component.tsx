@@ -5,7 +5,7 @@ import EditorActions from '../editorActions/EditorActions.components';
 import SVGTilePaint from './svgTile/SVGTilePaint.component';
 
 const TileEditor: React.FC = () => {
-  const { tile, paintLayer } = useContext(EditorContext) as any;
+  const { tile, paintLayer } = useContext(EditorContext) ;
 
   const colorLayer = (layerId: string) => {
     paintLayer(layerId);

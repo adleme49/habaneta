@@ -26,7 +26,6 @@ export interface IGeneralState {
 export interface IGlobalDispatchers {
   setCurrentFamily: (current: IFamily) => void;
   setCurrentTile: (current: IFloor | IBorder) => void;
-  addToRecent: (current: IFloor | IBorder) => void;
   deleteRecent: (index: number) => void;
   setShowSaveModal: () => void;
   setShowEnviromentModal: () => void;
@@ -35,6 +34,16 @@ export interface IGlobalDispatchers {
   setCurrentTilefromRecent: (current: IFloor | IBorder) => void;
 }
         
+export const initialGlobalDispatchers: IGlobalDispatchers = {
+  setCurrentFamily: (current: IFamily) => {},
+  setCurrentTile: (current: IFloor | IBorder) => {},
+  deleteRecent: (index: number) => {},
+  setShowSaveModal: () => {},
+  setShowEnviromentModal: () => {},
+  enableRecent: () => {},
+  disableRecent: () => {},
+  setCurrentTilefromRecent: (current: IFloor | IBorder) => {},
+};
 export const initialDomivalues: IGeneralState = {
   loading: false,
   showModal: false,

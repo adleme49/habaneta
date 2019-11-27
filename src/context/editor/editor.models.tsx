@@ -1,4 +1,4 @@
-import { ITile } from "../interfaces";
+import { ITile } from '../interfaces';
 
 export interface IEditorState {
   selectedColor: string;
@@ -10,7 +10,11 @@ export interface IEditorDispatchers {
   paintLayer: (layerId: string) => void;
 }
 
-export const initialStateEditor: IEditorState = {
-  selectedColor: "white",
+export const initialDispachers: IEditorDispatchers = {
+  setColor: (color: string) => {},
+  setTile: (tile: ITile) => {},
+  paintLayer: (layerId: string) => {}
 };
-
+export const initialStateEditor: IEditorState = {
+  selectedColor: 'white'
+};
