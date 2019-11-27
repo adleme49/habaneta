@@ -1,4 +1,5 @@
 import { ITile, IFloor, IBorder } from '../interfaces';
+import { recent } from '../seed';
 
 export interface IRecentState {
   selectedFloor?: IFloor;
@@ -12,3 +13,7 @@ export interface IRecentDispatchers {
   addRecent: (tile: ITile) => void;
   deleteRecent: (index: number) => void;
 }
+
+export const initialStateRecent: IRecentState = {
+  recent
+};

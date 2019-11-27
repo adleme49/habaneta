@@ -9,6 +9,7 @@ import SVGTile from '../../common/SVGTile.component';
 const TileGrid: React.FC = () => {
   const grid = Vgrid;
   const { selectedFloor, selectedBorder } = useContext(RecentContext);
+  console.log(selectedFloor, selectedBorder);
   return (
     <Fragment>
       {selectedFloor || selectedBorder

@@ -10,3 +10,7 @@ export interface IEditorDispatchers {
   paintLayer: (layerId: string) => void;
 }
 
+export const initialStateEditor: IEditorState = {
+  selectedColor: "white",
+};
+

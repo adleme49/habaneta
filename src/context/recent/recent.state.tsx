@@ -1,14 +1,12 @@
 import React, { useReducer } from 'react';
 import RecentReducer from './recent.reducer';
 import RecentContext from './recent.context';
-import { IRecentState } from './recent.models';
+import { IRecentState, initialStateRecent } from './recent.models';
 import { DeleteRecent, SelectLatest, AddRecent } from './recent.actions';
 import { ITile } from '../interfaces';
-import { recent } from '../seed';
 
-export const initialStateRecent: IRecentState = {
-  recent
-};
+
+
 
 const RecentState = (props: any): JSX.Element => {
   const initialState: IRecentState = initialStateRecent;
