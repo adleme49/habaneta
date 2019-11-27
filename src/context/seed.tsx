@@ -132,3 +132,9 @@ export const recentsUsed = [
   { name: 'empty' },
   { name: 'empty' }
 ];
+
+export const galleryPictures = [
+  { imgUrl: '../assets/Gallery/1.jpg' },
+  { imgUrl: '../assets/Gallery/2.jpg' },
+  { imgUrl: '../assets/Gallery/3.jpg' }
+];

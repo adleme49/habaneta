@@ -1,0 +1,16 @@
+.saveModal {
+  --height: 80%;
+  --width: 80%;
+}
+.galleryModal {
+  --height: 95%;
+  --width: 90%;
+}
+.arrows {
+  --organic-arrow-thickness: 12px;
+  --organic-arrow-border-radius: 20px;
+  --organic-arrow-height: 33px;
+  --organic-arrow-color: #56a491;
+  --control-button-width: 12%;
+  --control-button-height: 25%;
+}
