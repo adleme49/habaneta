@@ -3,7 +3,6 @@ import {
   SET_CURRENT_FAMILY,
   SET_CURRENT_TILE,
   SET_CURRENT_TILE_FROM_RECENT,
-  SET_PREVIEW,
   SHOW_SAVE_MODAL,
   SHOW_ENVIROMENT_MODAL,
   GlobalAction
@@ -34,11 +33,6 @@ const GeneralReducer = (
       return {
         ...state,
         selectedTile: currentFRecent
-      };
-    case SET_PREVIEW:
-      return {
-        ...state,
-        preview: true
       };
     case SHOW_SAVE_MODAL:
       return {

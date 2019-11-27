@@ -1,16 +1,16 @@
 export type Dict<T> = { [key: string]: T };
 
-export interface ITileFamily extends IFamily {
+export interface IFamily {
+  type: 'Border' | 'Floor';
   name: string;
+  types: ITile[];
+}
+
+export interface ITileFamily extends IFamily {
   types: IFloor[];
 }
 export interface IBorderFamily extends IFamily {
-  name: string;
   types: IBorder[];
-}
-
-export interface IFamily {
-  type: 'Border' | 'Floor';
 }
 
 export interface ITile {

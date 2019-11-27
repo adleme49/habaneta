@@ -1,32 +1,19 @@
 import React, { useReducer } from 'react';
 import { IBorder, IFloor, IFamily } from '../interfaces';
-import { borderFam, DomiColors, tilesFam } from '../seed';
 import {
   SetCurrentFamily,
   SetCurrentTile,
   SetLatest,
   SetCurrentTilefromRecent,
-  SetPreview,
-  AddtoRecent,
   DeleteRecent,
   SetShowEnviromentModal,
   SetShowSaveModal
 } from './general.actions';
 import GeneralContext from './general.context';
-import { IGeneralState } from './general.models';
+import { IGeneralState, initialDomivalues } from './general.models';
 import GeneralReducer from './general.reducer';
 
-const initialDomivalues: IGeneralState = {
-  loading: false,
-  showModal: false,
-  colors: DomiColors,
-  tilesFamilys: tilesFam,
-  borderFamilys: borderFam,
-  showSaveModal: false,
-  showEnviromentModal: false,
-  error: null,
-  preview: false
-};
+
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: IGeneralState = initialDomivalues;
@@ -41,7 +28,6 @@ const GeneralState = (props: any): JSX.Element => {
       colors,
       selectedFamily,
       selectedTile,
-      preview
     },
     dispatch
   ] = useReducer(GeneralReducer, initialState);
@@ -58,15 +44,6 @@ const GeneralState = (props: any): JSX.Element => {
   const setCurrentTilefromRecent = (current: IFloor | IBorder) => {
     dispatch(new SetCurrentTilefromRecent(current));
     dispatch(new SetLatest());
-  };
-
-  const setPreview = () => {
-    dispatch(new SetPreview());
-  };
-
-  const addToRecent = (current: IFloor | IBorder) => {
-    dispatch(new AddtoRecent(current));
-    setPreview();
   };
 
   const deleteRecent = (index: number) => {
@@ -92,15 +69,12 @@ const GeneralState = (props: any): JSX.Element => {
         colors,
         selectedFamily,
         selectedTile,
-        preview,
-        addToRecent,
         deleteRecent,
         setShowSaveModal,
         setShowEnviromentModal,
         setCurrentFamily,
         setCurrentTile,
         setCurrentTilefromRecent,
-        setPreview
       }}
     >
       {props.children}

@@ -10,7 +10,6 @@ export const SET_CURRENT_TILE = '[GLOBAL] SET_CURRENT_TILE';
 export const SET_LATEST = '[GLOBAL] SET_LATEST';
 export const SET_CURRENT_TILE_FROM_RECENT =
   '[GLOBAL] SET_CURRENT_TILE_FROM_RECENT';
-export const SET_PREVIEW = '[GLOBAL] SET_PREVIEW';
 export const ADD_TO_RECENT = '[GLOBAL] ADD_TO_RECENT';
 export const DELETE_RECENT = '[GLOBAL] DELETE_RECENT';
 export const SHOW_ENVIROMENT_MODAL = '[GLOBAL] SHOW_ENVIROMENT_MODAL';
@@ -29,10 +28,6 @@ export class SetCurrentTile implements IAction {
 export class SetCurrentTilefromRecent implements IAction {
   readonly type = SET_CURRENT_TILE_FROM_RECENT;
   constructor(public payload: IFloor | IBorder) {}
-}
-
-export class SetPreview implements IAction {
-  readonly type = SET_PREVIEW;
 }
 
 export class SetLatest implements IAction {
@@ -60,7 +55,6 @@ export class SetShowSaveModal implements IAction {
 export type GlobalAction =
   | SetCurrentFamily
   | SetCurrentTile
-  | SetPreview
   | SetLatest
   | SetCurrentTilefromRecent
   | AddtoRecent

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactSVG from 'react-svg';
 import { ITile } from '../../../../context/interfaces';
-import { getColorShapes, paintLayer } from '../../../../helpers';
+import { getColorShapes, paintLayer, styleSVG } from '../../../../helpers';
 
 const SVGTilePaint: React.FC<{
   tile: ITile;
@@ -15,11 +15,9 @@ const SVGTilePaint: React.FC<{
           console.error(error);
           return;
         }
-        console.log(svg);
       }}
       beforeInjection={svg => {
-        svg.classList.add('svg-class-name');
-        svg.setAttribute('style', 'width: 250px; height: 250px');
+        styleSVG(svg, { width: 250, height: 250 });
         const shapes = getColorShapes(svg);
         if (tile.layers) {
           Object.keys(tile.layers).forEach(layerId => {
@@ -31,19 +29,13 @@ const SVGTilePaint: React.FC<{
       }}
       fallback={() => <span>Error!</span>}
       loading={() => <span>Loading</span>}
-      renumerateIRIElements={false}
-      wrapper="span"
-      className="wrapper-class-name"
       onClick={event => {
-        console.log('wrapper onClick');
         const targetClass = ((event.target as Element).getAttribute(
           'class'
         ) as string).split(' ')[1];
-        console.log(targetClass);
         colorLayer(targetClass);
       }}
     />
   ) : null;
 };
 export default SVGTilePaint;
-

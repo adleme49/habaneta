@@ -20,3 +20,14 @@ export const paintLayer = (
   );
   layer.forEach((e: any) => e.setAttribute('fill', color ? color : 'white'));
 };
+
+export const styleSVG = (
+  svg: Element,
+  options: { height?: number; width?: number }
+) =>
+  svg.setAttribute(
+    'style',
+    `width: ${options.width ? options.width : 40.42}px; height: ${
+      options.height ? options.height : 40.42
+    }px`
+  );

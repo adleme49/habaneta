@@ -7,11 +7,11 @@ import {
   IFloor,
   IFamily
 } from '../interfaces';
+import { DomiColors, tilesFam, borderFam } from '../seed';
 
 export interface IGeneralState {
   loading: boolean;
   showModal: boolean;
-  preview: boolean;
   error: null | any;
   tilesFamilys: ITileFamily[];
   borderFamilys: IBorderFamily[];
@@ -30,5 +30,15 @@ export interface IGlobalDispatchers {
   setShowSaveModal: () => void;
   setShowEnviromentModal: () => void;
   setCurrentTilefromRecent: (current: IFloor | IBorder) => void;
-  setPreview: () => void;
 }
+
+export const initialDomivalues: IGeneralState = {
+  loading: false,
+  showModal: false,
+  colors: DomiColors,
+  tilesFamilys: tilesFam,
+  borderFamilys: borderFam,
+  showSaveModal: false,
+  showEnviromentModal: false,
+  error: null
+};
