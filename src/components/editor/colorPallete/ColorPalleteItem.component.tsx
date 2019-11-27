@@ -4,7 +4,7 @@ import { IColor } from '../../../context/interfaces';
 import EditorContext from '../../../context/editor/editor.context';
 
 const ColorPalleteItem: React.FC<{ color: IColor }> = ({ color }) => {
-  const { setColor } = useContext(EditorContext) as any;
+  const { setColor } = useContext(EditorContext);
 
   const handleSetColor = () => {
     setColor(color.code);

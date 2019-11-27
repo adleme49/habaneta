@@ -5,11 +5,13 @@ export const SET_CURRENT_TILE = '[GLOBAL] SET_CURRENT_TILE';
 export const SET_LATEST = '[GLOBAL] SET_LATEST';
 export const SET_CURRENT_TILE_FROM_RECENT =
   '[GLOBAL] SET_CURRENT_TILE_FROM_RECENT';
-export const SET_PREVIEW = '[GLOBAL] SET_PREVIEW';
 export const ADD_TO_RECENT = '[GLOBAL] ADD_TO_RECENT';
 export const DELETE_RECENT = '[GLOBAL] DELETE_RECENT';
 export const SHOW_ENVIROMENT_MODAL = '[GLOBAL] SHOW_ENVIROMENT_MODAL';
 export const SHOW_SAVE_MODAL = '[GLOBAL] SHOW_SAVE_MODAL';
+export const ENABLE_RECENT = '[GLOBAL] ENABLE RECENT';
+export const DISABLE_RECENT = '[GLOBAL] DISABLE RECENT';
+
 export const SHOW_GALLERY_MODAL = '[GLOBAL] SHOW_GALLERY_MODAL';
 
 export class SetCurrentFamily implements IAction {
@@ -25,10 +27,6 @@ export class SetCurrentTile implements IAction {
 export class SetCurrentTilefromRecent implements IAction {
   readonly type = SET_CURRENT_TILE_FROM_RECENT;
   constructor(public payload: IFloor | IBorder) {}
-}
-
-export class SetPreview implements IAction {
-  readonly type = SET_PREVIEW;
 }
 
 export class SetLatest implements IAction {
@@ -52,18 +50,26 @@ export class SetShowEnviromentModal implements IAction {
 export class SetShowSaveModal implements IAction {
   readonly type = SHOW_SAVE_MODAL;
 }
+export class EnableRecent implements IAction {
+  readonly type = ENABLE_RECENT;
+}
+export class DisableRecent implements IAction {
+  readonly type = DISABLE_RECENT;
+
 export class SetShowGalleryModal implements IAction {
   readonly type = SHOW_GALLERY_MODAL;
+
 }
 
 export type GlobalAction =
   | SetCurrentFamily
   | SetCurrentTile
-  | SetPreview
   | SetLatest
   | SetCurrentTilefromRecent
   | AddtoRecent
   | DeleteRecent
+  | EnableRecent
+  | DisableRecent
   | SetShowEnviromentModal
   | SetShowGalleryModal
   | SetShowSaveModal;

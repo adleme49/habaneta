@@ -2,16 +2,16 @@ import React, { Fragment, useContext } from 'react';
 import { IonRow, IonCol, IonImg } from '@ionic/react';
 import empty from '../../../theme/empty.png';
 import GeneralContext from '../../../context/global/general.context';
+import RecentContext from '../../../context/recent/recent.context';
 import { Vgrid } from './grid';
+import SVGTile from '../../common/SVGTile.component';
 
 const TileGrid: React.FC = () => {
   const grid = Vgrid;
-  const { selectedTile, latestFloor, latestBorder, preview } = useContext(
-    GeneralContext
-  );
+  const { selectedFloor, selectedBorder } = useContext(RecentContext);
   return (
     <Fragment>
-      {selectedTile && preview
+      {selectedFloor || selectedBorder
         ? grid.map((fila, i) => {
             return (
               <IonRow
@@ -26,18 +26,10 @@ const TileGrid: React.FC = () => {
                       className="ion-no-padding"
                       style={{ border: 'solid 0.1rem' }}
                     >
-                      {selectedTile.type === 'Floor' ? (
-                        <IonImg
-                          src={selectedTile.imgUrl}
-                          alt={selectedTile.name}
-                        />
-                      ) : latestFloor ? (
-                        <IonImg
-                          src={latestFloor.imgUrl}
-                          alt={latestFloor.name}
-                        />
+                      {selectedFloor ? (
+                        <SVGTile tile={selectedFloor} />
                       ) : (
-                        <IonImg src={empty} alt={selectedTile.name} />
+                        <IonImg src={empty} />
                       )}
                     </IonCol>
                   ) : (
@@ -46,18 +38,10 @@ const TileGrid: React.FC = () => {
                       className="ion-no-padding"
                       style={{ border: 'solid 0.1rem' }}
                     >
-                      {selectedTile.type === 'Border' ? (
-                        <IonImg
-                          src={selectedTile.imgUrl}
-                          alt={selectedTile.name}
-                        />
-                      ) : latestBorder ? (
-                        <IonImg
-                          src={latestBorder.imgUrl}
-                          alt={latestBorder.name}
-                        />
+                      {selectedBorder ? (
+                        <SVGTile tile={selectedBorder} />
                       ) : (
-                        <IonImg src={empty} alt={selectedTile.name} />
+                        <IonImg src={empty} />
                       )}
                     </IonCol>
                   );

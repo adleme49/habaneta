@@ -7,11 +7,11 @@ import {
   IFloor,
   IFamily
 } from '../interfaces';
+import { DomiColors, tilesFam, borderFam } from '../seed';
 
 export interface IGeneralState {
   loading: boolean;
   showModal: boolean;
-  preview: boolean;
   error: null | any;
   tilesFamilys: ITileFamily[];
   borderFamilys: IBorderFamily[];
@@ -19,21 +19,41 @@ export interface IGeneralState {
   showEnviromentModal: boolean;
   showGalleryModal: boolean;
   showSaveModal: boolean;
-  recentsUsed: Array<ITile>;
+  isRecent: boolean;
   selectedTile?: ITile;
-  latestBorder?: IBorder;
-  latestFloor?: IFloor;
   selectedFamily?: IFamily;
 }
 
 export interface IGlobalDispatchers {
   setCurrentFamily: (current: IFamily) => void;
   setCurrentTile: (current: IFloor | IBorder) => void;
-  addToRecent: (current: IFloor | IBorder) => void;
   deleteRecent: (index: number) => void;
   setShowSaveModal: () => void;
   setShowGalleryModal: () => void;
   setShowEnviromentModal: () => void;
+  enableRecent: () => void;
+  disableRecent: () => void;
   setCurrentTilefromRecent: (current: IFloor | IBorder) => void;
-  setPreview: () => void;
 }
+        
+export const initialGlobalDispatchers: IGlobalDispatchers = {
+  setCurrentFamily: (current: IFamily) => {},
+  setCurrentTile: (current: IFloor | IBorder) => {},
+  deleteRecent: (index: number) => {},
+  setShowSaveModal: () => {},
+  setShowEnviromentModal: () => {},
+  enableRecent: () => {},
+  disableRecent: () => {},
+  setCurrentTilefromRecent: (current: IFloor | IBorder) => {},
+};
+export const initialDomivalues: IGeneralState = {
+  loading: false,
+  showModal: false,
+  colors: DomiColors,
+  tilesFamilys: tilesFam,
+  borderFamilys: borderFam,
+  showSaveModal: false,
+  showEnviromentModal: false,
+  isRecent: false,
+  error: null
+};

@@ -1,17 +1,17 @@
 import { IonCol, IonImg } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
-import GeneralContext from '../../../context/global/general.context';
 import { IBorder, IFloor } from '../../../context/interfaces';
 import empty from '../../../theme/empty.png';
 import TileRecentItem from './TileRecentItem.component';
+import RecentContext from '../../../context/recent/recent.context';
 
 const TileRecent: React.FC = () => {
-  const { recentsUsed } = useContext(GeneralContext);
+  const { recent } = useContext(RecentContext);
 
   return (
     <Fragment>
-      {recentsUsed
-        ? recentsUsed.map((tile: IBorder | IFloor, index: number) => {
+      {recent
+        ? recent.map((tile: IBorder | IFloor, index: number) => {
             return !tile.name.includes('empty') ? (
               <TileRecentItem tile={tile} key={index} index={index} />
             ) : (

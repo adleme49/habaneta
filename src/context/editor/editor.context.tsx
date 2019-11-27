@@ -1,8 +1,13 @@
 import { createContext } from 'react';
-import { IEditorState, IEditorDispatchers } from './editor.models';
+import {
+  IEditorState,
+  IEditorDispatchers,
+  initialStateEditor,
+  initialDispachers
+} from './editor.models';
 
-const EditorContext = createContext<Partial<IEditorState & IEditorDispatchers>>(
-  {}
+const EditorContext = createContext<IEditorState & IEditorDispatchers>(
+  { ...initialStateEditor, ...initialDispachers }
 );
 
 export default EditorContext;

@@ -13,10 +13,11 @@ import {
 } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
 import GeneralContext from '../../../../context/global/general.context';
+import RecentContext from '../../../../context/recent/recent.context';
 
 const SaveModalContent: React.FC = () => {
+  const { selectedBorder, selectedFloor } = useContext(RecentContext);
   // const initialClient = { name: '', phone: '', address: '' };
-  const { latestFloor, latestBorder } = useContext(GeneralContext);
   // const [client, setClient] = useState(initialClient);
   // const { name, phone, address } = client;
 
@@ -79,15 +80,15 @@ const SaveModalContent: React.FC = () => {
           </IonCol>
           <IonCol align-self-center size="6">
             <IonRow align-items-end>
-              {latestFloor ? (
-                <IonImg src={latestFloor.imgUrl} alt={latestFloor.name} />
+              {selectedFloor ? (
+                <IonImg src={selectedFloor.imgUrl} alt={selectedFloor.name} />
               ) : (
                 <h2>No selecciono ninguna Loza</h2>
               )}
             </IonRow>
             <IonRow align-items-end>
-              {latestBorder ? (
-                <IonImg src={latestBorder.imgUrl} alt={latestBorder.name} />
+              {selectedBorder ? (
+                <IonImg src={selectedBorder.imgUrl} alt={selectedBorder.name} />
               ) : (
                 <h2>No selecciono ningun Borde</h2>
               )}

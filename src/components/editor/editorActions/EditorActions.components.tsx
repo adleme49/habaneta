@@ -1,16 +1,20 @@
 import React, { Fragment, useContext } from 'react';
 import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
-import GeneralContext from '../../../context/global/general.context';
+import RecentContext from '../../../context/recent/recent.context';
+import EditorContext from '../../../context/editor/editor.context';
 
 const EditorActions: React.FC = () => {
-  const { addToRecent, selectedTile } = useContext(GeneralContext) as any;
+  const { tile } = useContext(EditorContext);
+  const { addRecent } = useContext(RecentContext);
   const handleAddtoRecent = () => {
-    addToRecent(selectedTile);
+    if (tile) {
+      addRecent(tile);
+    }
   };
   return (
     <Fragment>
       <IonSegment>
-        <IonSegmentButton onClick={handleAddtoRecent} value='Recent'>
+        <IonSegmentButton onClick={handleAddtoRecent} value="Recent">
           <IonLabel>Salvar a recientes</IonLabel>
         </IonSegmentButton>
       </IonSegment>
