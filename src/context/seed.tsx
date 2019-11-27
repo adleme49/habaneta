@@ -83,19 +83,40 @@ export const tilesFam: ITileFamily[] = [
       {
         name: 'Mod. 267',
         imgUrl: '../assets/Tile/Contemporary/tile.svg',
+        type: Floor,
         layers: {
           l1: 'red',
           l2: 'green',
           l3: 'blue',
           l4: 'black',
-          l5: 'gray',
+          l5: 'gray'
         }
       },
-      { name: 'Mod. 248', imgUrl: '../assets/Tile/Traditional/248.png' },
-      { name: 'Mod. 127', imgUrl: '../assets/Tile/Traditional/127.png' },
-      { name: 'Mod. 165', imgUrl: '../assets/Tile/Traditional/165.png' },
-      { name: 'Mod. 143', imgUrl: '../assets/Tile/Traditional/143.png' },
-      { name: 'Mod. 137', imgUrl: '../assets/Tile/Traditional/137.png' }
+      {
+        name: 'Mod. 248',
+        type: Floor,
+        imgUrl: '../assets/Tile/Traditional/248.png'
+      },
+      {
+        name: 'Mod. 127',
+        type: Floor,
+        imgUrl: '../assets/Tile/Traditional/127.png'
+      },
+      {
+        name: 'Mod. 165',
+        type: Floor,
+        imgUrl: '../assets/Tile/Traditional/165.png'
+      },
+      {
+        name: 'Mod. 143',
+        type: Floor,
+        imgUrl: '../assets/Tile/Traditional/143.png'
+      },
+      {
+        name: 'Mod. 137',
+        type: Floor,
+        imgUrl: '../assets/Tile/Traditional/137.png'
+      }
     ]
   },
   {

@@ -9,6 +9,8 @@ const TileGrid: React.FC = () => {
   const grid = Vgrid;
   const { selectedTile, preview } = useContext(GeneralContext);
   const { selectedFloor, selectedBorder } = useContext(RecentContext);
+  console.log("selectedFloor",selectedFloor);
+  console.log("selectedBorder",selectedBorder);
   return (
     <Fragment>
       {selectedTile && preview

@@ -45,7 +45,7 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
     case DELETE_RECENT: {
       const index = action.payload;
       const recent = [
-        ...state.recent.slice().splice(index, 1),
+        ...state.recent.filter((_, i) => index !== i),
         { name: 'empty' }
       ];
 
