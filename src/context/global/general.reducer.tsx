@@ -7,7 +7,8 @@ import {
   SHOW_ENVIROMENT_MODAL,
   GlobalAction,
   ENABLE_RECENT,
-  DISABLE_RECENT
+  DISABLE_RECENT,
+  SHOW_GALLERY_MODAL
 } from './general.actions';
 
 const GeneralReducer = (
@@ -55,6 +56,11 @@ const GeneralReducer = (
       return {
         ...state,
         isRecent: false
+      };
+    case SHOW_GALLERY_MODAL:
+      return {
+        ...state,
+        showGalleryModal: !state.showGalleryModal
       };
     default:
       return state;

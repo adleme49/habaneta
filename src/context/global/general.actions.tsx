@@ -1,9 +1,4 @@
-import {
-  IAction,
-  IFloor,
-  IBorder,
-  IFamily
-} from '../interfaces';
+import { IAction, IFloor, IBorder, IFamily } from '../interfaces';
 
 export const SET_CURRENT_FAMILY = '[GLOBAL] SET_CURRENT_FAMILY';
 export const SET_CURRENT_TILE = '[GLOBAL] SET_CURRENT_TILE';
@@ -16,6 +11,8 @@ export const SHOW_ENVIROMENT_MODAL = '[GLOBAL] SHOW_ENVIROMENT_MODAL';
 export const SHOW_SAVE_MODAL = '[GLOBAL] SHOW_SAVE_MODAL';
 export const ENABLE_RECENT = '[GLOBAL] ENABLE RECENT';
 export const DISABLE_RECENT = '[GLOBAL] DISABLE RECENT';
+
+export const SHOW_GALLERY_MODAL = '[GLOBAL] SHOW_GALLERY_MODAL';
 
 export class SetCurrentFamily implements IAction {
   readonly type = SET_CURRENT_FAMILY;
@@ -58,6 +55,10 @@ export class EnableRecent implements IAction {
 }
 export class DisableRecent implements IAction {
   readonly type = DISABLE_RECENT;
+
+export class SetShowGalleryModal implements IAction {
+  readonly type = SHOW_GALLERY_MODAL;
+
 }
 
 export type GlobalAction =
@@ -70,4 +71,5 @@ export type GlobalAction =
   | EnableRecent
   | DisableRecent
   | SetShowEnviromentModal
+  | SetShowGalleryModal
   | SetShowSaveModal;

@@ -17,6 +17,7 @@ export interface IGeneralState {
   borderFamilys: IBorderFamily[];
   colors: IColor[];
   showEnviromentModal: boolean;
+  showGalleryModal: boolean;
   showSaveModal: boolean;
   isRecent: boolean;
   selectedTile?: ITile;
@@ -28,6 +29,7 @@ export interface IGlobalDispatchers {
   setCurrentTile: (current: IFloor | IBorder) => void;
   deleteRecent: (index: number) => void;
   setShowSaveModal: () => void;
+  setShowGalleryModal: () => void;
   setShowEnviromentModal: () => void;
   enableRecent: () => void;
   disableRecent: () => void;
