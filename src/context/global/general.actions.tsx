@@ -55,10 +55,9 @@ export class EnableRecent implements IAction {
 }
 export class DisableRecent implements IAction {
   readonly type = DISABLE_RECENT;
-
+}
 export class SetShowGalleryModal implements IAction {
   readonly type = SHOW_GALLERY_MODAL;
-
 }
 
 export type GlobalAction =

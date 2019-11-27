@@ -1,27 +1,19 @@
 import React, { useReducer } from 'react';
 import { IBorder, IFloor, IFamily } from '../interfaces';
-
+import GeneralContext from './general.context';
+import { IGeneralState, initialDomivalues } from './general.models';
+import GeneralReducer from './general.reducer';
 import {
-  AddtoRecent,
-  DeleteRecent,
   SetCurrentFamily,
   SetCurrentTile,
+  SetLatest,
   SetCurrentTilefromRecent,
-  DeleteRecent,
   SetShowEnviromentModal,
   SetShowSaveModal,
   EnableRecent,
   DisableRecent,
-  SetShowGalleryModal,
-  SetLatest,
-  SetPreview,
-  SetShowEnviromentModal,
-  SetShowSaveModal
+  SetShowGalleryModal
 } from './general.actions';
-import GeneralContext from './general.context';
-import { IGeneralState, initialDomivalues } from './general.models';
-import GeneralReducer from './general.reducer';
-
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: IGeneralState = initialDomivalues;
@@ -57,10 +49,6 @@ const GeneralState = (props: any): JSX.Element => {
     dispatch(new SetLatest());
   };
 
-  const deleteRecent = (index: number) => {
-    dispatch(new DeleteRecent(index));
-  };
-
   const setShowEnviromentModal = () => {
     dispatch(new SetShowEnviromentModal());
   };
@@ -72,7 +60,7 @@ const GeneralState = (props: any): JSX.Element => {
   };
   const disableRecent = () => {
     dispatch(new DisableRecent());
-    
+  };
   const setShowGalleryModal = () => {
     dispatch(new SetShowGalleryModal());
   };
@@ -91,7 +79,6 @@ const GeneralState = (props: any): JSX.Element => {
         selectedFamily,
         selectedTile,
         isRecent,
-        deleteRecent,
         setShowSaveModal,
         setShowEnviromentModal,
         setShowGalleryModal,
