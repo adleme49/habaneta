@@ -12,11 +12,16 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
     case SELECT_LATEST: {
       const tile = state.recent[action.payload];
       if (tile.type === 'Floor') {
-        return { ...state, selectedFloor: tile };
+        return {
+          ...state,
+          selectedFloor: tile,
+          selectedFloorIndex: action.payload
+        };
       }
       return {
         ...state,
-        selectedBorder: tile
+        selectedBorder: tile,
+        selectedBorderIndex: action.payload
       };
     }
     case ADD_RECENT: {
@@ -37,9 +42,22 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
         recents.push(tile);
       }
       const recent = [...recents, ...empty];
+      const count = state.count + 1;
+      if (tile.type === 'Floor') {
+        return {
+          ...state,
+          recent,
+          count,
+          selectedFloor: tile,
+          selectedFloorIndex: count - 1
+        };
+      }
       return {
         ...state,
-        recent
+        recent,
+        count,
+        selectedBorder: tile,
+        selectedBorderIndex: count - 1
       };
     }
     case DELETE_RECENT: {
@@ -48,23 +66,41 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
         ...state.recent.filter((_, i) => index !== i),
         { name: 'empty' }
       ];
-
+      const count = state.count - 1;
+      const selectedFloorIndex =
+        state.selectedFloorIndex && state.selectedFloorIndex > index
+          ? state.selectedFloorIndex - 1
+          : state.selectedFloorIndex;
+      const selectedBorderIndex =
+        state.selectedBorderIndex && state.selectedBorderIndex > index
+          ? state.selectedBorderIndex - 1
+          : state.selectedBorderIndex;
       if (index === state.selectedBorderIndex) {
         return {
           ...state,
           recent,
+          count,
           selectedBorder: undefined,
-          selectedBorderIndex: undefined
+          selectedBorderIndex: undefined,
+          selectedFloorIndex
         };
       } else if (index === state.selectedFloorIndex) {
         return {
           ...state,
           recent,
+          count,
           selectedFloor: undefined,
-          selectedFloorIndex: undefined
+          selectedFloorIndex: undefined,
+          selectedBorderIndex
         };
       }
-      return { ...state, recent };
+      return {
+        ...state,
+        recent,
+        count,
+        selectedFloorIndex,
+        selectedBorderIndex
+      };
     }
     default:
       return state;
