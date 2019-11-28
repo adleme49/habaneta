@@ -1,21 +1,40 @@
-import { IonContent, IonTitle, IonToolbar } from '@ionic/react';
-import React, { Fragment } from 'react';
+import {
+  IonContent,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonButton,
+  IonIcon
+} from '@ionic/react';
+import React, { Fragment, useContext } from 'react';
 import 'react-awesome-slider/dist/styles.css';
 import { galleryPictures } from '../../../../context/seed';
 import './../Modal.css';
+import GeneralContext from '../../../../context/global/general.context';
 const AwesomeSliderStyles = require('react-awesome-slider/src/styles');
 const AwesomeSlider = require('react-awesome-slider').default;
 declare const require: any;
 
-const GalleryModalContent: React.FC = () => {
+const GalleryModalContent: React.FC<{ onDismiss?: Function }> = ({}) => {
+  const { setShowGalleryModal } = useContext(GeneralContext) as any;
+
+  const handelDismiss = () => {
+    console.log('close');
+    setShowGalleryModal();
+  };
   return (
     <Fragment>
       <IonContent>
         <IonToolbar color="primary">
           <IonTitle>Gallery</IonTitle>
+          <IonButtons slot="secondary">
+            <IonButton onClick={handelDismiss}>
+              <IonIcon name="close" slot="icon-only" />
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
         <AwesomeSlider
-          className={'arrows'}
+          className="aws-btn"
           cssModule={AwesomeSliderStyles}
           bullets={false}
           fillParent={true}

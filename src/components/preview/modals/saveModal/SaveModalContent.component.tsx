@@ -31,13 +31,15 @@ const SaveModalContent: React.FC = () => {
         <IonTitle>Save</IonTitle>
       </IonToolbar>
 
-      <IonGrid fixed>
+      <IonGrid>
         <IonRow>
-          <IonCol align-self-center size="6">
+          <IonCol size="6">
             <form onSubmit={onSubmitForm}>
               <IonRow>
                 <h1>Datos del Cliente</h1>
+              </IonRow>
 
+              <IonRow>
                 <IonItem>
                   <IonLabel position="floating">Nombre</IonLabel>
                   <IonInput type="text" name="name" required></IonInput>
@@ -51,25 +53,31 @@ const SaveModalContent: React.FC = () => {
                     onChange={handleChange}
                   /> */}
                 </IonItem>
+              </IonRow>
+              <IonRow>
                 <IonItem>
                   <IonLabel position="floating">Telf</IonLabel>
                   <IonInput type="text" name="phone" required></IonInput>
                 </IonItem>
+              </IonRow>
+              <IonRow>
                 <IonItem>
                   <IonLabel position="floating">Direccion</IonLabel>
                   <IonInput type="text" name="address" required></IonInput>
                 </IonItem>
               </IonRow>
 
-              <IonButtons>
-                <IonButton expand="full" type="submit">
-                  Guardar
-                </IonButton>
-                <IonButton expand="full">Cancelar</IonButton>
-              </IonButtons>
+              <IonRow>
+                <IonButtons>
+                  <IonButton expand="full" type="submit">
+                    Guardar
+                  </IonButton>
+                  <IonButton expand="full">Cancelar</IonButton>
+                </IonButtons>
+              </IonRow>
             </form>
           </IonCol>
-          <IonCol align-self-center size="6">
+          <IonCol size="6">
             <IonRow align-items-end>
               {selectedFloor ? (
                 <SVGTile tile={selectedFloor} height={230} width={230} />

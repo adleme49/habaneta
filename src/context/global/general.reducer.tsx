@@ -47,6 +47,12 @@ const GeneralReducer = (
         ...state,
         showEnviromentModal: !state.showEnviromentModal
       };
+    case SHOW_GALLERY_MODAL:
+      const showGModal = state.showGalleryModal;
+      return {
+        ...state,
+        showGalleryModal: !showGModal
+      };
     case ENABLE_RECENT:
       return {
         ...state,
@@ -56,11 +62,6 @@ const GeneralReducer = (
       return {
         ...state,
         isRecent: false
-      };
-    case SHOW_GALLERY_MODAL:
-      return {
-        ...state,
-        showGalleryModal: !state.showGalleryModal
       };
     default:
       return state;
