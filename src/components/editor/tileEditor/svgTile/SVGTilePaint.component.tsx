@@ -12,7 +12,6 @@ const SVGTilePaint: React.FC<{
       src={tile.imgUrl}
       afterInjection={(error, svg) => {
         if (error) {
-          console.error(error);
           return;
         }
       }}

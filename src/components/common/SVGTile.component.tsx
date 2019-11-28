@@ -7,14 +7,15 @@ const SVGTile: React.FC<{
   tile: ITile;
   width?: number;
   height?: number;
+  rotation?: number;
   onClickHandler?: (event: any) => void;
-}> = ({ tile, width, height, onClickHandler }) => {
+}> = ({ tile, width, height, rotation, onClickHandler }) => {
   return (
     <ReactSVG
       src={tile.imgUrl as string}
       onClick={onClickHandler}
       beforeInjection={svg => {
-        // styleSVG(svg, { width, height });
+        styleSVG(svg, { width, height, rotation });
         const shapes = getColorShapes(svg);
         if (tile.layers) {
           Object.keys(tile.layers).forEach(layerId => {

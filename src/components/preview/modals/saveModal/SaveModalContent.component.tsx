@@ -25,14 +25,6 @@ const SaveModalContent: React.FC = () => {
     console.log(event.timeStamp);
   };
 
-  // const handleChange = (event: any) => {
-  //   console.log(event.target.name, event.target.value);
-  //   // setClient({
-  //   //   ...client,
-  //   //   [event.currentTarget.name]: event.currentTarget.value
-  //   // });
-  // };
-
   return (
     <Fragment>
       <IonToolbar color="primary">
