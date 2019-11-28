@@ -3,7 +3,6 @@ import {
   IonButtons,
   IonCol,
   IonGrid,
-  IonImg,
   IonInput,
   IonItem,
   IonLabel,
@@ -12,7 +11,6 @@ import {
   IonToolbar
 } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
-import GeneralContext from '../../../../context/global/general.context';
 import RecentContext from '../../../../context/recent/recent.context';
 import SVGTile from '../../../common/SVGTile.component';
 
