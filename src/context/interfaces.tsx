@@ -27,6 +27,7 @@ export interface IFloor extends ITile {
 
 export interface IBorder extends ITile {
   corner?: boolean;
+  cornerUrl?: string;
 }
 export interface IColor {
   name: string;

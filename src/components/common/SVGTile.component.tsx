@@ -8,11 +8,12 @@ const SVGTile: React.FC<{
   width?: number;
   height?: number;
   rotation?: number;
+  url?: string;
   onClickHandler?: (event: any) => void;
-}> = ({ tile, width, height, rotation, onClickHandler }) => {
+}> = ({ tile, width, height, rotation, onClickHandler, url }) => {
   return (
     <ReactSVG
-      src={tile.imgUrl as string}
+      src={url ? url : (tile.imgUrl as string)}
       onClick={onClickHandler}
       beforeInjection={svg => {
         styleSVG(svg, { width, height, rotation });
