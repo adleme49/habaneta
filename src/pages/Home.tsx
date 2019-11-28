@@ -16,9 +16,7 @@ const Home: React.FC = () => {
       {loading ? <Loading loading={loading} /> : null}
       {showToast ? <Toast showToast={showToast} /> : null}
       <Fragment>
-        <IonContent className="ion-padding">
-          <MainLayout />
-        </IonContent>
+        <MainLayout />
       </Fragment>
     </IonPage>
   );
