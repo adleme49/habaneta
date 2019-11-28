@@ -14,6 +14,7 @@ import {
 import React, { Fragment, useContext } from 'react';
 import GeneralContext from '../../../../context/global/general.context';
 import RecentContext from '../../../../context/recent/recent.context';
+import SVGTile from '../../../common/SVGTile.component';
 
 const SaveModalContent: React.FC = () => {
   const { selectedBorder, selectedFloor } = useContext(RecentContext);
@@ -81,16 +82,16 @@ const SaveModalContent: React.FC = () => {
           <IonCol align-self-center size="6">
             <IonRow align-items-end>
               {selectedFloor ? (
-                <IonImg src={selectedFloor.imgUrl} alt={selectedFloor.name} />
+                <SVGTile tile={selectedFloor} height={230} width={230} />
               ) : (
                 <h2>No selecciono ninguna Loza</h2>
               )}
             </IonRow>
             <IonRow align-items-end>
               {selectedBorder ? (
-                <IonImg src={selectedBorder.imgUrl} alt={selectedBorder.name} />
+                <SVGTile tile={selectedBorder} height={230} width={230} />
               ) : (
-                <h2>No selecciono ningun Borde</h2>
+                <h2>No seleccionó ningun Borde</h2>
               )}
             </IonRow>
           </IonCol>
