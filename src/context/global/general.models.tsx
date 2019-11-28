@@ -30,6 +30,7 @@ export interface IGlobalDispatchers {
   setShowSaveModal: () => void;
   setShowGalleryModal: () => void;
   setShowEnviromentModal: () => void;
+  closeModals: () => void;
   enableRecent: () => void;
   disableRecent: () => void;
   setCurrentTilefromRecent: (current: IFloor | IBorder) => void;
@@ -41,6 +42,7 @@ export const initialGlobalDispatchers: IGlobalDispatchers = {
   setShowSaveModal: () => {},
   setShowEnviromentModal: () => {},
   setShowGalleryModal: () => {},
+  closeModals: () => {},
   enableRecent: () => {},
   disableRecent: () => {},
   setCurrentTilefromRecent: (current: IFloor | IBorder) => {},

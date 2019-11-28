@@ -12,7 +12,8 @@ import {
   SetShowSaveModal,
   EnableRecent,
   DisableRecent,
-  SetShowGalleryModal
+  SetShowGalleryModal,
+  CloseModals
 } from './general.actions';
 
 const GeneralState = (props: any): JSX.Element => {
@@ -64,6 +65,9 @@ const GeneralState = (props: any): JSX.Element => {
   const setShowGalleryModal = () => {
     dispatch(new SetShowGalleryModal());
   };
+  const closeModals = () => {
+    dispatch(new CloseModals());
+  };
 
   return (
     <GeneralContext.Provider
@@ -85,6 +89,7 @@ const GeneralState = (props: any): JSX.Element => {
         setCurrentFamily,
         setCurrentTile,
         setCurrentTilefromRecent,
+        closeModals,
         enableRecent,
         disableRecent,
         showModal

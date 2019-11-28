@@ -8,7 +8,8 @@ import {
   GlobalAction,
   ENABLE_RECENT,
   DISABLE_RECENT,
-  SHOW_GALLERY_MODAL
+  SHOW_GALLERY_MODAL,
+  CLOSE_MODALS
 } from './general.actions';
 
 const GeneralReducer = (
@@ -52,6 +53,13 @@ const GeneralReducer = (
       return {
         ...state,
         showGalleryModal: !showGModal
+      };
+    case CLOSE_MODALS:
+      return {
+        ...state,
+        showGalleryModal: false,
+        showEnviromentModal: false,
+        showSaveModal: false
       };
     case ENABLE_RECENT:
       return {

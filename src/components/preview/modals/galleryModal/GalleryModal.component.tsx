@@ -4,12 +4,12 @@ import GeneralContext from '../../../../context/global/general.context';
 import './../Modal.css';
 import GalleryModalContent from './GalleryModalContent.component';
 const GalleryModal: React.FC = () => {
-  const { showGalleryModal, setShowGalleryModal } = useContext(
+  const { showGalleryModal, closeModals } = useContext(
     GeneralContext
-  ) as any;
+  );
 
   const handelDismiss = () => {
-    setShowGalleryModal();
+    closeModals();
   };
 
   return (

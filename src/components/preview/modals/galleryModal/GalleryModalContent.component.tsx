@@ -1,3 +1,4 @@
+import React, { Fragment, useContext } from 'react';
 import {
   IonContent,
   IonTitle,
@@ -6,7 +7,6 @@ import {
   IonButton,
   IonIcon
 } from '@ionic/react';
-import React, { Fragment, useContext } from 'react';
 import 'react-awesome-slider/dist/styles.css';
 import { galleryPictures } from '../../../../context/seed';
 import './../Modal.css';
@@ -16,12 +16,12 @@ const AwesomeSlider = require('react-awesome-slider').default;
 declare const require: any;
 
 const GalleryModalContent: React.FC<{ onDismiss?: Function }> = ({}) => {
-  const { setShowGalleryModal } = useContext(GeneralContext) as any;
+  const { closeModals } = useContext(GeneralContext);
 
   const handelDismiss = () => {
-    console.log('close');
-    setShowGalleryModal();
+    closeModals();
   };
+  
   return (
     <Fragment>
       <IonContent>

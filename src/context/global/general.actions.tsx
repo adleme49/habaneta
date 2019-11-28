@@ -13,6 +13,7 @@ export const ENABLE_RECENT = '[GLOBAL] ENABLE RECENT';
 export const DISABLE_RECENT = '[GLOBAL] DISABLE RECENT';
 
 export const SHOW_GALLERY_MODAL = '[GLOBAL] SHOW_GALLERY_MODAL';
+export const CLOSE_MODALS = '[GLOBAL] CLOSE MODALS';
 
 export class SetCurrentFamily implements IAction {
   readonly type = SET_CURRENT_FAMILY;
@@ -59,8 +60,12 @@ export class DisableRecent implements IAction {
 export class SetShowGalleryModal implements IAction {
   readonly type = SHOW_GALLERY_MODAL;
 }
+export class CloseModals implements IAction {
+  readonly type = CLOSE_MODALS;
+}
 
 export type GlobalAction =
+  | CloseModals
   | SetCurrentFamily
   | SetCurrentTile
   | SetLatest
