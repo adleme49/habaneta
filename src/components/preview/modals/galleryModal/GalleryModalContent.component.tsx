@@ -19,6 +19,7 @@ const GalleryModalContent: React.FC = () => {
           cssModule={AwesomeSliderStyles}
           bullets={false}
           fillParent={true}
+          transitionDelay={2}
         >
           <div data-src={galleryPictures[0].imgUrl} />
           <div data-src={galleryPictures[1].imgUrl} />
