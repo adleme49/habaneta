@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import 'react-awesome-slider/dist/styles.css';
 import { galleryPictures } from '../../../../context/seed';
 import './../Modal.css';
-const AwesomeSliderStyles = require('react-awesome-slider/src/styled/cube-animation');
+const AwesomeSliderStyles = require('react-awesome-slider/src/styles');
 const AwesomeSlider = require('react-awesome-slider').default;
 declare const require: any;
 
