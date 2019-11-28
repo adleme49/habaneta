@@ -13,24 +13,24 @@ const Body: React.FC<{ borderTile: IBorder; floorTile: IFloor }> = ({
     <Fragment>
       <IonRow className="ion-no-padding ion-no-margin">
         <IonCol className="ion-no-padding ion-no-margin">
-          {borderTile ? <SVGTile tile={borderTile} /> : <IonImg src={empty} />}
+          {borderTile ? <SVGTile tile={borderTile} rotation={-90}/> : <IonImg src={empty}/>}
         </IonCol>
         <FloorGrid tile={floorTile} orientation={'TOP'} />
         <FloorGrid tile={floorTile} orientation={'TOP'} />
         <FloorGrid tile={floorTile} orientation={'TOP'} />
         <IonCol className="ion-no-padding ion-no-margin">
-          {borderTile ? <SVGTile tile={borderTile} /> : <IonImg src={empty} />}
+          {borderTile ? <SVGTile tile={borderTile}  rotation={90}/> : <IonImg src={empty} />}
         </IonCol>
       </IonRow>
       <IonRow className="ion-no-padding ion-no-margin">
         <IonCol className="ion-no-padding ion-no-margin">
-          {borderTile ? <SVGTile tile={borderTile} /> : <IonImg src={empty} />}
+          {borderTile ? <SVGTile tile={borderTile} rotation={-90}/> : <IonImg src={empty}/>}
         </IonCol>
         <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
         <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
         <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
         <IonCol className="ion-no-padding ion-no-margin">
-          {borderTile ? <SVGTile tile={borderTile} /> : <IonImg src={empty} />}
+          {borderTile ? <SVGTile tile={borderTile} rotation={90}/> : <IonImg src={empty} />}
         </IonCol>
       </IonRow>
     </Fragment>
