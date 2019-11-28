@@ -23,11 +23,11 @@ export const paintLayer = (
 
 export const styleSVG = (
   svg: Element,
-  options: { height?: number; width?: number }
+  options: { height?: number; width?: number; rotation?: number }
 ) =>
   svg.setAttribute(
     'style',
-    `width: ${options.width ? options.width : 40.42}px; height: ${
-      options.height ? options.height : 40.42
-    }px`
+    ` ${options.width ? `width: ${options.width}px` : ''};
+      ${options.height ? `height: ${options.height}px` : ''};
+      ${options.rotation ? `transform: rotate(${options.rotation}deg)` : ''};`
   );
