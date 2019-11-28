@@ -14,7 +14,7 @@ const SVGTile: React.FC<{
       src={tile.imgUrl as string}
       onClick={onClickHandler}
       beforeInjection={svg => {
-        styleSVG(svg, { width, height });
+        // styleSVG(svg, { width, height });
         const shapes = getColorShapes(svg);
         if (tile.layers) {
           Object.keys(tile.layers).forEach(layerId => {
