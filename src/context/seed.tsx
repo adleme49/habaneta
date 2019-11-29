@@ -98,11 +98,10 @@ export const tilesFam: ITileFamily[] = [
         imgUrl: '../assets/Tile/Contemporary/tile.svg',
         type: Floor,
         layers: {
-          l1: 'red',
+          l1: '#d3e39d',
           l2: 'green',
-          l3: 'blue',
           l4: 'black',
-          l5: 'gray'
+          l5: 'red'
         }
       },
       {
