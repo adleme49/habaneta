@@ -1,16 +1,15 @@
-import React, { Fragment, useContext } from 'react';
 import {
-  IonContent,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
   IonButton,
-  IonIcon
+  IonButtons,
+  IonContent,
+  IonIcon,
+  IonTitle,
+  IonToolbar
 } from '@ionic/react';
+import React, { Fragment } from 'react';
 import 'react-awesome-slider/dist/styles.css';
 import { galleryPictures } from '../../../../context/seed';
 import './../Modal.css';
-import GeneralContext from '../../../../context/global/general.context';
 const AwesomeSliderStyles = require('react-awesome-slider/src/styles');
 const AwesomeSlider = require('react-awesome-slider').default;
 declare const require: any;

@@ -3,18 +3,16 @@ import {
   IonButtons,
   IonCol,
   IonGrid,
+  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
   IonRow,
   IonTitle,
-  IonToolbar,
-  IonIcon
+  IonToolbar
 } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
 import RecentContext from '../../../../context/recent/recent.context';
-import SVGTile from '../../../common/SVGTile.component';
-import GeneralContext from '../../../../context/global/general.context';
 import TileInfo from './TileInfo.component';
 
 const SaveModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {

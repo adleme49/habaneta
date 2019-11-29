@@ -1,4 +1,4 @@
-import { IAction, ITile, IFloor, IBorder } from '../interfaces';
+import { IAction, ITile } from '../interfaces';
 
 export const ADD_RECENT = '[Recent] ADD RECENT';
 export const SELECT_LATEST = '[Recent] SELECT LATEST';
