@@ -6,12 +6,16 @@ import SVGTile from '../../../common/SVGTile.component';
 const TileInfo: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
   return (
     <Fragment>
-      <IonRow>
+      <IonRow style={{ height: '100%' }}>
         <IonCol size="6">
           <IonRow>
             {tile.type === 'Floor' ? <h1>Piso</h1> : <h1>Borde</h1>}
           </IonRow>
-          <SVGTile tile={tile} height={230} width={230} />
+          <IonRow>
+            <IonCol>
+              <SVGTile tile={tile} />
+            </IonCol>
+          </IonRow>
         </IonCol>
         <IonCol size="6">
           <IonRow>
