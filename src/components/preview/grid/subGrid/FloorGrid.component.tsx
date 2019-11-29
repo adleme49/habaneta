@@ -12,7 +12,11 @@ const FloorGrid: React.FC<{ orientation: 'TOP' | 'BOTTOM'; tile: IBorder }> = ({
     <Fragment>
       <IonCol className="ion-no-padding ion-no-margin">
         {tile ? (
-          <SVGTile tile={tile} rotation={orientation === 'TOP' ? 450 : 720} />
+          <SVGTile
+            check={true}
+            tile={tile}
+            rotation={orientation === 'TOP' ? 450 : 720}
+          />
         ) : (
           <IonImg src={empty} />
         )}

@@ -3,6 +3,7 @@ import { IonRow, IonCol, IonImg } from '@ionic/react';
 import { IBorder } from '../../../../context/interfaces';
 import SVGTile from '../../../common/SVGTile.component';
 import empty from '../../../../theme/empty.png';
+import ReactDOM from 'react-dom';
 
 const vhorizontal = [1, 2, 3, 4, 5, 6];
 const Horizontal: React.FC<{
@@ -14,7 +15,12 @@ const Horizontal: React.FC<{
       <IonRow className="ion-no-padding ion-no-margin">
         <IonCol className="ion-no-padding ion-no-margin">
           {tile ? (
-            <SVGTile tile={tile} url={tile.cornerUrl} rotation={orientation === 'TOP' ? 0 : -90} />
+            <SVGTile
+              check={true}
+              tile={tile}
+              url={tile.cornerUrl}
+              rotation={orientation === 'TOP' ? 0 : -90}
+            />
           ) : (
             <IonImg src={empty} />
           )}
@@ -30,7 +36,11 @@ const Horizontal: React.FC<{
         ))}
         <IonCol className="ion-no-padding ion-no-margin">
           {tile ? (
-            <SVGTile tile={tile} url={tile.cornerUrl} rotation={orientation === 'TOP' ? 90 : 180} />
+            <SVGTile
+              tile={tile}
+              url={tile.cornerUrl}
+              rotation={orientation === 'TOP' ? 90 : 180}
+            />
           ) : (
             <IonImg src={empty} />
           )}

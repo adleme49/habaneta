@@ -9,7 +9,8 @@ import {
   ENABLE_RECENT,
   DISABLE_RECENT,
   SHOW_GALLERY_MODAL,
-  CLOSE_MODALS
+  CLOSE_MODALS,
+  SET_SVG_HEIGHT
 } from './general.actions';
 
 const GeneralReducer = (
@@ -71,6 +72,16 @@ const GeneralReducer = (
         ...state,
         isRecent: false
       };
+    case SET_SVG_HEIGHT: {
+      const h = action.payload;
+      if (h) {
+        return {
+          ...state,
+          svgHeight: h
+        };
+      }
+      return state;
+    }
     default:
       return state;
   }
