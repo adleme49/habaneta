@@ -21,7 +21,7 @@ const GalleryModalContent: React.FC<{ onDismiss?: Function }> = ({}) => {
   const handelDismiss = () => {
     closeModals();
   };
-  
+
   return (
     <Fragment>
       <IonContent>
@@ -40,9 +40,9 @@ const GalleryModalContent: React.FC<{ onDismiss?: Function }> = ({}) => {
           fillParent={true}
           transitionDelay={2}
         >
-          <div data-src={galleryPictures[0].imgUrl} />
-          <div data-src={galleryPictures[1].imgUrl} />
-          <div data-src={galleryPictures[2].imgUrl} />
+          {galleryPictures.map(({ imgUrl }, i) => (
+            <div data-src={imgUrl} key={i} />
+          ))}
         </AwesomeSlider>
       </IonContent>
     </Fragment>

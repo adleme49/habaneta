@@ -178,7 +178,25 @@ export const recent = [
 ];
 
 export const galleryPictures = [
-  { imgUrl: '../assets/Gallery/1.jpg' },
-  { imgUrl: '../assets/Gallery/2.jpg' },
-  { imgUrl: '../assets/Gallery/3.jpg' }
+  { imgUrl: '../assets/Gallery/f1.jpeg' },
+  { imgUrl: '../assets/Gallery/f2.jpeg' },
+  { imgUrl: '../assets/Gallery/f3.jpeg' },
+  { imgUrl: '../assets/Gallery/f4.jpeg' },
+  { imgUrl: '../assets/Gallery/f5.jpeg' },
+  { imgUrl: '../assets/Gallery/f6.jpeg' },
+  { imgUrl: '../assets/Gallery/f7.jpeg' },
+  { imgUrl: '../assets/Gallery/f8.jpeg' },
+  { imgUrl: '../assets/Gallery/f9.jpeg' },
+  { imgUrl: '../assets/Gallery/f10.jpeg' },
+  { imgUrl: '../assets/Gallery/f11.jpeg' },
+  { imgUrl: '../assets/Gallery/f12.jpeg' },
+  { imgUrl: '../assets/Gallery/f13.jpeg' },
+  { imgUrl: '../assets/Gallery/f14.jpeg' },
+  { imgUrl: '../assets/Gallery/f15.jpeg' },
+  { imgUrl: '../assets/Gallery/f16.jpeg' },
+  { imgUrl: '../assets/Gallery/f17.jpeg' },
+  { imgUrl: '../assets/Gallery/f18.jpeg' },
+  { imgUrl: '../assets/Gallery/f19.jpeg' },
+  { imgUrl: '../assets/Gallery/f20.jpeg' },
+  { imgUrl: '../assets/Gallery/f21.jpeg' },
 ];
