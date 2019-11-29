@@ -16,7 +16,7 @@ const SVGTilePaint: React.FC<{
         }
       }}
       beforeInjection={svg => {
-        styleSVG(svg, { width: 250, height: 250 });
+        styleSVG(svg, { width: 450, height: 450 });
         const shapes = getColorShapes(svg);
         if (tile.layers) {
           Object.keys(tile.layers).forEach(layerId => {

@@ -7,7 +7,6 @@ export const DomiColors: IColor[] = [
   { name: 'red', code: '#F44336' },
   { name: 'pink', code: '#E91E63' },
   { name: 'purple', code: '#9C27B0' },
-  { name: 'deeppurple', code: '#673AB7' },
   { name: 'indigo', code: '#3F51B5' },
   { name: 'blue', code: '#2196F3' },
   { name: 'lightblue', code: '#03A9F4' },
@@ -25,9 +24,10 @@ export const DomiColors: IColor[] = [
   { name: 'bluegrey', code: '#607D8B' },
   { name: 'darken_red', code: '#b71c1c' },
   { name: 'darken_pink', code: '#880e4f' },
-  { name: 'darken_purple', code: '#4a148c' },
   { name: 'darken_blue', code: '#0d47a1' },
-  { name: 'darken_amber', code: '#ff6f00' }
+  { name: 'darken_amber', code: '#ff6f00' },
+  { name: 'white', code: 'white' },
+  { name: 'black', code: 'black' },
 ];
 
 export const borderFam: IBorderFamily[] = [
