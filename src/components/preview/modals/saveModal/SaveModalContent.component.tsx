@@ -83,13 +83,16 @@ const SaveModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
             {selectedFloor ? (
               <TileInfo tile={selectedFloor} />
             ) : (
-              <h2>No selecciono ninguna Loza</h2>
+              <IonRow>
+                <h2>No selecciono ninguna Loza</h2>
+              </IonRow>
             )}
-
             {selectedBorder ? (
               <TileInfo tile={selectedBorder} />
             ) : (
-              <h2>No seleccionó ningun Borde</h2>
+              <IonRow>
+                <h2>No seleccionó ningun Borde</h2>
+              </IonRow>
             )}
           </IonCol>
         </IonRow>
