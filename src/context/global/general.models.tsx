@@ -20,6 +20,7 @@ export interface IGeneralState {
   showGalleryModal: boolean;
   showSaveModal: boolean;
   isRecent: boolean;
+  svgHeight?: number;
   selectedTile?: ITile;
   selectedFamily?: IFamily;
 }
@@ -30,6 +31,8 @@ export interface IGlobalDispatchers {
   setShowSaveModal: () => void;
   setShowGalleryModal: () => void;
   setShowEnviromentModal: () => void;
+  closeModals: () => void;
+  setSVGHeight: (height: number) => void;
   enableRecent: () => void;
   disableRecent: () => void;
   setCurrentTilefromRecent: (current: IFloor | IBorder) => void;
@@ -41,8 +44,10 @@ export const initialGlobalDispatchers: IGlobalDispatchers = {
   setShowSaveModal: () => {},
   setShowEnviromentModal: () => {},
   setShowGalleryModal: () => {},
+  closeModals: () => {},
   enableRecent: () => {},
   disableRecent: () => {},
+  setSVGHeight: (height: number) => {},
   setCurrentTilefromRecent: (current: IFloor | IBorder) => {},
 };
 export const initialDomivalues: IGeneralState = {

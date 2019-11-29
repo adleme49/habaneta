@@ -7,7 +7,6 @@ export const DomiColors: IColor[] = [
   { name: 'red', code: '#F44336' },
   { name: 'pink', code: '#E91E63' },
   { name: 'purple', code: '#9C27B0' },
-  { name: 'deeppurple', code: '#673AB7' },
   { name: 'indigo', code: '#3F51B5' },
   { name: 'blue', code: '#2196F3' },
   { name: 'lightblue', code: '#03A9F4' },
@@ -25,9 +24,10 @@ export const DomiColors: IColor[] = [
   { name: 'bluegrey', code: '#607D8B' },
   { name: 'darken_red', code: '#b71c1c' },
   { name: 'darken_pink', code: '#880e4f' },
-  { name: 'darken_purple', code: '#4a148c' },
   { name: 'darken_blue', code: '#0d47a1' },
-  { name: 'darken_amber', code: '#ff6f00' }
+  { name: 'darken_amber', code: '#ff6f00' },
+  { name: 'white', code: 'white' },
+  { name: 'black', code: 'black' },
 ];
 
 export const borderFam: IBorderFamily[] = [
@@ -94,15 +94,14 @@ export const tilesFam: ITileFamily[] = [
     type: Floor,
     types: [
       {
-        name: 'Mod. 267',
+        name: 'Mod. 262B',
         imgUrl: '../assets/Tile/Contemporary/tile.svg',
         type: Floor,
         layers: {
-          l1: 'red',
+          l1: '#d3e39d',
           l2: 'green',
-          l3: 'blue',
           l4: 'black',
-          l5: 'gray'
+          l5: 'red'
         }
       },
       {
@@ -178,7 +177,25 @@ export const recent = [
 ];
 
 export const galleryPictures = [
-  { imgUrl: '../assets/Gallery/1.jpg' },
-  { imgUrl: '../assets/Gallery/2.jpg' },
-  { imgUrl: '../assets/Gallery/3.jpg' }
+  { imgUrl: '../assets/Gallery/f1.jpeg' },
+  { imgUrl: '../assets/Gallery/f2.jpeg' },
+  { imgUrl: '../assets/Gallery/f3.jpeg' },
+  { imgUrl: '../assets/Gallery/f4.jpeg' },
+  { imgUrl: '../assets/Gallery/f5.jpeg' },
+  { imgUrl: '../assets/Gallery/f6.jpeg' },
+  { imgUrl: '../assets/Gallery/f7.jpeg' },
+  { imgUrl: '../assets/Gallery/f8.jpeg' },
+  { imgUrl: '../assets/Gallery/f9.jpeg' },
+  { imgUrl: '../assets/Gallery/f10.jpeg' },
+  { imgUrl: '../assets/Gallery/f11.jpeg' },
+  { imgUrl: '../assets/Gallery/f12.jpeg' },
+  { imgUrl: '../assets/Gallery/f13.jpeg' },
+  { imgUrl: '../assets/Gallery/f14.jpeg' },
+  { imgUrl: '../assets/Gallery/f15.jpeg' },
+  { imgUrl: '../assets/Gallery/f16.jpeg' },
+  { imgUrl: '../assets/Gallery/f17.jpeg' },
+  { imgUrl: '../assets/Gallery/f18.jpeg' },
+  { imgUrl: '../assets/Gallery/f19.jpeg' },
+  { imgUrl: '../assets/Gallery/f20.jpeg' },
+  { imgUrl: '../assets/Gallery/f21.jpeg' },
 ];

@@ -3,7 +3,6 @@ import { IBorder, IFloor } from '../../../context/interfaces';
 import RecentContext from '../../../context/recent/recent.context';
 import Body from './subGrid/Body.component';
 import Horizontal from './subGrid/Horizontal.component';
-import { IonRow } from '@ionic/react';
 
 const TileGrid: React.FC = () => {
   const { selectedFloor, selectedBorder } = useContext(RecentContext);

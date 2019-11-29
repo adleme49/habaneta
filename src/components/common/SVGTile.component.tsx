@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ReactSVG from 'react-svg';
 import { ITile } from '../../context/interfaces';
 import { getColorShapes, paintLayer, styleSVG } from '../../helpers';
+import GeneralContext from '../../context/global/general.context';
 
 const SVGTile: React.FC<{
   tile: ITile;
@@ -9,13 +10,23 @@ const SVGTile: React.FC<{
   height?: number;
   rotation?: number;
   url?: string;
+  check?: boolean;
   onClickHandler?: (event: any) => void;
-}> = ({ tile, width, height, rotation, onClickHandler, url }) => {
+}> = ({ tile, width, height, rotation, onClickHandler, url, check }) => {
+  const { svgHeight, setSVGHeight } = useContext(GeneralContext);
+  const setHeight = (value: any) => {
+    if (check && !svgHeight) setSVGHeight(value);
+  };
   return (
     <ReactSVG
       src={url ? url : (tile.imgUrl as string)}
+      style={{
+        height: svgHeight
+      }}
+      className="svg-wrapper"
       onClick={onClickHandler}
       beforeInjection={svg => {
+        setHeight(svg.clientHeight as any);
         styleSVG(svg, { width, height, rotation });
         const shapes = getColorShapes(svg);
         if (tile.layers) {
@@ -24,6 +35,11 @@ const SVGTile: React.FC<{
               paintLayer(shapes, layerId, tile.layers[layerId]);
             }
           });
+        }
+      }}
+      afterInjection={(error, svg) => {
+        if (svg) {
+          setHeight(svg.clientHeight);
         }
       }}
     />

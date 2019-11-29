@@ -3,6 +3,7 @@ import {
   IonButtons,
   IonCol,
   IonGrid,
+  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
@@ -12,13 +13,14 @@ import {
 } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
 import RecentContext from '../../../../context/recent/recent.context';
-import SVGTile from '../../../common/SVGTile.component';
+import TileInfo from './TileInfo.component';
 
-const SaveModalContent: React.FC = () => {
+const SaveModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
   const { selectedBorder, selectedFloor } = useContext(RecentContext);
-  // const initialClient = { name: '', phone: '', address: '' };
-  // const [client, setClient] = useState(initialClient);
-  // const { name, phone, address } = client;
+
+  const handelDismiss = () => {
+    onClose();
+  };
 
   const onSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,61 +31,69 @@ const SaveModalContent: React.FC = () => {
     <Fragment>
       <IonToolbar color="primary">
         <IonTitle>Save</IonTitle>
+        <IonButtons slot="secondary">
+          <IonButton onClick={handelDismiss}>
+            <IonIcon name="close" slot="icon-only" />
+          </IonButton>
+        </IonButtons>
       </IonToolbar>
 
-      <IonGrid fixed>
+      <IonGrid fixed={true}>
         <IonRow>
-          <IonCol align-self-center size="6">
+          <IonCol size="6">
             <form onSubmit={onSubmitForm}>
               <IonRow>
                 <h1>Datos del Cliente</h1>
+              </IonRow>
 
+              <IonRow>
                 <IonItem>
                   <IonLabel position="floating">Nombre</IonLabel>
                   <IonInput type="text" name="name" required></IonInput>
-
-                  {/* <input
-                    className="ion-input"
-                    type="text"
-                    name="name"
-                    value={name}
-                    required
-                    onChange={handleChange}
-                  /> */}
                 </IonItem>
+              </IonRow>
+              <IonRow>
                 <IonItem>
                   <IonLabel position="floating">Telf</IonLabel>
                   <IonInput type="text" name="phone" required></IonInput>
                 </IonItem>
+              </IonRow>
+              <IonRow>
                 <IonItem>
                   <IonLabel position="floating">Direccion</IonLabel>
                   <IonInput type="text" name="address" required></IonInput>
                 </IonItem>
               </IonRow>
 
-              <IonButtons>
-                <IonButton expand="full" type="submit">
-                  Guardar
-                </IonButton>
-                <IonButton expand="full">Cancelar</IonButton>
-              </IonButtons>
+              <IonRow>
+                <IonButtons>
+                  <IonButton expand="full" type="submit">
+                    Guardar
+                  </IonButton>
+                  <IonButton expand="full">Cancelar</IonButton>
+                </IonButtons>
+              </IonRow>
             </form>
           </IonCol>
-          <IonCol align-self-center size="6">
-            <IonRow align-items-end>
-              {selectedFloor ? (
-                <SVGTile tile={selectedFloor} height={230} width={230} />
-              ) : (
+          <IonCol size="6">
+            <IonRow>
+              <h1>Datos de las Lozas</h1>
+            </IonRow>
+
+            {selectedFloor ? (
+              <TileInfo tile={selectedFloor} />
+            ) : (
+              <IonRow>
                 <h2>No selecciono ninguna Loza</h2>
-              )}
-            </IonRow>
-            <IonRow align-items-end>
-              {selectedBorder ? (
-                <SVGTile tile={selectedBorder} height={230} width={230} />
-              ) : (
+              </IonRow>
+            )}
+            {selectedBorder ? (
+              <TileInfo tile={selectedBorder} />
+            ) : (
+              <IonRow>
                 <h2>No seleccionó ningun Borde</h2>
-              )}
-            </IonRow>
+              </IonRow>
+            )}
           </IonCol>
         </IonRow>
       </IonGrid>

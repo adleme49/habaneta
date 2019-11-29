@@ -8,7 +8,9 @@ import {
   GlobalAction,
   ENABLE_RECENT,
   DISABLE_RECENT,
-  SHOW_GALLERY_MODAL
+  SHOW_GALLERY_MODAL,
+  CLOSE_MODALS,
+  SET_SVG_HEIGHT
 } from './general.actions';
 
 const GeneralReducer = (
@@ -47,6 +49,19 @@ const GeneralReducer = (
         ...state,
         showEnviromentModal: !state.showEnviromentModal
       };
+    case SHOW_GALLERY_MODAL:
+      const showGModal = state.showGalleryModal;
+      return {
+        ...state,
+        showGalleryModal: !showGModal
+      };
+    case CLOSE_MODALS:
+      return {
+        ...state,
+        showGalleryModal: false,
+        showEnviromentModal: false,
+        showSaveModal: false
+      };
     case ENABLE_RECENT:
       return {
         ...state,
@@ -57,11 +72,16 @@ const GeneralReducer = (
         ...state,
         isRecent: false
       };
-    case SHOW_GALLERY_MODAL:
-      return {
-        ...state,
-        showGalleryModal: !state.showGalleryModal
-      };
+    case SET_SVG_HEIGHT: {
+      const h = action.payload;
+      if (h) {
+        return {
+          ...state,
+          svgHeight: h
+        };
+      }
+      return state;
+    }
     default:
       return state;
   }

@@ -14,7 +14,12 @@ const Horizontal: React.FC<{
       <IonRow className="ion-no-padding ion-no-margin">
         <IonCol className="ion-no-padding ion-no-margin">
           {tile ? (
-            <SVGTile tile={tile} url={tile.cornerUrl} rotation={orientation === 'TOP' ? 0 : -90} />
+            <SVGTile
+              check={true}
+              tile={tile}
+              url={tile.cornerUrl}
+              rotation={orientation === 'TOP' ? 0 : -90}
+            />
           ) : (
             <IonImg src={empty} />
           )}
@@ -30,7 +35,11 @@ const Horizontal: React.FC<{
         ))}
         <IonCol className="ion-no-padding ion-no-margin">
           {tile ? (
-            <SVGTile tile={tile} url={tile.cornerUrl} rotation={orientation === 'TOP' ? 90 : 180} />
+            <SVGTile
+              tile={tile}
+              url={tile.cornerUrl}
+              rotation={orientation === 'TOP' ? 90 : 180}
+            />
           ) : (
             <IonImg src={empty} />
           )}

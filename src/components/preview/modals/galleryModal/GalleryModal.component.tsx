@@ -4,12 +4,10 @@ import GeneralContext from '../../../../context/global/general.context';
 import './../Modal.css';
 import GalleryModalContent from './GalleryModalContent.component';
 const GalleryModal: React.FC = () => {
-  const { showGalleryModal, setShowGalleryModal } = useContext(
-    GeneralContext
-  ) as any;
+  const { showGalleryModal, closeModals } = useContext(GeneralContext);
 
   const handelDismiss = () => {
-    setShowGalleryModal();
+    closeModals();
   };
 
   return (
@@ -19,7 +17,7 @@ const GalleryModal: React.FC = () => {
         onDidDismiss={handelDismiss}
         cssClass="galleryModal"
       >
-        <GalleryModalContent />
+        <GalleryModalContent onClose={handelDismiss} />
       </IonModal>
     </Fragment>
   );

@@ -12,13 +12,16 @@ import {
   SetShowSaveModal,
   EnableRecent,
   DisableRecent,
-  SetShowGalleryModal
+  SetShowGalleryModal,
+  CloseModals,
+  SetSVGHeight
 } from './general.actions';
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: IGeneralState = initialDomivalues;
   const [
     {
+      svgHeight,
       loading,
       showEnviromentModal,
       showSaveModal,
@@ -35,7 +38,9 @@ const GeneralState = (props: any): JSX.Element => {
     dispatch
   ] = useReducer(GeneralReducer, initialState);
 
-  // set CurrentCategory
+  const setSVGHeight = (height: number) => {
+    dispatch(new SetSVGHeight(height));
+  };
   const setCurrentFamily = (current: IFamily) => {
     dispatch(new SetCurrentFamily(current));
   };
@@ -64,11 +69,15 @@ const GeneralState = (props: any): JSX.Element => {
   const setShowGalleryModal = () => {
     dispatch(new SetShowGalleryModal());
   };
+  const closeModals = () => {
+    dispatch(new CloseModals());
+  };
 
   return (
     <GeneralContext.Provider
       value={{
         loading,
+        svgHeight,
         showEnviromentModal,
         showSaveModal,
         showGalleryModal,
@@ -85,6 +94,8 @@ const GeneralState = (props: any): JSX.Element => {
         setCurrentFamily,
         setCurrentTile,
         setCurrentTilefromRecent,
+        setSVGHeight,
+        closeModals,
         enableRecent,
         disableRecent,
         showModal

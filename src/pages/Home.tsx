@@ -1,5 +1,5 @@
-import { IonContent, IonPage } from '@ionic/react';
-import React, { Fragment, useState, useContext } from 'react';
+import { IonPage } from '@ionic/react';
+import React, { Fragment, useContext, useState } from 'react';
 import Loading from '../components/layout/loading/Loading.component';
 import MainLayout from '../components/layout/main/MainLayaout.component';
 import NavLayaout from '../components/layout/nav/NavLayout.component';
