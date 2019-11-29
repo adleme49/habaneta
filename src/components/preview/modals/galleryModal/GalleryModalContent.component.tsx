@@ -15,13 +15,11 @@ const AwesomeSliderStyles = require('react-awesome-slider/src/styles');
 const AwesomeSlider = require('react-awesome-slider').default;
 declare const require: any;
 
-const GalleryModalContent: React.FC<{ onDismiss?: Function }> = ({}) => {
-  const { closeModals } = useContext(GeneralContext);
-
+const GalleryModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
   const handelDismiss = () => {
-    closeModals();
+    onClose();
   };
-  
+
   return (
     <Fragment>
       <IonContent>

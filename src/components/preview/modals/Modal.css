@@ -1,10 +1,10 @@
 .saveModal {
-  --height: 80%;
-  --width: 80%;
+  --height: 100%;
+  --width: 100%;
 }
 .galleryModal {
-  --height: 95%;
-  --width: 90%;
+  --height: 100%;
+  --width: 100%;
 }
 .aws-btn {
   --organic-arrow-thickness: 12px;

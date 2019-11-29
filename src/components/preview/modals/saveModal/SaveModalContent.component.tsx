@@ -8,17 +8,21 @@ import {
   IonLabel,
   IonRow,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  IonIcon
 } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
 import RecentContext from '../../../../context/recent/recent.context';
 import SVGTile from '../../../common/SVGTile.component';
+import GeneralContext from '../../../../context/global/general.context';
+import TileInfo from './TileInfo.component';
 
-const SaveModalContent: React.FC = () => {
+const SaveModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
   const { selectedBorder, selectedFloor } = useContext(RecentContext);
-  // const initialClient = { name: '', phone: '', address: '' };
-  // const [client, setClient] = useState(initialClient);
-  // const { name, phone, address } = client;
+
+  const handelDismiss = () => {
+    onClose();
+  };
 
   const onSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,9 +33,14 @@ const SaveModalContent: React.FC = () => {
     <Fragment>
       <IonToolbar color="primary">
         <IonTitle>Save</IonTitle>
+        <IonButtons slot="secondary">
+          <IonButton onClick={handelDismiss}>
+            <IonIcon name="close" slot="icon-only" />
+          </IonButton>
+        </IonButtons>
       </IonToolbar>
 
-      <IonGrid>
+      <IonGrid fixed={true}>
         <IonRow>
           <IonCol size="6">
             <form onSubmit={onSubmitForm}>
@@ -43,15 +52,6 @@ const SaveModalContent: React.FC = () => {
                 <IonItem>
                   <IonLabel position="floating">Nombre</IonLabel>
                   <IonInput type="text" name="name" required></IonInput>
-
-                  {/* <input
-                    className="ion-input"
-                    type="text"
-                    name="name"
-                    value={name}
-                    required
-                    onChange={handleChange}
-                  /> */}
                 </IonItem>
               </IonRow>
               <IonRow>
@@ -78,20 +78,21 @@ const SaveModalContent: React.FC = () => {
             </form>
           </IonCol>
           <IonCol size="6">
-            <IonRow align-items-end>
-              {selectedFloor ? (
-                <SVGTile tile={selectedFloor} height={230} width={230} />
-              ) : (
-                <h2>No selecciono ninguna Loza</h2>
-              )}
+            <IonRow>
+              <h1>Datos de las Lozas</h1>
             </IonRow>
-            <IonRow align-items-end>
-              {selectedBorder ? (
-                <SVGTile tile={selectedBorder} height={230} width={230} />
-              ) : (
-                <h2>No seleccionó ningun Borde</h2>
-              )}
-            </IonRow>
+
+            {selectedFloor ? (
+              <TileInfo tile={selectedFloor} />
+            ) : (
+              <h2>No selecciono ninguna Loza</h2>
+            )}
+
+            {selectedBorder ? (
+              <TileInfo tile={selectedBorder} />
+            ) : (
+              <h2>No seleccionó ningun Borde</h2>
+            )}
           </IonCol>
         </IonRow>
       </IonGrid>

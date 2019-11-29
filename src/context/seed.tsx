@@ -94,7 +94,7 @@ export const tilesFam: ITileFamily[] = [
     type: Floor,
     types: [
       {
-        name: 'Mod. 267',
+        name: 'Mod. 262B',
         imgUrl: '../assets/Tile/Contemporary/tile.svg',
         type: Floor,
         layers: {

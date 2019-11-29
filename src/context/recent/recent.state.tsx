@@ -25,6 +25,7 @@ const RecentState = (props: any): JSX.Element => {
     if (tile && isRecent && (selectedTileIndex as number) >= 0) {
       dispatch(new UpdateSelected(tile));
     }
+    // eslint-disable-next-line
   }, [tile]);
 
   const addRecent = (tile: ITile) => {
