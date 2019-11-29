@@ -10,7 +10,7 @@ const SelectedColor: React.FC = () => {
           className="border-darken-4"
           style={{
             background: `${selectedColor}`,
-            height: '3rem',
+            height: '5rem',
             width: '100%',
             border: 'solid 0.1rem'
           }}

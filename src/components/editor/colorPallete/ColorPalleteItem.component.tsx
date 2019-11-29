@@ -13,7 +13,7 @@ const ColorPalleteItem: React.FC<{ color: IColor }> = ({ color }) => {
   return (
     <IonCol
       size="2"
-      style={{ background: color.code, height: '3rem' }}
+      style={{ background: color.code, height: '5rem' }}
       onClick={handleSetColor}
     ></IonCol>
   );
