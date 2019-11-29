@@ -3,7 +3,6 @@ import { IonRow, IonCol, IonImg } from '@ionic/react';
 import { IBorder } from '../../../../context/interfaces';
 import SVGTile from '../../../common/SVGTile.component';
 import empty from '../../../../theme/empty.png';
-import ReactDOM from 'react-dom';
 
 const vhorizontal = [1, 2, 3, 4, 5, 6];
 const Horizontal: React.FC<{
