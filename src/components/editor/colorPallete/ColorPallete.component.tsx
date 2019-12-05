@@ -9,7 +9,7 @@ const ColorPallete: React.FC = () => {
 
   return (
     <Fragment>
-      <div style={{ border: 'solid 2px black' }}>
+      <div style={{ border: 'solid 2px black' }} id="test">
         <IonRow>
           {(colors as IColor[]).map((color: IColor) => (
             <ColorPalleteItem key={color.code} color={color} />

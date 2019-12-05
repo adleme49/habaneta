@@ -8,20 +8,22 @@ const TileGrid: React.FC = () => {
   const { selectedFloor, selectedBorder } = useContext(RecentContext);
   return (
     <Fragment>
-      <Horizontal orientation={'TOP'} tile={selectedBorder as IBorder} />
-      <Body
-        borderTile={selectedBorder as IBorder}
-        floorTile={selectedFloor as IFloor}
-      />
-      <Body
-        borderTile={selectedBorder as IBorder}
-        floorTile={selectedFloor as IFloor}
-      />
-      <Body
-        borderTile={selectedBorder as IBorder}
-        floorTile={selectedFloor as IFloor}
-      />
-      <Horizontal orientation={'BOTTOM'} tile={selectedBorder as IBorder} />
+      <div id="test2">
+        <Horizontal orientation={'TOP'} tile={selectedBorder as IBorder} />
+        <Body
+          borderTile={selectedBorder as IBorder}
+          floorTile={selectedFloor as IFloor}
+        />
+        <Body
+          borderTile={selectedBorder as IBorder}
+          floorTile={selectedFloor as IFloor}
+        />
+        <Body
+          borderTile={selectedBorder as IBorder}
+          floorTile={selectedFloor as IFloor}
+        />
+        <Horizontal orientation={'BOTTOM'} tile={selectedBorder as IBorder} />
+      </div>
     </Fragment>
   );
 };
