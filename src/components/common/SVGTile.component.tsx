@@ -13,20 +13,26 @@ const SVGTile: React.FC<{
   check?: boolean;
   onClickHandler?: (event: any) => void;
 }> = ({ tile, width, height, rotation, onClickHandler, url, check }) => {
-  const { svgHeight, setSVGHeight } = useContext(GeneralContext);
-  const setHeight = (value: any) => {
-    if (check && !svgHeight) setSVGHeight(value);
+  const { svgHeight, setSVGHeight, svgWidth, setSVGWidth } = useContext(
+    GeneralContext
+  );
+  const setHeight = (height: number, width: number) => {
+    if (check && !svgHeight) {
+      setSVGHeight(height);
+      setSVGHeight(width);
+    }
   };
   return (
     <ReactSVG
       src={url ? url : (tile.imgUrl as string)}
       style={{
-        height: svgHeight
+        height: svgHeight,
+        width: svgWidth
       }}
       className="svg-wrapper"
       onClick={onClickHandler}
       beforeInjection={svg => {
-        setHeight(svg.clientHeight as any);
+        setHeight(svg.clientHeight, svg.clientWidth);
         styleSVG(svg, { width, height, rotation });
         const shapes = getColorShapes(svg);
         if (tile.layers) {
@@ -39,7 +45,7 @@ const SVGTile: React.FC<{
       }}
       afterInjection={(error, svg) => {
         if (svg) {
-          setHeight(svg.clientHeight);
+          setHeight(svg.clientHeight, svg.clientWidth);
         }
       }}
     />

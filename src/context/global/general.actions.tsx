@@ -15,7 +15,12 @@ export const DISABLE_RECENT = '[GLOBAL] DISABLE RECENT';
 export const SHOW_GALLERY_MODAL = '[GLOBAL] SHOW_GALLERY_MODAL';
 export const CLOSE_MODALS = '[GLOBAL] CLOSE MODALS';
 export const SET_SVG_HEIGHT = '[GLOBAL] SET SVG HEIGHT';
+export const SET_SVG_WIDTH = '[GLOBAL] SET SVG WIDTH';
 
+export class SetSVGWidth implements IAction {
+  readonly type = SET_SVG_WIDTH;
+  constructor(public payload: number) {}
+}
 export class SetSVGHeight implements IAction {
   readonly type = SET_SVG_HEIGHT;
   constructor(public payload: number) {}
@@ -72,6 +77,7 @@ export class CloseModals implements IAction {
 
 export type GlobalAction =
   | SetSVGHeight
+  | SetSVGWidth
   | CloseModals
   | SetCurrentFamily
   | SetCurrentTile
