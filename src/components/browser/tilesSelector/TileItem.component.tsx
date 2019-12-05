@@ -4,6 +4,7 @@ import Default from '../../../theme/102.png';
 import { IFloor, IBorder } from '../../../context/interfaces';
 import EditorContext from '../../../context/editor/editor.context';
 import GeneralContext from '../../../context/global/general.context';
+import SVGTileBase from '../../common/SVGBase.component';
 
 const TileItem: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
   const { disableRecent } = useContext(GeneralContext);
@@ -15,7 +16,11 @@ const TileItem: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
   };
   return tile ? (
     <IonItem onClick={handleClick}>
-      <IonImg src={tile.imgUrl ? tile.imgUrl : Default} alt={tile.name} />
+      {tile.imgUrl ? (
+        <SVGTileBase tile={tile} style={{ width: 300 }} />
+      ) : (
+        <IonImg src={Default} />
+      )}
     </IonItem>
   ) : null;
 };

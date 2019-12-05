@@ -18,6 +18,7 @@ const SVGTilePaint: React.FC<{
       beforeInjection={svg => {
         styleSVG(svg, { width: 450, height: 450 });
         const shapes = getColorShapes(svg);
+        console.log(shapes);
         if (tile.layers) {
           Object.keys(tile.layers).forEach(layerId => {
             if (tile.layers) {
@@ -32,6 +33,7 @@ const SVGTilePaint: React.FC<{
         const targetClass = ((event.target as Element).getAttribute(
           'class'
         ) as string).split(' ')[1];
+        console.log(event.target);
         console.log(targetClass);
         colorLayer(targetClass);
       }}

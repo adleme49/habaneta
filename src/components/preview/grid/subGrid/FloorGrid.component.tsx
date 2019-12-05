@@ -4,10 +4,10 @@ import { IonCol, IonImg } from '@ionic/react';
 import SVGTile from '../../../common/SVGTile.component';
 import empty from '../../../../theme/empty.png';
 
-const FloorGrid: React.FC<{ orientation: 'TOP' | 'BOTTOM'; tile: IBorder }> = ({
-  orientation,
-  tile
-}) => {
+const FloorGrid: React.FC<{
+  orientation: 'TOP' | 'BOTTOM';
+  tile: IBorder | undefined;
+}> = ({ orientation, tile }) => {
   return (
     <Fragment>
       <IonCol className="ion-no-padding ion-no-margin">
