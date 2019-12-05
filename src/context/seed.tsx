@@ -27,7 +27,7 @@ export const DomiColors: IColor[] = [
   { name: 'darken_blue', code: '#0d47a1' },
   { name: 'darken_amber', code: '#ff6f00' },
   { name: 'white', code: 'white' },
-  { name: 'black', code: 'black' },
+  { name: 'black', code: 'black' }
 ];
 
 export const borderFam: IBorderFamily[] = [
@@ -60,6 +60,32 @@ export const borderFam: IBorderFamily[] = [
           l3: 'blue',
           l4: 'black',
           l5: 'gray'
+        }
+      },
+      {
+        name: 'Mod. 3',
+        imgUrl: '../assets/Border/Floral/l3.1.svg',
+        cornerUrl: '../assets/Border/Floral/l3.2.svg',
+        type: Border,
+        layers: {
+          st0: '#D3AC85',
+          st1: '#8E2424',
+          st2: '#F7EAB7',
+          st3: '#5C819E'
+        }
+      },
+      {
+        name: 'Mod. 29',
+        imgUrl: '../assets/Border/Floral/l29.1.svg',
+        cornerUrl: '../assets/Border/Floral/l29.3.svg',
+        cornerInteriorUrl: '../assets/Border/Floral/l29.2.svg',
+        type: Border,
+        layers: {
+          st0: '#A5A5A0',
+          st1: '#A0EFED',
+          st2: '#B6D37F',
+          st3: '#EEF2A0',
+          st4: '#F9B7B7'
         }
       },
       { name: 'Mod. c33', imgUrl: '../assets/Border/Floral/c33.png' },
@@ -102,6 +128,22 @@ export const tilesFam: ITileFamily[] = [
           l2: 'green',
           l4: 'black',
           l5: 'red'
+        }
+      },
+      {
+        name: 'Mod. l14',
+        imgUrl: '../assets/Tile/Contemporary/l14.svg',
+        type: Floor,
+        layers: {
+          st0: '#AF5A4B',
+          st1: '#C4C3C3',
+          st2: '#E5DC71',
+          st3: '#020202',
+          st4: '#88D1D7',
+          st5: '#81CBAD',
+          st6: '#91C365',
+          st7: '#EEAE3D',
+          st8: '#6D78B9'
         }
       },
       {
@@ -197,5 +239,5 @@ export const galleryPictures = [
   { imgUrl: '../assets/Gallery/f18.jpeg' },
   { imgUrl: '../assets/Gallery/f19.jpeg' },
   { imgUrl: '../assets/Gallery/f20.jpeg' },
-  { imgUrl: '../assets/Gallery/f21.jpeg' },
+  { imgUrl: '../assets/Gallery/f21.jpeg' }
 ];

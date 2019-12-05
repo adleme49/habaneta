@@ -32,6 +32,7 @@ const SVGTilePaint: React.FC<{
         const targetClass = ((event.target as Element).getAttribute(
           'class'
         ) as string).split(' ')[1];
+        console.log(targetClass);
         colorLayer(targetClass);
       }}
     />
