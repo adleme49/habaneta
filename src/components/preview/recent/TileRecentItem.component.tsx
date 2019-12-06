@@ -39,7 +39,9 @@ const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
             display: 'flex',
             position: 'absolute',
             top: '0px',
-            right: '0px'
+            right: '0px',
+            transform: 'scale(2)',
+            zIndex: 2
           }}
           color="danger"
         >
