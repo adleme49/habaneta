@@ -22,7 +22,8 @@ const SVGTile: React.FC<{
       tile={tile}
       url={url}
       style={{
-        height: svgHeight
+        height: svgHeight,
+        width: "auto"
       }}
       onClickHandler={onClickHandler}
       beforeInjection={svg => {
