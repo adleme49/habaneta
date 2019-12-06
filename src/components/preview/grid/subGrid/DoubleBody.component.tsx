@@ -5,13 +5,16 @@ import empty from '../../../../theme/empty.png';
 import SVGTile from '../../../common/SVGTile.component';
 import FloorGrid from './FloorGrid.component';
 
-const Body: React.FC<{
+const DoubleBody: React.FC<{
   borderTile: IBorder | undefined;
   floorTile: IFloor | undefined;
 }> = ({ borderTile, floorTile }) => {
   return (
     <Fragment>
       <IonRow className="ion-no-padding ion-no-margin">
+        <FloorGrid tile={floorTile} orientation={'TOP'} />
+        <FloorGrid tile={floorTile} orientation={'TOP'} />
+        <FloorGrid tile={floorTile} orientation={'TOP'} />
         <IonCol className="ion-no-padding ion-no-margin">
           {borderTile ? (
             <SVGTile tile={borderTile} rotation={-90} />
@@ -19,9 +22,6 @@ const Body: React.FC<{
             <IonImg src={empty} />
           )}
         </IonCol>
-        <FloorGrid tile={floorTile} orientation={'TOP'} />
-        <FloorGrid tile={floorTile} orientation={'TOP'} />
-        <FloorGrid tile={floorTile} orientation={'TOP'} />
         <IonCol className="ion-no-padding ion-no-margin">
           {borderTile ? (
             <SVGTile tile={borderTile} rotation={90} />
@@ -31,6 +31,9 @@ const Body: React.FC<{
         </IonCol>
       </IonRow>
       <IonRow className="ion-no-padding ion-no-margin">
+        <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
+        <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
+        <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
         <IonCol className="ion-no-padding ion-no-margin">
           {borderTile ? (
             <SVGTile tile={borderTile} rotation={-90} />
@@ -38,9 +41,6 @@ const Body: React.FC<{
             <IonImg src={empty} />
           )}
         </IonCol>
-        <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
-        <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
-        <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
         <IonCol className="ion-no-padding ion-no-margin">
           {borderTile ? (
             <SVGTile tile={borderTile} rotation={90} />
@@ -53,4 +53,4 @@ const Body: React.FC<{
   );
 };
 
-export default Body;
+export default DoubleBody;

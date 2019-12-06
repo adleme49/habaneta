@@ -2,7 +2,7 @@ export const getColorShapes = (svg: Element): Element[] =>
   Array.from(svg.childNodes).reduce(
     (acc: any, curr) =>
       curr.childNodes.length > 0
-        ? [...acc, curr, ...Array.from(curr.childNodes)]
+        ? [...acc, curr, ...Array.from(curr.childNodes), ...getColorShapes(curr as any)]
         : [...acc, curr],
     []
   );
