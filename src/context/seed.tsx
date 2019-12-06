@@ -55,8 +55,8 @@ export const borderFam: IBorderFamily[] = [
       {
         name: 'Mod. 29',
         imgUrl: '../assets/Border/Floral/l29.1.svg',
-        cornerUrl: '../assets/Border/Floral/l29.3.svg',
-        cornerInteriorUrl: '../assets/Border/Floral/l29.2.svg',
+        cornerUrl: '../assets/Border/Floral/l29.2.svg',
+        cornerInteriorUrl: '../assets/Border/Floral/l29.3.svg',
         type: Border,
         layers: {
           st0: '#FFFFFF',
