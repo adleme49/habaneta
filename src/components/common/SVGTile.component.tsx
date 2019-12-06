@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import ReactSVG from 'react-svg';
 import { ITile } from '../../context/interfaces';
-import { getColorShapes, paintLayer, styleSVG } from '../../helpers';
+import { styleSVG } from '../../helpers';
 import GeneralContext from '../../context/global/general.context';
+import SVGTileBase from './SVGBase.component';
 
 const SVGTile: React.FC<{
   tile: ITile;
@@ -23,25 +23,17 @@ const SVGTile: React.FC<{
     }
   };
   return (
-    <ReactSVG
-      src={url ? url : (tile.imgUrl as string)}
+    <SVGTileBase
+      tile={tile}
+      url={url}
       style={{
         height: svgHeight,
         width: svgWidth
       }}
-      className="svg-wrapper"
-      onClick={onClickHandler}
+      onClickHandler={onClickHandler}
       beforeInjection={svg => {
         setHeight(svg.clientHeight, svg.clientWidth);
         styleSVG(svg, { width, height, rotation });
-        const shapes = getColorShapes(svg);
-        if (tile.layers) {
-          Object.keys(tile.layers).forEach(layerId => {
-            if (tile.layers) {
-              paintLayer(shapes, layerId, tile.layers[layerId]);
-            }
-          });
-        }
       }}
       afterInjection={(error, svg) => {
         if (svg) {

@@ -18,7 +18,7 @@ const Horizontal: React.FC<{
               check={true}
               tile={tile}
               url={tile.cornerUrl}
-              rotation={orientation === 'TOP' ? 0 : -90}
+              rotation={orientation === 'TOP' ? -90 : 180}
             />
           ) : (
             <IonImg src={empty} />
@@ -38,7 +38,7 @@ const Horizontal: React.FC<{
             <SVGTile
               tile={tile}
               url={tile.cornerUrl}
-              rotation={orientation === 'TOP' ? 90 : 180}
+              rotation={orientation === 'TOP' ? 0 : 90}
             />
           ) : (
             <IonImg src={empty} />
