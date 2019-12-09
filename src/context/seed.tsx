@@ -64,7 +64,8 @@ export const borderFam: IBorderFamily[] = [
           st2: '#A0EFED',
           st3: '#B6D37F',
           st4: '#EEF2A0',
-          st5: '#F9B7B7'
+          st5: '#F9B7B7',
+          st6: '#000000',
         }
       }
     ]
