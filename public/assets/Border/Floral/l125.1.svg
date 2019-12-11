@@ -1,10 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#FFFFFF;}
-	.st1{fill:none;stroke:#000000;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.stl125v1{fill:none;stroke:#000000;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 </style>
 <g>
 	<rect x="0.5" y="0.5" class="colora st0" width="399" height="399"/>
@@ -12,21 +9,21 @@
 </g>
 <g id="XMLID_2_">
 	<g>
-		<polygon points="357.4,174 372.4,199.9 357.4,225.9 327.4,225.9 312.4,199.9 327.4,174 		"/>
-		<polygon points="267.4,174 282.4,199.9 267.4,225.9 237.4,225.9 222.4,199.9 237.4,174 		"/>
-		<polygon points="215.4,204 230.4,230 215.4,255.9 185.5,255.9 170.5,230 185.5,204 		"/>
-		<polygon points="215.4,144 230.4,170 215.4,196 185.5,196 170.5,170 185.5,144 		"/>
-		<polygon points="163.5,174 178.5,199.9 163.5,225.9 133.5,225.9 118.5,199.9 133.5,174 		"/>
-		<polygon points="73.5,174 88.5,200 73.5,225.9 43.4,225.9 28.5,200 43.4,174 		"/>
+		<polygon class="colora st1" points="357.4,174 372.4,199.9 357.4,225.9 327.4,225.9 312.4,199.9 327.4,174 		"/>
+		<polygon class="colora st1" points="267.4,174 282.4,199.9 267.4,225.9 237.4,225.9 222.4,199.9 237.4,174 		"/>
+		<polygon class="colora st1" points="215.4,204 230.4,230 215.4,255.9 185.5,255.9 170.5,230 185.5,204 		"/>
+		<polygon class="colora st1" points="215.4,144 230.4,170 215.4,196 185.5,196 170.5,170 185.5,144 		"/>
+		<polygon class="colora st1" points="163.5,174 178.5,199.9 163.5,225.9 133.5,225.9 118.5,199.9 133.5,174 		"/>
+		<polygon class="colora st1" points="73.5,174 88.5,200 73.5,225.9 43.4,225.9 28.5,200 43.4,174 		"/>
 	</g>
 	<g>
-		<polygon class="colora st1" points="185.5,144 170.5,170 185.5,196 215.4,196 230.4,170 215.4,144 		"/>
-		<polygon class="colora st1" points="185.5,204 170.5,230 185.5,255.9 215.4,255.9 230.4,230 215.4,204 		"/>
-		<polygon class="colora st1" points="133.5,174 118.5,199.9 133.5,225.9 163.5,225.9 178.5,199.9 163.5,174 		"/>
-		<polygon class="colora st1" points="237.4,174 222.4,199.9 237.4,225.9 267.4,225.9 282.4,199.9 267.4,174 		"/>
-		<polygon class="colora st1" points="327.4,174 312.4,199.9 327.4,225.9 357.4,225.9 372.4,199.9 357.4,174 		"/>
-		<polygon class="colora st1" points="73.5,174 88.5,200 73.5,225.9 43.4,225.9 28.5,200 43.4,174 		"/>
-		<rect x="0.4" y="0" class="colora st1" width="400" height="400"/>
+		<polygon class="colora stl125v1" points="185.5,144 170.5,170 185.5,196 215.4,196 230.4,170 215.4,144 		"/>
+		<polygon class="colora stl125v1" points="185.5,204 170.5,230 185.5,255.9 215.4,255.9 230.4,230 215.4,204 		"/>
+		<polygon class="colora stl125v1" points="133.5,174 118.5,199.9 133.5,225.9 163.5,225.9 178.5,199.9 163.5,174 		"/>
+		<polygon class="colora stl125v1" points="237.4,174 222.4,199.9 237.4,225.9 267.4,225.9 282.4,199.9 267.4,174 		"/>
+		<polygon class="colora stl125v1" points="327.4,174 312.4,199.9 327.4,225.9 357.4,225.9 372.4,199.9 357.4,174 		"/>
+		<polygon class="colora stl125v1" points="73.5,174 88.5,200 73.5,225.9 43.4,225.9 28.5,200 43.4,174 		"/>
+		<rect x="0.4" y="0" class="colora stl125v1" width="400" height="400"/>
 	</g>
 </g>
 </svg>

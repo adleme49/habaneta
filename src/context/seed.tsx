@@ -41,6 +41,65 @@ export const borderFam: IBorderFamily[] = [
     type: Border,
     types: [
       {
+        name: 'Mod. 130',
+        imgUrl: '../assets/Border/Floral/l130.1.svg',
+        cornerUrl: '../assets/Border/Floral/l130.2.svg',
+        type: Border,
+        layers: {
+          st0: '#FFFFFF',
+          st1: '#D4F4A2',
+          st2: '#E0DFDE',
+          st3: '#913E3A',
+          st4: '#EAE654',
+          st5: '#8E9AF4',
+          st6: '#819363',
+          st7: '#ED7066',
+          st8: '#F4B7B0',
+          st9: '#707070',
+          st10: '#56A5A5',
+          st11: '#E8B356',
+          st12: '#ACF460',
+          st13: '#BFBFBF',
+          st14: '#000000',
+        }
+      },
+      {
+        name: 'Mod. 126',
+        imgUrl: '../assets/Border/Floral/l126.1.svg',
+        cornerUrl: '../assets/Border/Floral/l126.2.svg',
+        type: Border,
+        layers: {
+          st0: '#FFFFFF',
+          st1: '#000000'
+        }
+      },
+      {
+        name: 'Mod. 125',
+        imgUrl: '../assets/Border/Floral/l125.1.svg',
+        cornerUrl: '../assets/Border/Floral/l125.2.svg',
+        type: Border,
+        layers: {
+          st0: '#FFFFFF',
+          st1: '#000000'
+        }
+      },
+      {
+        name: 'Mod. 87',
+        imgUrl: '../assets/Border/Floral/l87.1.svg',
+        cornerUrl: '../assets/Border/Floral/l87.2.svg',
+        type: Border,
+        layers: {
+          st0: '#FFFFFF',
+          st1: '#EEEA69',
+          st2: '#C4E1BC',
+          st3: '#94CA66',
+          st4: '#537B80',
+          st5: '#313F76',
+          st6: '#993D3D',
+          st7: '#F6F19B'
+        }
+      },
+      {
         name: 'Mod. 84',
         imgUrl: '../assets/Border/Floral/l84.1.svg',
         cornerUrl: '../assets/Border/Floral/l84.2.svg',
