@@ -53,6 +53,19 @@ export const borderFam: IBorderFamily[] = [
         }
       },
       {
+        name: 'Mod. 4',
+        imgUrl: '../assets/Border/Floral/l4.1.svg',
+        cornerUrl: '../assets/Border/Floral/l4.2.svg',
+        type: Border,
+        layers: {
+          st0: '#FFFFFF',
+          st1: '#555555',
+          st2: '#E4E4E4',
+          st3: '#AFAFAF',
+          st5: '#000000',
+        }
+      },
+      {
         name: 'Mod. 29',
         imgUrl: '../assets/Border/Floral/l29.1.svg',
         cornerUrl: '../assets/Border/Floral/l29.2.svg',
@@ -65,7 +78,7 @@ export const borderFam: IBorderFamily[] = [
           st3: '#B6D37F',
           st4: '#EEF2A0',
           st5: '#F9B7B7',
-          st6: '#000000',
+          st6: '#000000'
         }
       }
     ]

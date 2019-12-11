@@ -1,0 +1,28 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
+<style type="text/css">
+	.st4l4v2{fill:none;stroke:#000000;stroke-width:0.5669;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<g>
+	<rect x="0.5" y="0.5" class="colora st0" width="399" height="399"/>
+	<path d="M399,1v398H1V1H399 M400,0H0v400h400V0L400,0z"/>
+</g>
+<g>
+	<g id="XMLID_2_">
+		<g>
+			<polygon class="colora st2" points="370,31.6 370,401.2 140.2,401.2 140.2,261.4 0.4,261.4 0.4,31.6 			"/>
+			<polygon class="colora st3" points="140.2,261.4 140.2,401.2 110.3,401.2 110.3,291.3 0.4,291.3 0.4,261.4 			"/>
+			<polygon class="colora st1" points="110.3,291.3 110.3,401.2 30.4,401.2 30.4,371.3 0.4,371.3 0.4,291.3 			"/>
+			<rect class="colora st5" x="0.4" y="371.3" width="29.9" height="29.9"/>
+		</g>
+		<g>
+			<polyline class="colora st4l4v2" points="0.4,1.6 0.4,31.6 0.4,261.4 0.4,291.3 0.4,371.3 0.4,401.2 30.4,401.2 110.3,401.2 140.2,401.2 
+				370,401.2 400,401.2 400,1.6 0.4,1.6 			"/>
+			<polyline class="colora st4l4v2" points="0.4,371.3 30.4,371.3 30.4,401.2 			"/>
+			<polyline class="colora st4l4v2" points="0.4,291.3 110.3,291.3 110.3,401.2 			"/>
+			<polyline class="colora st4l4v2" points="0.4,261.4 140.2,261.4 140.2,401.2 			"/>
+			<polyline class="colora st4l4v2" points="0.4,31.6 370,31.6 370,401.2 			"/>
+		</g>
+	</g>
+</g>
+</svg>

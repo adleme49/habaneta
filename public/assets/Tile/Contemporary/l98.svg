@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#78C2D6;}
+	.st2{fill:#4C7C87;}
+	.st3{fill:#C1C1C1;}
+	.st4{fill:none;stroke:#000000;stroke-width:0.567;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<g>
+	<rect x="0.5" y="0.5" class="st0" width="399" height="399"/>
+	<path d="M399,1v398H1V1H399 M400,0H0v400h400V0L400,0z"/>
+</g>
+<g id="XMLID_1_">
+	<g>
+		<polygon class="st1" points="400.5,339 400.5,400 400.4,400 355.9,355 355.9,294.5 400.4,339 		"/>
+		<polygon class="st2" points="295.4,355 355.9,355 400.4,400 339.9,400 339.9,399.5 		"/>
+		<polygon class="st3" points="347.8,0 400.5,0 400.5,52.7 		"/>
+		<polygon points="347.8,0 400.5,52.7 56.3,400 56.3,400 0.4,344.1 		"/>
+		<polygon class="st2" points="0.4,0 60.9,0 105.4,44.5 44.9,44.5 		"/>
+		<polygon class="st3" points="0.4,344.1 56.3,400 0.4,400 		"/>
+		<polygon class="st1" points="0.4,0 44.9,44.5 44.9,105 0.4,60.5 		"/>
+	</g>
+	<g>
+		<polygon class="st4" points="400.5,339 400.5,400 400.4,400 339.9,400 56.3,400 56.3,400 0.4,400 0.4,344.1 0.4,60.5 0.4,0 
+			60.9,0 347.8,0 400.5,0 400.5,52.7 		"/>
+		<line class="st4" x1="0.4" y1="60.5" x2="44.9" y2="105"/>
+		<line class="st4" x1="44.9" y1="105" x2="44.9" y2="44.5"/>
+		<line class="st4" x1="60.9" y1="0" x2="105.4" y2="44.5"/>
+		<line class="st4" x1="105.4" y1="44.5" x2="44.9" y2="44.5"/>
+		<line class="st4" x1="400.4" y1="339" x2="355.9" y2="294.5"/>
+		<line class="st4" x1="355.9" y1="294.5" x2="355.9" y2="355"/>
+		<line class="st4" x1="339.9" y1="399.5" x2="295.4" y2="355"/>
+		<line class="st4" x1="295.4" y1="355" x2="355.9" y2="355"/>
+		<line class="st4" x1="0.4" y1="0" x2="44.9" y2="44.5"/>
+		<line class="st4" x1="347.8" y1="0" x2="400.5" y2="52.7"/>
+		<line class="st4" x1="400.4" y1="400" x2="355.9" y2="355"/>
+		<polyline class="st4" points="0.4,344.1 56.3,400 56.3,400 		"/>
+		<line class="st4" x1="0.4" y1="344.1" x2="347.8" y2="0"/>
+		<polyline class="st4" points="400.5,52.7 56.3,400 56.3,400 		"/>
+	</g>
+</g>
+</svg>
