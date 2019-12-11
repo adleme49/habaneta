@@ -46,16 +46,16 @@ export const borderFam: IBorderFamily[] = [
         cornerUrl: '../assets/Border/Floral/l84.2.svg',
         type: Border,
         layers: {
-          st0:"#FFFFFF",
-          st1:"#F4E7CF",
-          st2:"#F0B961",
-          st3:"#394C45",
-          st4:"#3A6531",
-          st5:"#E6E983",
-          st6:"#64887A",
-          st7:"#BCB961",
-          st8:"#706F4F",
-          st9:"#000000",
+          st0: '#FFFFFF',
+          st1: '#F4E7CF',
+          st2: '#F0B961',
+          st3: '#394C45',
+          st4: '#3A6531',
+          st5: '#E6E983',
+          st6: '#64887A',
+          st7: '#BCB961',
+          st8: '#706F4F',
+          st9: '#000000'
         }
       },
       {
@@ -64,16 +64,16 @@ export const borderFam: IBorderFamily[] = [
         cornerUrl: '../assets/Border/Floral/l84b.2.svg',
         type: Border,
         layers: {
-          st0:"#FFFFFF",
-          st1:"#7F7F7F",
-          st2:"#A1BAD3",
-          st3:"#DAC7A9",
-          st4:"#EEBA63",
-          st5:"#DAE084",
-          st6:"#7AA395",
-          st7:"#EE4748",
-          st8:"#689A4A",
-          st9:"#000000",
+          st0: '#FFFFFF',
+          st1: '#7F7F7F',
+          st2: '#A1BAD3',
+          st3: '#DAC7A9',
+          st4: '#EEBA63',
+          st5: '#DAE084',
+          st6: '#7AA395',
+          st7: '#EE4748',
+          st8: '#689A4A',
+          st9: '#000000'
         }
       },
       {
@@ -114,8 +114,7 @@ export const borderFam: IBorderFamily[] = [
           st4: '#757575',
           st5: '#000000'
         }
-      }
-      ,
+      },
       {
         name: 'Mod. 29',
         imgUrl: '../assets/Border/Floral/l29.1.svg',
@@ -131,7 +130,7 @@ export const borderFam: IBorderFamily[] = [
           st5: '#F9B7B7',
           st6: '#000000'
         }
-      }, 
+      },
       {
         name: 'Mod. 30',
         imgUrl: '../assets/Border/Floral/l30.1.svg',
@@ -139,15 +138,15 @@ export const borderFam: IBorderFamily[] = [
         cornerInteriorUrl: '../assets/Border/Floral/l30.3.svg',
         type: Border,
         layers: {
-          st0:"#FFFFFF",
-	        st1:"#EFC67D",
-        	st2:"#F9C2C2",
-	        st3:"#2AB2BC",
-	        st4:"#818281",
-	        st5:"#B4CC7F",
-	        st6:"#E2E2E2",
-	        st7:"#F9F9AA",
-	        st8:"#FFFFFF",
+          st0: '#FFFFFF',
+          st1: '#EFC67D',
+          st2: '#F9C2C2',
+          st3: '#2AB2BC',
+          st4: '#818281',
+          st5: '#B4CC7F',
+          st6: '#E2E2E2',
+          st7: '#F9F9AA',
+          st8: '#FFFFFF'
         }
       },
       {
@@ -157,16 +156,37 @@ export const borderFam: IBorderFamily[] = [
         cornerInteriorUrl: '../assets/Border/Floral/l31.3.svg',
         type: Border,
         layers: {
-        	st0:"#FFFFFF",
-	st1:"#C9C9C9",
-	st2:"#FCD465",
-	st3:"#F9F567",
-	st4:"#822121",
-	st5:"#F7A9A9",
-	st6:"#B6DEF2",
-	st7:"#000000",
+          st0: '#FFFFFF',
+          st1: '#C9C9C9',
+          st2: '#FCD465',
+          st3: '#F9F567',
+          st4: '#822121',
+          st5: '#F7A9A9',
+          st6: '#B6DEF2',
+          st7: '#000000'
         }
       },
+      {
+        name: 'Mod. 86',
+        imgUrl: '../assets/Border/Floral/l86.1.svg',
+        cornerUrl: '../assets/Border/Floral/l86.2.svg',
+        cornerInteriorUrl: '../assets/Border/Floral/l86.3.svg',
+        type: Border,
+        layers: {
+          st0: '#FFFFFF',
+          st1: '#F3CDA7',
+          st2: '#9DD9E5',
+          st3: '#1A1F1C',
+          st4: '#C9E1A9',
+          st5: '#96A78D',
+          st6: '#667A94',
+          st7: '#F6A3A4',
+          st8: '#F3C43E',
+          st9: '#F1ED7B',
+          st10: '#A1BAD3',
+          st11: '#635E4C'
+        }
+      }
     ]
   }
 ];
