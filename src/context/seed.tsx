@@ -41,6 +41,24 @@ export const borderFam: IBorderFamily[] = [
     type: Border,
     types: [
       {
+        name: 'Mod. 84',
+        imgUrl: '../assets/Border/Floral/l84.1.svg',
+        cornerUrl: '../assets/Border/Floral/l84.2.svg',
+        type: Border,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#F4E7CF",
+          st2:"#F0B961",
+          st3:"#394C45",
+          st4:"#3A6531",
+          st5:"#E6E983",
+          st6:"#64887A",
+          st7:"#BCB961",
+          st8:"#706F4F",
+          st9:"#000000",
+        }
+      },
+      {
         name: 'Mod. 3',
         imgUrl: '../assets/Border/Floral/l3.1.svg',
         cornerUrl: '../assets/Border/Floral/l3.2.svg',
@@ -62,9 +80,24 @@ export const borderFam: IBorderFamily[] = [
           st1: '#555555',
           st2: '#E4E4E4',
           st3: '#AFAFAF',
-          st5: '#000000',
+          st5: '#000000'
         }
       },
+      {
+        name: 'Mod. 6',
+        imgUrl: '../assets/Border/Floral/l6.1.svg',
+        cornerUrl: '../assets/Border/Floral/l6.2.svg',
+        type: Border,
+        layers: {
+          st0: '#FFFFFF',
+          st1: '#E9ED9A',
+          st2: '#A4E6EA',
+          st3: '#E0E2E2',
+          st4: '#757575',
+          st5: '#000000'
+        }
+      }
+      ,
       {
         name: 'Mod. 29',
         imgUrl: '../assets/Border/Floral/l29.1.svg',
@@ -80,7 +113,42 @@ export const borderFam: IBorderFamily[] = [
           st5: '#F9B7B7',
           st6: '#000000'
         }
-      }
+      }, 
+      {
+        name: 'Mod. 30',
+        imgUrl: '../assets/Border/Floral/l30.1.svg',
+        cornerUrl: '../assets/Border/Floral/l30.2.svg',
+        cornerInteriorUrl: '../assets/Border/Floral/l30.3.svg',
+        type: Border,
+        layers: {
+          st0:"#FFFFFF",
+	        st1:"#EFC67D",
+        	st2:"#F9C2C2",
+	        st3:"#2AB2BC",
+	        st4:"#818281",
+	        st5:"#B4CC7F",
+	        st6:"#E2E2E2",
+	        st7:"#F9F9AA",
+	        st8:"#FFFFFF",
+        }
+      },
+      {
+        name: 'Mod. 31',
+        imgUrl: '../assets/Border/Floral/l31.1.svg',
+        cornerUrl: '../assets/Border/Floral/l31.2.svg',
+        cornerInteriorUrl: '../assets/Border/Floral/l31.3.svg',
+        type: Border,
+        layers: {
+        	st0:"#FFFFFF",
+	st1:"#C9C9C9",
+	st2:"#FCD465",
+	st3:"#F9F567",
+	st4:"#822121",
+	st5:"#F7A9A9",
+	st6:"#B6DEF2",
+	st7:"#000000",
+        }
+      },
     ]
   }
 ];
