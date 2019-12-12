@@ -337,6 +337,78 @@ export const tilesFam: ITileFamily[] = [
         }
       },
       {
+        name: 'Mod. l25',
+        imgUrl: '../assets/Tile/Contemporary/l25.svg',
+        type: Floor,
+        layers: {
+          st0: '#FFFFFF',
+          st1: '#E7D8A8',
+          st2: '#77A9B4',
+          st3: '#616E77'
+        }
+      },
+      {
+        name: 'Mod. l26',
+        imgUrl: '../assets/Tile/Contemporary/l26.svg',
+        type: Floor,
+        layers: {
+          st0: '#FFFFFF',
+          st1: '#F1DCA9',
+          st2: '#BAE2E8',
+          st3: '#77A9B4'
+        }
+      },
+      {
+        name: 'Mod. l27',
+        imgUrl: '../assets/Tile/Contemporary/l27.svg',
+        type: Floor,
+        layers: {
+          st0: '#FFFFFF',
+          st1: '#EDCB82',
+          st2: '#ECDFBB',
+          st3: '#5B9DA4'
+        }
+      },
+      {
+        name: 'Mod. l28',
+        imgUrl: '../assets/Tile/Contemporary/l28.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#F7F4B8",
+          st2:"#C0E6EC",
+          st3:"#77A9B4",
+        }
+      },
+      {
+        name: 'Mod. l33',
+        imgUrl: '../assets/Tile/Contemporary/l33.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#F3E6BC",
+          st2:"#99999A",
+          st3:"#F8D993",
+          st4:"#D5D4CC",
+          st5:"#F0EE91",
+          st6:"#8BD4E6",
+          st7:"#000000",
+        }
+      },
+      {
+        name: 'Mod. l35',
+        imgUrl: '../assets/Tile/Contemporary/l35.svg',
+        type: Floor,
+        layers: {
+          st0: '#FFFFFF',
+          st1: '#C9AC69',
+          st2: '#B25538',
+          st3: '#093542',
+          st4: '#7894A2',
+          st5: '#AFA68F'
+        }
+      },
+      {
         name: 'Mod. l19',
         imgUrl: '../assets/Tile/Contemporary/l19.svg',
         type: Floor,

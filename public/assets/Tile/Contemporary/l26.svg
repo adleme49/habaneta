@@ -1,13 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#FFFFFF;}
-	.st1{fill:#F1DCA9;}
-	.st2{fill:#BAE2E8;}
-	.st3{fill:#77A9B4;}
-	.st4{fill:none;stroke:#000000;stroke-width:1.02;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+	.stl26{fill:none;stroke:#000000;stroke-width:1.02;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 </style>
 <g>
 	<rect x="0.5" y="0.5" class="colora st0" width="399" height="399"/>
@@ -77,59 +72,59 @@
 		<polygon class="colora st3" points="-0.5,371.7 -0.5,228.3 71.3,300 		"/>
 	</g>
 	<g>
-		<polygon class="colora st4" points="-0.5,28.3 -0.5,0 27.9,0 171.5,0 228.1,0 371.7,0 400,0 400,28.3 400,171.7 400,228.3 400,371.7 
+		<polygon class="colora stl26" points="-0.5,28.3 -0.5,0 27.9,0 171.5,0 228.1,0 371.7,0 400,0 400,28.3 400,171.7 400,228.3 400,371.7 
 			400,400 371.7,400 228.1,400 171.5,400 27.9,400 -0.5,400 -0.5,371.7 -0.5,228.3 -0.5,171.7 		"/>
-		<line class="colora st4" x1="371.7" y1="400" x2="299.9" y2="328.3"/>
-		<line class="colora st4" x1="271.6" y1="300" x2="199.8" y2="228.3"/>
-		<line class="colora st4" x1="171.5" y1="200" x2="99.7" y2="128.3"/>
-		<line class="colora st4" x1="71.3" y1="100" x2="-0.5" y2="28.3"/>
-		<line class="colora st4" x1="400" y1="371.7" x2="328.2" y2="300"/>
-		<line class="colora st4" x1="299.9" y1="271.7" x2="228.1" y2="200"/>
-		<line class="colora st4" x1="199.8" y1="171.7" x2="128" y2="100"/>
-		<line class="colora st4" x1="99.7" y1="71.7" x2="27.9" y2="0"/>
-		<line class="colora st4" x1="-0.5" y1="371.7" x2="71.3" y2="300"/>
-		<line class="colora st4" x1="99.7" y1="271.7" x2="171.5" y2="200"/>
-		<line class="colora st4" x1="199.8" y1="171.7" x2="271.6" y2="100"/>
-		<line class="colora st4" x1="299.9" y1="71.7" x2="371.7" y2="0"/>
-		<line class="colora st4" x1="27.9" y1="400" x2="99.7" y2="328.3"/>
-		<line class="colora st4" x1="128" y1="300" x2="199.8" y2="228.3"/>
-		<line class="colora st4" x1="228.1" y1="200" x2="299.9" y2="128.3"/>
-		<line class="colora st4" x1="328.2" y1="100" x2="400" y2="28.3"/>
-		<line class="colora st4" x1="371.7" y1="200" x2="299.9" y2="128.3"/>
-		<line class="colora st4" x1="271.6" y1="100" x2="199.8" y2="28.3"/>
-		<line class="colora st4" x1="400" y1="171.7" x2="328.2" y2="100"/>
-		<line class="colora st4" x1="299.9" y1="71.7" x2="228.1" y2="0"/>
-		<line class="colora st4" x1="171.5" y1="400" x2="99.7" y2="328.3"/>
-		<line class="colora st4" x1="71.3" y1="300" x2="-0.5" y2="228.3"/>
-		<line class="colora st4" x1="199.8" y1="371.7" x2="128" y2="300"/>
-		<line class="colora st4" x1="99.7" y1="271.7" x2="27.9" y2="200"/>
-		<line class="colora st4" x1="-0.5" y1="171.7" x2="71.3" y2="100"/>
-		<line class="colora st4" x1="99.7" y1="71.7" x2="171.5" y2="0"/>
-		<line class="colora st4" x1="27.9" y1="200" x2="99.7" y2="128.3"/>
-		<line class="colora st4" x1="128" y1="100" x2="199.8" y2="28.3"/>
-		<line class="colora st4" x1="199.8" y1="371.7" x2="271.6" y2="300"/>
-		<line class="colora st4" x1="299.9" y1="271.7" x2="371.7" y2="200"/>
-		<line class="colora st4" x1="228.1" y1="400" x2="299.9" y2="328.3"/>
-		<line class="colora st4" x1="328.2" y1="300" x2="400" y2="228.3"/>
-		<polygon class="colora st4" points="171.5,200 179.8,191.7 179.8,180 191.5,180 199.8,171.7 208.1,180 219.8,180 219.8,191.7 228.1,200 
+		<line class="colora stl26" x1="371.7" y1="400" x2="299.9" y2="328.3"/>
+		<line class="colora stl26" x1="271.6" y1="300" x2="199.8" y2="228.3"/>
+		<line class="colora stl26" x1="171.5" y1="200" x2="99.7" y2="128.3"/>
+		<line class="colora stl26" x1="71.3" y1="100" x2="-0.5" y2="28.3"/>
+		<line class="colora stl26" x1="400" y1="371.7" x2="328.2" y2="300"/>
+		<line class="colora stl26" x1="299.9" y1="271.7" x2="228.1" y2="200"/>
+		<line class="colora stl26" x1="199.8" y1="171.7" x2="128" y2="100"/>
+		<line class="colora stl26" x1="99.7" y1="71.7" x2="27.9" y2="0"/>
+		<line class="colora stl26" x1="-0.5" y1="371.7" x2="71.3" y2="300"/>
+		<line class="colora stl26" x1="99.7" y1="271.7" x2="171.5" y2="200"/>
+		<line class="colora stl26" x1="199.8" y1="171.7" x2="271.6" y2="100"/>
+		<line class="colora stl26" x1="299.9" y1="71.7" x2="371.7" y2="0"/>
+		<line class="colora stl26" x1="27.9" y1="400" x2="99.7" y2="328.3"/>
+		<line class="colora stl26" x1="128" y1="300" x2="199.8" y2="228.3"/>
+		<line class="colora stl26" x1="228.1" y1="200" x2="299.9" y2="128.3"/>
+		<line class="colora stl26" x1="328.2" y1="100" x2="400" y2="28.3"/>
+		<line class="colora stl26" x1="371.7" y1="200" x2="299.9" y2="128.3"/>
+		<line class="colora stl26" x1="271.6" y1="100" x2="199.8" y2="28.3"/>
+		<line class="colora stl26" x1="400" y1="171.7" x2="328.2" y2="100"/>
+		<line class="colora stl26" x1="299.9" y1="71.7" x2="228.1" y2="0"/>
+		<line class="colora stl26" x1="171.5" y1="400" x2="99.7" y2="328.3"/>
+		<line class="colora stl26" x1="71.3" y1="300" x2="-0.5" y2="228.3"/>
+		<line class="colora stl26" x1="199.8" y1="371.7" x2="128" y2="300"/>
+		<line class="colora stl26" x1="99.7" y1="271.7" x2="27.9" y2="200"/>
+		<line class="colora stl26" x1="-0.5" y1="171.7" x2="71.3" y2="100"/>
+		<line class="colora stl26" x1="99.7" y1="71.7" x2="171.5" y2="0"/>
+		<line class="colora stl26" x1="27.9" y1="200" x2="99.7" y2="128.3"/>
+		<line class="colora stl26" x1="128" y1="100" x2="199.8" y2="28.3"/>
+		<line class="colora stl26" x1="199.8" y1="371.7" x2="271.6" y2="300"/>
+		<line class="colora stl26" x1="299.9" y1="271.7" x2="371.7" y2="200"/>
+		<line class="colora stl26" x1="228.1" y1="400" x2="299.9" y2="328.3"/>
+		<line class="colora stl26" x1="328.2" y1="300" x2="400" y2="228.3"/>
+		<polygon class="colora stl26" points="171.5,200 179.8,191.7 179.8,180 191.5,180 199.8,171.7 208.1,180 219.8,180 219.8,191.7 228.1,200 
 			219.8,208.3 219.8,220 208.1,220 199.8,228.3 191.5,220 179.8,220 179.8,208.3 		"/>
-		<polygon class="colora st4" points="271.6,100 279.9,91.7 279.9,80 291.6,80 299.9,71.7 308.2,80 319.9,80 319.9,91.7 328.2,100 
+		<polygon class="colora stl26" points="271.6,100 279.9,91.7 279.9,80 291.6,80 299.9,71.7 308.2,80 319.9,80 319.9,91.7 328.2,100 
 			319.9,108.3 319.9,120 308.2,120 299.9,128.3 291.6,120 279.9,120 279.9,108.3 		"/>
-		<polyline class="colora st4" points="228.1,0 219.8,8.3 219.8,20 208.1,20 199.8,28.3 191.5,20 179.8,20 179.8,8.3 171.5,0 		"/>
-		<polygon class="colora st4" points="71.3,100 79.6,91.7 79.6,80 91.3,80 99.7,71.7 108,80 119.7,80 119.7,91.7 128,100 119.7,108.3 
+		<polyline class="colora stl26" points="228.1,0 219.8,8.3 219.8,20 208.1,20 199.8,28.3 191.5,20 179.8,20 179.8,8.3 171.5,0 		"/>
+		<polygon class="colora stl26" points="71.3,100 79.6,91.7 79.6,80 91.3,80 99.7,71.7 108,80 119.7,80 119.7,91.7 128,100 119.7,108.3 
 			119.7,120 108,120 99.7,128.3 91.3,120 79.6,120 79.6,108.3 		"/>
-		<polygon class="colora st4" points="71.3,300 79.6,291.7 79.6,280 91.3,280 99.7,271.7 108,280 119.7,280 119.7,291.7 128,300 
+		<polygon class="colora stl26" points="71.3,300 79.6,291.7 79.6,280 91.3,280 99.7,271.7 108,280 119.7,280 119.7,291.7 128,300 
 			119.7,308.3 119.7,320 108,320 99.7,328.3 91.3,320 79.6,320 79.6,308.3 		"/>
-		<polygon class="colora st4" points="271.6,300 279.9,291.7 279.9,280 291.6,280 299.9,271.7 308.2,280 319.9,280 319.9,291.7 328.2,300 
+		<polygon class="colora stl26" points="271.6,300 279.9,291.7 279.9,280 291.6,280 299.9,271.7 308.2,280 319.9,280 319.9,291.7 328.2,300 
 			319.9,308.3 319.9,320 308.2,320 299.9,328.3 291.6,320 279.9,320 279.9,308.3 		"/>
-		<polyline class="colora st4" points="-0.5,171.7 7.8,180 19.5,180 19.5,191.7 27.9,200 19.5,208.3 19.5,220 7.8,220 -0.5,228.3 		"/>
-		<polyline class="colora st4" points="400,228.3 391.7,220 380,220 380,208.3 371.7,200 380,191.7 380,180 391.7,180 400,171.7 		"/>
-		<polyline class="colora st4" points="171.5,400 179.8,391.7 179.8,380 191.5,380 199.8,371.7 208.1,380 219.8,380 219.8,391.7 228.1,400 
+		<polyline class="colora stl26" points="-0.5,171.7 7.8,180 19.5,180 19.5,191.7 27.9,200 19.5,208.3 19.5,220 7.8,220 -0.5,228.3 		"/>
+		<polyline class="colora stl26" points="400,228.3 391.7,220 380,220 380,208.3 371.7,200 380,191.7 380,180 391.7,180 400,171.7 		"/>
+		<polyline class="colora stl26" points="171.5,400 179.8,391.7 179.8,380 191.5,380 199.8,371.7 208.1,380 219.8,380 219.8,391.7 228.1,400 
 					"/>
-		<polyline class="colora st4" points="371.7,400 380,391.7 380,380 391.7,380 400,371.7 		"/>
-		<polyline class="colora st4" points="27.9,400 19.5,391.7 19.5,380 7.8,380 -0.5,371.7 		"/>
-		<polyline class="colora st4" points="371.7,0 380,8.3 380,20 391.7,20 400,28.3 		"/>
-		<polyline class="colora st4" points="27.9,0 19.5,8.3 19.5,20 7.8,20 -0.5,28.3 		"/>
+		<polyline class="colora stl26" points="371.7,400 380,391.7 380,380 391.7,380 400,371.7 		"/>
+		<polyline class="colora stl26" points="27.9,400 19.5,391.7 19.5,380 7.8,380 -0.5,371.7 		"/>
+		<polyline class="colora stl26" points="371.7,0 380,8.3 380,20 391.7,20 400,28.3 		"/>
+		<polyline class="colora stl26" points="27.9,0 19.5,8.3 19.5,20 7.8,20 -0.5,28.3 		"/>
 	</g>
 </g>
 </svg>
