@@ -9,17 +9,17 @@
 	.st3{fill:none;stroke:#231F20;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 </style>
 <g>
-	<rect x="0.5" y="0.5" class="st0" width="399" height="399"/>
+	<rect x="0.5" y="0.5" class="colora st0" width="399" height="399"/>
 	<path d="M399,1v398H1V1H399 M400,0H0v400h400V0L400,0z"/>
 </g>
 <g id="XMLID_1_">
 	<g>
-		<polygon class="st1" points="0.3,0.1 400,0.1 400,399.9 		"/>
-		<polygon class="st2" points="0.3,0.1 400,399.9 0.3,399.9 		"/>
+		<polygon class="colora st1" points="0.3,0.1 400,0.1 400,399.9 		"/>
+		<polygon class="colora st2" points="0.3,0.1 400,399.9 0.3,399.9 		"/>
 	</g>
 	<g>
-		<line class="st3" x1="400" y1="399.9" x2="0.3" y2="0.1"/>
-		<rect x="0.3" y="0.1" class="st3" width="399.7" height="399.7"/>
+		<line class="colora st3" x1="400" y1="399.9" x2="0.3" y2="0.1"/>
+		<rect x="0.3" y="0.1" class="colora st3" width="399.7" height="399.7"/>
 	</g>
 </g>
 </svg>
