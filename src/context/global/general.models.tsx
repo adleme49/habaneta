@@ -24,6 +24,7 @@ export interface IGeneralState {
   svgWidth?: number;
   selectedTile?: ITile;
   selectedFamily?: IFamily;
+  gridImg?: string;
 }
 
 export interface IGlobalDispatchers {
@@ -38,8 +39,9 @@ export interface IGlobalDispatchers {
   enableRecent: () => void;
   disableRecent: () => void;
   setCurrentTilefromRecent: (current: IFloor | IBorder) => void;
+  saveGridImg: (img: string) => void;
 }
-        
+
 export const initialGlobalDispatchers: IGlobalDispatchers = {
   setCurrentFamily: (current: IFamily) => {},
   setCurrentTile: (current: IFloor | IBorder) => {},
@@ -52,6 +54,7 @@ export const initialGlobalDispatchers: IGlobalDispatchers = {
   setSVGHeight: (height: number) => {},
   setSVGWidth: (width: number) => {},
   setCurrentTilefromRecent: (current: IFloor | IBorder) => {},
+  saveGridImg: (img: string) => {}
 };
 export const initialDomivalues: IGeneralState = {
   loading: false,

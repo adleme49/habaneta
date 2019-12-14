@@ -15,7 +15,8 @@ import {
   SetShowGalleryModal,
   CloseModals,
   SetSVGHeight,
-  SetSVGWidth
+  SetSVGWidth,
+  SaveGridImg
 } from './general.actions';
 
 const GeneralState = (props: any): JSX.Element => {
@@ -24,6 +25,7 @@ const GeneralState = (props: any): JSX.Element => {
     {
       svgWidth,
       svgHeight,
+      gridImg,
       loading,
       showEnviromentModal,
       showSaveModal,
@@ -77,11 +79,15 @@ const GeneralState = (props: any): JSX.Element => {
   const closeModals = () => {
     dispatch(new CloseModals());
   };
+  const saveGridImg = (img: string) => {
+    dispatch(new SaveGridImg(img));
+  };
 
   return (
     <GeneralContext.Provider
       value={{
         loading,
+        gridImg,
         svgHeight,
         svgWidth,
         showEnviromentModal,
@@ -94,6 +100,7 @@ const GeneralState = (props: any): JSX.Element => {
         selectedFamily,
         selectedTile,
         isRecent,
+        saveGridImg,
         setShowSaveModal,
         setShowEnviromentModal,
         setShowGalleryModal,

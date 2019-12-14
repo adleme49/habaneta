@@ -11,7 +11,8 @@ import {
   SHOW_GALLERY_MODAL,
   CLOSE_MODALS,
   SET_SVG_HEIGHT,
-  SET_SVG_WIDTH
+  SET_SVG_WIDTH,
+  SAVE_GRID_IMG
 } from './general.actions';
 
 const GeneralReducer = (
@@ -92,6 +93,13 @@ const GeneralReducer = (
         };
       }
       return state;
+    }
+    case SAVE_GRID_IMG: {
+      const img = action.payload;
+      return {
+        ...state,
+        gridImg: img
+      };
     }
     default:
       return state;

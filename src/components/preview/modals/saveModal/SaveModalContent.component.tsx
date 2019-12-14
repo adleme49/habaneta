@@ -24,7 +24,6 @@ const SaveModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
 
   const onSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(event.timeStamp);
   };
 
   return (

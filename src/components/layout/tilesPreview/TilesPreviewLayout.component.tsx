@@ -16,7 +16,9 @@ const TilesPreviewLayout: React.FC = () => {
       </IonRow>
       <IonRow>
         <IonCol size="10" offset="1" style={{ padding: '1.5rem 0rem' }}>
-          <TileGrid />
+          <div id="test2">
+            <TileGrid />
+          </div>
         </IonCol>
       </IonRow>
       <IonRow>

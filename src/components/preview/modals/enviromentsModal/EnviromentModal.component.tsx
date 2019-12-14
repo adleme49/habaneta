@@ -4,18 +4,23 @@ import GeneralContext from '../../../../context/global/general.context';
 import EnviromentModalContent from './EnviromentModalContent.component';
 
 export const EnviromentModal: React.FC = () => {
-  const { showEnviromentModal, setShowEnviromentModal } = useContext(
+  const { showEnviromentModal, closeModals, gridImg } = useContext(
     GeneralContext
   );
 
   const handelDismiss = () => {
-    setShowEnviromentModal();
+    closeModals();
   };
-
   return (
     <Fragment>
-      <IonModal isOpen={showEnviromentModal} onDidDismiss={handelDismiss}>
-        <EnviromentModalContent />
+      <IonModal
+        isOpen={showEnviromentModal}
+        onDidDismiss={handelDismiss}
+        cssClass="enviromentModal"
+      >
+        {gridImg ? (
+          <EnviromentModalContent img={gridImg} onClose={handelDismiss} />
+        ) : null}
       </IonModal>
     </Fragment>
   );
