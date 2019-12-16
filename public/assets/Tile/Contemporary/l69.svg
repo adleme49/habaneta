@@ -1,0 +1,28 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
+<style type="text/css">
+	.stl69{fill:none;stroke:#231F20;stroke-width:0.4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<g>
+	<rect x="0.5" y="0.5" class="colora st0" width="399" height="399"/>
+	<path d="M399,1v398H1V1H399 M400,0H0v400h400V0L400,0z"/>
+</g>
+<g>
+	<g id="XMLID_1_">
+		<g>
+			<polygon class="colora st1" points="399.5,299.6 399.5,399.5 299.7,399.5 			"/>
+			<polygon class="colora st1" points="399.5,0 399.5,100 299.7,0 299.7,0 			"/>
+			<polygon class="colora st1" points="99.8,0 99.8,0 0,100 0,100 0,0 			"/>
+			<polygon class="colora st1" points="0,299.6 99.8,399.5 0,399.5 			"/>
+		</g>
+		<g>
+			<line class="colora stl69" x1="399.5" y1="100" x2="299.7" y2="0"/>
+			<line class="colora stl69" x1="99.8" y1="0" x2="0" y2="100"/>
+			<line class="colora stl69" x1="0" y1="299.6" x2="99.8" y2="399.5"/>
+			<line class="colora stl69" x1="299.7" y1="399.5" x2="399.5" y2="299.6"/>
+			<polygon class="colora stl69" points="0,299.6 0,399.5 99.8,399.5 299.7,399.5 399.5,399.5 399.5,299.6 399.5,100 399.5,0 299.7,0 99.8,0 
+				0,0 0,100 			"/>
+		</g>
+	</g>
+</g>
+</svg>

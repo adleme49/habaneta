@@ -1,0 +1,63 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
+<style type="text/css">
+	.st9l30v3{fill:none;stroke:#231F20;stroke-width:0.5669;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<g>
+	<rect x="0.5" y="0.5" class="colora st0" width="399" height="399"/>
+	<path d="M399,1v398H1V1H399 M400,0H0v400h400V0L400,0z"/>
+</g>
+<g>
+	<g id="XMLID_3_">
+		<g>
+			<rect x="360" y="360.2" class="colora st7" width="40" height="40"/>
+			<polygon class="colora st6" points="360,360.2 360,400.1 340,400.1 340,340.2 400,340.2 400,360.2 			"/>
+			<polygon class="colora st5" points="400,320.2 400,340.2 340,340.2 340,400.1 320.1,400.1 320.1,320.2 			"/>
+			<polygon class="colora st5" points="80.3,80.5 80.3,400.1 60.4,400.1 60.4,60.5 400,60.5 400,80.5 			"/>
+			<polygon class="colora st4" points="400,40.5 400,60.5 60.4,60.5 60.4,400.1 40.4,400.1 40.4,39 			"/>
+			<polygon class="colora st1" points="400,0.5 400,40.5 40.4,39 40.4,400.1 0.4,400.1 0.4,0.5 			"/>
+			<polygon class="colora st2" points="333.4,147.8 385.9,200.3 333.4,252.8 281,200.3 			"/>
+			<polygon class="colora st2" points="200.2,281 252.7,333.5 200.2,386 147.7,333.5 			"/>
+			<polygon class="colora st3" points="252.7,200.3 200.2,252.8 147.7,200.3 200.2,147.9 			"/>
+			<polygon class="colora st5" points="267.6,320.2 214.3,266.9 266.8,214.5 214.4,266.9 			"/>
+			<path class="colora st5" d="M266.8,186.2l53.3-53.2l13.3-13.3l66.6,66.6v28.3L333.4,281l-13.3-13.3l-53.3-53.2l-52.5,52.4l53.3,53.2
+				l13.4,13.4l-66.6,66.6h-28.3l-66.6-66.6l66.6-66.6l-66.6-66.6l80.7-80.7L266.8,186.2z M200.2,252.8L200.2,252.8L200.2,252.8
+				l52.5-52.5l-52.4-52.5l0,0l0,0l-52.5,52.5L200.2,252.8z M385.9,200.3l-52.4-52.5L281,200.3l52.5,52.5L385.9,200.3z M252.7,333.5
+				L200.2,281l-52.5,52.5l52.5,52.4L252.7,333.5z"/>
+		</g>
+		<g>
+			<polygon class="colora st9l30v3" points="147.7,200.3 200.2,252.8 200.2,252.8 252.7,200.3 200.2,147.9 200.2,147.8 			"/>
+			<line class="colora st9l30v3" x1="119.5" y1="200.3" x2="186.1" y2="266.9"/>
+			<line class="colora st9l30v3" x1="214.3" y1="266.9" x2="266.8" y2="214.5"/>
+			<line class="colora st9l30v3" x1="266.8" y1="186.2" x2="214.3" y2="133.8"/>
+			<polygon class="colora st9l30v3" points="281,200.3 333.4,252.8 385.9,200.3 333.4,147.8 			"/>
+			<polyline class="colora st9l30v3" points="320.1,267.7 333.4,281 400,214.5 			"/>
+			<polyline class="colora st9l30v3" points="400,186.2 333.4,119.6 320.1,133 			"/>
+			<line class="colora st9l30v3" x1="214.3" y1="266.9" x2="267.6" y2="320.2"/>
+			<polygon class="colora st9l30v3" points="40.4,400.1 0.4,400.1 0.4,0.5 400,0.5 400,40.5 400,60.5 400,80.5 400,186.2 400,214.5 400,320.2 
+				400,340.2 400,360.2 400,400.1 360,400.1 340,400.1 320.1,400.1 214.4,400.1 186.1,400.1 80.3,400.1 60.4,400.1 			"/>
+			<polyline class="colora st9l30v3" points="80.3,400.1 80.3,400.1 80.3,80.5 80.3,80.4 			"/>
+			<polyline class="colora st9l30v3" points="60.4,400.1 60.4,400.1 60.4,60.5 			"/>
+			<polyline class="colora st9l30v3" points="40.4,400.1 40.4,400.1 40.4,39 			"/>
+			<polygon class="colora st9l30v3" points="200.2,252.8 200.2,252.8 252.7,200.3 200.2,147.8 200.2,147.9 147.7,200.3 			"/>
+			<line class="colora st9l30v3" x1="214.4" y1="266.9" x2="266.8" y2="214.5"/>
+			<line class="colora st9l30v3" x1="266.8" y1="186.2" x2="200.2" y2="119.6"/>
+			<line class="colora st9l30v3" x1="200.2" y1="119.6" x2="119.5" y2="200.3"/>
+			<polyline class="colora st9l30v3" points="186.1,266.9 119.5,333.5 186.1,400.1 186.1,400.1 			"/>
+			<polyline class="colora st9l30v3" points="214.4,400.1 214.4,400.1 280.9,333.5 267.6,320.2 214.4,266.9 			"/>
+			<polygon class="colora st9l30v3" points="200.2,386 252.7,333.5 200.2,281 147.7,333.5 			"/>
+			<line class="colora st9l30v3" x1="320.1" y1="267.7" x2="266.8" y2="214.5"/>
+			<line class="colora st9l30v3" x1="266.8" y1="186.2" x2="320.1" y2="133"/>
+			<line class="colora st9l30v3" x1="80.3" y1="80.5" x2="400" y2="80.5"/>
+			<line class="colora st9l30v3" x1="60.4" y1="60.5" x2="400" y2="60.5"/>
+			<line class="colora st9l30v3" x1="40.4" y1="39" x2="400" y2="40.5"/>
+			<polyline class="colora st9l30v3" points="360,400.1 360,400.1 360,360.2 360,360.1 			"/>
+			<polyline class="colora st9l30v3" points="340,400.1 340,400.1 340,340.2 			"/>
+			<polyline class="colora st9l30v3" points="320.1,400.1 320.1,400.1 320.1,320.2 			"/>
+			<line class="colora st9l30v3" x1="360" y1="360.2" x2="400" y2="360.2"/>
+			<line class="colora st9l30v3" x1="340" y1="340.2" x2="400" y2="340.2"/>
+			<line class="colora st9l30v3" x1="320.1" y1="320.2" x2="400" y2="320.2"/>
+		</g>
+	</g>
+</g>
+</svg>
