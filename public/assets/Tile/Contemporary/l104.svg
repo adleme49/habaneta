@@ -1,0 +1,44 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
+<style type="text/css">
+	.stl104c1{fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.stl104c2{fill:none;stroke:#231F20;stroke-miterlimit:10;}
+</style>
+<g>
+	<rect x="0.5" y="0.5" class="colora st0" width="399" height="399"/>
+	<path d="M399,1v398H1V1H399 M400,0H0v400h400V0L400,0z"/>
+</g>
+<g id="XMLID_1_">
+	<g>
+		<polygon class="colora st1" points="217.8,200.2 273.5,176.9 329.5,200.2 329.5,200.9 273.5,224.2 217.8,200.9 		"/>
+		<polygon class="colora st1" points="199.3,219.1 222.6,274.9 199.3,330.8 198.6,330.8 175.3,274.9 198.6,219.1 		"/>
+		<polygon class="colora st1" points="199.8,69.7 223.1,125.7 199.8,181.4 199.1,181.4 175.8,125.7 199.1,69.7 		"/>
+		<path class="colora st2" d="M124.9,223.6l55.7-23.3v-0.7l-55.7-23.3l-56,23.3v0.7L124.9,223.6z M163.2,269.6l22.9-55.9l-0.5-0.5
+			l-55.9,22.9l-23.1,56l0.5,0.5L163.2,269.6z M185.7,186.9l0.5-0.5l-22.9-55.9l-56-23.1l-0.5,0.5l23.1,56L185.7,186.9z M222.6,274.9
+			l-23.3-55.7h-0.7l-23.3,55.7l23.3,56h0.7L222.6,274.9z M199.8,181.4l23.3-55.7l-23.3-56h-0.7l-23.3,56l23.3,55.7H199.8z
+			 M217.8,200.9l55.7,23.3l56-23.3v-0.7l-56-23.3l-55.7,23.3V200.9z M212.3,214.1l22.9,55.9l56,23.1l0.5-0.5l-23.1-56l-55.9-22.9
+			L212.3,214.1z M268.6,164.3l23.1-56l-0.5-0.5l-56,23.1l-22.9,55.9l0.5,0.5L268.6,164.3z M-0.5,0.1h399.5V400H-0.5V0.1z"/>
+		<polygon class="colora st1" points="124.9,176.3 180.6,199.6 180.6,200.3 124.9,223.6 69,200.3 69,199.6 		"/>
+	</g>
+	<g>
+		<polygon class="colora stl104c1" points="399.1,0.1 399.4,0.1 399.4,400 399.1,400 -0.5,400 -0.5,0.1 		"/>
+		<line class="colora stl104c2" x1="399.1" y1="0.1" x2="399.1" y2="400"/>
+		<polyline class="colora stl104c1" points="199.8,181.4 223.1,125.7 199.8,69.7 		"/>
+		<polyline class="colora stl104c1" points="199.1,181.4 175.8,125.7 199.1,69.7 		"/>
+		<polyline class="colora stl104c1" points="186.2,186.4 163.2,130.5 107.2,107.4 		"/>
+		<polyline class="colora stl104c1" points="185.7,186.9 129.8,164 106.7,107.9 		"/>
+		<polyline class="colora stl104c1" points="180.6,199.6 124.9,176.3 69,199.6 		"/>
+		<polyline class="colora stl104c1" points="180.6,200.3 124.9,223.6 69,200.3 		"/>
+		<polyline class="colora stl104c1" points="185.7,213.3 129.8,236.2 106.7,292.2 		"/>
+		<polyline class="colora stl104c1" points="186.2,213.7 163.2,269.6 107.2,292.7 		"/>
+		<polyline class="colora stl104c1" points="198.6,219.1 175.3,274.9 198.6,330.8 		"/>
+		<polyline class="colora stl104c1" points="199.3,219.1 222.6,274.9 199.3,330.8 		"/>
+		<polyline class="colora stl104c1" points="212.3,214.1 235.2,270 291.2,293.1 		"/>
+		<polyline class="colora stl104c1" points="212.7,213.6 268.6,236.5 291.7,292.6 		"/>
+		<polyline class="colora stl104c1" points="217.8,200.9 273.5,224.2 329.5,200.9 		"/>
+		<polyline class="colora stl104c1" points="217.8,200.2 273.5,176.9 329.5,200.2 		"/>
+		<polyline class="colora stl104c1" points="212.7,187.2 268.6,164.3 291.7,108.3 		"/>
+		<polyline class="colora stl104c1" points="212.3,186.8 235.2,130.9 291.2,107.8 		"/>
+	</g>
+</g>
+</svg>
