@@ -11,8 +11,8 @@ const DoubleGrid: React.FC<{
   <Fragment>
     <DoubleHorizontal tile={selectedBorder} />
     <DoubleBody borderTile={selectedBorder} floorTile={selectedFloor} selectedGrid={selectedGrid} />
-    <DoubleBody borderTile={selectedBorder} floorTile={selectedFloor} />
-    <DoubleBody borderTile={selectedBorder} floorTile={selectedFloor} />
+    <DoubleBody borderTile={selectedBorder} floorTile={selectedFloor} selectedGrid={selectedGrid} />
+    <DoubleBody borderTile={selectedBorder} floorTile={selectedFloor} selectedGrid={selectedGrid} />
   </Fragment>
 );
 
