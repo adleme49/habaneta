@@ -891,6 +891,346 @@ export const tilesFam: ITileFamily[] = [
         }
       },
       {
+        name: 'Mod. l98',
+        imgUrl: '../assets/Tile/Contemporary/l98.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#78C2D6",
+          st2:"#4C7C87",
+          st3:"#C1C1C1",
+          st4:"#000000",
+        }
+      },
+      {
+        name: 'Mod. l99',
+        imgUrl: '../assets/Tile/Contemporary/l99.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#231F20",
+          st2:"#7C7A7A",
+        }
+      },
+      {
+        name: 'Mod. l100-mod',
+        imgUrl: '../assets/Tile/Contemporary/l100-mod.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#8BD36A",
+          st2:"#A0A0A0",
+          st3:"#5B5B1D",
+          st4:"#F2ED8F",
+        }
+      },
+      {
+        name: 'Mod. l102',
+        imgUrl: '../assets/Tile/Contemporary/l102.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#A6F4F4",
+          st2:"#458482",
+          st3:"#1A3534",
+          st4:"#EFEF7B",
+        }
+      },
+      {
+        name: 'Mod. l104',
+        imgUrl: '../assets/Tile/Contemporary/l104.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#F4CB89",
+          st2:"#A9FCFA",
+        }
+      },
+      {
+        name: 'Mod. l105',
+        imgUrl: '../assets/Tile/Contemporary/l105.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#7FEEF7",
+          st2:"#F4F47F",
+          st3:"#478D96",
+          st4:"#BF3232",
+        }
+      },
+      {
+        name: 'Mod. l107',
+        imgUrl: '../assets/Tile/Contemporary/l107.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#898762",
+          st2:"#D1D1CF",
+          st3:"#F7ADA4",
+          st4:"#8C2D26",
+          st5:"#A6C658",
+          st6:"#E5E16A",
+          st7:"#000000",
+        }
+      },
+      {
+        name: 'Mod. l108',
+        imgUrl: '../assets/Tile/Contemporary/l108.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#A3A3A3",
+          st2:"#BDF9E6",
+          st3:"#BBE895",
+          st4:"#F9F3A7",
+          st5:"#8E8D75",
+          st6:"#F9BBB9",
+        }
+      },
+      {
+        name: 'Mod. l110',
+        imgUrl: '../assets/Tile/Contemporary/l110.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#5AA39A",
+          st2:"#9CFFF1",
+          st3:"#5FBFD6",
+          st4:"#F5FC72",
+        }
+      },
+      {
+        name: 'Mod. l111',
+        imgUrl: '../assets/Tile/Contemporary/l111.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#F6AEC3",
+          st2:"#297D91",
+          st3:"#E2E775",
+          st4:"#932727",
+          st5:"#EF4C4C",
+          st6:"#3D3D3D",
+        }
+      },
+      {
+        name: 'Mod. l112',
+        imgUrl: '../assets/Tile/Contemporary/l112.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#EEAF30",
+          st2:"#F8F299",
+          st3:"#C9DADD",
+          st4:"#66ACA8",
+          st5:"#D2E180",
+          st6:"#000000",
+        }
+      },
+      {
+        name: 'Mod. l113',
+        imgUrl: '../assets/Tile/Contemporary/l113.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#A84E36",
+          st2:"#519285",
+          st3:"#8EAF63",
+          st4:"#CEE18F",
+          st5:"#EDEC86",
+          st6:"#B5E0DC",
+        }
+      },
+      {
+        name: 'Mod. l115',
+        imgUrl: '../assets/Tile/Contemporary/l115.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#3C55A4",
+          st2:"#98985F",
+          st3:"#EC1E24",
+          st4:"#9DCCD7",
+          st5:"#F7F29F",
+          st6:"#E2BB3D",
+          st7:"#3A6C7B",
+          st8:"#249A5D",
+          st9:"#D7D7D7",
+          st10:"#888888",
+          st11:"#000000",
+        }
+      },
+      {
+        name: 'Mod. l116a',
+        imgUrl: '../assets/Tile/Contemporary/l116a.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#C9DADD",
+        }
+      },
+      {
+        name: 'Mod. l116b',
+        imgUrl: '../assets/Tile/Contemporary/l116b.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#C9DADD",
+          st2:"#96A78D",
+          st3:"#64887A",
+          st4:"#F1D9B2",
+          st5:"#ED7B7B",
+          st6:"#EAA780",
+        }
+      },
+      {
+        name: 'Mod. l116d',
+        imgUrl: '../assets/Tile/Contemporary/l116d.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#C9DADD",
+          st2:"#F1D9B2",
+          st3:"#EAA780",
+          st4:"#ED7B7B",
+          st5:"#ECE47C",
+          st6:"#BDB35C",
+          st7:"#822222",
+        }
+      },
+      {
+        name: 'Mod. l117',
+        imgUrl: '../assets/Tile/Contemporary/l117.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#61EEF2",
+          st2:"#EAEAEA",
+          st3:"#939393",
+          st4:"#F7CD84",
+          st5:"#CCCCCC",
+          st6:"#000000",
+        }
+      },
+      {
+        name: 'Mod. l118',
+        imgUrl: '../assets/Tile/Contemporary/l118.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#F2EF97",
+          st2:"#A2A063",
+          st3:"#A5BFC8",
+          st4:"#F6E4AC",
+          st5:"#8CD6F2",
+          st6:"#366A77",
+        }
+      },
+      {
+        name: 'Mod. l123',
+        imgUrl: '../assets/Tile/Contemporary/l123.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#1A1F1C",
+        }
+      },
+      {
+        name: 'Mod. l124',
+        imgUrl: '../assets/Tile/Contemporary/l124.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#9A988E",
+          st2:"#5E6959",
+          st3:"#CADADD",
+          st4:"#64897A",
+        }
+      },
+      {
+        name: 'Mod. l127',
+        imgUrl: '../assets/Tile/Contemporary/l127.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#FC9808",
+          st2:"#C9C9C9",
+          st3:"#232323",
+          st4:"#667A95",
+          st5:"#FF7676",
+          st6:"#A02D2D",
+          st7:"#F9C78C",
+          st8:"#FCFC68",
+          st9:"#A5DB86",
+          st10:"#FFFFC0",
+          st11:"#686868",
+          st12:"#28BF53",
+        }
+      },
+      {
+        name: 'Mod. l128',
+        imgUrl: '../assets/Tile/Contemporary/l128.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#BCF975",
+          st2:"#E4F9C7",
+          st3:"#426325",
+          st4:"#5F7A67",
+          st5:"#649139",
+          st6:"#97EFBB",
+        }
+      },
+      {
+        name: 'Mod. l129',
+        imgUrl: '../assets/Tile/Contemporary/l129.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#4C473D",
+          st2:"#F4E9D0",
+        }
+      },
+      {
+        name: 'Mod. l130',
+        imgUrl: '../assets/Tile/Contemporary/l130.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#BFBFBF",
+          st2:"#ED7066",
+          st3:"#707070",
+          st4:"#913E3A",
+          st5:"#EAE654",
+          st6:"#E8B356",
+          st7:"#F4B7B0",
+          st8:"#819363",
+          st9:"#D4F4A2",
+          st10:"#E0DFDE",
+          st11:"#8E9AF4",
+          st12:"#000000",
+        }
+      },
+      {
+        name: 'Mod. l131',
+        imgUrl: '../assets/Tile/Contemporary/l131.svg',
+        type: Floor,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#6099A8",
+          st2:"#98E3F4",
+          st3:"#EFE86F",
+          st4:"#465C89",
+          st5:"#CFF99D",
+          st6:"#B8F2DC",
+          st7:"#F2DA99",
+          st8:"#5E7C35",
+          st9:"#CECECE",
+          st10:"#5E5E5D",
+          st11:"#000000",
+        }
+      },
+      {
         name: 'Mod. l19',
         imgUrl: '../assets/Tile/Contemporary/l19.svg',
         type: Floor,

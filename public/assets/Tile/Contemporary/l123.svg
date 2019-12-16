@@ -1,11 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#FFFFFF;}
-	.st1{fill:#1A1F1C;}
-	.st2{fill:none;stroke:#000000;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.stl123{fill:none;stroke:#000000;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 </style>
 <g>
 	<rect x="1.5" y="0.5" class="colora st0" width="399" height="399"/>
@@ -23,15 +19,15 @@
 		<polygon class="colora st1" points="15.4,306 30.4,332 15.4,358 0.5,358 0.4,358 0.4,306 0.5,306 		"/>
 	</g>
 	<g>
-		<polygon class="colora st2" points="74.3,340 89.3,366 74.3,392 44.3,392 29.2,366 44.3,340 		"/>
-		<polyline class="colora st2" points="0.5,306 15.4,306 30.4,332 15.4,358 0.5,358 		"/>
-		<polygon class="colora st2" points="326.6,340 311.6,366 326.6,392 356.6,392 371.7,366 356.6,340 		"/>
-		<polyline class="colora st2" points="400.4,306 385.5,306 370.5,332 385.5,358 400.4,358 		"/>
-		<polygon class="colora st2" points="74.3,60 89.3,34 74.3,8 44.3,8 29.2,34 44.3,60 		"/>
-		<polyline class="colora st2" points="0.5,93.9 15.4,93.9 30.4,67.9 15.4,41.9 0.5,41.9 		"/>
-		<polygon class="colora st2" points="326.6,60 311.6,34 326.6,8 356.6,8 371.7,34 356.6,60 		"/>
-		<polyline class="colora st2" points="400.4,93.9 385.5,93.9 370.5,67.9 385.5,41.9 400.4,41.9 		"/>
-		<polygon class="colora st2" points="0.4,358 0.4,400 400.5,400 400.5,358 400.5,306 400.5,93.9 400.5,41.9 400.5,0 0.4,0 0.4,41.9 
+		<polygon class="colora stl123" points="74.3,340 89.3,366 74.3,392 44.3,392 29.2,366 44.3,340 		"/>
+		<polyline class="colora stl123" points="0.5,306 15.4,306 30.4,332 15.4,358 0.5,358 		"/>
+		<polygon class="colora stl123" points="326.6,340 311.6,366 326.6,392 356.6,392 371.7,366 356.6,340 		"/>
+		<polyline class="colora stl123" points="400.4,306 385.5,306 370.5,332 385.5,358 400.4,358 		"/>
+		<polygon class="colora stl123" points="74.3,60 89.3,34 74.3,8 44.3,8 29.2,34 44.3,60 		"/>
+		<polyline class="colora stl123" points="0.5,93.9 15.4,93.9 30.4,67.9 15.4,41.9 0.5,41.9 		"/>
+		<polygon class="colora stl123" points="326.6,60 311.6,34 326.6,8 356.6,8 371.7,34 356.6,60 		"/>
+		<polyline class="colora stl123" points="400.4,93.9 385.5,93.9 370.5,67.9 385.5,41.9 400.4,41.9 		"/>
+		<polygon class="colora stl123" points="0.4,358 0.4,400 400.5,400 400.5,358 400.5,306 400.5,93.9 400.5,41.9 400.5,0 0.4,0 0.4,41.9 
 			0.4,93.9 0.4,306 		"/>
 	</g>
 </g>

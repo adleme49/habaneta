@@ -1,12 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#FFFFFF;}
-	.st1{fill:#231F20;}
-	.st2{fill:#7C7A7A;}
-	.st3{fill:none;stroke:#231F20;stroke-miterlimit:10;}
+	.stl99{fill:none;stroke:#231F20;stroke-miterlimit:10;}
 </style>
 <g>
 	<rect x="0.5" y="0.5" class="colora st0" width="399" height="399"/>
@@ -19,13 +14,13 @@
 		<polygon class="colora st1" points="0.3,349 51.5,400.2 51.5,400.5 -0.5,400.5 -0.5,349 		"/>
 	</g>
 	<g>
-		<polygon class="colora st3" points="400,51.7 400,400.5 399.6,400.5 51.5,400.5 -0.5,400.5 -0.5,349 -0.5,0.1 348.8,0.1 399.6,0.1 
+		<polygon class="colora stl99" points="400,51.7 400,400.5 399.6,400.5 51.5,400.5 -0.5,400.5 -0.5,349 -0.5,0.1 348.8,0.1 399.6,0.1 
 			400,0.1 		"/>
-		<polyline class="colora st3" points="400,51.7 399.6,51.3 348.8,0.5 		"/>
-		<polyline class="colora st3" points="399.6,0.1 399.6,51.3 399.6,52 399.6,400.5 		"/>
-		<line class="colora st3" x1="0.3" y1="349" x2="51.5" y2="400.2"/>
-		<line class="colora st3" x1="0.3" y1="349" x2="348.8" y2="0.5"/>
-		<polyline class="colora st3" points="51.5,400.2 399.6,52 400,51.7 		"/>
+		<polyline class="colora stl99" points="400,51.7 399.6,51.3 348.8,0.5 		"/>
+		<polyline class="colora stl99" points="399.6,0.1 399.6,51.3 399.6,52 399.6,400.5 		"/>
+		<line class="colora stl99" x1="0.3" y1="349" x2="51.5" y2="400.2"/>
+		<line class="colora stl99" x1="0.3" y1="349" x2="348.8" y2="0.5"/>
+		<polyline class="colora stl99" points="51.5,400.2 399.6,52 400,51.7 		"/>
 	</g>
 </g>
 </svg>
