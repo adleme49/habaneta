@@ -3,6 +3,8 @@ import { recent } from '../seed';
 
 export interface IRecentState {
   count: number;
+  selectedGridPos: number;
+  selectedGrid?: number[];
   selectedFloor?: IFloor;
   selectedBorder?: IBorder;
   selectedTileIndex?: number;
@@ -26,5 +28,6 @@ export const initialDispachersRecent: IRecentDispatchers = {
 
 export const initialStateRecent: IRecentState = {
   recent,
-  count: 0
+  count: 0,
+  selectedGridPos: 0,
 };

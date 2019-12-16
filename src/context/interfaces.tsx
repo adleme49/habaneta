@@ -23,6 +23,7 @@ export interface ITile {
 }
 export interface IFloor extends ITile {
   rotation?: boolean;
+  grids?: Array<number[]>;
 }
 
 export interface IBorder extends ITile {

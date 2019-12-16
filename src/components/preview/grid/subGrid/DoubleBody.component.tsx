@@ -6,15 +6,16 @@ import SVGTile from '../../../common/SVGTile.component';
 import FloorGrid from './FloorGrid.component';
 
 const DoubleBody: React.FC<{
-  borderTile: IBorder | undefined;
-  floorTile: IFloor | undefined;
-}> = ({ borderTile, floorTile }) => {
+  borderTile?: IBorder;
+  floorTile?: IFloor;
+  selectedGrid?: number[];
+}> = ({ borderTile, floorTile, selectedGrid }) => {
   return (
     <Fragment>
       <IonRow className="ion-no-padding ion-no-margin">
-        <FloorGrid tile={floorTile} orientation={'TOP'} />
-        <FloorGrid tile={floorTile} orientation={'TOP'} />
-        <FloorGrid tile={floorTile} orientation={'TOP'} />
+        <FloorGrid tile={floorTile} grid={selectedGrid} orientation={'TOP'} />
+        <FloorGrid tile={floorTile} grid={selectedGrid}  orientation={'TOP'} />
+        <FloorGrid tile={floorTile} grid={selectedGrid}  orientation={'TOP'} />
         <IonCol className="ion-no-padding ion-no-margin">
           {borderTile ? (
             <SVGTile tile={borderTile} rotation={-90} />
@@ -31,9 +32,9 @@ const DoubleBody: React.FC<{
         </IonCol>
       </IonRow>
       <IonRow className="ion-no-padding ion-no-margin">
-        <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
-        <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
-        <FloorGrid tile={floorTile} orientation={'BOTTOM'} />
+        <FloorGrid tile={floorTile} grid={selectedGrid}  orientation={'BOTTOM'} />
+        <FloorGrid tile={floorTile} grid={selectedGrid}  orientation={'BOTTOM'} />
+        <FloorGrid tile={floorTile} grid={selectedGrid}  orientation={'BOTTOM'} />
         <IonCol className="ion-no-padding ion-no-margin">
           {borderTile ? (
             <SVGTile tile={borderTile} rotation={-90} />
