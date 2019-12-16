@@ -6,7 +6,8 @@ import {
   ADD_RECENT,
   UPDATE_SELECTED
 } from './recent.actions';
-import { ITile } from '../interfaces';
+import { ITile, IFloor } from '../interfaces';
+import { getNextGrid } from '../../constants/floor';
 
 const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
   switch (action.type) {
@@ -14,12 +15,36 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
       const tile = state.recent[action.payload];
       const selectedTileIndex = action.payload;
       if (tile.type === 'Floor') {
-        return {
-          ...state,
-          selectedTileIndex,
-          selectedFloor: tile,
-          selectedFloorIndex: action.payload
-        };
+        const floor: IFloor = tile;
+
+        const selectedGrid = floor.grids ? floor.grids[0] : undefined;
+        const selectedGridPos = 0;
+
+        if (floor.grids && selectedTileIndex === state.selectedTileIndex) {
+          const [newGrid, newPos] = getNextGrid(
+            floor.grids,
+            state.selectedGridPos
+          );
+          return {
+            ...state,
+            selectedGrid: newGrid as number[],
+            selectedGridPos: newPos as number,
+            selectedTileIndex,
+            selectedFloor: tile,
+            selectedFloorIndex: action.payload
+          };
+        } else {
+          const selectedGrid = floor.grids ? floor.grids[0] : undefined;
+          const selectedGridPos = 0;
+          return {
+            ...state,
+            selectedGrid,
+            selectedGridPos,
+            selectedTileIndex,
+            selectedFloor: tile,
+            selectedFloorIndex: action.payload
+          };
+        }
       }
       return {
         ...state,
@@ -43,7 +68,7 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
           ...state,
           recent: recentCopy,
           selectedFloor: action.payload
-        }
+        };
       }
       return state;
     }
@@ -67,10 +92,13 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
       const recent = [...recents, ...empty];
       const count = state.count + 1;
       if (tile.type === 'Floor') {
+        const floor: IFloor = tile;
         return {
           ...state,
           recent,
           count,
+          selectedGrid: floor.grids ? floor.grids[0] : undefined,
+          selectedGridPos: 0,
           selectedFloor: tile,
           selectedFloorIndex: count - 1,
           selectedTileIndex: count - 1

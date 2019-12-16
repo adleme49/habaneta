@@ -1,4 +1,5 @@
 import { IColor, IBorderFamily, ITileFamily } from './interfaces';
+import { floorGrid } from '../constants/floor';
 
 export const Border = 'Border';
 export const Floor = 'Floor';
@@ -352,6 +353,7 @@ export const tilesFam: ITileFamily[] = [
         name: 'Mod. l05',
         imgUrl: '../assets/Tile/Contemporary/l05.svg',
         type: Floor,
+        grids: [floorGrid.SIMPLE],
         layers: {
           st0: '#FFFFFF',
           st1: '#333333',
@@ -383,6 +385,7 @@ export const tilesFam: ITileFamily[] = [
         name: 'Mod. l21',
         imgUrl: '../assets/Tile/Contemporary/l21.svg',
         type: Floor,
+        grids: [ floorGrid.DEFAULT,floorGrid.SIMPLE, floorGrid.ROTATED],
         layers: {
           st0: '#FFFFFF',
           st1: '#A5A5A5',

@@ -15,7 +15,15 @@ import GeneralContext from '../global/general.context';
 const RecentState = (props: any): JSX.Element => {
   const initialState: IRecentState = initialStateRecent;
   const [
-    { selectedBorder, selectedFloor, selectedTileIndex, recent, count },
+    {
+      selectedBorder,
+      selectedFloor,
+      selectedTileIndex,
+      recent,
+      count,
+      selectedGrid,
+      selectedGridPos
+    },
     dispatch
   ] = useReducer(RecentReducer, initialState);
   const { tile, setTile } = useContext(EditorContext);
@@ -48,6 +56,8 @@ const RecentState = (props: any): JSX.Element => {
     <RecentContext.Provider
       value={{
         count,
+        selectedGrid,
+        selectedGridPos,
         selectedBorder,
         selectedFloor,
         selectedTileIndex,
