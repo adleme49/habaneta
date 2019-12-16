@@ -34,7 +34,71 @@ export const borderFam: IBorderFamily[] = [
   {
     name: 'Victorian',
     type: Border,
-    types: []
+    types: [
+      {
+        name: 'Mod. 49',
+        imgUrl: '../assets/Border/Victorian/l49.1.svg',
+        cornerUrl: '../assets/Border/Victorian/l49.2.svg',
+        cornerInteriorUrl: '../assets/Border/Victorian/l49.3.svg',
+        type: Border,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#8FAD68",
+          st2:"#428689",
+          st3:"#54EAAD",
+          st4:"#FFE106",
+          st5:"#EFF78D",
+          st6:"#EDC154",
+          st7:"#AF3838",
+          st8:"#ADADAD",
+        }
+      },
+      {
+        name: 'Mod. 61',
+        imgUrl: '../assets/Border/Victorian/l61.1.svg',
+        cornerUrl: '../assets/Border/Victorian/l61.2.svg',
+        cornerInteriorUrl: '../assets/Border/Victorian/l61.3.svg',
+        type: Border,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#FFD899",
+          st2:"#84BCD8",
+          st3:"#E4EA73",
+          st4:"#89895B",
+          st5:"#FF9797",
+          st6:"#FC9500",
+        }
+      },
+      {
+        name: 'Mod. 62',
+        imgUrl: '../assets/Border/Victorian/l62.1.svg',
+        cornerUrl: '../assets/Border/Victorian/l62.2.svg',
+        type: Border,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#455245",
+          st2:"#A5A2B7",
+          st3:"#E0FFE8",
+          st4:"#F8D2DD",
+          st5:"#B78795",
+        }
+      },
+      {
+        name: 'Mod. 68',
+        imgUrl: '../assets/Border/Victorian/l68.1.svg',
+        cornerUrl: '../assets/Border/Victorian/l68.2.svg',
+        type: Border,
+        layers: {
+          st0:"#FFFFFF",
+          st1:"#969696",
+          st2:"#A09D6D",
+          st3:"#C2D18C",
+          st4:"#F4F17F",
+          st5:"#E5E5E5",
+          st6:"#000000",
+        }
+      },
+    ]
   },
   {
     name: 'Floral',
