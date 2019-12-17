@@ -7,15 +7,18 @@ const TilePreviewActions: React.FC = () => {
   const {
     setShowEnviromentModal,
     setShowSaveModal,
-    setShowGalleryModal
+    setShowGalleryModal,
+    saveGridImg
   } = useContext(GeneralContext);
 
   const [img, setimg] = useState('');
+
   const domCapturer = () => {
     const grid = document.getElementById('grid');
     if (grid) {
       domtoimage.toPng(grid).then(dataUrl => {
         setimg(dataUrl);
+        saveGridImg(dataUrl);
         setShowEnviromentModal();
       });
     }
