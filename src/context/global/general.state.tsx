@@ -14,13 +14,15 @@ import {
   DisableRecent,
   SetShowGalleryModal,
   CloseModals,
-  SetSVGHeight
+  SetSVGHeight,
+  SetSVGWidth
 } from './general.actions';
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: IGeneralState = initialDomivalues;
   const [
     {
+      svgWidth,
       svgHeight,
       loading,
       showEnviromentModal,
@@ -38,6 +40,9 @@ const GeneralState = (props: any): JSX.Element => {
     dispatch
   ] = useReducer(GeneralReducer, initialState);
 
+  const setSVGWidth = (width: number) => {
+    dispatch(new SetSVGWidth(width));
+  };
   const setSVGHeight = (height: number) => {
     dispatch(new SetSVGHeight(height));
   };
@@ -78,6 +83,7 @@ const GeneralState = (props: any): JSX.Element => {
       value={{
         loading,
         svgHeight,
+        svgWidth,
         showEnviromentModal,
         showSaveModal,
         showGalleryModal,
@@ -95,6 +101,7 @@ const GeneralState = (props: any): JSX.Element => {
         setCurrentTile,
         setCurrentTilefromRecent,
         setSVGHeight,
+        setSVGWidth,
         closeModals,
         enableRecent,
         disableRecent,
