@@ -12,25 +12,17 @@ const TilePreviewActions: React.FC = () => {
 
   const [img, setimg] = useState('');
   const domCapturer = () => {
-    const grid = document.getElementById('test2');
-    const options = {
-      background: 'green',
-      height: 750,
-      width: 1250,
-      style: { transform: 'rotate(20deg) ' }
-    };
-    console.log(grid);
+    const grid = document.getElementById('grid');
     if (grid) {
-      domtoimage.toPng(grid, options).then(dataUrl => {
-        console.log(dataUrl);
+      domtoimage.toPng(grid).then(dataUrl => {
         setimg(dataUrl);
+        setShowEnviromentModal();
       });
     }
   };
 
   const onEnviroment = () => {
     domCapturer();
-    // setShowEnviromentModal();
   };
   const onSave = () => {
     setShowSaveModal();

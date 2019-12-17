@@ -15,7 +15,12 @@ const TilesPreviewLayout: React.FC = () => {
         <TileRecent />
       </IonRow>
       <IonRow>
-        <IonCol size="10" offset="1" style={{ padding: '1.5rem 0rem' }}>
+        <IonCol
+          size="10"
+          offset="1"
+          style={{ padding: '1.5rem 0rem' }}
+          id="grid"
+        >
           <TileGrid />
         </IonCol>
       </IonRow>

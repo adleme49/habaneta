@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
+import GeneralContext from '../../context/global/general.context';
 import { ITile } from '../../context/interfaces';
 import { styleSVG } from '../../helpers';
-import GeneralContext from '../../context/global/general.context';
 import SVGTileBase from './SVGBase.component';
 
 const SVGTile: React.FC<{
@@ -29,7 +29,6 @@ const SVGTile: React.FC<{
       style={{
         height: svgHeight,
         width: 'auto'
-
       }}
       onClickHandler={onClickHandler}
       beforeInjection={svg => {
