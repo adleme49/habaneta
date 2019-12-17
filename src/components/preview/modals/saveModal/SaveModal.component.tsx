@@ -5,7 +5,7 @@ import GeneralContext from '../../../../context/global/general.context';
 import './../Modal.css';
 
 const SaveModal: React.FC = () => {
-  const { showSaveModal, closeModals } = useContext(GeneralContext);
+  const { showSaveModal, closeModals, gridImg } = useContext(GeneralContext);
 
   const handelDismiss = () => {
     closeModals();
@@ -17,10 +17,11 @@ const SaveModal: React.FC = () => {
         <IonModal
           isOpen={showSaveModal}
           // isOpen={true}
+
           onDidDismiss={handelDismiss}
           cssClass="saveModal"
         >
-          <SaveModalContent onClose={handelDismiss} />
+          <SaveModalContent onClose={handelDismiss} gridImg={gridImg} />
         </IonModal>
       </IonContent>
     </Fragment>

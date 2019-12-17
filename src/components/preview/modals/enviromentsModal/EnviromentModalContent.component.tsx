@@ -1,17 +1,16 @@
-import React, { Fragment } from 'react';
 import {
-  IonToolbar,
-  IonTitle,
-  IonImg,
   IonButton,
   IonButtons,
-  IonIcon,
-  IonRow,
+  IonCol,
   IonGrid,
-  IonCol
+  IonIcon,
+  IonImg,
+  IonRow,
+  IonTitle,
+  IonToolbar
 } from '@ionic/react';
+import React, { Fragment } from 'react';
 import bano from '../../../../theme/bano.png';
-import { transform } from '@babel/core';
 const EnviromentModalContent: React.FC<{ img: string; onClose: Function }> = ({
   img,
   onClose

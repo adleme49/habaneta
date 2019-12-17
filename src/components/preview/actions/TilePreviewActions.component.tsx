@@ -11,24 +11,21 @@ const TilePreviewActions: React.FC = () => {
     saveGridImg
   } = useContext(GeneralContext);
 
-  const [img, setimg] = useState('');
-
-  const domCapturer = () => {
+  const domCapturer = (ModaltoOpen: Function) => {
     const grid = document.getElementById('grid');
     if (grid) {
       domtoimage.toPng(grid).then(dataUrl => {
-        setimg(dataUrl);
         saveGridImg(dataUrl);
-        setShowEnviromentModal();
+        ModaltoOpen();
       });
     }
   };
 
   const onEnviroment = () => {
-    domCapturer();
+    domCapturer(setShowEnviromentModal);
   };
   const onSave = () => {
-    setShowSaveModal();
+    domCapturer(setShowSaveModal);
   };
   const onGallery = () => {
     setShowGalleryModal();
@@ -47,7 +44,6 @@ const TilePreviewActions: React.FC = () => {
           <IonLabel>Save</IonLabel>
         </IonSegmentButton>
       </IonSegment>
-      {img ? <IonImg src={img} /> : null}
     </Fragment>
   );
 };

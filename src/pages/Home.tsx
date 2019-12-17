@@ -1,4 +1,4 @@
-import { IonContent, IonPage } from '@ionic/react';
+import { IonPage } from '@ionic/react';
 import React, { useContext, useState } from 'react';
 import Loading from '../components/layout/loading/Loading.component';
 import MainLayout from '../components/layout/main/MainLayaout.component';
@@ -15,9 +15,7 @@ const Home: React.FC = () => {
       <NavLayaout />
       {loading ? <Loading loading={loading} /> : null}
       {showToast ? <Toast showToast={showToast} /> : null}
-      <IonContent>
-        <MainLayout />
-      </IonContent>
+      <MainLayout />
     </IonPage>
   );
 };

@@ -10,13 +10,17 @@ import {
   IonRow,
   IonText,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  IonImg
 } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
 import RecentContext from '../../../../context/recent/recent.context';
 import TileInfo from './TileInfo.component';
 
-const SaveModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
+const SaveModalContent: React.FC<{
+  onClose: Function;
+  gridImg: string | undefined;
+}> = ({ onClose, gridImg }) => {
   const { selectedBorder, selectedFloor } = useContext(RecentContext);
 
   const handelDismiss = () => {
@@ -69,7 +73,7 @@ const SaveModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
         </form>
         <IonRow>
           <IonCol size="6" style={{ width: '100%' }}>
-            La foto que esta guardada
+            {gridImg ? <IonImg src={gridImg}></IonImg> : null}
           </IonCol>
           <IonCol size="6">
             <IonRow>
