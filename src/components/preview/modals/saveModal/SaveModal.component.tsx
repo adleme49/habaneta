@@ -16,6 +16,7 @@ const SaveModal: React.FC = () => {
       <IonContent>
         <IonModal
           isOpen={showSaveModal}
+          // isOpen={true}
           onDidDismiss={handelDismiss}
           cssClass="saveModal"
         >

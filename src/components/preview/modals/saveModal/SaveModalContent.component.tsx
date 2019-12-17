@@ -8,6 +8,7 @@ import {
   IonItem,
   IonLabel,
   IonRow,
+  IonText,
   IonTitle,
   IonToolbar
 } from '@ionic/react';
@@ -38,63 +39,67 @@ const SaveModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
         </IonButtons>
       </IonToolbar>
 
-      <IonGrid fixed={true}>
+      <IonGrid fixed={true} style={{ width: '90%' }}>
+        <form onSubmit={onSubmitForm}>
+          <IonRow>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="floating">Nombre</IonLabel>
+                <IonInput type="text" name="name" required></IonInput>
+              </IonItem>
+            </IonCol>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="floating">Telf</IonLabel>
+                <IonInput type="text" name="phone" required></IonInput>
+              </IonItem>
+            </IonCol>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="floating">Habitacion</IonLabel>
+                <IonInput type="text" name="room" required></IonInput>
+              </IonItem>
+            </IonCol>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="floating">Metros Cuadrados</IonLabel>
+                <IonInput type="text" name="m2" required></IonInput>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+        </form>
         <IonRow>
-          <IonCol size="6">
-            <form onSubmit={onSubmitForm}>
-              <IonRow>
-                <h1>Datos del Cliente</h1>
-              </IonRow>
-
-              <IonRow>
-                <IonItem>
-                  <IonLabel position="floating">Nombre</IonLabel>
-                  <IonInput type="text" name="name" required></IonInput>
-                </IonItem>
-              </IonRow>
-              <IonRow>
-                <IonItem>
-                  <IonLabel position="floating">Telf</IonLabel>
-                  <IonInput type="text" name="phone" required></IonInput>
-                </IonItem>
-              </IonRow>
-              <IonRow>
-                <IonItem>
-                  <IonLabel position="floating">Direccion</IonLabel>
-                  <IonInput type="text" name="address" required></IonInput>
-                </IonItem>
-              </IonRow>
-
-              <IonRow>
-                <IonButtons>
-                  <IonButton expand="full" type="submit">
-                    Guardar
-                  </IonButton>
-                  <IonButton expand="full">Cancelar</IonButton>
-                </IonButtons>
-              </IonRow>
-            </form>
+          <IonCol size="6" style={{ width: '100%' }}>
+            La foto que esta guardada
           </IonCol>
           <IonCol size="6">
             <IonRow>
-              <h1>Datos de las Lozas</h1>
+              {selectedFloor ? (
+                <TileInfo tile={selectedFloor} />
+              ) : (
+                <IonText>
+                  <h2>No selecciono ninguna Loza</h2>
+                </IonText>
+              )}
             </IonRow>
-
-            {selectedFloor ? (
-              <TileInfo tile={selectedFloor} />
-            ) : (
-              <IonRow>
-                <h2>No selecciono ninguna Loza</h2>
-              </IonRow>
-            )}
-            {selectedBorder ? (
-              <TileInfo tile={selectedBorder} />
-            ) : (
-              <IonRow>
-                <h2>No seleccionó ningun Borde</h2>
-              </IonRow>
-            )}
+            <IonRow>
+              {selectedBorder ? (
+                <TileInfo tile={selectedBorder} />
+              ) : (
+                <IonText>
+                  <h2>No seleccionó ningun Borde</h2>
+                </IonText>
+              )}
+            </IonRow>
           </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonButtons>
+            <IonButton expand="full" type="submit">
+              Guardar
+            </IonButton>
+            <IonButton expand="full">Cancelar</IonButton>
+          </IonButtons>
         </IonRow>
       </IonGrid>
     </Fragment>
