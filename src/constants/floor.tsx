@@ -1,5 +1,3 @@
-import { IFloor } from '../context/interfaces';
-
 const DEFAULT = [450, 180, 720, 990];
 const SIMPLE = [0, 0, 0, 0];
 const ROTATED = [90, 90, 90, 90];

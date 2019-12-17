@@ -1,7 +1,6 @@
 import {
   ITileFamily,
   IBorderFamily,
-  IColor,
   ITile,
   IBorder,
   IFloor,

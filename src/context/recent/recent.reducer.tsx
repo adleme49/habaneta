@@ -17,9 +17,6 @@ const reducer = (state: IRecentState, action: RecentAction): IRecentState => {
       if (tile.type === 'Floor') {
         const floor: IFloor = tile;
 
-        const selectedGrid = floor.grids ? floor.grids[0] : undefined;
-        const selectedGridPos = 0;
-
         if (floor.grids && selectedTileIndex === state.selectedTileIndex) {
           const [newGrid, newPos] = getNextGrid(
             floor.grids,
