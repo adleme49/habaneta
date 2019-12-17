@@ -6,6 +6,10 @@
   --height: 100%;
   --width: 100%;
 }
+.enviromentModal {
+  --height: 100%;
+  --width: 100%;
+}
 .aws-btn {
   --organic-arrow-thickness: 12px;
   --organic-arrow-border-radius: 20px;

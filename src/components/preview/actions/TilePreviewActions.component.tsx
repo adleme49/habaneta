@@ -7,30 +7,30 @@ const TilePreviewActions: React.FC = () => {
   const {
     setShowEnviromentModal,
     setShowSaveModal,
-    setShowGalleryModal
+    setShowGalleryModal,
+    saveGridImg
   } = useContext(GeneralContext);
 
   const [img, setimg] = useState('');
+
   const domCapturer = () => {
     const grid = document.getElementById('test2');
-    const options = {
-      background: 'green',
-      height: 750,
-      width: 1250,
-      style: { transform: 'rotate(20deg) ' }
-    };
     console.log(grid);
     if (grid) {
-      domtoimage.toPng(grid, options).then(dataUrl => {
-        console.log(dataUrl);
+      // const options = {
+      //   width: 1250,
+      //   height: 750
+      // };
+      domtoimage.toPng(grid).then(dataUrl => {
         setimg(dataUrl);
+        saveGridImg(dataUrl);
+        setShowEnviromentModal();
       });
     }
   };
 
   const onEnviroment = () => {
     domCapturer();
-    // setShowEnviromentModal();
   };
   const onSave = () => {
     setShowSaveModal();
