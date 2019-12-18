@@ -12,7 +12,7 @@ const TileInfo: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
           {tile.type === 'Floor' ? <h1>Piso</h1> : <h1>Borde</h1>}
         </IonRow>
         <IonRow>
-          <SVGTileBase tile={tile} style={{ width: '50%' }} />
+          <SVGTileBase tile={tile} style={{ width: '100%' }} />
         </IonRow>
       </IonCol>
       <IonCol size="6">

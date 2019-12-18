@@ -4,16 +4,16 @@ import {
   IonCol,
   IonGrid,
   IonIcon,
+  IonImg,
   IonInput,
   IonItem,
   IonLabel,
   IonRow,
   IonText,
   IonTitle,
-  IonToolbar,
-  IonImg
+  IonToolbar
 } from '@ionic/react';
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import RecentContext from '../../../../context/recent/recent.context';
 import TileInfo from './TileInfo.component';
 
@@ -23,8 +23,14 @@ const SaveModalContent: React.FC<{
 }> = ({ onClose, gridImg }) => {
   const { selectedBorder, selectedFloor } = useContext(RecentContext);
 
+  const [userInfo, setUserInfo] = useState({});
+
   const handelDismiss = () => {
     onClose();
+  };
+  const handleInput = (e: any) => {
+    console.log(e.target.value);
+    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
   const onSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
@@ -48,25 +54,45 @@ const SaveModalContent: React.FC<{
             <IonCol>
               <IonItem>
                 <IonLabel position="fixed">Nombre</IonLabel>
-                <IonInput type="text" name="name" required></IonInput>
+                <IonInput
+                  type="text"
+                  name="name"
+                  required
+                  onIonChange={handleInput}
+                />
               </IonItem>
             </IonCol>
             <IonCol>
               <IonItem>
                 <IonLabel position="fixed">Telf</IonLabel>
-                <IonInput type="text" name="phone" required></IonInput>
+                <IonInput
+                  type="text"
+                  name="phone"
+                  onIonChange={handleInput}
+                  required
+                />
               </IonItem>
             </IonCol>
             <IonCol>
               <IonItem>
                 <IonLabel position="fixed">Habitacion</IonLabel>
-                <IonInput type="text" name="room" required></IonInput>
+                <IonInput
+                  type="text"
+                  name="room"
+                  required
+                  onIonChange={handleInput}
+                />
               </IonItem>
             </IonCol>
             <IonCol>
               <IonItem>
                 <IonLabel position="fixed">Metros x 2</IonLabel>
-                <IonInput type="number" name="m2" required></IonInput>
+                <IonInput
+                  type="number"
+                  name="m2"
+                  required
+                  onIonChange={handleInput}
+                />
               </IonItem>
             </IonCol>
           </IonRow>

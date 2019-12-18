@@ -1,6 +1,6 @@
+import { IonCol, IonRow } from '@ionic/react';
 import React from 'react';
 import { Dict } from '../../../../context/interfaces';
-import { IonRow, IonCol } from '@ionic/react';
 
 const TileInfoList: React.FC<{ layers: Dict<string> }> = ({ layers }) => (
   <IonRow>
@@ -28,5 +28,5 @@ const chunk = (size: number) => (arr: any[]) => {
   return R;
 };
 
-const chunkSize5 = chunk(5);
+// const chunkSize5 = chunk(5);
 const chunkSize4 = chunk(4);

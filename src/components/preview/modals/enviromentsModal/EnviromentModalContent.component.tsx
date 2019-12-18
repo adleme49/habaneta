@@ -1,7 +1,6 @@
 import {
   IonButton,
   IonButtons,
-  IonCol,
   IonGrid,
   IonIcon,
   IonImg,
@@ -26,13 +25,13 @@ const EnviromentModalContent: React.FC<{ img: string; onClose: Function }> = ({
     top: '27em',
     transform: 'perspective(1200px) rotateX(68deg)'
   };
-  const ImgStyleDouble = {
-    position: 'relative',
-    zIndex: '1',
-    left: '27em',
-    top: '27em',
-    transform: 'perspective(1200px) rotateX(68deg) rotateZ(90deg)'
-  };
+  // const ImgStyleDouble = {
+  //   position: 'relative',
+  //   zIndex: '1',
+  //   left: '27em',
+  //   top: '27em',
+  //   transform: 'perspective(1200px) rotateX(68deg) rotateZ(90deg)'
+  // };
   const banoStyle = { position: 'absolute', zIndex: '2', width: '80vw' };
   return (
     <Fragment>
