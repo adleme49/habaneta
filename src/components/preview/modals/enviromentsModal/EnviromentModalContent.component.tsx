@@ -21,13 +21,19 @@ const EnviromentModalContent: React.FC<{ img: string; onClose: Function }> = ({
 
   const imgStyle = {
     position: 'relative',
-    width: '60%',
     zIndex: '1',
-    left: '13em',
-    top: '16em',
-    transform: 'rotateX(72deg) rotateY(-1deg) rotateZ(3deg) skewX(3deg)'
+    left: '27em',
+    top: '27em',
+    transform: 'perspective(1200px) rotateX(68deg)'
   };
-  const banoStyle = { position: 'absolute', zIndex: '2' };
+  const ImgStyleDouble = {
+    position: 'relative',
+    zIndex: '1',
+    left: '27em',
+    top: '27em',
+    transform: 'perspective(1200px) rotateX(68deg) rotateZ(90deg)'
+  };
+  const banoStyle = { position: 'absolute', zIndex: '2', width: '80vw' };
   return (
     <Fragment>
       <IonToolbar color="primary">
@@ -38,22 +44,14 @@ const EnviromentModalContent: React.FC<{ img: string; onClose: Function }> = ({
           </IonButton>
         </IonButtons>
       </IonToolbar>
-      <IonGrid>
+      <IonGrid
+        fixed={true}
+        style={{ width: '100%' }}
+        className="ion-no-padding ion-no-margin"
+      >
         <IonRow>
-          <IonCol size="12">
-            {/* <div
-              style={{
-                backgroundImage: `url(${img})`,
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat'
-              }}
-            ></div> */}
-            <div style={{ position: 'relative' }}>
-              <IonImg src={bano} style={banoStyle} />
-              <IonImg src={img} style={imgStyle} />
-            </div>
-          </IonCol>
+          <IonImg src={bano} style={banoStyle} />
+          <IonImg src={img} style={imgStyle} />
         </IonRow>
       </IonGrid>
     </Fragment>
