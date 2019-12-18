@@ -2,12 +2,9 @@ import { IonCol, IonRow, IonText } from '@ionic/react';
 import React, { Fragment } from 'react';
 import { IBorder, IFloor } from '../../../../context/interfaces';
 import SVGTileBase from '../../../common/SVGBase.component';
+import TileInfoList from './TileInfoList.component';
 
 const TileInfo: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
-  let layers = [];
-  for (var layerId in tile.layers) {
-    layers.push(tile.layers[layerId]);
-  }
   return (
     <Fragment>
       <IonCol size="6">
@@ -30,23 +27,10 @@ const TileInfo: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
             <IonText color="black">Colores:</IonText>
           </h1>
         </IonRow>
-        {Object.keys(tile.layers!).map((key, index) => (
-          <IonRow key={index}>
-            <h1>
-              Capa {index + 1}: {tile.layers![key]}
-            </h1>
-          </IonRow>
-        ))}
+        {tile.layers ? <TileInfoList layers={tile.layers} /> : null}
       </IonCol>
     </Fragment>
   );
 };
 
 export default TileInfo;
-// {layers.map((layer, index) => (
-//   <IonRow key={index}>
-//     <h1>
-//       Capa {index + 1}: {layer}
-//     </h1>
-//   </IonRow>
-// ))}
