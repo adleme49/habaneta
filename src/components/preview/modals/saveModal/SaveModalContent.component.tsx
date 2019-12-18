@@ -47,63 +47,63 @@ const SaveModalContent: React.FC<{
           <IonRow>
             <IonCol>
               <IonItem>
-                <IonLabel position="floating">Nombre</IonLabel>
+                <IonLabel position="fixed">Nombre</IonLabel>
                 <IonInput type="text" name="name" required></IonInput>
               </IonItem>
             </IonCol>
             <IonCol>
               <IonItem>
-                <IonLabel position="floating">Telf</IonLabel>
+                <IonLabel position="fixed">Telf</IonLabel>
                 <IonInput type="text" name="phone" required></IonInput>
               </IonItem>
             </IonCol>
             <IonCol>
               <IonItem>
-                <IonLabel position="floating">Habitacion</IonLabel>
+                <IonLabel position="fixed">Habitacion</IonLabel>
                 <IonInput type="text" name="room" required></IonInput>
               </IonItem>
             </IonCol>
             <IonCol>
               <IonItem>
-                <IonLabel position="floating">Metros Cuadrados</IonLabel>
-                <IonInput type="text" name="m2" required></IonInput>
+                <IonLabel position="fixed">Metros x 2</IonLabel>
+                <IonInput type="number" name="m2" required></IonInput>
               </IonItem>
             </IonCol>
           </IonRow>
+          <IonRow>
+            <IonCol size="6" style={{ width: '100%' }}>
+              {gridImg ? <IonImg src={gridImg}></IonImg> : null}
+            </IonCol>
+            <IonCol size="6">
+              <IonRow>
+                {selectedFloor ? (
+                  <TileInfo tile={selectedFloor} />
+                ) : (
+                  <IonText>
+                    <h2>No selecciono ninguna Loza</h2>
+                  </IonText>
+                )}
+              </IonRow>
+              <IonRow>
+                {selectedBorder ? (
+                  <TileInfo tile={selectedBorder} />
+                ) : (
+                  <IonText>
+                    <h2>No seleccionó ningun Borde</h2>
+                  </IonText>
+                )}
+              </IonRow>
+            </IonCol>
+          </IonRow>
+          <IonRow class="ion-justify-content-center">
+            <IonButtons>
+              <IonButton expand="full" type="submit">
+                Guardar
+              </IonButton>
+              <IonButton expand="full">Cancelar</IonButton>
+            </IonButtons>
+          </IonRow>
         </form>
-        <IonRow>
-          <IonCol size="6" style={{ width: '100%' }}>
-            {gridImg ? <IonImg src={gridImg}></IonImg> : null}
-          </IonCol>
-          <IonCol size="6">
-            <IonRow>
-              {selectedFloor ? (
-                <TileInfo tile={selectedFloor} />
-              ) : (
-                <IonText>
-                  <h2>No selecciono ninguna Loza</h2>
-                </IonText>
-              )}
-            </IonRow>
-            <IonRow>
-              {selectedBorder ? (
-                <TileInfo tile={selectedBorder} />
-              ) : (
-                <IonText>
-                  <h2>No seleccionó ningun Borde</h2>
-                </IonText>
-              )}
-            </IonRow>
-          </IonCol>
-        </IonRow>
-        <IonRow>
-          <IonButtons>
-            <IonButton expand="full" type="submit">
-              Guardar
-            </IonButton>
-            <IonButton expand="full">Cancelar</IonButton>
-          </IonButtons>
-        </IonRow>
       </IonGrid>
     </Fragment>
   );
