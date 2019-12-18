@@ -10,11 +10,11 @@ import {
 } from '@ionic/react';
 import React, { Fragment } from 'react';
 import bano from '../../../../theme/bano.png';
-import { ITile, IBorder } from '../../../../context/interfaces';
+import { IBorder } from '../../../../context/interfaces';
 const EnviromentModalContent: React.FC<{
   onClose: Function;
   img: string;
-  border?: ITile;
+  border?: IBorder;
 }> = ({ img, onClose, border }) => {
   const handelDismiss = () => {
     onClose();
@@ -52,7 +52,12 @@ const EnviromentModalContent: React.FC<{
       >
         <IonRow>
           <IonImg src={bano} style={banoStyle} />
-          <IonImg src={img} style={imgStyle} />
+          <IonImg
+            src={img}
+            style={
+              border && border.cornerInteriorUrl ? imgStyleDouble : imgStyle
+            }
+          />
         </IonRow>
       </IonGrid>
     </Fragment>
