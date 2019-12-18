@@ -10,10 +10,12 @@ import {
 } from '@ionic/react';
 import React, { Fragment } from 'react';
 import bano from '../../../../theme/bano.png';
-const EnviromentModalContent: React.FC<{ img: string; onClose: Function }> = ({
-  img,
-  onClose
-}) => {
+import { ITile, IBorder } from '../../../../context/interfaces';
+const EnviromentModalContent: React.FC<{
+  onClose: Function;
+  img: string;
+  border?: ITile;
+}> = ({ img, onClose, border }) => {
   const handelDismiss = () => {
     onClose();
   };
@@ -25,13 +27,13 @@ const EnviromentModalContent: React.FC<{ img: string; onClose: Function }> = ({
     top: '27em',
     transform: 'perspective(1200px) rotateX(68deg)'
   };
-  // const ImgStyleDouble = {
-  //   position: 'relative',
-  //   zIndex: '1',
-  //   left: '27em',
-  //   top: '27em',
-  //   transform: 'perspective(1200px) rotateX(68deg) rotateZ(90deg)'
-  // };
+  const imgStyleDouble = {
+    position: 'relative',
+    zIndex: '1',
+    left: '27em',
+    top: '27em',
+    transform: 'perspective(1200px) rotateX(68deg) rotateZ(90deg)'
+  };
   const banoStyle = { position: 'absolute', zIndex: '2', width: '80vw' };
   return (
     <Fragment>
