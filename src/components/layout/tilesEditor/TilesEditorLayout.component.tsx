@@ -10,15 +10,13 @@ const TilesEditorLayout: React.FC = () => {
       <IonRow>
         <h2>Editor</h2>
       </IonRow>
-
-      <ColorPallete />
-
-      <IonRow align-items-center>
-        <SelectedColor />
+      <IonRow className="ion-justify-content-center">
+        <ColorPallete />
       </IonRow>
-      <IonRow>
-        <TileEditor />
-      </IonRow>
+
+      <SelectedColor />
+
+      <TileEditor />
     </Fragment>
   );
 };
