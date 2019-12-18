@@ -17,4 +17,3 @@ export default TileInfoList;
 //       </h1>
 //     </IonRow>
 //   ));
-};
