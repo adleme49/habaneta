@@ -1,6 +1,6 @@
-import { IonImg, IonLabel, IonSegment, IonSegmentButton } from '@ionic/react';
+import { IonLabel, IonSegment, IonSegmentButton } from '@ionic/react';
 import domtoimage from 'dom-to-image';
-import React, { Fragment, useContext, useState } from 'react';
+import React, { Fragment, useContext } from 'react';
 import GeneralContext from '../../../context/global/general.context';
 
 const TilePreviewActions: React.FC = () => {

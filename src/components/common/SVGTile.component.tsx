@@ -13,9 +13,7 @@ const SVGTile: React.FC<{
   check?: boolean;
   onClickHandler?: (event: any) => void;
 }> = ({ tile, width, height, rotation, onClickHandler, url, check }) => {
-  const { svgHeight, setSVGHeight, svgWidth, setSVGWidth } = useContext(
-    GeneralContext
-  );
+  const { svgHeight, setSVGHeight } = useContext(GeneralContext);
   const setHeight = (height: number, width: number) => {
     if (check && !svgHeight) {
       setSVGHeight(height);
