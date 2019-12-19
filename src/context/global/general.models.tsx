@@ -11,6 +11,7 @@ import { tilesFam, borderFam, colors } from '../seed';
 export interface IGeneralState {
   loading: boolean;
   showModal: boolean;
+  showOverlay: boolean;
   error: null | any;
   tilesFamilys: ITileFamily[];
   borderFamilys: IBorderFamily[];
@@ -29,6 +30,7 @@ export interface IGeneralState {
 export interface IGlobalDispatchers {
   setCurrentFamily: (current: IFamily) => void;
   setCurrentTile: (current: IFloor | IBorder) => void;
+  toggleOverlay: () => void;
   setShowSaveModal: () => void;
   setShowGalleryModal: () => void;
   setShowEnviromentModal: () => void;
@@ -47,6 +49,7 @@ export const initialGlobalDispatchers: IGlobalDispatchers = {
   setShowSaveModal: () => {},
   setShowEnviromentModal: () => {},
   setShowGalleryModal: () => {},
+  toggleOverlay: () => {},
   closeModals: () => {},
   enableRecent: () => {},
   disableRecent: () => {},
@@ -58,6 +61,7 @@ export const initialGlobalDispatchers: IGlobalDispatchers = {
 export const initialDomivalues: IGeneralState = {
   loading: false,
   showModal: false,
+  showOverlay: false,
   colors: colors,
   tilesFamilys: tilesFam,
   borderFamilys: borderFam,

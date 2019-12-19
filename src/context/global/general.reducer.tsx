@@ -12,7 +12,8 @@ import {
   CLOSE_MODALS,
   SET_SVG_HEIGHT,
   SET_SVG_WIDTH,
-  SAVE_GRID_IMG
+  SAVE_GRID_IMG,
+  TOGGLE_OVERLAY
 } from './general.actions';
 
 const GeneralReducer = (
@@ -20,13 +21,20 @@ const GeneralReducer = (
   action: GlobalAction
 ): IGeneralState => {
   switch (action.type) {
-    case SET_CURRENT_FAMILY:
+    case TOGGLE_OVERLAY: {
+      return {
+        ...state,
+        showOverlay: !state.showOverlay
+      };
+    }
+    case SET_CURRENT_FAMILY: {
       const family = action.payload;
       return {
         ...state,
         selectedFamily: family
       };
-    case SET_CURRENT_TILE:
+    }
+    case SET_CURRENT_TILE: {
       const current = action.payload;
       return {
         ...state,
@@ -35,45 +43,53 @@ const GeneralReducer = (
           type: state.selectedFamily ? state.selectedFamily.type : undefined
         }
       };
-    case SET_CURRENT_TILE_FROM_RECENT:
+    }
+    case SET_CURRENT_TILE_FROM_RECENT: {
       const currentFRecent = action.payload;
       return {
         ...state,
         selectedTile: currentFRecent
       };
-    case SHOW_SAVE_MODAL:
+    }
+    case SHOW_SAVE_MODAL: {
       return {
         ...state,
         showSaveModal: !state.showSaveModal
       };
-    case SHOW_ENVIROMENT_MODAL:
+    }
+    case SHOW_ENVIROMENT_MODAL: {
       return {
         ...state,
         showEnviromentModal: !state.showEnviromentModal
       };
-    case SHOW_GALLERY_MODAL:
+    }
+    case SHOW_GALLERY_MODAL: {
       const showGModal = state.showGalleryModal;
       return {
         ...state,
         showGalleryModal: !showGModal
       };
-    case CLOSE_MODALS:
+    }
+    case CLOSE_MODALS: {
       return {
         ...state,
         showGalleryModal: false,
         showEnviromentModal: false,
         showSaveModal: false
       };
-    case ENABLE_RECENT:
+    }
+    case ENABLE_RECENT: {
       return {
         ...state,
         isRecent: true
       };
-    case DISABLE_RECENT:
+    }
+    case DISABLE_RECENT: {
       return {
         ...state,
         isRecent: false
       };
+    }
     case SET_SVG_HEIGHT: {
       const h = action.payload;
       if (h) {

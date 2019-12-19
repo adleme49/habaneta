@@ -5,17 +5,21 @@ import MainLayout from '../components/layout/main/MainLayaout.component';
 import NavLayaout from '../components/layout/nav/NavLayout.component';
 import Toast from '../components/layout/toast/Toast.component';
 import GeneralContext from '../context/global/general.context';
+import LoaderOverlay from '../components/common/Overlay.component';
 
 const Home: React.FC = () => {
-  const { loading } = useContext(GeneralContext);
+  const { loading, showOverlay } = useContext(GeneralContext);
   const [showToast] = useState(false);
 
   return (
     <IonPage>
-      <NavLayaout />
-      {loading ? <Loading loading={loading} /> : null}
-      {showToast ? <Toast showToast={showToast} /> : null}
-      <MainLayout />
+      <LoaderOverlay active={showOverlay}>
+        <NavLayaout />
+        {loading ? <Loading loading={loading} /> : null}
+        {showToast ? <Toast showToast={showToast} /> : null}
+
+        <MainLayout />
+      </LoaderOverlay>
     </IonPage>
   );
 };
