@@ -16,13 +16,15 @@ import {
   CloseModals,
   SetSVGHeight,
   SetSVGWidth,
-  SaveGridImg
+  SaveGridImg,
+  ToggleOverlay
 } from './general.actions';
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: IGeneralState = initialDomivalues;
   const [
     {
+      showOverlay,
       svgWidth,
       svgHeight,
       gridImg,
@@ -42,6 +44,9 @@ const GeneralState = (props: any): JSX.Element => {
     dispatch
   ] = useReducer(GeneralReducer, initialState);
 
+  const toggleOverlay = () => {
+    dispatch(new ToggleOverlay());
+  };
   const setSVGWidth = (width: number) => {
     dispatch(new SetSVGWidth(width));
   };
@@ -112,6 +117,8 @@ const GeneralState = (props: any): JSX.Element => {
         closeModals,
         enableRecent,
         disableRecent,
+        showOverlay,
+        toggleOverlay,
         showModal
       }}
     >

@@ -17,7 +17,11 @@ export const CLOSE_MODALS = '[GLOBAL] CLOSE MODALS';
 export const SET_SVG_HEIGHT = '[GLOBAL] SET SVG HEIGHT';
 export const SET_SVG_WIDTH = '[GLOBAL] SET SVG WIDTH';
 export const SAVE_GRID_IMG = '[GLOBAL] SAVE_GRID_IMG';
+export const TOGGLE_OVERLAY = '[GLOBAL] TOGGLE_OVERLAY';
 
+export class ToggleOverlay implements IAction {
+  readonly type = TOGGLE_OVERLAY;
+}
 export class SetSVGWidth implements IAction {
   readonly type = SET_SVG_WIDTH;
   constructor(public payload: number) {}
@@ -81,6 +85,7 @@ export class SaveGridImg implements IAction {
 }
 
 export type GlobalAction =
+  | ToggleOverlay
   | SetSVGHeight
   | SetSVGWidth
   | CloseModals

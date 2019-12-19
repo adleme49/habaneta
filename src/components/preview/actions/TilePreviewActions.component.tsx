@@ -8,14 +8,17 @@ const TilePreviewActions: React.FC = () => {
     setShowEnviromentModal,
     setShowSaveModal,
     setShowGalleryModal,
-    saveGridImg
+    saveGridImg,
+    toggleOverlay
   } = useContext(GeneralContext);
 
   const domCapturer = (ModaltoOpen: Function) => {
+    toggleOverlay();
     const grid = document.getElementById('grid');
     if (grid) {
       domtoimage.toPng(grid).then(dataUrl => {
         saveGridImg(dataUrl);
+        toggleOverlay();
         ModaltoOpen();
       });
     }
