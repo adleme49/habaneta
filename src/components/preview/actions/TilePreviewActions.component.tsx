@@ -1,20 +1,31 @@
+import { IonLabel, IonSegment, IonSegmentButton } from '@ionic/react';
+import domtoimage from 'dom-to-image';
 import React, { Fragment, useContext } from 'react';
-import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
 import GeneralContext from '../../../context/global/general.context';
 
 const TilePreviewActions: React.FC = () => {
-
   const {
     setShowEnviromentModal,
     setShowSaveModal,
-    setShowGalleryModal
+    setShowGalleryModal,
+    saveGridImg
   } = useContext(GeneralContext);
 
+  const domCapturer = (ModaltoOpen: Function) => {
+    const grid = document.getElementById('grid');
+    if (grid) {
+      domtoimage.toPng(grid).then(dataUrl => {
+        saveGridImg(dataUrl);
+        ModaltoOpen();
+      });
+    }
+  };
+
   const onEnviroment = () => {
-    setShowEnviromentModal();
+    domCapturer(setShowEnviromentModal);
   };
   const onSave = () => {
-    setShowSaveModal();
+    domCapturer(setShowSaveModal);
   };
   const onGallery = () => {
     setShowGalleryModal();

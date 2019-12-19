@@ -10,7 +10,9 @@ import {
   DISABLE_RECENT,
   SHOW_GALLERY_MODAL,
   CLOSE_MODALS,
-  SET_SVG_HEIGHT
+  SET_SVG_HEIGHT,
+  SET_SVG_WIDTH,
+  SAVE_GRID_IMG
 } from './general.actions';
 
 const GeneralReducer = (
@@ -81,6 +83,23 @@ const GeneralReducer = (
         };
       }
       return state;
+    }
+    case SET_SVG_WIDTH: {
+      const w = action.payload;
+      if (w) {
+        return {
+          ...state,
+          svgWidth: w
+        };
+      }
+      return state;
+    }
+    case SAVE_GRID_IMG: {
+      const img = action.payload;
+      return {
+        ...state,
+        gridImg: img
+      };
     }
     default:
       return state;

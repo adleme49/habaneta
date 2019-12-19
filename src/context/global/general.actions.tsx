@@ -15,7 +15,13 @@ export const DISABLE_RECENT = '[GLOBAL] DISABLE RECENT';
 export const SHOW_GALLERY_MODAL = '[GLOBAL] SHOW_GALLERY_MODAL';
 export const CLOSE_MODALS = '[GLOBAL] CLOSE MODALS';
 export const SET_SVG_HEIGHT = '[GLOBAL] SET SVG HEIGHT';
+export const SET_SVG_WIDTH = '[GLOBAL] SET SVG WIDTH';
+export const SAVE_GRID_IMG = '[GLOBAL] SAVE_GRID_IMG';
 
+export class SetSVGWidth implements IAction {
+  readonly type = SET_SVG_WIDTH;
+  constructor(public payload: number) {}
+}
 export class SetSVGHeight implements IAction {
   readonly type = SET_SVG_HEIGHT;
   constructor(public payload: number) {}
@@ -69,9 +75,14 @@ export class SetShowGalleryModal implements IAction {
 export class CloseModals implements IAction {
   readonly type = CLOSE_MODALS;
 }
+export class SaveGridImg implements IAction {
+  readonly type = SAVE_GRID_IMG;
+  constructor(public payload: string) {}
+}
 
 export type GlobalAction =
   | SetSVGHeight
+  | SetSVGWidth
   | CloseModals
   | SetCurrentFamily
   | SetCurrentTile
@@ -83,4 +94,5 @@ export type GlobalAction =
   | DisableRecent
   | SetShowEnviromentModal
   | SetShowGalleryModal
+  | SaveGridImg
   | SetShowSaveModal;

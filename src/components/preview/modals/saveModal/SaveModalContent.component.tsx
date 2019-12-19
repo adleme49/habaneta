@@ -4,27 +4,37 @@ import {
   IonCol,
   IonGrid,
   IonIcon,
+  IonImg,
   IonInput,
   IonItem,
   IonLabel,
   IonRow,
+  IonText,
   IonTitle,
   IonToolbar
 } from '@ionic/react';
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import RecentContext from '../../../../context/recent/recent.context';
 import TileInfo from './TileInfo.component';
 
-const SaveModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
+const SaveModalContent: React.FC<{
+  onClose: Function;
+  gridImg: string | undefined;
+}> = ({ onClose, gridImg }) => {
   const { selectedBorder, selectedFloor } = useContext(RecentContext);
+
+  const [userInfo, setUserInfo] = useState({});
 
   const handelDismiss = () => {
     onClose();
   };
+  const handleInput = (e: any) => {
+    console.log(e.target.value);
+    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
+  };
 
   const onSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(event.timeStamp);
   };
 
   return (
@@ -38,64 +48,88 @@ const SaveModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
         </IonButtons>
       </IonToolbar>
 
-      <IonGrid fixed={true}>
-        <IonRow>
-          <IonCol size="6">
-            <form onSubmit={onSubmitForm}>
+      <IonGrid fixed={true} style={{ width: '90%' }}>
+        <form onSubmit={onSubmitForm}>
+          <IonRow>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="fixed">Nombre</IonLabel>
+                <IonInput
+                  type="text"
+                  name="name"
+                  required
+                  onIonChange={handleInput}
+                />
+              </IonItem>
+            </IonCol>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="fixed">Telf</IonLabel>
+                <IonInput
+                  type="text"
+                  name="phone"
+                  onIonChange={handleInput}
+                  required
+                />
+              </IonItem>
+            </IonCol>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="fixed">Habitacion</IonLabel>
+                <IonInput
+                  type="text"
+                  name="room"
+                  required
+                  onIonChange={handleInput}
+                />
+              </IonItem>
+            </IonCol>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="fixed">Metros x 2</IonLabel>
+                <IonInput
+                  type="number"
+                  name="m2"
+                  required
+                  onIonChange={handleInput}
+                />
+              </IonItem>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol size="6" style={{ width: '100%' }}>
+              {gridImg ? <IonImg src={gridImg}></IonImg> : null}
+            </IonCol>
+            <IonCol size="6">
               <IonRow>
-                <h1>Datos del Cliente</h1>
-              </IonRow>
-
-              <IonRow>
-                <IonItem>
-                  <IonLabel position="floating">Nombre</IonLabel>
-                  <IonInput type="text" name="name" required></IonInput>
-                </IonItem>
-              </IonRow>
-              <IonRow>
-                <IonItem>
-                  <IonLabel position="floating">Telf</IonLabel>
-                  <IonInput type="text" name="phone" required></IonInput>
-                </IonItem>
+                {selectedFloor ? (
+                  <TileInfo tile={selectedFloor} />
+                ) : (
+                  <IonText>
+                    <h2>No selecciono ninguna Loza</h2>
+                  </IonText>
+                )}
               </IonRow>
               <IonRow>
-                <IonItem>
-                  <IonLabel position="floating">Direccion</IonLabel>
-                  <IonInput type="text" name="address" required></IonInput>
-                </IonItem>
+                {selectedBorder ? (
+                  <TileInfo tile={selectedBorder} />
+                ) : (
+                  <IonText>
+                    <h2>No seleccionó ningun Borde</h2>
+                  </IonText>
+                )}
               </IonRow>
-
-              <IonRow>
-                <IonButtons>
-                  <IonButton expand="full" type="submit">
-                    Guardar
-                  </IonButton>
-                  <IonButton expand="full">Cancelar</IonButton>
-                </IonButtons>
-              </IonRow>
-            </form>
-          </IonCol>
-          <IonCol size="6">
-            <IonRow>
-              <h1>Datos de las Lozas</h1>
-            </IonRow>
-
-            {selectedFloor ? (
-              <TileInfo tile={selectedFloor} />
-            ) : (
-              <IonRow>
-                <h2>No selecciono ninguna Loza</h2>
-              </IonRow>
-            )}
-            {selectedBorder ? (
-              <TileInfo tile={selectedBorder} />
-            ) : (
-              <IonRow>
-                <h2>No seleccionó ningun Borde</h2>
-              </IonRow>
-            )}
-          </IonCol>
-        </IonRow>
+            </IonCol>
+          </IonRow>
+          <IonRow class="ion-justify-content-center">
+            <IonButtons>
+              <IonButton expand="full" type="submit">
+                Guardar
+              </IonButton>
+              <IonButton expand="full">Cancelar</IonButton>
+            </IonButtons>
+          </IonRow>
+        </form>
       </IonGrid>
     </Fragment>
   );

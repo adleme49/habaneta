@@ -14,14 +14,18 @@ import {
   DisableRecent,
   SetShowGalleryModal,
   CloseModals,
-  SetSVGHeight
+  SetSVGHeight,
+  SetSVGWidth,
+  SaveGridImg
 } from './general.actions';
 
 const GeneralState = (props: any): JSX.Element => {
   const initialState: IGeneralState = initialDomivalues;
   const [
     {
+      svgWidth,
       svgHeight,
+      gridImg,
       loading,
       showEnviromentModal,
       showSaveModal,
@@ -38,6 +42,9 @@ const GeneralState = (props: any): JSX.Element => {
     dispatch
   ] = useReducer(GeneralReducer, initialState);
 
+  const setSVGWidth = (width: number) => {
+    dispatch(new SetSVGWidth(width));
+  };
   const setSVGHeight = (height: number) => {
     dispatch(new SetSVGHeight(height));
   };
@@ -72,12 +79,17 @@ const GeneralState = (props: any): JSX.Element => {
   const closeModals = () => {
     dispatch(new CloseModals());
   };
+  const saveGridImg = (img: string) => {
+    dispatch(new SaveGridImg(img));
+  };
 
   return (
     <GeneralContext.Provider
       value={{
         loading,
+        gridImg,
         svgHeight,
+        svgWidth,
         showEnviromentModal,
         showSaveModal,
         showGalleryModal,
@@ -88,6 +100,7 @@ const GeneralState = (props: any): JSX.Element => {
         selectedFamily,
         selectedTile,
         isRecent,
+        saveGridImg,
         setShowSaveModal,
         setShowEnviromentModal,
         setShowGalleryModal,
@@ -95,6 +108,7 @@ const GeneralState = (props: any): JSX.Element => {
         setCurrentTile,
         setCurrentTilefromRecent,
         setSVGHeight,
+        setSVGWidth,
         closeModals,
         enableRecent,
         disableRecent,
