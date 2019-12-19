@@ -1,37 +1,34 @@
+import { IonCol, IonRow, IonText } from '@ionic/react';
 import React, { Fragment } from 'react';
-import { IFloor, IBorder } from '../../../../context/interfaces';
-import { IonRow, IonCol } from '@ionic/react';
-import SVGTile from '../../../common/SVGTile.component';
+import { IBorder, IFloor } from '../../../../context/interfaces';
+import SVGTileBase from '../../../common/SVGBase.component';
+import TileInfoList from './TileInfoList.component';
 
 const TileInfo: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
   return (
     <Fragment>
-      <IonRow style={{ height: '100%' }}>
-        <IonCol size="6">
-          <IonRow>
-            {tile.type === 'Floor' ? <h1>Piso</h1> : <h1>Borde</h1>}
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <SVGTile tile={tile} />
-            </IonCol>
-          </IonRow>
-        </IonCol>
-        <IonCol size="6">
-          <IonRow>
-            <h1>Nombre:</h1>
-          </IonRow>
-          <IonRow>
-            <h2>{tile.name}</h2>
-          </IonRow>
-          <IonRow>
-            <h1>Colores:</h1>
-          </IonRow>
-          <IonRow>
-            <h1>Familia</h1>
-          </IonRow>
-        </IonCol>
-      </IonRow>
+      <IonCol size="6">
+        <IonRow>
+          {tile.type === 'Floor' ? <h1>Piso</h1> : <h1>Borde</h1>}
+        </IonRow>
+        <IonRow>
+          <SVGTileBase tile={tile} style={{ width: '100%' }} />
+        </IonRow>
+      </IonCol>
+      <IonCol size="6">
+        <IonRow>
+          <h1>
+            <IonText color="primary">Modelo:</IonText>
+            {tile.name}
+          </h1>
+        </IonRow>
+        <IonRow>
+          <h1>
+            <IonText color="black">Colores:</IonText>
+          </h1>
+        </IonRow>
+        {tile.layers ? <TileInfoList layers={tile.layers} /> : null}
+      </IonCol>
     </Fragment>
   );
 };

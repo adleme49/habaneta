@@ -1,0 +1,39 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
+<style type="text/css">
+	.stl58{fill:none;stroke:#000000;stroke-width:1.02;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:10;}
+</style>
+<g>
+	<rect x="0.5" y="0.5" class="colora st0" width="399" height="399"/>
+	<path d="M399,1v398H1V1H399 M400,0H0v400h400V0L400,0z"/>
+</g>
+<g id="XMLID_1_">
+	<g>
+		<polygon class="colora st1" points="379.9,292.1 379.9,362 329.9,312.1 329.9,242.1 		"/>
+		<polygon class="colora st2" points="362,380 291.9,380 241.8,330.1 311.9,330.1 		"/>
+		<path class="colora st3" d="M91.8,396.2c2.7-66.9,55-120.8,121.9-125.7l3.8-0.2v0v-52.6h52.7l0.3-4.8c5.2-66,58.6-117.5,124.9-120.6
+			l4.8-0.1V400H91.7L91.8,396.2z M379.9,362v-69.9l-50.1-50v69.9L379.9,362z M291.9,380H362l-50.1-49.9h-70.1L291.9,380z"/>
+		<path class="colora st4" d="M3.3,308c67.1-2.7,121-54.9,125.9-121.7l0.2-3.8h52.7v-52.6l4.8-0.3C253,124.4,304.7,71.1,307.7,5l0.1-4.7
+			H400v91.9l-4.8,0.1C329,95.5,275.6,147,270.4,213l-0.3,4.8h-52.7v52.6v0l-3.8,0.2c-66.9,4.9-119.2,58.7-121.9,125.7l-0.1,3.8H-0.5
+			v-92L3.3,308z"/>
+		<path class="colora st3" d="M69.6,88.2l-50-50v69.9l50,50V88.2z M87.7,70.2h70.1l-50.1-50H37.6L87.7,70.2z M182.1,182.6h-52.7l-0.2,3.8
+			c-4.9,66.8-58.8,119-125.9,121.7l-3.8,0.1V0.3h308.3L307.7,5c-3,66.1-54.8,119.4-120.8,124.7l-4.8,0.3V182.6z"/>
+		<polygon class="colora st2" points="157.7,70.2 87.7,70.2 37.6,20.3 107.7,20.3 		"/>
+		<polygon class="colora st1" points="19.6,108.2 19.6,38.3 69.6,88.2 69.6,158.2 		"/>
+	</g>
+	<g>
+		<polygon class="colora stl58" points="-0.5,308 -0.5,0.3 307.9,0.3 400,0.3 400,92.2 400,400 91.7,400 -0.5,400 		"/>
+		<polygon class="colora stl58" points="291.9,380 362,380 311.9,330.1 241.8,330.1 		"/>
+		<path class="colora stl58" d="M217.4,270.4l-3.8,0.2c-66.9,4.9-119.2,58.7-121.9,125.7l-0.1,3.8"/>
+		<line class="colora stl58" x1="217.4" y1="270.3" x2="217.4" y2="217.7"/>
+		<polygon class="colora stl58" points="379.9,292.1 379.9,362 329.9,312.1 329.9,242.1 		"/>
+		<path class="colora stl58" d="M400,92.2l-4.8,0.1C329,95.5,275.6,147,270.4,213l-0.3,4.8h-52.7"/>
+		<polygon class="colora stl58" points="19.6,108.2 19.6,38.3 69.6,88.2 69.6,158.2 		"/>
+		<path class="colora stl58" d="M-0.5,308l3.8-0.1c67.1-2.7,121-54.9,125.9-121.7l0.2-3.8"/>
+		<line class="colora stl58" x1="129.4" y1="182.6" x2="182.1" y2="182.6"/>
+		<polygon class="colora stl58" points="107.7,20.3 37.6,20.3 87.7,70.2 157.7,70.2 		"/>
+		<path class="colora stl58" d="M182.1,129.9l4.8-0.3C253,124.4,304.7,71.1,307.7,5l0.1-4.7"/>
+		<polyline class="colora stl58" points="182.1,129.9 182.1,182.6 182.1,182.6 		"/>
+	</g>
+</g>
+</svg>

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
+import GeneralContext from '../../context/global/general.context';
 import { ITile } from '../../context/interfaces';
 import { styleSVG } from '../../helpers';
-import GeneralContext from '../../context/global/general.context';
 import SVGTileBase from './SVGBase.component';
 
 const SVGTile: React.FC<{
@@ -13,9 +13,7 @@ const SVGTile: React.FC<{
   check?: boolean;
   onClickHandler?: (event: any) => void;
 }> = ({ tile, width, height, rotation, onClickHandler, url, check }) => {
-  const { svgHeight, setSVGHeight, svgWidth, setSVGWidth } = useContext(
-    GeneralContext
-  );
+  const { svgHeight, setSVGHeight } = useContext(GeneralContext);
   const setHeight = (height: number, width: number) => {
     if (check && !svgHeight) {
       setSVGHeight(height);
@@ -28,7 +26,7 @@ const SVGTile: React.FC<{
       url={url}
       style={{
         height: svgHeight,
-        width: svgWidth
+        width: 'auto'
       }}
       onClickHandler={onClickHandler}
       beforeInjection={svg => {

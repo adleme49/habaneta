@@ -13,7 +13,7 @@ const EditorActions: React.FC = () => {
   };
   return (
     <Fragment>
-      <IonSegment>
+      <IonSegment style={{ paddingTop: '3em' }}>
         <IonSegmentButton onClick={handleAddtoRecent} value="Recent">
           <IonLabel>Salvar a recientes</IonLabel>
         </IonSegmentButton>

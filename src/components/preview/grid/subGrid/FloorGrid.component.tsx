@@ -1,13 +1,20 @@
 import React, { Fragment } from 'react';
-import { IBorder } from '../../../../context/interfaces';
+import { IFloor } from '../../../../context/interfaces';
 import { IonCol, IonImg } from '@ionic/react';
 import SVGTile from '../../../common/SVGTile.component';
 import empty from '../../../../theme/empty.png';
+import {
+  getTopLeftAngle,
+  getTopRightAngle,
+  getBottomLeftAngle,
+  getBottomRightAngle
+} from '../../../../constants/floor';
 
 const FloorGrid: React.FC<{
   orientation: 'TOP' | 'BOTTOM';
-  tile: IBorder | undefined;
-}> = ({ orientation, tile }) => {
+  tile?: IFloor;
+  grid?: number[];
+}> = ({ orientation, tile, grid }) => {
   return (
     <Fragment>
       <IonCol className="ion-no-padding ion-no-margin">
@@ -15,7 +22,11 @@ const FloorGrid: React.FC<{
           <SVGTile
             check={true}
             tile={tile}
-            rotation={orientation === 'TOP' ? 450 : 720}
+            rotation={
+              orientation === 'TOP'
+                ? getTopLeftAngle(grid)
+                : getBottomLeftAngle(grid)
+            }
           />
         ) : (
           <IonImg src={empty} />
@@ -23,7 +34,14 @@ const FloorGrid: React.FC<{
       </IonCol>
       <IonCol className="ion-no-padding ion-no-margin">
         {tile ? (
-          <SVGTile tile={tile} rotation={orientation === 'TOP' ? 180 : 990} />
+          <SVGTile
+            tile={tile}
+            rotation={
+              orientation === 'TOP'
+                ? getTopRightAngle(grid)
+                : getBottomRightAngle(grid)
+            }
+          />
         ) : (
           <IonImg src={empty} />
         )}

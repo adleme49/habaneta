@@ -1,13 +1,12 @@
 import {
   ITileFamily,
   IBorderFamily,
-  IColor,
   ITile,
   IBorder,
   IFloor,
   IFamily
 } from '../interfaces';
-import { DomiColors, tilesFam, borderFam } from '../seed';
+import { tilesFam, borderFam, colors } from '../seed';
 
 export interface IGeneralState {
   loading: boolean;
@@ -15,7 +14,7 @@ export interface IGeneralState {
   error: null | any;
   tilesFamilys: ITileFamily[];
   borderFamilys: IBorderFamily[];
-  colors: IColor[];
+  colors: Array<string[]>;
   showEnviromentModal: boolean;
   showGalleryModal: boolean;
   showSaveModal: boolean;
@@ -59,7 +58,7 @@ export const initialGlobalDispatchers: IGlobalDispatchers = {
 export const initialDomivalues: IGeneralState = {
   loading: false,
   showModal: false,
-  colors: DomiColors,
+  colors: colors,
   tilesFamilys: tilesFam,
   borderFamilys: borderFam,
   showSaveModal: false,
