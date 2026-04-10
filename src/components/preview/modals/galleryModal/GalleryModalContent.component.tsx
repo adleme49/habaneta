@@ -7,12 +7,10 @@ import {
   IonToolbar
 } from '@ionic/react';
 import React, { Fragment } from 'react';
+import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
 import { galleryPictures } from '../../../../context/seed';
 import './../Modal.css';
-const AwesomeSliderStyles = require('react-awesome-slider/src/styles');
-const AwesomeSlider = require('react-awesome-slider').default;
-declare const require: any;
 
 const GalleryModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
   const handelDismiss = () => {
@@ -32,7 +30,6 @@ const GalleryModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
         </IonToolbar>
         <AwesomeSlider
           className="aws-btn"
-          cssModule={AwesomeSliderStyles}
           bullets={false}
           fillParent={true}
           transitionDelay={2}

@@ -2,7 +2,7 @@ import { IonRow } from '@ionic/react';
 import React, { Fragment, useContext } from 'react';
 import GeneralContext from '../../../context/global/general.context';
 import EditorContext from '../../../context/editor/editor.context';
-const { SwatchesPicker } = require('react-color');
+import { SwatchesPicker } from 'react-color';
 
 const ColorPallete: React.FC = () => {
   const { colors } = useContext(GeneralContext);
