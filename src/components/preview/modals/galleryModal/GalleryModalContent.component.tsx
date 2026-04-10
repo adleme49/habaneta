@@ -1,33 +1,16 @@
-import {
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonIcon,
-  IonTitle,
-  IonToolbar
-} from '@ionic/react';
-import React, { Fragment } from 'react';
+import React from 'react';
 import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
 import { galleryPictures } from '../../../../context/seed';
-import './../Modal.css';
 
 const GalleryModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
-  const handelDismiss = () => {
-    onClose();
-  };
-
   return (
-    <Fragment>
-      <IonContent>
-        <IonToolbar color="primary">
-          <IonTitle>Gallery</IonTitle>
-          <IonButtons slot="secondary">
-            <IonButton onClick={handelDismiss}>
-              <IonIcon name="close" slot="icon-only" />
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
+    <>
+      <div className="bg-blue-500 text-white px-4 py-2 flex justify-between items-center">
+        <span className="font-semibold">Gallery</span>
+        <button onClick={() => onClose()} className="text-white text-xl">×</button>
+      </div>
+      <div className="h-[calc(100%-3rem)]">
         <AwesomeSlider
           className="aws-btn"
           bullets={false}
@@ -38,8 +21,8 @@ const GalleryModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
             <div data-src={imgUrl} key={i} />
           ))}
         </AwesomeSlider>
-      </IonContent>
-    </Fragment>
+      </div>
+    </>
   );
 };
 

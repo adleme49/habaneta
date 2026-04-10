@@ -1,6 +1,5 @@
-import { IonLabel, IonSegment, IonSegmentButton } from '@ionic/react';
 import domtoimage from 'dom-to-image';
-import React, { Fragment, useContext } from 'react';
+import React, { useContext } from 'react';
 import GeneralContext from '../../../context/global/general.context';
 
 const TilePreviewActions: React.FC = () => {
@@ -35,19 +34,17 @@ const TilePreviewActions: React.FC = () => {
   };
 
   return (
-    <Fragment>
-      <IonSegment style={{ padding: '2rem 0rem' }}>
-        <IonSegmentButton onClick={onGallery}>
-          <IonLabel>Gallery</IonLabel>
-        </IonSegmentButton>
-        <IonSegmentButton onClick={onEnviroment}>
-          <IonLabel>Enviroment</IonLabel>
-        </IonSegmentButton>
-        <IonSegmentButton onClick={onSave}>
-          <IonLabel>Save</IonLabel>
-        </IonSegmentButton>
-      </IonSegment>
-    </Fragment>
+    <div className="flex gap-2 py-4">
+      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={onGallery}>
+        Gallery
+      </button>
+      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={onEnviroment}>
+        Enviroment
+      </button>
+      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={onSave}>
+        Save
+      </button>
+    </div>
   );
 };
 

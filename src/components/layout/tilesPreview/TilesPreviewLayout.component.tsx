@@ -1,28 +1,20 @@
-import React, { Fragment } from 'react';
-import { IonRow, IonCol } from '@ionic/react';
+import React from 'react';
 import TileRecent from '../../preview/recent/TileRecent.component';
 import TileGrid from '../../preview/grid/TileGrid.component';
 import TilePreviewActions from '../../preview/actions/TilePreviewActions.component';
 
 const TilesPreviewLayout: React.FC = () => {
   return (
-    <Fragment>
-      <IonRow>
-        <h2>Preview</h2>
-      </IonRow>
-
-      <IonRow align-items-center>
+    <div>
+      <h2 className="text-xl font-semibold mb-2">Preview</h2>
+      <div className="flex items-center gap-2 mb-2">
         <TileRecent />
-      </IonRow>
-      <IonRow id="grid">
-        <IonCol>
-          <TileGrid />
-        </IonCol>
-      </IonRow>
-      <IonRow>
-        <TilePreviewActions />
-      </IonRow>
-    </Fragment>
+      </div>
+      <div id="grid">
+        <TileGrid />
+      </div>
+      <TilePreviewActions />
+    </div>
   );
 };
 

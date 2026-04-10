@@ -1,6 +1,5 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { IFloor } from '../../../../context/interfaces';
-import { IonCol, IonImg } from '@ionic/react';
 import SVGTile from '../../../common/SVGTile.component';
 import empty from '../../../../theme/empty.png';
 import {
@@ -16,8 +15,8 @@ const FloorGrid: React.FC<{
   grid?: number[];
 }> = ({ orientation, tile, grid }) => {
   return (
-    <Fragment>
-      <IonCol className="ion-no-padding ion-no-margin">
+    <>
+      <div className="flex-1 p-0 m-0">
         {tile ? (
           <SVGTile
             check={true}
@@ -29,10 +28,10 @@ const FloorGrid: React.FC<{
             }
           />
         ) : (
-          <IonImg src={empty} />
+          <img src={empty} alt="" />
         )}
-      </IonCol>
-      <IonCol className="ion-no-padding ion-no-margin">
+      </div>
+      <div className="flex-1 p-0 m-0">
         {tile ? (
           <SVGTile
             tile={tile}
@@ -43,10 +42,10 @@ const FloorGrid: React.FC<{
             }
           />
         ) : (
-          <IonImg src={empty} />
+          <img src={empty} alt="" />
         )}
-      </IonCol>
-    </Fragment>
+      </div>
+    </>
   );
 };
 

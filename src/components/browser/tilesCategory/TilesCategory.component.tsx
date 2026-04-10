@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react';
-import { IonList, IonListHeader, IonLabel } from '@ionic/react';
+import React from 'react';
 import CategoryItem from './TilesCategoryItem.component';
 import { ITileFamily, IBorderFamily } from '../../../context/interfaces';
 
@@ -9,23 +8,19 @@ const Category: React.FC<{
   borderFamilys?: IBorderFamily[];
 }> = ({ title, tileFamilys, borderFamilys }) => {
   return (
-    <Fragment>
-      <IonList>
-        <IonListHeader>
-          <IonLabel>{title}</IonLabel>
-        </IonListHeader>
-        {tileFamilys
-          ? tileFamilys.map((item: ITileFamily) => (
-              <CategoryItem key={item.name} categoryItem={item} />
-            ))
-          : null}
-        {borderFamilys
-          ? borderFamilys.map((item: IBorderFamily) => (
-              <CategoryItem key={item.name} categoryItem={item} />
-            ))
-          : null}
-      </IonList>
-    </Fragment>
+    <div>
+      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide py-2">
+        {title}
+      </h3>
+      <ul className="divide-y divide-gray-200">
+        {tileFamilys?.map((item: ITileFamily) => (
+          <CategoryItem key={item.name} categoryItem={item} />
+        ))}
+        {borderFamilys?.map((item: IBorderFamily) => (
+          <CategoryItem key={item.name} categoryItem={item} />
+        ))}
+      </ul>
+    </div>
   );
 };
 

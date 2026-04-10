@@ -1,5 +1,4 @@
-import React, { Fragment, useContext } from 'react';
-import { IonList, IonContent } from '@ionic/react';
+import React, { useContext } from 'react';
 import TileItem from './TileItem.component';
 import GeneralContext from '../../../context/global/general.context';
 import { IBorder, IFloor } from '../../../context/interfaces';
@@ -7,19 +6,15 @@ import { IBorder, IFloor } from '../../../context/interfaces';
 const TilesSelector: React.FC = () => {
   const { selectedFamily } = useContext(GeneralContext);
 
-  return (
-    <Fragment>
-      {selectedFamily ? (
-        <IonContent scrollX style={{ height: '70vh', width: '100%' }}>
-          <IonList inset={true}>
-            {selectedFamily.types.map((tile: IFloor | IBorder) => (
-              <TileItem key={tile.name} tile={tile} />
-            ))}
-          </IonList>
-        </IonContent>
-      ) : null}
-    </Fragment>
-  );
+  return selectedFamily ? (
+    <div className="h-[70vh] overflow-y-auto">
+      <div className="space-y-1">
+        {selectedFamily.types.map((tile: IFloor | IBorder) => (
+          <TileItem key={tile.name} tile={tile} />
+        ))}
+      </div>
+    </div>
+  ) : null;
 };
 
 export default TilesSelector;

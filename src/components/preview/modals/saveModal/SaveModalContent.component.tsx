@@ -1,19 +1,4 @@
-import {
-  IonButton,
-  IonButtons,
-  IonCol,
-  IonGrid,
-  IonIcon,
-  IonImg,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonRow,
-  IonText,
-  IonTitle,
-  IonToolbar
-} from '@ionic/react';
-import React, { Fragment, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import RecentContext from '../../../../context/recent/recent.context';
 import TileInfo from './TileInfo.component';
 
@@ -22,14 +7,9 @@ const SaveModalContent: React.FC<{
   gridImg: string | undefined;
 }> = ({ onClose, gridImg }) => {
   const { selectedBorder, selectedFloor } = useContext(RecentContext);
-
   const [userInfo, setUserInfo] = useState({});
 
-  const handelDismiss = () => {
-    onClose();
-  };
-  const handleInput = (e: any) => {
-    console.log(e.target.value);
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
@@ -38,100 +18,60 @@ const SaveModalContent: React.FC<{
   };
 
   return (
-    <Fragment>
-      <IonToolbar color="primary">
-        <IonTitle>Save</IonTitle>
-        <IonButtons slot="secondary">
-          <IonButton onClick={handelDismiss}>
-            <IonIcon name="close" slot="icon-only" />
-          </IonButton>
-        </IonButtons>
-      </IonToolbar>
+    <>
+      <div className="bg-blue-500 text-white px-4 py-2 flex justify-between items-center">
+        <span className="font-semibold">Save</span>
+        <button onClick={() => onClose()} className="text-white text-xl">×</button>
+      </div>
 
-      <IonGrid fixed={true} style={{ width: '90%' }}>
+      <div className="w-[90%] mx-auto p-4">
         <form onSubmit={onSubmitForm}>
-          <IonRow>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="fixed">Nombre</IonLabel>
-                <IonInput
-                  type="text"
-                  name="name"
-                  required
-                  onIonChange={handleInput}
-                />
-              </IonItem>
-            </IonCol>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="fixed">Telf</IonLabel>
-                <IonInput
-                  type="text"
-                  name="phone"
-                  onIonChange={handleInput}
-                  required
-                />
-              </IonItem>
-            </IonCol>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="fixed">Habitacion</IonLabel>
-                <IonInput
-                  type="text"
-                  name="room"
-                  required
-                  onIonChange={handleInput}
-                />
-              </IonItem>
-            </IonCol>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="fixed">Metros x 2</IonLabel>
-                <IonInput
-                  type="number"
-                  name="m2"
-                  required
-                  onIonChange={handleInput}
-                />
-              </IonItem>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol size="6" style={{ width: '100%' }}>
-              {gridImg ? <IonImg src={gridImg}></IonImg> : null}
-            </IonCol>
-            <IonCol size="6">
-              <IonRow>
+          <div className="grid grid-cols-4 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Nombre</label>
+              <input type="text" name="name" required onChange={handleInput} className="border rounded px-2 py-1 w-full" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Telf</label>
+              <input type="text" name="phone" required onChange={handleInput} className="border rounded px-2 py-1 w-full" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Habitacion</label>
+              <input type="text" name="room" required onChange={handleInput} className="border rounded px-2 py-1 w-full" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Metros x 2</label>
+              <input type="number" name="m2" required onChange={handleInput} className="border rounded px-2 py-1 w-full" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              {gridImg ? <img src={gridImg} alt="grid" className="w-full" /> : null}
+            </div>
+            <div>
+              <div>
                 {selectedFloor ? (
                   <TileInfo tile={selectedFloor} />
                 ) : (
-                  <IonText>
-                    <h2>No selecciono ninguna Loza</h2>
-                  </IonText>
+                  <h2>No selecciono ninguna Loza</h2>
                 )}
-              </IonRow>
-              <IonRow>
+              </div>
+              <div>
                 {selectedBorder ? (
                   <TileInfo tile={selectedBorder} />
                 ) : (
-                  <IonText>
-                    <h2>No seleccionó ningun Borde</h2>
-                  </IonText>
+                  <h2>No seleccionó ningun Borde</h2>
                 )}
-              </IonRow>
-            </IonCol>
-          </IonRow>
-          <IonRow class="ion-justify-content-center">
-            <IonButtons>
-              <IonButton expand="full" type="submit">
-                Guardar
-              </IonButton>
-              <IonButton expand="full">Cancelar</IonButton>
-            </IonButtons>
-          </IonRow>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center gap-2">
+            <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">Guardar</button>
+            <button type="button" className="px-4 py-2 border rounded" onClick={() => onClose()}>Cancelar</button>
+          </div>
         </form>
-      </IonGrid>
-    </Fragment>
+      </div>
+    </>
   );
 };
 

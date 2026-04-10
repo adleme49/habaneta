@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { IonItem, IonImg } from '@ionic/react';
 import Default from '../../../theme/102.png';
 import { IFloor, IBorder } from '../../../context/interfaces';
 import EditorContext from '../../../context/editor/editor.context';
@@ -14,14 +13,15 @@ const TileItem: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
     disableRecent();
     setTile(tile);
   };
+
   return tile ? (
-    <IonItem onClick={handleClick}>
+    <div className="cursor-pointer hover:bg-gray-50 p-1" onClick={handleClick}>
       {tile.imgUrl ? (
         <SVGTileBase tile={tile} style={{ width: 300 }} />
       ) : (
-        <IonImg src={Default} />
+        <img src={Default} alt={tile.name} />
       )}
-    </IonItem>
+    </div>
   ) : null;
 };
 

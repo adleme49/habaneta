@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react';
-import { IonRow, IonCol, IonImg } from '@ionic/react';
+import React from 'react';
 import { IBorder } from '../../../../context/interfaces';
 import SVGTile from '../../../common/SVGTile.component';
 import empty from '../../../../theme/empty.png';
@@ -9,65 +8,58 @@ const DoubleHorizontal: React.FC<{
   tile: IBorder | undefined;
 }> = ({ tile }) => {
   return (
-    <Fragment>
-      <IonRow className="ion-no-padding ion-no-margin">
+    <>
+      <div className="flex p-0 m-0">
         {horizontal1.map((column: number) =>
           column === 8 ? (
-            <IonCol className="ion-no-padding ion-no-margin" key={column}>
+            <div className="flex-1 p-0 m-0" key={column}>
               {tile ? (
                 <SVGTile check={true} tile={tile} url={tile.cornerUrl} rotation={90} />
               ) : (
-                <IonImg src={empty} />
+                <img src={empty} alt="" />
               )}
-            </IonCol>
+            </div>
           ) : (
-            <IonCol className="ion-no-padding ion-no-margin" key={column}>
+            <div className="flex-1 p-0 m-0" key={column}>
               {tile ? (
                 <SVGTile tile={tile} rotation={0} />
               ) : (
-                <IonImg src={empty} />
+                <img src={empty} alt="" />
               )}
-            </IonCol>
+            </div>
           )
         )}
-      </IonRow>
-      <IonRow className="ion-no-padding ion-no-margin">
+      </div>
+      <div className="flex p-0 m-0">
         {horizontal1.map((column: number) =>
           column === 7 ? (
-            <IonCol className="ion-no-padding ion-no-margin" key={column}>
+            <div className="flex-1 p-0 m-0" key={column}>
               {tile ? (
-                <SVGTile
-                  tile={tile}
-                  url={tile.cornerInteriorUrl}
-                  rotation={90}
-                />
+                <SVGTile tile={tile} url={tile.cornerInteriorUrl} rotation={90} />
               ) : (
-                <IonImg src={empty} />
+                <img src={empty} alt="" />
               )}
-            </IonCol>
-          )  : column === 8 ? (
-            <IonCol className="ion-no-padding ion-no-margin" key={column}>
+            </div>
+          ) : column === 8 ? (
+            <div className="flex-1 p-0 m-0" key={column}>
               {tile ? (
-                <SVGTile
-                  tile={tile}
-                  rotation={90}
-                />
+                <SVGTile tile={tile} rotation={90} />
               ) : (
-                <IonImg src={empty} />
+                <img src={empty} alt="" />
               )}
-            </IonCol>
-          )  : (
-            <IonCol className="ion-no-padding ion-no-margin" key={column}>
+            </div>
+          ) : (
+            <div className="flex-1 p-0 m-0" key={column}>
               {tile ? (
                 <SVGTile tile={tile} rotation={180} />
               ) : (
-                <IonImg src={empty} />
+                <img src={empty} alt="" />
               )}
-            </IonCol>
+            </div>
           )
         )}
-      </IonRow>
-    </Fragment>
+      </div>
+    </>
   );
 };
 

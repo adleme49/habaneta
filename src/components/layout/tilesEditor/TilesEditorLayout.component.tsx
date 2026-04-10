@@ -1,23 +1,18 @@
-import React, { Fragment } from 'react';
-import { IonRow } from '@ionic/react';
+import React from 'react';
 import SelectedColor from '../../editor/selectedColor/SelectedColor.component';
 import ColorPallete from '../../editor/colorPallete/ColorPallete.component';
 import TileEditor from '../../editor/tileEditor/TileEditor.component';
 
 const TilesEditorLayout: React.FC = () => {
   return (
-    <Fragment>
-      <IonRow>
-        <h2>Editor</h2>
-      </IonRow>
-      <IonRow className="ion-justify-content-center">
+    <div>
+      <h2 className="text-xl font-semibold mb-2">Editor</h2>
+      <div className="flex justify-center">
         <ColorPallete />
-      </IonRow>
-
+      </div>
       <SelectedColor />
-
       <TileEditor />
-    </Fragment>
+    </div>
   );
 };
 

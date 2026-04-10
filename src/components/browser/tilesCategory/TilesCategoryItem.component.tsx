@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { IonItem, IonLabel } from '@ionic/react';
 import { IBorderFamily, ITileFamily } from '../../../context/interfaces';
 import GeneralContext from '../../../context/global/general.context';
 
@@ -13,9 +12,12 @@ const CategoryItem: React.FC<{
   };
 
   return (
-    <IonItem button onClick={handleClick}>
-      <IonLabel>{categoryItem.name}</IonLabel>
-    </IonItem>
+    <li
+      className="px-3 py-2 cursor-pointer hover:bg-gray-100 text-sm"
+      onClick={handleClick}
+    >
+      {categoryItem.name}
+    </li>
   );
 };
 

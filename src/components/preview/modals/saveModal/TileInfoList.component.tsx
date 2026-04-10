@@ -1,23 +1,20 @@
-import { IonCol, IonRow } from '@ionic/react';
 import React from 'react';
 import { Dict } from '../../../../context/interfaces';
 
 const TileInfoList: React.FC<{ layers: Dict<string> }> = ({ layers }) => (
-  <IonRow>
+  <div className="flex gap-4">
     {chunkSize4(Object.keys(layers).map(key => layers[key])).map(
       (layerChunk, iCol) => (
-        <IonCol key={iCol}>
+        <div key={iCol}>
           {layerChunk.map((color, iRow) => (
-            <IonRow key={iRow}>
-              <h1>
-                Capa {iCol * 4 + iRow + 1}: {color}
-              </h1>
-            </IonRow>
+            <p key={iRow} className="text-sm">
+              Capa {iCol * 4 + iRow + 1}: {color}
+            </p>
           ))}
-        </IonCol>
+        </div>
       )
     )}
-  </IonRow>
+  </div>
 );
 
 export default TileInfoList;
@@ -28,5 +25,4 @@ const chunk = (size: number) => (arr: any[]): Array<any[]> => {
   return R;
 };
 
-// const chunkSize5 = chunk(5);
 const chunkSize4 = chunk(4);

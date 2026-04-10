@@ -1,5 +1,4 @@
-import React, { Fragment, useContext } from 'react';
-import { IonCol, IonImg, IonBadge } from '@ionic/react';
+import React, { useContext } from 'react';
 import Default from '../../../theme/102.png';
 import { ITile } from '../../../context/interfaces';
 import RecentContext from '../../../context/recent/recent.context';
@@ -19,36 +18,26 @@ const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
   };
 
   return (
-    <Fragment>
-      <IonCol>
-        {tile.layers ? (
-          <SVGTile tile={tile} onClickHandler={onSetCurrentTilefromRecent} />
-        ) : tile.imgUrl ? (
-          <IonImg
-            src={tile.imgUrl}
-            alt={tile.name}
-            onClick={onSetCurrentTilefromRecent}
-          />
-        ) : (
-          <IonImg src={Default} alt={tile.name} />
-        )}
-
-        <IonBadge
-          onClick={handleDelete}
-          style={{
-            display: 'flex',
-            position: 'absolute',
-            top: '0px',
-            right: '0px',
-            transform: 'scale(2)',
-            zIndex: 2
-          }}
-          color="danger"
-        >
-          X
-        </IonBadge>
-      </IonCol>
-    </Fragment>
+    <div className="relative w-16">
+      {tile.layers ? (
+        <SVGTile tile={tile} onClickHandler={onSetCurrentTilefromRecent} />
+      ) : tile.imgUrl ? (
+        <img
+          src={tile.imgUrl}
+          alt={tile.name}
+          onClick={onSetCurrentTilefromRecent}
+          className="cursor-pointer"
+        />
+      ) : (
+        <img src={Default} alt={tile.name} />
+      )}
+      <span
+        onClick={handleDelete}
+        className="absolute top-0 right-0 bg-red-500 text-white text-xs px-1 cursor-pointer rounded-sm"
+      >
+        X
+      </span>
+    </div>
   );
 };
 

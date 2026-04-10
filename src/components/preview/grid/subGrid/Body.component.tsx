@@ -1,5 +1,4 @@
-import { IonCol, IonImg, IonRow } from '@ionic/react';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { IBorder, IFloor } from '../../../../context/interfaces';
 import empty from '../../../../theme/empty.png';
 import SVGTile from '../../../common/SVGTile.component';
@@ -9,48 +8,48 @@ const Body: React.FC<{
   borderTile?: IBorder;
   floorTile?: IFloor;
   grid?: number[];
-}> = ({ borderTile, floorTile,grid }) => {
+}> = ({ borderTile, floorTile, grid }) => {
   return (
-    <Fragment>
-      <IonRow className="ion-no-padding ion-no-margin">
-        <IonCol className="ion-no-padding ion-no-margin">
+    <>
+      <div className="flex p-0 m-0">
+        <div className="flex-1 p-0 m-0">
           {borderTile ? (
             <SVGTile tile={borderTile} rotation={-90} />
           ) : (
-            <IonImg src={empty} />
+            <img src={empty} alt="" />
           )}
-        </IonCol>
-        <FloorGrid tile={floorTile} orientation={'TOP'} grid={grid}/>
-        <FloorGrid tile={floorTile} orientation={'TOP'} grid={grid}/>
-        <FloorGrid tile={floorTile} orientation={'TOP'} grid={grid}/>
-        <IonCol className="ion-no-padding ion-no-margin">
+        </div>
+        <FloorGrid tile={floorTile} orientation={'TOP'} grid={grid} />
+        <FloorGrid tile={floorTile} orientation={'TOP'} grid={grid} />
+        <FloorGrid tile={floorTile} orientation={'TOP'} grid={grid} />
+        <div className="flex-1 p-0 m-0">
           {borderTile ? (
             <SVGTile tile={borderTile} rotation={90} />
           ) : (
-            <IonImg src={empty} />
+            <img src={empty} alt="" />
           )}
-        </IonCol>
-      </IonRow>
-      <IonRow className="ion-no-padding ion-no-margin">
-        <IonCol className="ion-no-padding ion-no-margin">
+        </div>
+      </div>
+      <div className="flex p-0 m-0">
+        <div className="flex-1 p-0 m-0">
           {borderTile ? (
             <SVGTile tile={borderTile} rotation={-90} />
           ) : (
-            <IonImg src={empty} />
+            <img src={empty} alt="" />
           )}
-        </IonCol>
+        </div>
         <FloorGrid tile={floorTile} orientation={'BOTTOM'} grid={grid} />
         <FloorGrid tile={floorTile} orientation={'BOTTOM'} grid={grid} />
         <FloorGrid tile={floorTile} orientation={'BOTTOM'} grid={grid} />
-        <IonCol className="ion-no-padding ion-no-margin">
+        <div className="flex-1 p-0 m-0">
           {borderTile ? (
             <SVGTile tile={borderTile} rotation={90} />
           ) : (
-            <IonImg src={empty} />
+            <img src={empty} alt="" />
           )}
-        </IonCol>
-      </IonRow>
-    </Fragment>
+        </div>
+      </div>
+    </>
   );
 };
 

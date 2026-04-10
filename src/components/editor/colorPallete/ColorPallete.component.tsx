@@ -1,5 +1,4 @@
-import { IonRow } from '@ionic/react';
-import React, { Fragment, useContext } from 'react';
+import React, { useContext } from 'react';
 import GeneralContext from '../../../context/global/general.context';
 import EditorContext from '../../../context/editor/editor.context';
 import { SwatchesPicker } from 'react-color';
@@ -13,13 +12,9 @@ const ColorPallete: React.FC = () => {
   };
 
   return (
-    <Fragment>
-      <div style={{ border: 'solid 2px black', width:"450px" }}>
-        <IonRow>
-          <SwatchesPicker colors={colors} width={450} onChange={handleSetColor} />
-        </IonRow>
-      </div>
-    </Fragment>
+    <div style={{ border: 'solid 2px black', width: '450px' }}>
+      <SwatchesPicker colors={colors} width={450} onChange={handleSetColor} />
+    </div>
   );
 };
 

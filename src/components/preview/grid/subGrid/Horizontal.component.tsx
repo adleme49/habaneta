@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react';
-import { IonRow, IonCol, IonImg } from '@ionic/react';
+import React from 'react';
 import { IBorder } from '../../../../context/interfaces';
 import SVGTile from '../../../common/SVGTile.component';
 import empty from '../../../../theme/empty.png';
@@ -10,42 +9,40 @@ const Horizontal: React.FC<{
   tile: IBorder;
 }> = ({ orientation, tile }) => {
   return (
-    <Fragment>
-      <IonRow className="ion-no-padding ion-no-margin">
-        <IonCol className="ion-no-padding ion-no-margin">
+    <div className="flex p-0 m-0">
+      <div className="flex-1 p-0 m-0">
+        {tile ? (
+          <SVGTile
+            check={true}
+            tile={tile}
+            url={tile.cornerUrl}
+            rotation={orientation === 'TOP' ? -90 : 180}
+          />
+        ) : (
+          <img src={empty} alt="" />
+        )}
+      </div>
+      {vhorizontal.map((_: number) => (
+        <div className="flex-1 p-0 m-0" key={_}>
           {tile ? (
-            <SVGTile
-              check={true}
-              tile={tile}
-              url={tile.cornerUrl}
-              rotation={orientation === 'TOP' ? -90 : 180}
-            />
+            <SVGTile tile={tile} rotation={orientation === 'TOP' ? 0 : 180} />
           ) : (
-            <IonImg src={empty} />
+            <img src={empty} alt="" />
           )}
-        </IonCol>
-        {vhorizontal.map((_: number) => (
-          <IonCol className="ion-no-padding ion-no-margin" key={_}>
-            {tile ? (
-              <SVGTile tile={tile} rotation={orientation === 'TOP' ? 0 : 180} />
-            ) : (
-              <IonImg src={empty} />
-            )}
-          </IonCol>
-        ))}
-        <IonCol className="ion-no-padding ion-no-margin">
-          {tile ? (
-            <SVGTile
-              tile={tile}
-              url={tile.cornerUrl}
-              rotation={orientation === 'TOP' ? 0 : 90}
-            />
-          ) : (
-            <IonImg src={empty} />
-          )}
-        </IonCol>
-      </IonRow>
-    </Fragment>
+        </div>
+      ))}
+      <div className="flex-1 p-0 m-0">
+        {tile ? (
+          <SVGTile
+            tile={tile}
+            url={tile.cornerUrl}
+            rotation={orientation === 'TOP' ? 0 : 90}
+          />
+        ) : (
+          <img src={empty} alt="" />
+        )}
+      </div>
+    </div>
   );
 };
 

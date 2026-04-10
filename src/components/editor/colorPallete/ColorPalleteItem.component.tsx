@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { IonCol } from '@ionic/react';
 import { IColor } from '../../../context/interfaces';
 import EditorContext from '../../../context/editor/editor.context';
 
@@ -11,11 +10,11 @@ const ColorPalleteItem: React.FC<{ color: IColor }> = ({ color }) => {
   };
 
   return (
-    <IonCol
-      size="2"
-      style={{ background: color.code, height: '5rem' }}
+    <div
+      className="h-20 cursor-pointer"
+      style={{ background: color.code }}
       onClick={handleSetColor}
-    ></IonCol>
+    />
   );
 };
 
