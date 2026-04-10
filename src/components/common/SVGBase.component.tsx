@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactSVG from 'react-svg';
+import { ReactSVG } from 'react-svg';
 import { ITile } from '../../context/interfaces';
 import { getColorShapes, paintLayer } from '../../helpers';
 
@@ -9,7 +9,7 @@ const SVGTileBase: React.FC<{
   style?: React.CSSProperties;
   onClickHandler?: (event: any) => void;
   beforeInjection?: (svg: Element) => void;
-  afterInjection?: (error: Error | null, svg: Element | undefined) => void;
+  afterInjection?: (svg: SVGSVGElement) => void;
 }> = ({
   tile,
   url,

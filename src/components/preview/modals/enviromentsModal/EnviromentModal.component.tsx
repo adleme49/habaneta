@@ -18,7 +18,7 @@ export const EnviromentModal: React.FC = () => {
       <IonModal
         isOpen={showEnviromentModal}
         onDidDismiss={handelDismiss}
-        cssClass="enviromentModal"
+        className="enviromentModal"
       >
         {gridImg ? (
           <EnviromentModalContent

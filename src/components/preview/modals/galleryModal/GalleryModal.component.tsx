@@ -15,7 +15,7 @@ const GalleryModal: React.FC = () => {
       <IonModal
         isOpen={showGalleryModal}
         onDidDismiss={handelDismiss}
-        cssClass="galleryModal"
+        className="galleryModal"
       >
         <GalleryModalContent onClose={handelDismiss} />
       </IonModal>

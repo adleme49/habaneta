@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactSVG from 'react-svg';
+import { ReactSVG } from 'react-svg';
 import { ITile } from '../../../../context/interfaces';
 import { getColorShapes, paintLayer, styleSVG } from '../../../../helpers';
 
@@ -10,11 +10,7 @@ const SVGTilePaint: React.FC<{
   return tile.imgUrl ? (
     <ReactSVG
       src={tile.imgUrl}
-      afterInjection={(error, svg) => {
-        if (error) {
-          return;
-        }
-      }}
+      afterInjection={() => {}}
       beforeInjection={svg => {
         styleSVG(svg, { width: 450, height: 450 });
         const shapes = getColorShapes(svg);

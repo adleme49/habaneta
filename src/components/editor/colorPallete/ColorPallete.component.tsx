@@ -16,7 +16,7 @@ const ColorPallete: React.FC = () => {
     <Fragment>
       <div style={{ border: 'solid 2px black', width:"450px" }}>
         <IonRow>
-          <SwatchesPicker colors={colors} width="450px" onChange={handleSetColor} />
+          <SwatchesPicker colors={colors} width={450} onChange={handleSetColor} />
         </IonRow>
       </div>
     </Fragment>

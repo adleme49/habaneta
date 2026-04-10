@@ -33,7 +33,7 @@ const SVGTile: React.FC<{
         setHeight(svg.clientHeight, svg.clientWidth);
         styleSVG(svg, { width, height, rotation });
       }}
-      afterInjection={(error, svg) => {
+      afterInjection={(svg) => {
         if (svg) {
           setHeight(svg.clientHeight, svg.clientWidth);
         }

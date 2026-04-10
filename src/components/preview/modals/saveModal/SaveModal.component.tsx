@@ -19,7 +19,7 @@ const SaveModal: React.FC = () => {
           // isOpen={true}
 
           onDidDismiss={handelDismiss}
-          cssClass="saveModal"
+          className="saveModal"
         >
           <SaveModalContent onClose={handelDismiss} gridImg={gridImg} />
         </IonModal>
