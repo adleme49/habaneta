@@ -37,6 +37,20 @@ export interface TileInstance {
 }
 
 /**
+ * A named color scheme saved by a user for a specific tile. A preset
+ * is essentially a TileInstance with a display name and some metadata,
+ * persisted separately so it can be applied to future edits of the
+ * same source tile.
+ */
+export interface TilePreset {
+  id: string;                      // `${sourceId}:${timestamp}`
+  sourceId: string;                // → TileSource.id
+  name: string;                    // user-given, e.g. "Ocean blue"
+  layerOverrides: Dict<string>;
+  createdAt: string;               // ISO timestamp
+}
+
+/**
  * A TileSource merged with a TileInstance's overrides. Shape-compatible
  * with the legacy ITile / IFloor / IBorder union so existing rendering
  * components (SVGBase, SVGTile, grid sub-components) can consume it

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStore } from '../../../store/store';
 import EditorActions from '../editorActions/EditorActions.components';
+import Presets from '../presets/Presets.component';
 import SVGTilePaint from './svgTile/SVGTilePaint.component';
 
 const TileEditor: React.FC = () => {
@@ -24,6 +25,9 @@ const TileEditor: React.FC = () => {
       </div>
       <div className="flex justify-center">
         <EditorActions />
+      </div>
+      <div className="flex justify-center">
+        <Presets />
       </div>
     </>
   );

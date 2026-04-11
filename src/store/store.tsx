@@ -9,6 +9,7 @@ import React, {
 import {
   TileSource,
   TileInstance,
+  TilePreset,
   ResolvedTile,
   FamilyMeta,
   listFamilies,
@@ -17,7 +18,12 @@ import {
   paintInstanceLayer,
   resolveTile,
 } from '../lib/library';
-import { useLibraryQuery } from '../lib/queries';
+import {
+  useDeletePresetMutation,
+  useLibraryQuery,
+  usePresetsQuery,
+  useSavePresetMutation,
+} from '../lib/queries';
 import { colors as seedColors } from '../lib/colors';
 import { getNextGrid } from '../constants/floor';
 
@@ -186,6 +192,15 @@ export interface Store {
   paintLayer: (layerId: string) => void;
   commitEditingToRecent: () => void;
 
+  // Presets — named color schemes saved per TileSource
+  /** All presets (for any source) currently in storage. */
+  presets: TilePreset[];
+  /** Subset of `presets` matching the editingInstance's sourceId. */
+  presetsForEditing: TilePreset[];
+  savePreset: (name: string) => void;
+  applyPreset: (preset: TilePreset) => void;
+  deletePreset: (id: string) => void;
+
   // Recent slots + grid output
   recent: Array<TileInstance | null>;
   selectedFloor?: ResolvedTile;
@@ -242,6 +257,12 @@ const StoreProviderInner: React.FC<{
   children?: React.ReactNode;
 }> = ({ library, children }) => {
   const families = useMemo(() => listFamilies(library), [library]);
+
+  // Presets query + mutations (backed by localStorage).
+  const presetsQuery = usePresetsQuery();
+  const savePresetMutation = useSavePresetMutation();
+  const deletePresetMutation = useDeletePresetMutation();
+  const presets = presetsQuery.data ?? [];
 
   // Browsing
   const [selectedFamily, setSelectedFamily] = useState<FamilyMeta | undefined>();
@@ -316,6 +337,57 @@ const StoreProviderInner: React.FC<{
     dispatch({ type: 'DELETE', index });
   }, []);
 
+  // ----- Preset actions -----
+
+  const savePreset = useCallback(
+    (name: string) => {
+      if (!editingInstance) return;
+      const trimmed = name.trim();
+      if (!trimmed) return;
+      const preset: TilePreset = {
+        id: `${editingInstance.sourceId}:${Date.now()}`,
+        sourceId: editingInstance.sourceId,
+        name: trimmed,
+        layerOverrides: { ...editingInstance.layerOverrides },
+        createdAt: new Date().toISOString(),
+      };
+      savePresetMutation.mutate(preset);
+    },
+    [editingInstance, savePresetMutation]
+  );
+
+  const applyPreset = useCallback(
+    (preset: TilePreset) => {
+      setEditingInstance((prev) => {
+        if (!prev || prev.sourceId !== preset.sourceId) return prev;
+        const next: TileInstance = {
+          ...prev,
+          layerOverrides: { ...preset.layerOverrides },
+        };
+        if (recent.editingIndex !== undefined) {
+          dispatch({ type: 'UPDATE_EDITING', instance: next });
+        }
+        return next;
+      });
+    },
+    [recent.editingIndex]
+  );
+
+  const deletePreset = useCallback(
+    (id: string) => {
+      deletePresetMutation.mutate(id);
+    },
+    [deletePresetMutation]
+  );
+
+  const presetsForEditing = useMemo(
+    () =>
+      editingInstance
+        ? presets.filter((p) => p.sourceId === editingInstance.sourceId)
+        : [],
+    [presets, editingInstance]
+  );
+
   // ----- Derived resolved tiles -----
 
   const resolveByIndex = useCallback(
@@ -364,6 +436,12 @@ const StoreProviderInner: React.FC<{
     setSelectedColor,
     paintLayer,
     commitEditingToRecent,
+
+    presets,
+    presetsForEditing,
+    savePreset,
+    applyPreset,
+    deletePreset,
 
     recent: recent.slots,
     selectedFloor,
