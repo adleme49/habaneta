@@ -13,7 +13,6 @@
 // eventually load the catalog from JSON or a backend without rewriting
 // the rendering path.
 
-import libraryJson from '../../public/library.json';
 import { ITile, Dict } from '../context/interfaces';
 
 export type TileKind = 'floor' | 'border';
@@ -88,15 +87,21 @@ export function paintInstanceLayer(
   };
 }
 
-// ---------- Static catalog loading ----------
+// ---------- Catalog loading ----------
 
 /**
- * Load the built-in tile catalog. Today this is a synchronous import
- * of public/library.json; the next step wraps it in TanStack Query so
- * user-uploaded tiles (from IndexedDB) can be merged in at runtime.
+ * Fetch the built-in tile catalog from public/library.json.
+ *
+ * Wired into TanStack Query via `useLibraryQuery()` in src/lib/queries.ts
+ * so it gets cached, deduped, and automatically invalidated when the
+ * admin UI writes new user tiles to IndexedDB.
  */
-export function getBuiltinLibrary(): TileSource[] {
-  return libraryJson as TileSource[];
+export async function fetchBuiltinLibrary(): Promise<TileSource[]> {
+  const res = await fetch('/library.json');
+  if (!res.ok) {
+    throw new Error(`Failed to load library.json: ${res.status} ${res.statusText}`);
+  }
+  return (await res.json()) as TileSource[];
 }
 
 /** List of all family names that contain at least one tile, grouped by kind. */

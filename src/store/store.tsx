@@ -11,13 +11,13 @@ import {
   TileInstance,
   ResolvedTile,
   FamilyMeta,
-  getBuiltinLibrary,
   listFamilies,
   findSource,
   newInstance,
   paintInstanceLayer,
   resolveTile,
 } from '../lib/library';
+import { useLibraryQuery } from '../lib/queries';
 import { colors as seedColors } from '../lib/colors';
 import { getNextGrid } from '../constants/floor';
 
@@ -213,8 +213,34 @@ const StoreContext = createContext<Store | null>(null);
 export const StoreProvider: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
-  // Static library, loaded once from the built-in catalog.
-  const library = useMemo(() => getBuiltinLibrary(), []);
+  // Library loaded async via TanStack Query. The whole app is gated on
+  // a successful load — rendering a loading/error shell until the
+  // catalog is ready keeps the downstream components simple (they can
+  // assume `library` is a populated TileSource[]).
+  const libraryQuery = useLibraryQuery();
+
+  if (libraryQuery.isPending) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">
+        Loading catalog…
+      </div>
+    );
+  }
+  if (libraryQuery.isError || !libraryQuery.data) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-sm text-red-600">
+        Failed to load catalog: {String(libraryQuery.error)}
+      </div>
+    );
+  }
+
+  return <StoreProviderInner library={libraryQuery.data}>{children}</StoreProviderInner>;
+};
+
+const StoreProviderInner: React.FC<{
+  library: TileSource[];
+  children?: React.ReactNode;
+}> = ({ library, children }) => {
   const families = useMemo(() => listFamilies(library), [library]);
 
   // Browsing
