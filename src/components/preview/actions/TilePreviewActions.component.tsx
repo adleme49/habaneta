@@ -1,6 +1,7 @@
 import domtoimage from 'dom-to-image';
 import React from 'react';
 import { useStore } from '../../../store/store';
+import { Button } from '@/components/ui/button';
 
 const TilePreviewActions: React.FC = () => {
   const { openModal, setGridImg, toggleOverlay } = useStore();
@@ -19,15 +20,15 @@ const TilePreviewActions: React.FC = () => {
 
   return (
     <div className="flex gap-2 py-4">
-      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={() => openModal('gallery')}>
+      <Button variant="outline" onClick={() => openModal('gallery')}>
         Gallery
-      </button>
-      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={() => capture('enviroment')}>
+      </Button>
+      <Button variant="outline" onClick={() => capture('enviroment')}>
         Enviroment
-      </button>
-      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={() => capture('save')}>
+      </Button>
+      <Button variant="outline" onClick={() => capture('save')}>
         Save
-      </button>
+      </Button>
     </div>
   );
 };
