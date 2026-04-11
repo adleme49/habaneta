@@ -1,5 +1,6 @@
 import React, { useMemo, useRef } from 'react';
 import { useStore } from '../../../store/store';
+import { generateShades } from '../../../lib/color-math';
 
 /**
  * Compact color chooser for the tile editor. Two rows of chrome
@@ -18,6 +19,7 @@ const ColorPallete: React.FC = () => {
   const pickerRef = useRef<HTMLInputElement>(null);
 
   const flatColors = useMemo(() => colors.flat(), [colors]);
+  const shades = useMemo(() => generateShades(selectedColor, 9), [selectedColor]);
 
   const handleHexInput = (value: string) => {
     const trimmed = value.trim();
@@ -84,6 +86,41 @@ const ColorPallete: React.FC = () => {
           );
         })}
       </div>
+
+      {/* Shades ramp: 4 darker + base + 4 lighter variations of the
+          currently selected color. Hidden if selectedColor isn't a
+          parseable hex (parseable shades list would be empty). */}
+      {shades.length > 0 && (
+        <div className="pt-1">
+          <div className="text-[10px] uppercase tracking-wide text-gray-400 mb-1">
+            Shades
+          </div>
+          <div
+            className="grid gap-[2px]"
+            style={{ gridTemplateColumns: 'repeat(9, 1fr)' }}
+          >
+            {shades.map((shade, i) => {
+              const isActive =
+                shade.toLowerCase() === selectedColor.toLowerCase();
+              return (
+                <button
+                  key={`${shade}-${i}`}
+                  type="button"
+                  onClick={() => setSelectedColor(shade)}
+                  className={`aspect-square rounded-sm transition-all ${
+                    isActive
+                      ? 'ring-2 ring-offset-1 ring-blue-500 z-10'
+                      : 'hover:ring-1 hover:ring-gray-400'
+                  }`}
+                  style={{ backgroundColor: shade }}
+                  title={shade}
+                  aria-label={`Shade ${shade}`}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
