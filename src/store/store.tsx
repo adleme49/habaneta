@@ -2,180 +2,162 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useMemo,
   useReducer,
   useState,
 } from 'react';
 import {
-  IBorder,
-  IFamily,
-  IFloor,
-  ITile,
-} from '../context/interfaces';
+  TileSource,
+  TileInstance,
+  TilePreset,
+  ResolvedTile,
+  FamilyMeta,
+  listFamilies,
+  findSource,
+  newInstance,
+  paintInstanceLayer,
+  resolveTile,
+} from '../lib/library';
 import {
-  borderFam,
-  colors as seedColors,
-  tilesFam,
-  recent as seedRecent,
-} from '../context/seed';
+  useDeletePresetMutation,
+  useLibraryQuery,
+  usePresetsQuery,
+  useSavePresetMutation,
+} from '../lib/queries';
+import { colors as seedColors } from '../lib/colors';
 import { getNextGrid } from '../constants/floor';
 
-// -------------- Recent state (uses reducer for non-trivial mutations) --------------
+// -------------- Recent slots (reducer for the non-trivial juggling) --------------
+
+const RECENT_SLOT_COUNT = 7;
 
 interface RecentState {
-  recent: ITile[];
-  count: number;
-  selectedTileIndex?: number;
-  selectedFloorIndex?: number;
-  selectedBorderIndex?: number;
-  selectedFloor?: IFloor;
-  selectedBorder?: IBorder;
+  /** Fixed-length array; null means "empty slot". */
+  slots: Array<TileInstance | null>;
+  /** Which slot is currently loaded into the editor (if any). */
+  editingIndex?: number;
+  /** Which slot is currently the active floor (shown on grid). */
+  floorIndex?: number;
+  /** Which slot is currently the active border. */
+  borderIndex?: number;
+  /** Chosen rotation pattern for the active floor. */
   selectedGrid?: number[];
+  /** Index within floor.grids[] we're cycling through. */
   selectedGridPos: number;
 }
 
 type RecentAction =
-  | { type: 'ADD'; tile: ITile }
-  | { type: 'SELECT'; index: number }
+  | { type: 'ADD'; instance: TileInstance; source: TileSource }
+  | { type: 'SELECT'; index: number; source: TileSource }
   | { type: 'DESELECT' }
   | { type: 'DELETE'; index: number }
-  | { type: 'UPDATE_SELECTED'; tile: ITile };
+  | { type: 'UPDATE_EDITING'; instance: TileInstance };
 
 const initialRecent: RecentState = {
-  recent: seedRecent as ITile[],
-  count: 0,
+  slots: Array(RECENT_SLOT_COUNT).fill(null),
   selectedGridPos: 0,
 };
+
+/** Push a new instance into the slots array, filling empties first. */
+function pushInstance(
+  slots: Array<TileInstance | null>,
+  instance: TileInstance
+): { slots: Array<TileInstance | null>; index: number } {
+  const next = [...slots];
+  const emptyIdx = next.indexOf(null);
+  if (emptyIdx >= 0) {
+    next[emptyIdx] = instance;
+    return { slots: next, index: emptyIdx };
+  }
+  // No empty slots — drop the oldest (slot 0), shift left, append.
+  next.shift();
+  next.push(instance);
+  return { slots: next, index: next.length - 1 };
+}
 
 function recentReducer(state: RecentState, action: RecentAction): RecentState {
   switch (action.type) {
     case 'ADD': {
-      const tile = action.tile;
-      const empty: ITile[] = [];
-      const recents: ITile[] = [];
-      state.recent.forEach((current) => {
-        if (current.name === 'empty') empty.push(current);
-        else recents.push(current);
-      });
-      if (empty.length > 0) {
-        empty.push(tile);
-        empty.shift();
-        empty.reverse();
-      } else {
-        recents.shift();
-        recents.push(tile);
-      }
-      const recent = [...recents, ...empty];
-      const count = state.count + 1;
-      if (tile.type === 'Floor') {
-        const floor = tile as IFloor;
+      const { slots, index } = pushInstance(state.slots, action.instance);
+      if (action.source.kind === 'floor') {
+        const grids = action.source.grids;
         return {
           ...state,
-          recent,
-          count,
-          selectedGrid: floor.grids ? floor.grids[0] : undefined,
+          slots,
+          editingIndex: index,
+          floorIndex: index,
+          selectedGrid: grids ? grids[0] : undefined,
           selectedGridPos: 0,
-          selectedFloor: floor,
-          selectedFloorIndex: count - 1,
-          selectedTileIndex: count - 1,
         };
       }
       return {
         ...state,
-        recent,
-        count,
-        selectedBorder: tile as IBorder,
-        selectedBorderIndex: count - 1,
-        selectedTileIndex: count - 1,
+        slots,
+        editingIndex: index,
+        borderIndex: index,
       };
     }
+
     case 'SELECT': {
-      const tile = state.recent[action.index];
-      const selectedTileIndex = action.index;
-      if (tile.type === 'Floor') {
-        const floor = tile as IFloor;
-        if (floor.grids && selectedTileIndex === state.selectedTileIndex) {
-          const [newGrid, newPos] = getNextGrid(floor.grids, state.selectedGridPos);
-          return {
-            ...state,
-            selectedGrid: newGrid as number[],
-            selectedGridPos: newPos as number,
-            selectedTileIndex,
-            selectedFloor: floor,
-            selectedFloorIndex: action.index,
-          };
-        }
+      // Cycle through grid patterns if re-clicking the same floor slot.
+      if (
+        action.source.kind === 'floor' &&
+        action.source.grids &&
+        state.editingIndex === action.index
+      ) {
+        const [grid, pos] = getNextGrid(
+          action.source.grids,
+          state.selectedGridPos
+        );
         return {
           ...state,
-          selectedGrid: floor.grids ? floor.grids[0] : undefined,
+          editingIndex: action.index,
+          floorIndex: action.index,
+          selectedGrid: grid as number[],
+          selectedGridPos: pos as number,
+        };
+      }
+      if (action.source.kind === 'floor') {
+        return {
+          ...state,
+          editingIndex: action.index,
+          floorIndex: action.index,
+          selectedGrid: action.source.grids ? action.source.grids[0] : undefined,
           selectedGridPos: 0,
-          selectedTileIndex,
-          selectedFloor: floor,
-          selectedFloorIndex: action.index,
         };
       }
       return {
         ...state,
-        selectedTileIndex,
-        selectedBorder: tile as IBorder,
-        selectedBorderIndex: action.index,
+        editingIndex: action.index,
+        borderIndex: action.index,
       };
     }
+
     case 'DESELECT': {
-      return { ...state, selectedTileIndex: undefined };
+      return { ...state, editingIndex: undefined };
     }
-    case 'UPDATE_SELECTED': {
-      if (state.selectedTileIndex === undefined) return state;
-      const recentCopy = [...state.recent];
-      recentCopy[state.selectedTileIndex] = action.tile;
-      if (state.selectedTileIndex === state.selectedBorderIndex) {
-        return { ...state, recent: recentCopy, selectedBorder: action.tile as IBorder };
-      }
-      return { ...state, recent: recentCopy, selectedFloor: action.tile as IFloor };
+
+    case 'UPDATE_EDITING': {
+      if (state.editingIndex === undefined) return state;
+      const slots = [...state.slots];
+      slots[state.editingIndex] = action.instance;
+      return { ...state, slots };
     }
+
     case 'DELETE': {
-      const index = action.index;
-      const recent = [
-        ...state.recent.filter((_, i) => i !== index),
-        { name: 'empty' } as ITile,
-      ];
-      const count = state.count - 1;
+      const slots = [...state.slots];
+      slots[action.index] = null;
       const shift = (i?: number) =>
-        i !== undefined && i > index ? i - 1 : i;
-      const selectedTileIndex =
-        state.selectedTileIndex === index ? undefined : shift(state.selectedTileIndex);
-      const selectedFloorIndex = shift(state.selectedFloorIndex);
-      const selectedBorderIndex = shift(state.selectedBorderIndex);
-      if (index === state.selectedBorderIndex) {
-        return {
-          ...state,
-          recent,
-          count,
-          selectedTileIndex,
-          selectedBorder: undefined,
-          selectedBorderIndex: undefined,
-          selectedFloorIndex,
-        };
-      }
-      if (index === state.selectedFloorIndex) {
-        return {
-          ...state,
-          recent,
-          count,
-          selectedTileIndex,
-          selectedFloor: undefined,
-          selectedFloorIndex: undefined,
-          selectedBorderIndex,
-        };
-      }
+        i === action.index ? undefined : i;
       return {
         ...state,
-        recent,
-        count,
-        selectedTileIndex,
-        selectedFloorIndex,
-        selectedBorderIndex,
+        slots,
+        editingIndex: shift(state.editingIndex),
+        floorIndex: shift(state.floorIndex),
+        borderIndex: shift(state.borderIndex),
       };
     }
+
     default:
       return state;
   }
@@ -186,29 +168,44 @@ function recentReducer(state: RecentState, action: RecentAction): RecentState {
 type ModalName = 'gallery' | 'enviroment' | 'save' | null;
 
 export interface Store {
-  // Static seed data
-  tilesFamilys: typeof tilesFam;
-  borderFamilys: typeof borderFam;
+  // Library
+  library: TileSource[];
+  families: FamilyMeta[];
   colors: typeof seedColors;
 
-  // Browser
-  selectedFamily?: IFamily;
-  setSelectedFamily: (family: IFamily) => void;
+  // Browsing
+  selectedFamily?: FamilyMeta;
+  setSelectedFamily: (family: FamilyMeta) => void;
+  tilesForSelectedFamily: TileSource[];
 
   // Editor
-  editingTile?: ITile;
-  selectEditingTile: (tile: ITile) => void;
+  /** Instance currently loaded in the editor (from browser pick or recent slot). */
+  editingInstance?: TileInstance;
+  /** The ResolvedTile for the editor (source ⊕ overrides). */
+  editingResolved?: ResolvedTile;
+  /** Index into `recent` if the current edit came from a recent slot. */
+  editingIndex?: number;
+
+  selectEditingSource: (source: TileSource) => void;
   selectedColor: string;
   setSelectedColor: (color: string) => void;
   paintLayer: (layerId: string) => void;
+  commitEditingToRecent: () => void;
 
-  // Recent / grid output
-  recent: ITile[];
-  selectedFloor?: IFloor;
-  selectedBorder?: IBorder;
+  // Presets — named color schemes saved per TileSource
+  /** All presets (for any source) currently in storage. */
+  presets: TilePreset[];
+  /** Subset of `presets` matching the editingInstance's sourceId. */
+  presetsForEditing: TilePreset[];
+  savePreset: (name: string) => void;
+  applyPreset: (preset: TilePreset) => void;
+  deletePreset: (id: string) => void;
+
+  // Recent slots + grid output
+  recent: Array<TileInstance | null>;
+  selectedFloor?: ResolvedTile;
+  selectedBorder?: ResolvedTile;
   selectedGrid?: number[];
-  selectedTileIndex?: number;
-  addRecent: (tile: ITile) => void;
   selectRecent: (index: number) => void;
   deleteRecent: (index: number) => void;
 
@@ -223,7 +220,7 @@ export interface Store {
 
   // Shared SVG sizing
   svgHeight?: number;
-  setSvgHeight: (height: number) => void;
+  setSvgHeight: (h: number) => void;
 }
 
 const StoreContext = createContext<Store | null>(null);
@@ -231,78 +228,225 @@ const StoreContext = createContext<Store | null>(null);
 export const StoreProvider: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
-  const [selectedFamily, setSelectedFamily] = useState<IFamily | undefined>();
-  const [editingTile, setEditingTile] = useState<ITile | undefined>();
-  const [selectedColor, setSelectedColor] = useState<string>('white');
-  const [recentState, dispatch] = useReducer(recentReducer, initialRecent);
+  // Library loaded async via TanStack Query. The whole app is gated on
+  // a successful load — rendering a loading/error shell until the
+  // catalog is ready keeps the downstream components simple (they can
+  // assume `library` is a populated TileSource[]).
+  const libraryQuery = useLibraryQuery();
+
+  if (libraryQuery.isPending) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">
+        Loading catalog…
+      </div>
+    );
+  }
+  if (libraryQuery.isError || !libraryQuery.data) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-sm text-red-600">
+        Failed to load catalog: {String(libraryQuery.error)}
+      </div>
+    );
+  }
+
+  return <StoreProviderInner library={libraryQuery.data}>{children}</StoreProviderInner>;
+};
+
+const StoreProviderInner: React.FC<{
+  library: TileSource[];
+  children?: React.ReactNode;
+}> = ({ library, children }) => {
+  const families = useMemo(() => listFamilies(library), [library]);
+
+  // Presets query + mutations (backed by localStorage).
+  const presetsQuery = usePresetsQuery();
+  const savePresetMutation = useSavePresetMutation();
+  const deletePresetMutation = useDeletePresetMutation();
+  const presets = presetsQuery.data ?? [];
+
+  // Browsing
+  const [selectedFamily, setSelectedFamily] = useState<FamilyMeta | undefined>();
+  const tilesForSelectedFamily = useMemo(
+    () =>
+      selectedFamily
+        ? library.filter(
+            (t) => t.family === selectedFamily.name && t.kind === selectedFamily.kind
+          )
+        : [],
+    [library, selectedFamily]
+  );
+
+  // Editor — an instance that's not (yet) in recent.
+  const [editingInstance, setEditingInstance] = useState<TileInstance | undefined>();
+  const [selectedColor, setSelectedColor] = useState<string>('#ffffff');
+
+  // Recent slots reducer.
+  const [recent, dispatch] = useReducer(recentReducer, initialRecent);
+
+  // UI state.
   const [modal, setModal] = useState<ModalName>(null);
   const [overlay, setOverlay] = useState(false);
   const [gridImg, setGridImg] = useState<string | undefined>();
   const [svgHeight, setSvgHeight] = useState<number | undefined>();
 
-  // Pick a tile from the browser into the editor (new tile, not from recent).
-  // Clear selectedTileIndex so paintLayer doesn't write the new edits into the
-  // previously-selected recent slot.
-  const selectEditingTile = useCallback((tile: ITile) => {
-    setEditingTile({ ...tile, type: selectedFamily?.type });
+  // Pick a tile from the browser → fresh instance loaded into editor,
+  // not tied to any recent slot yet.
+  const selectEditingSource = useCallback((source: TileSource) => {
+    setEditingInstance(newInstance(source));
     dispatch({ type: 'DESELECT' });
-  }, [selectedFamily]);
+  }, []);
 
-  // Paint a layer with the selected color (updates editor + recent if applicable)
+  // Paint a single SVG layer. Updates the editor instance AND — if that
+  // instance is currently backed by a recent slot — the slot too.
   const paintLayer = useCallback(
     (layerId: string) => {
-      setEditingTile((prev) => {
+      setEditingInstance((prev) => {
         if (!prev) return prev;
-        const next: ITile = {
-          ...prev,
-          layers: { ...prev.layers, [layerId]: selectedColor },
-        };
-        if (recentState.selectedTileIndex !== undefined) {
-          dispatch({ type: 'UPDATE_SELECTED', tile: next });
+        const next = paintInstanceLayer(prev, layerId, selectedColor);
+        if (recent.editingIndex !== undefined) {
+          dispatch({ type: 'UPDATE_EDITING', instance: next });
         }
         return next;
       });
     },
-    [selectedColor, recentState.selectedTileIndex]
+    [selectedColor, recent.editingIndex]
   );
 
-  // Select a recent slot → load into editor
+  // "Salvar a recientes" — commit the current editor instance to a slot.
+  const commitEditingToRecent = useCallback(() => {
+    if (!editingInstance) return;
+    const source = findSource(library, editingInstance.sourceId);
+    if (!source) return;
+    dispatch({ type: 'ADD', instance: editingInstance, source });
+  }, [editingInstance, library]);
+
+  // Click an existing recent slot → load it into the editor.
   const selectRecent = useCallback(
     (index: number) => {
-      dispatch({ type: 'SELECT', index });
-      setEditingTile(recentState.recent[index]);
+      const instance = recent.slots[index];
+      if (!instance) return;
+      const source = findSource(library, instance.sourceId);
+      if (!source) return;
+      dispatch({ type: 'SELECT', index, source });
+      setEditingInstance(instance);
     },
-    [recentState.recent]
+    [recent.slots, library]
   );
-
-  const addRecent = useCallback((tile: ITile) => {
-    dispatch({ type: 'ADD', tile });
-  }, []);
 
   const deleteRecent = useCallback((index: number) => {
     dispatch({ type: 'DELETE', index });
   }, []);
 
+  // ----- Preset actions -----
+
+  const savePreset = useCallback(
+    (name: string) => {
+      if (!editingInstance) return;
+      const trimmed = name.trim();
+      if (!trimmed) return;
+      const preset: TilePreset = {
+        id: `${editingInstance.sourceId}:${Date.now()}`,
+        sourceId: editingInstance.sourceId,
+        name: trimmed,
+        layerOverrides: { ...editingInstance.layerOverrides },
+        createdAt: new Date().toISOString(),
+      };
+      savePresetMutation.mutate(preset);
+    },
+    [editingInstance, savePresetMutation]
+  );
+
+  const applyPreset = useCallback(
+    (preset: TilePreset) => {
+      setEditingInstance((prev) => {
+        if (!prev || prev.sourceId !== preset.sourceId) return prev;
+        const next: TileInstance = {
+          ...prev,
+          layerOverrides: { ...preset.layerOverrides },
+        };
+        if (recent.editingIndex !== undefined) {
+          dispatch({ type: 'UPDATE_EDITING', instance: next });
+        }
+        return next;
+      });
+    },
+    [recent.editingIndex]
+  );
+
+  const deletePreset = useCallback(
+    (id: string) => {
+      deletePresetMutation.mutate(id);
+    },
+    [deletePresetMutation]
+  );
+
+  const presetsForEditing = useMemo(
+    () =>
+      editingInstance
+        ? presets.filter((p) => p.sourceId === editingInstance.sourceId)
+        : [],
+    [presets, editingInstance]
+  );
+
+  // ----- Derived resolved tiles -----
+
+  const resolveByIndex = useCallback(
+    (index?: number): ResolvedTile | undefined => {
+      if (index === undefined) return undefined;
+      const instance = recent.slots[index];
+      if (!instance) return undefined;
+      const source = findSource(library, instance.sourceId);
+      if (!source) return undefined;
+      return resolveTile(source, instance);
+    },
+    [library, recent.slots]
+  );
+
+  const selectedFloor = useMemo(
+    () => resolveByIndex(recent.floorIndex),
+    [resolveByIndex, recent.floorIndex]
+  );
+
+  const selectedBorder = useMemo(
+    () => resolveByIndex(recent.borderIndex),
+    [resolveByIndex, recent.borderIndex]
+  );
+
+  const editingResolved = useMemo<ResolvedTile | undefined>(() => {
+    if (!editingInstance) return undefined;
+    const source = findSource(library, editingInstance.sourceId);
+    if (!source) return undefined;
+    return resolveTile(source, editingInstance);
+  }, [library, editingInstance]);
+
   const value: Store = {
-    tilesFamilys: tilesFam,
-    borderFamilys: borderFam,
+    library,
+    families,
     colors: seedColors,
 
     selectedFamily,
     setSelectedFamily,
+    tilesForSelectedFamily,
 
-    editingTile,
-    selectEditingTile,
+    editingInstance,
+    editingResolved,
+    editingIndex: recent.editingIndex,
+    selectEditingSource,
     selectedColor,
     setSelectedColor,
     paintLayer,
+    commitEditingToRecent,
 
-    recent: recentState.recent,
-    selectedFloor: recentState.selectedFloor,
-    selectedBorder: recentState.selectedBorder,
-    selectedGrid: recentState.selectedGrid,
-    selectedTileIndex: recentState.selectedTileIndex,
-    addRecent,
+    presets,
+    presetsForEditing,
+    savePreset,
+    applyPreset,
+    deletePreset,
+
+    recent: recent.slots,
+    selectedFloor,
+    selectedBorder,
+    selectedGrid: recent.selectedGrid,
     selectRecent,
     deleteRecent,
 

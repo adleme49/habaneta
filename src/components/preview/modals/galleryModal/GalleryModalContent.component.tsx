@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { galleryPictures } from '../../../../context/seed';
+import { galleryPictures } from '../../../../lib/gallery';
 
 const GalleryModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
   const [index, setIndex] = useState(0);

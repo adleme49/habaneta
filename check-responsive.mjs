@@ -14,7 +14,7 @@ for (const vp of viewports) {
   await page.goto('http://localhost:3000', { waitUntil: 'networkidle', timeout: 15000 });
   await page.waitForTimeout(800);
   // Simulate the full flow at this viewport
-  await page.getByText('Traditional', { exact: true }).click();
+  await page.getByText(/^Contemporary/).click();
   await page.waitForTimeout(300);
   await page.locator('.svg-wrapper').first().click();
   await page.waitForTimeout(300);

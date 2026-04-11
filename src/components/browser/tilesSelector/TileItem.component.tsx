@@ -1,24 +1,22 @@
 import React from 'react';
-import Default from '../../../theme/102.png';
-import { IFloor, IBorder } from '../../../context/interfaces';
+import { TileSource, resolveTile, newInstance } from '../../../lib/library';
 import { useStore } from '../../../store/store';
 import SVGTileBase from '../../common/SVGBase.component';
 
-const TileItem: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
-  const { selectEditingTile } = useStore();
+const TileItem: React.FC<{ source: TileSource }> = ({ source }) => {
+  const { selectEditingSource } = useStore();
 
-  return tile ? (
+  // Render the tile with its default colors as a thumbnail.
+  const resolved = resolveTile(source, newInstance(source));
+
+  return (
     <div
       className="cursor-pointer hover:bg-gray-50 p-1 rounded"
-      onClick={() => selectEditingTile(tile)}
+      onClick={() => selectEditingSource(source)}
     >
-      {tile.imgUrl ? (
-        <SVGTileBase tile={tile} style={{ width: '100%', maxWidth: 240 }} />
-      ) : (
-        <img src={Default} alt={tile.name} />
-      )}
+      <SVGTileBase tile={resolved} style={{ width: '100%', maxWidth: 240 }} />
     </div>
-  ) : null;
+  );
 };
 
 export default TileItem;

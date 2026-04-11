@@ -9,8 +9,8 @@ try {
   await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
   await page.waitForTimeout(500);
 
-  console.log('1. Click Traditional (floor category)');
-  await page.getByText('Traditional', { exact: true }).click();
+  console.log('1. Click Contemporary (floor category)');
+  await page.getByText(/^Contemporary/).click();
   await page.waitForTimeout(300);
 
   console.log('2. Click first floor tile');
@@ -23,7 +23,7 @@ try {
   await page.screenshot({ path: '/tmp/multi-1-after-floor.png', fullPage: true });
 
   console.log('4. Click Victorian (border category)');
-  await page.getByText('Victorian', { exact: true }).click();
+  await page.getByText(/^Victorian/).click();
   await page.waitForTimeout(300);
 
   console.log('5. Click first border tile');
