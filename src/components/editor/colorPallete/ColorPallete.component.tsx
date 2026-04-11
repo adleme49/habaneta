@@ -2,15 +2,16 @@ import React, { useMemo, useRef } from 'react';
 import { useStore } from '../../../store/store';
 
 /**
- * Compact color chooser for the tile editor. Three components in
- * ~120px of vertical space:
+ * Compact color chooser for the tile editor. Two rows of chrome
+ * (~130px total) that give users:
  *
- *   - Row 1: current color preview + hex input + native picker
- *   - Row 2-7: 6×6 curated preset grid
+ *   - current color preview (click → native OS picker)
+ *   - hex input (type or paste any CSS color)
+ *   - 9×4 preset grid for common choices
  *
- * The native <input type="color"> gives users full spectrum access
- * without bundling a heavy picker library. Hex input accepts any
- * valid CSS color string. Presets are one-click shortcuts.
+ * Deliberately tiny. Anything not in the presets is reachable via
+ * the input or the native picker, so there's no UX cost to keeping
+ * the visible grid small.
  */
 const ColorPallete: React.FC = () => {
   const { colors, selectedColor, setSelectedColor } = useStore();
@@ -20,8 +21,6 @@ const ColorPallete: React.FC = () => {
 
   const handleHexInput = (value: string) => {
     const trimmed = value.trim();
-    // Accept with or without leading #, any length (user is still
-    // typing). Only commit if it parses to a valid 3/6/8-digit hex.
     const normalized = trimmed.startsWith('#') ? trimmed : `#${trimmed}`;
     if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(normalized)) {
       setSelectedColor(normalized);
@@ -29,15 +28,15 @@ const ColorPallete: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-[280px] space-y-2">
-      {/* Row 1: preview + hex input + native picker */}
-      <div className="flex items-center gap-2">
+    <div className="w-full max-w-[320px] space-y-1.5">
+      {/* Preview + hex input inline */}
+      <div className="flex items-center gap-1.5">
         <button
           type="button"
           onClick={() => pickerRef.current?.click()}
-          className="w-8 h-8 rounded border border-gray-300 shadow-sm flex-shrink-0 cursor-pointer"
+          className="w-7 h-7 rounded border border-gray-300 shadow-sm flex-shrink-0 cursor-pointer"
           style={{ backgroundColor: selectedColor }}
-          title="Click to open color picker"
+          title="Open color picker"
           aria-label="Open color picker"
         />
         <input
@@ -53,17 +52,17 @@ const ColorPallete: React.FC = () => {
           type="text"
           value={selectedColor}
           onChange={(e) => handleHexInput(e.target.value)}
-          className="flex-1 min-w-0 h-8 border rounded px-2 text-xs font-mono"
+          className="flex-1 min-w-0 h-7 border rounded px-2 text-xs font-mono"
           placeholder="#rrggbb"
           spellCheck={false}
           aria-label="Hex color value"
         />
       </div>
 
-      {/* Row 2: preset grid */}
+      {/* 9×4 preset grid — compact squares */}
       <div
-        className="grid gap-1"
-        style={{ gridTemplateColumns: 'repeat(6, 1fr)' }}
+        className="grid gap-[2px]"
+        style={{ gridTemplateColumns: 'repeat(9, 1fr)' }}
       >
         {flatColors.map((color) => {
           const isActive =
@@ -73,10 +72,10 @@ const ColorPallete: React.FC = () => {
               key={color}
               type="button"
               onClick={() => setSelectedColor(color)}
-              className={`aspect-square rounded border transition-all ${
+              className={`aspect-square rounded-sm transition-all ${
                 isActive
-                  ? 'ring-2 ring-offset-1 ring-blue-500 border-transparent'
-                  : 'border-gray-200 hover:border-gray-400'
+                  ? 'ring-2 ring-offset-1 ring-blue-500 z-10'
+                  : 'hover:ring-1 hover:ring-gray-400'
               }`}
               style={{ backgroundColor: color }}
               title={color}
