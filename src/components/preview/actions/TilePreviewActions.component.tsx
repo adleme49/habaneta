@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore, DEFAULT_BODY_ROWS } from '../../../store/store';
 import { buildShareUrl } from '../../../lib/design-url';
+import {
+  exportDesignAsPng,
+  buildExportFilename,
+} from '../../../lib/design-export';
 import { DEFAULT_AMBIENT_ID } from '../../../lib/ambients';
 import { Button } from '@/components/ui/button';
 
@@ -14,6 +18,11 @@ const TilePreviewActions: React.FC = () => {
   // in a persistent input (not auto-dismissed) so the user can
   // select-all + copy from it.
   const [fallbackUrl, setFallbackUrl] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportStatus, setExportStatus] = useState<{
+    text: string;
+    kind: 'ok' | 'error';
+  } | null>(null);
 
   const captureAndOpenEnviroment = () => {
     toggleOverlay();
@@ -24,6 +33,28 @@ const TilePreviewActions: React.FC = () => {
         toggleOverlay();
         openModal('enviroment');
       });
+    }
+  };
+
+  const handleExport = async () => {
+    const grid = document.getElementById('grid');
+    if (!grid) return;
+    setIsExporting(true);
+    setExportStatus(null);
+    try {
+      await exportDesignAsPng(grid, buildExportFilename());
+      setExportStatus({ text: t('preview.exported'), kind: 'ok' });
+      window.setTimeout(() => setExportStatus(null), 3000);
+    } catch (e) {
+      setExportStatus({
+        text: t('preview.exportFailed', {
+          error: e instanceof Error ? e.message : String(e),
+        }),
+        kind: 'error',
+      });
+      window.setTimeout(() => setExportStatus(null), 5000);
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -55,6 +86,13 @@ const TilePreviewActions: React.FC = () => {
         <Button variant="outline" onClick={captureAndOpenEnviroment}>
           {t('preview.environment')}
         </Button>
+        <Button
+          variant="outline"
+          onClick={handleExport}
+          disabled={isExporting}
+        >
+          {isExporting ? t('preview.exporting') : t('preview.export')}
+        </Button>
         <Button onClick={handleShare}>{t('preview.share')}</Button>
         {shareStatus && (
           <span
@@ -62,6 +100,16 @@ const TilePreviewActions: React.FC = () => {
             aria-live="polite"
           >
             {shareStatus}
+          </span>
+        )}
+        {exportStatus && (
+          <span
+            className={`text-xs ${
+              exportStatus.kind === 'error' ? 'text-red-600' : 'text-green-700'
+            }`}
+            aria-live="polite"
+          >
+            {exportStatus.text}
           </span>
         )}
       </div>

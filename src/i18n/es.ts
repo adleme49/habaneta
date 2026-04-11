@@ -59,6 +59,10 @@ export const es: Translations = {
     shareFallback: 'Portapapeles bloqueado — copia esta URL:',
     shareRestored: 'Diseño restaurado',
     sharePartial: 'Restaurado parcialmente — faltan {{count}} loza(s)',
+    export: 'Exportar',
+    exporting: 'Exportando…',
+    exported: 'Diseño exportado',
+    exportFailed: 'Error al exportar: {{error}}',
   },
   ambient: {
     scene: 'Escena',

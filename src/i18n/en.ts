@@ -57,6 +57,10 @@ export const en = {
     shareFallback: 'Clipboard blocked — copy this URL:',
     shareRestored: 'Shared design restored',
     sharePartial: 'Restored partially — missing {{count}} tile(s)',
+    export: 'Export',
+    exporting: 'Exporting…',
+    exported: 'Design exported',
+    exportFailed: 'Export failed: {{error}}',
   },
   ambient: {
     scene: 'Scene',
