@@ -7,7 +7,7 @@ const TilesPreviewLayout: React.FC = () => {
   return (
     <div>
       <h2 className="text-xl font-semibold mb-2">Preview</h2>
-      <div className="flex items-center gap-2 mb-2">
+      <div className="mb-2">
         <TileRecent />
       </div>
       <div id="grid">

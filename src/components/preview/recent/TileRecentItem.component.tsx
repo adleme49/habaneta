@@ -2,7 +2,7 @@ import React from 'react';
 import Default from '../../../theme/102.png';
 import { ITile } from '../../../context/interfaces';
 import { useStore } from '../../../store/store';
-import SVGTile from '../../common/SVGTile.component';
+import SVGTileBase from '../../common/SVGBase.component';
 
 const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
   tile,
@@ -13,25 +13,31 @@ const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
 
   return (
     <div
-      className={`relative w-14 ${
-        isActive ? 'ring-2 ring-blue-500 rounded' : ''
+      className={`relative w-14 h-14 flex-shrink-0 overflow-hidden rounded cursor-pointer ${
+        isActive ? 'ring-2 ring-blue-500' : ''
       }`}
+      onClick={() => selectRecent(index)}
     >
       {tile.layers ? (
-        <SVGTile tile={tile} onClickHandler={() => selectRecent(index)} />
+        <SVGTileBase
+          tile={tile}
+          style={{ width: '100%', height: '100%' }}
+        />
       ) : tile.imgUrl ? (
         <img
           src={tile.imgUrl}
           alt={tile.name}
-          onClick={() => selectRecent(index)}
-          className="cursor-pointer"
+          className="w-full h-full object-cover"
         />
       ) : (
-        <img src={Default} alt={tile.name} />
+        <img src={Default} alt={tile.name} className="w-full h-full object-cover" />
       )}
       <button
-        onClick={() => deleteRecent(index)}
-        className="absolute top-0 right-0 bg-red-500 text-white text-[10px] leading-none w-4 h-4 rounded-sm cursor-pointer"
+        onClick={(e) => {
+          e.stopPropagation();
+          deleteRecent(index);
+        }}
+        className="absolute top-0 right-0 bg-red-500 text-white text-[10px] leading-none w-4 h-4 flex items-center justify-center cursor-pointer"
       >
         ×
       </button>
