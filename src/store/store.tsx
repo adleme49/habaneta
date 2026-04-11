@@ -36,6 +36,7 @@ interface RecentState {
 type RecentAction =
   | { type: 'ADD'; tile: ITile }
   | { type: 'SELECT'; index: number }
+  | { type: 'DESELECT' }
   | { type: 'DELETE'; index: number }
   | { type: 'UPDATE_SELECTED'; tile: ITile };
 
@@ -118,6 +119,9 @@ function recentReducer(state: RecentState, action: RecentAction): RecentState {
         selectedBorder: tile as IBorder,
         selectedBorderIndex: action.index,
       };
+    }
+    case 'DESELECT': {
+      return { ...state, selectedTileIndex: undefined };
     }
     case 'UPDATE_SELECTED': {
       if (state.selectedTileIndex === undefined) return state;
@@ -236,9 +240,12 @@ export const StoreProvider: React.FC<{ children?: React.ReactNode }> = ({
   const [gridImg, setGridImg] = useState<string | undefined>();
   const [svgHeight, setSvgHeight] = useState<number | undefined>();
 
-  // Pick a tile from the browser into the editor (new tile, not from recent)
+  // Pick a tile from the browser into the editor (new tile, not from recent).
+  // Clear selectedTileIndex so paintLayer doesn't write the new edits into the
+  // previously-selected recent slot.
   const selectEditingTile = useCallback((tile: ITile) => {
     setEditingTile({ ...tile, type: selectedFamily?.type });
+    dispatch({ type: 'DESELECT' });
   }, [selectedFamily]);
 
   // Paint a layer with the selected color (updates editor + recent if applicable)
