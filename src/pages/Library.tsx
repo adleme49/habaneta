@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   ColumnDef,
-  ColumnFiltersState,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -21,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import TileUploadDialog from '../components/library/TileUploadDialog.component';
 import LibraryImportExport from '../components/library/LibraryImportExport.component';
+import TileDetailDialog from '../components/library/TileDetailDialog.component';
 import {
   Table,
   TableBody,
@@ -31,29 +31,31 @@ import {
 } from '@/components/ui/table';
 
 /**
- * Tile library admin. Browsable read-only view of every TileSource in
- * the catalog. First step of the Input module — upload, edit and
- * delete land in subsequent commits, each gated on this Table view.
+ * Tile library admin. Browsable, sortable, filterable view of every
+ * TileSource in the catalog. Clicking a row opens a detail drawer
+ * (TileDetailDialog) — only the drawer's "Open in editor" button
+ * actually navigates. That keeps the Library page a useful
+ * inspection surface as well as a launchpad.
  */
 type QuickFilter = 'all' | 'floor' | 'border' | 'user';
 
 const Library: React.FC = () => {
-  const history = useHistory();
   const { data: library, isPending, isError, error } = useLibraryQuery();
   const deleteMutation = useDeleteUserTileMutation();
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [quickFilter, setQuickFilter] = useState<QuickFilter>('all');
   const [confirmingDelete, setConfirmingDelete] = useState<string | null>(null);
+  const [detailTile, setDetailTile] = useState<TileSource | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Keyboard shortcut: "/" focuses the search input (common pattern on
-  // content-heavy pages). Ignored when the user is already typing in
-  // an input or textarea.
+  // Keyboard shortcut: "/" focuses the search input. Ignored when
+  // the user is already typing in a form field, or when the detail
+  // drawer is open.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== '/') return;
+      if (detailTile !== null) return;
       const target = e.target as HTMLElement | null;
       if (
         target &&
@@ -69,11 +71,7 @@ const Library: React.FC = () => {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
-
-  const openInEditor = (sourceId: string) => {
-    history.push(`/home?tile=${encodeURIComponent(sourceId)}`);
-  };
+  }, [detailTile]);
 
   const builtinCount = library?.filter((t) => t.source === 'builtin').length ?? 0;
   const userCount = library?.filter((t) => t.source === 'user').length ?? 0;
@@ -110,16 +108,9 @@ const Library: React.FC = () => {
           </div>
         ),
         enableSorting: false,
-        enableColumnFilter: false,
       },
-      {
-        accessorKey: 'displayName',
-        header: 'Name',
-      },
-      {
-        accessorKey: 'family',
-        header: 'Family',
-      },
+      { accessorKey: 'displayName', header: 'Name' },
+      { accessorKey: 'family', header: 'Family' },
       {
         accessorKey: 'kind',
         header: 'Kind',
@@ -165,44 +156,18 @@ const Library: React.FC = () => {
         id: 'actions',
         header: '',
         enableSorting: false,
-        enableColumnFilter: false,
-        cell: ({ row }) => {
-          if (row.original.source !== 'user') return null;
-          const isConfirming = confirmingDelete === row.original.id;
-          if (isConfirming) {
-            return (
-              <div className="flex items-center gap-1">
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => {
-                    deleteMutation.mutate(row.original.id);
-                    setConfirmingDelete(null);
-                  }}
-                >
-                  Confirm
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setConfirmingDelete(null)}
-                >
-                  Cancel
-                </Button>
-              </div>
-            );
-          }
-          return (
-            <Button
-              size="sm"
-              variant="ghost"
-              className="text-red-600 hover:bg-red-50 hover:text-red-700"
-              onClick={() => setConfirmingDelete(row.original.id)}
-            >
-              Delete
-            </Button>
-          );
-        },
+        cell: ({ row }) => (
+          <ActionsCell
+            tile={row.original}
+            confirmingId={confirmingDelete}
+            onStartConfirm={setConfirmingDelete}
+            onConfirm={(id) => {
+              deleteMutation.mutate(id);
+              setConfirmingDelete(null);
+            }}
+            onCancelConfirm={() => setConfirmingDelete(null)}
+          />
+        ),
       },
     ],
     [confirmingDelete, deleteMutation]
@@ -211,15 +176,16 @@ const Library: React.FC = () => {
   const table = useReactTable({
     data: filteredData,
     columns,
-    state: { sorting, columnFilters, globalFilter },
+    state: { sorting, globalFilter },
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     globalFilterFn: 'includesString',
   });
+
+  const openDetail = (tile: TileSource) => setDetailTile(tile);
 
   return (
     <div className="min-h-screen bg-background">
@@ -364,13 +330,21 @@ const Library: React.FC = () => {
                     table.getRowModel().rows.map((row) => (
                       <TableRow
                         key={row.id}
+                        role="button"
+                        tabIndex={0}
                         className="cursor-pointer"
                         onClick={(e) => {
-                          // Don't hijack clicks on the action column
-                          // (Delete / Confirm / Cancel buttons).
+                          // Don't hijack clicks on the action
+                          // column buttons.
                           const target = e.target as HTMLElement;
                           if (target.closest('button')) return;
-                          openInEditor(row.original.id);
+                          openDetail(row.original);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            openDetail(row.original);
+                          }
                         }}
                       >
                         {row.getVisibleCells().map((cell) => (
@@ -390,6 +364,11 @@ const Library: React.FC = () => {
           </>
         )}
       </div>
+
+      <TileDetailDialog
+        tile={detailTile}
+        onClose={() => setDetailTile(null)}
+      />
     </div>
   );
 };
@@ -415,5 +394,45 @@ const FilterPill: React.FC<{
     <span className="ml-1.5 tabular-nums opacity-80">{count}</span>
   </button>
 );
+
+/**
+ * Per-row Delete action with inline Confirm/Cancel.
+ */
+const ActionsCell: React.FC<{
+  tile: TileSource;
+  confirmingId: string | null;
+  onStartConfirm: (id: string) => void;
+  onConfirm: (id: string) => void;
+  onCancelConfirm: () => void;
+}> = ({ tile, confirmingId, onStartConfirm, onConfirm, onCancelConfirm }) => {
+  if (tile.source !== 'user') return null;
+  const isConfirming = confirmingId === tile.id;
+  if (isConfirming) {
+    return (
+      <div className="flex items-center gap-1">
+        <Button
+          size="sm"
+          variant="destructive"
+          onClick={() => onConfirm(tile.id)}
+        >
+          Confirm
+        </Button>
+        <Button size="sm" variant="ghost" onClick={onCancelConfirm}>
+          Cancel
+        </Button>
+      </div>
+    );
+  }
+  return (
+    <Button
+      size="sm"
+      variant="ghost"
+      className="text-red-600 hover:bg-red-50 hover:text-red-700"
+      onClick={() => onStartConfirm(tile.id)}
+    >
+      Delete
+    </Button>
+  );
+};
 
 export default Library;

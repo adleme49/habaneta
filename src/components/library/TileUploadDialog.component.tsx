@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useForm } from '@tanstack/react-form';
 import { parseSvgFile, ParsedSvg } from '../../lib/svg-parse';
 import { TileSource, resolveTile, newInstance } from '../../lib/library';
@@ -92,28 +92,19 @@ const TileUploadDialog: React.FC = () => {
   };
 
   // Build a ResolvedTile-shaped preview out of the parsed SVG
-  const previewTile = parsed
-    ? resolveTile(
-        {
-          id: 'preview',
-          kind: form.state.values.kind,
-          family: '',
-          displayName: '',
-          svgUrl: `data:image/svg+xml;utf8,${encodeURIComponent(parsed.svgText)}`,
-          layers: parsed.layers,
-          source: 'user',
-        },
-        newInstance({
-          id: 'preview',
-          kind: 'floor',
-          family: '',
-          displayName: '',
-          svgUrl: '',
-          layers: parsed.layers,
-          source: 'user',
-        })
-      )
-    : null;
+  const previewTile = useMemo(() => {
+    if (!parsed) return null;
+    const previewSource: TileSource = {
+      id: 'preview',
+      kind: form.state.values.kind,
+      family: '',
+      displayName: '',
+      svgUrl: `data:image/svg+xml;utf8,${encodeURIComponent(parsed.svgText)}`,
+      layers: parsed.layers,
+      source: 'user',
+    };
+    return resolveTile(previewSource, newInstance(previewSource));
+  }, [parsed, form.state.values.kind]);
 
   return (
     <Dialog

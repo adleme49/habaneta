@@ -26,16 +26,26 @@ try {
   const filtered = await page.locator('tbody tr').count();
   console.log(`   filtered rows: ${filtered}`);
 
-  console.log('3. Click the first matching row (not the delete button)');
+  console.log('3. Click the first matching row → opens detail drawer');
   const firstRow = page.locator('tbody tr').first();
   const tileName = await firstRow.locator('td').nth(1).textContent();
   console.log(`   clicking "${tileName}"`);
   await firstRow.click();
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(400);
 
-  // Should have navigated to /home?tile=...
+  // Detail drawer should be open with "Open in editor"
+  const drawerOpen = await page
+    .getByRole('button', { name: 'Open in editor' })
+    .isVisible();
+  console.log(`   drawer visible with Open in editor button: ${drawerOpen}`);
+
+  console.log('4. Click "Open in editor" → navigate to /home?tile=');
+  await page.getByRole('button', { name: 'Open in editor' }).click();
+  await page.waitForURL('**/home**');
+  await page.waitForTimeout(400);
+
   const url = page.url();
-  console.log(`   URL after click: ${url}`);
+  console.log(`   URL: ${url}`);
 
   // Editor should have the tile loaded — "Salvar a recientes" button visible
   const editorLoaded = await page.getByText('Salvar a recientes').isVisible();

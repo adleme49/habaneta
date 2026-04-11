@@ -67,8 +67,12 @@ export function useSavePresetMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (preset: TilePreset) => addPreset(preset),
-    onSuccess: (next) => {
-      qc.setQueryData(queryKeys.presets, next);
+    // Invalidate rather than setQueryData so two racing mutations
+    // (e.g. rapid double-click on "Save") can't write a stale snapshot
+    // over a fresher one — the query refetches from the source of
+    // truth (localStorage) instead.
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: queryKeys.presets });
     },
   });
 }
@@ -77,8 +81,8 @@ export function useDeletePresetMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => removePreset(id),
-    onSuccess: (next) => {
-      qc.setQueryData(queryKeys.presets, next);
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: queryKeys.presets });
     },
   });
 }

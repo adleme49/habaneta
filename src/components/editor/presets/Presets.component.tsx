@@ -136,27 +136,28 @@ const PresetChip: React.FC<{
   }, [sourceLayers, preset.layerOverrides]);
 
   return (
-    <div
-      className="group flex items-center gap-2 bg-gray-100 hover:bg-gray-200 rounded-full pl-1.5 pr-2 py-1 text-sm cursor-pointer transition-colors"
-      onClick={onApply}
-      title={`Apply "${preset.name}"`}
-    >
-      <div className="flex items-center">
-        {swatches.map((color, i) => (
-          <div
-            key={i}
-            className="w-3.5 h-3.5 rounded-full border border-white -ml-1 first:ml-0"
-            style={{ backgroundColor: color }}
-          />
-        ))}
-      </div>
-      <span>{preset.name}</span>
+    <div className="group flex items-center gap-1 bg-gray-100 hover:bg-gray-200 rounded-full pl-1.5 pr-1 py-0.5 text-sm transition-colors">
       <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onDelete();
-        }}
-        className="opacity-40 hover:opacity-100 text-xs leading-none"
+        type="button"
+        onClick={onApply}
+        className="flex items-center gap-2 py-0.5 pr-1 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+        title={`Apply "${preset.name}"`}
+      >
+        <span className="flex items-center">
+          {swatches.map((color, i) => (
+            <span
+              key={i}
+              className="w-3.5 h-3.5 rounded-full border border-white -ml-1 first:ml-0 block"
+              style={{ backgroundColor: color }}
+            />
+          ))}
+        </span>
+        <span>{preset.name}</span>
+      </button>
+      <button
+        type="button"
+        onClick={onDelete}
+        className="opacity-40 hover:opacity-100 text-xs leading-none w-4 h-4 flex items-center justify-center rounded-full"
         title="Delete preset"
         aria-label={`Delete ${preset.name}`}
       >
