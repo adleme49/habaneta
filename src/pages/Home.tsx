@@ -6,21 +6,22 @@ import LoaderOverlay from '../components/common/Overlay.component';
 import { useStore } from '../store/store';
 
 const Home: React.FC = () => {
-  const { overlay, selectEditingSourceById } = useStore();
+  const { overlay, editingInstance, selectEditingSourceById } = useStore();
   const location = useLocation();
 
   // If the URL carries ?tile=<sourceId>, pre-select that tile in the
-  // editor on mount (e.g. from a click-through on the /library page).
+  // editor. Two guards prevent clobbering an in-progress edit:
+  //   - skip if the URL tile is already the one being edited (a
+  //     noop navigation shouldn't reset layerOverrides)
+  //   - effect deps intentionally only include location.search, so
+  //     subsequent editingInstance changes (user picks something
+  //     else) don't re-trigger and undo their choice
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tileId = params.get('tile');
-    if (tileId) {
-      selectEditingSourceById(tileId);
-    }
-    // We intentionally only read the query once per navigation event —
-    // re-running when selectEditingSourceById rebinds would re-select
-    // the tile every time the library array changes and discard the
-    // user's in-progress edits.
+    if (!tileId) return;
+    if (editingInstance?.sourceId === tileId) return;
+    selectEditingSourceById(tileId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
 

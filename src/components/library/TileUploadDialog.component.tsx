@@ -54,8 +54,15 @@ const TileUploadDialog: React.FC = () => {
         layers: parsed.layers,
         source: 'user',
       };
-      await saveMutation.mutateAsync(tile);
-      resetAndClose();
+      try {
+        await saveMutation.mutateAsync(tile);
+        resetAndClose();
+      } catch {
+        // Keep the dialog open — the mutation's error state is
+        // rendered in the footer below so the user can see what
+        // went wrong (usually QuotaExceededError from IndexedDB).
+        // No resetAndClose so their form input is preserved.
+      }
     },
   });
 
@@ -264,6 +271,14 @@ const TileUploadDialog: React.FC = () => {
             </div>
           </div>
 
+          {saveMutation.isError && (
+            <div className="col-span-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2">
+              Save failed: {String(saveMutation.error)}
+              {String(saveMutation.error).includes('Quota') && (
+                <> — Try exporting and deleting older uploads first.</>
+              )}
+            </div>
+          )}
           <DialogFooter className="col-span-2">
             <Button type="button" variant="outline" onClick={resetAndClose}>
               Cancel
