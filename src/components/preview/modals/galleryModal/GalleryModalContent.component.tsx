@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { galleryPictures } from '../../../../lib/gallery';
 
 const GalleryModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
+  const { t } = useTranslation();
   const [index, setIndex] = useState(0);
   const total = galleryPictures.length;
 
@@ -11,28 +13,32 @@ const GalleryModalContent: React.FC<{ onClose: Function }> = ({ onClose }) => {
   return (
     <>
       <div className="bg-blue-500 text-white px-4 py-2 flex justify-between items-center">
-        <span className="font-semibold">Gallery</span>
-        <button onClick={() => onClose()} className="text-white text-xl">
+        <span className="font-semibold">{t('gallery.title')}</span>
+        <button
+          onClick={() => onClose()}
+          className="text-white text-xl"
+          aria-label={t('common.close')}
+        >
           ×
         </button>
       </div>
       <div className="relative h-[calc(100%-3rem)] bg-black flex items-center justify-center">
         <img
           src={galleryPictures[index].imgUrl}
-          alt={`Gallery ${index + 1}`}
+          alt={`${t('gallery.title')} ${index + 1}`}
           className="max-h-full max-w-full object-contain"
         />
         <button
           onClick={prev}
           className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full w-12 h-12 flex items-center justify-center text-2xl shadow"
-          aria-label="Previous"
+          aria-label={t('gallery.previous')}
         >
           ‹
         </button>
         <button
           onClick={next}
           className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full w-12 h-12 flex items-center justify-center text-2xl shadow"
-          aria-label="Next"
+          aria-label={t('gallery.next')}
         >
           ›
         </button>

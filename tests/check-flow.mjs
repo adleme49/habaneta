@@ -24,8 +24,8 @@ try {
   await page.waitForTimeout(500);
   await page.screenshot({ path: '/tmp/flow-2.png', fullPage: true });
 
-  console.log('Step 3: Click "Salvar a recientes"');
-  await page.getByText('Salvar a recientes').click();
+  console.log('Step 3: Click "Save to recents"');
+  await page.getByText('Save to recents').click();
   await page.waitForTimeout(500);
   await page.screenshot({ path: '/tmp/flow-3.png', fullPage: true });
 

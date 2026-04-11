@@ -1,20 +1,18 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import TileRecent from '../../preview/recent/TileRecent.component';
 import TileGrid from '../../preview/grid/TileGrid.component';
 import TilePreviewActions from '../../preview/actions/TilePreviewActions.component';
 import GridSizeControl from '../../preview/controls/GridSizeControl.component';
 
-/**
- * Preview section. Sticky header (title + grid size), sticky recent
- * row below, scrollable floor grid in the middle, sticky action
- * buttons at the bottom. No internal layout component may push the
- * page to scroll — everything is bounded.
- */
 const TilesPreviewLayout: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <div className="h-full flex flex-col">
       <div className="px-4 py-3 border-b flex-shrink-0 flex items-center justify-between bg-white">
-        <h2 className="text-sm font-semibold text-gray-700">Preview</h2>
+        <h2 className="text-sm font-semibold text-gray-700">
+          {t('preview.title')}
+        </h2>
         <GridSizeControl />
       </div>
       <div className="px-4 pt-3 pb-2 border-b flex-shrink-0 bg-white">

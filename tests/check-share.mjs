@@ -24,7 +24,7 @@ try {
   await page.waitForTimeout(300);
   await page.locator('.svg-wrapper').first().click();
   await page.waitForTimeout(300);
-  await page.getByText('Salvar a recientes').click();
+  await page.getByText('Save to recents').click();
   await page.waitForTimeout(300);
 
   await page.getByText(/^Victorian/).click();
@@ -33,7 +33,7 @@ try {
   if (wrappers.length > 1) {
     await wrappers[1].click();
     await page.waitForTimeout(300);
-    await page.getByText('Salvar a recientes').click();
+    await page.getByText('Save to recents').click();
     await page.waitForTimeout(300);
   }
 

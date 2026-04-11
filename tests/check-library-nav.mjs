@@ -47,8 +47,8 @@ try {
   const url = page.url();
   console.log(`   URL: ${url}`);
 
-  // Editor should have the tile loaded — "Salvar a recientes" button visible
-  const editorLoaded = await page.getByText('Salvar a recientes').isVisible();
+  // Editor should have the tile loaded — "Save to recents" button visible
+  const editorLoaded = await page.getByText('Save to recents').isVisible();
   console.log(`   Editor ready with tile: ${editorLoaded}`);
 
   // The family in the browser panel should be highlighted

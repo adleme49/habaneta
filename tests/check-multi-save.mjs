@@ -18,7 +18,7 @@ try {
   await page.waitForTimeout(300);
 
   console.log('3. Save floor to recent');
-  await page.getByText('Salvar a recientes').click();
+  await page.getByText('Save to recents').click();
   await page.waitForTimeout(300);
   await page.screenshot({ path: '/tmp/multi-1-after-floor.png', fullPage: true });
 
@@ -33,11 +33,11 @@ try {
   await page.waitForTimeout(300);
   await page.screenshot({ path: '/tmp/multi-2-border-picked.png', fullPage: true });
 
-  const saveButtonText = await page.locator('button', { hasText: /Salvar|Already/ }).textContent();
+  const saveButtonText = await page.locator('button', { hasText: /Save to recents|Already/ }).textContent();
   console.log(`   Save button says: "${saveButtonText}"`);
 
   console.log('6. Save border to recent');
-  await page.getByText('Salvar a recientes').click();
+  await page.getByText('Save to recents').click();
   await page.waitForTimeout(300);
   await page.screenshot({ path: '/tmp/multi-3-after-border.png', fullPage: true });
 

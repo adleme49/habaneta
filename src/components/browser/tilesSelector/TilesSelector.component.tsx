@@ -1,4 +1,5 @@
 import React, { useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import TileItem from './TileItem.component';
 import { useStore } from '../../../store/store';
@@ -25,6 +26,7 @@ const OVERSCAN = 2;
  * column virtualizer.
  */
 const TilesSelector: React.FC = () => {
+  const { t } = useTranslation();
   const { selectedFamily, tilesForSelectedFamily } = useStore();
   const parentRef = useRef<HTMLDivElement>(null);
 
@@ -47,7 +49,7 @@ const TilesSelector: React.FC = () => {
   if (!selectedFamily) {
     return (
       <div className="text-xs text-gray-400 px-2 py-4">
-        Select a category →
+        {t('browser.selectCategory')}
       </div>
     );
   }

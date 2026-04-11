@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   ColumnDef,
   SortingState,
@@ -40,6 +41,7 @@ import {
 type QuickFilter = 'all' | 'floor' | 'border' | 'user';
 
 const Library: React.FC = () => {
+  const { t } = useTranslation();
   const { data: library, isPending, isError, error } = useLibraryQuery();
   const deleteMutation = useDeleteUserTileMutation();
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -109,11 +111,11 @@ const Library: React.FC = () => {
         ),
         enableSorting: false,
       },
-      { accessorKey: 'displayName', header: 'Name' },
-      { accessorKey: 'family', header: 'Family' },
+      { accessorKey: 'displayName', header: t('library.columns.name') },
+      { accessorKey: 'family', header: t('library.columns.family') },
       {
         accessorKey: 'kind',
-        header: 'Kind',
+        header: t('library.columns.kind'),
         cell: ({ row }) => (
           <span className="text-xs uppercase tracking-wide text-muted-foreground">
             {row.original.kind}
@@ -122,7 +124,7 @@ const Library: React.FC = () => {
       },
       {
         id: 'layerCount',
-        header: 'Layers',
+        header: t('library.columns.layers'),
         accessorFn: (row) => Object.keys(row.layers).length,
         cell: ({ getValue }) => (
           <span className="tabular-nums">{getValue() as number}</span>
@@ -130,7 +132,7 @@ const Library: React.FC = () => {
       },
       {
         accessorKey: 'source',
-        header: 'Source',
+        header: t('library.columns.source'),
         cell: ({ row }) => (
           <span
             className={`text-xs px-2 py-0.5 rounded ${
@@ -145,7 +147,7 @@ const Library: React.FC = () => {
       },
       {
         accessorKey: 'id',
-        header: 'ID',
+        header: t('library.columns.id'),
         cell: ({ getValue }) => (
           <code className="text-xs text-muted-foreground">
             {getValue() as string}
@@ -170,7 +172,7 @@ const Library: React.FC = () => {
         ),
       },
     ],
-    [confirmingDelete, deleteMutation]
+    [confirmingDelete, deleteMutation, t]
   );
 
   const table = useReactTable({
@@ -191,21 +193,21 @@ const Library: React.FC = () => {
     <div className="min-h-screen bg-background">
       <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h1 className="text-lg text-gray-700">Habaneta · Library</h1>
-          <Link
-            to="/home"
-            className="text-sm text-blue-600 hover:underline"
-          >
-            ← back to editor
+          <h1 className="text-lg text-gray-700">{t('library.pageTitle')}</h1>
+          <Link to="/home" className="text-sm text-blue-600 hover:underline">
+            {t('common.backToEditor')}
           </Link>
         </div>
         <div className="flex items-center gap-3">
           {library && (
             <span className="text-sm text-muted-foreground">
-              <span className="tabular-nums">{library.length}</span> tiles
+              {t('library.counter', { count: library.length })}
               {userCount > 0 && (
                 <span className="ml-2 text-xs">
-                  ({builtinCount} builtin · {userCount} yours)
+                  {t('library.counterSplit', {
+                    builtin: builtinCount,
+                    user: userCount,
+                  })}
                 </span>
               )}
             </span>
@@ -217,11 +219,13 @@ const Library: React.FC = () => {
 
       <div className="p-6">
         {isPending && (
-          <p className="text-sm text-muted-foreground">Loading catalog…</p>
+          <p className="text-sm text-muted-foreground">
+            {t('library.loading')}
+          </p>
         )}
         {isError && (
           <p className="text-sm text-red-600">
-            Failed to load catalog: {String(error)}
+            {t('library.failed', { error: String(error) })}
           </p>
         )}
         {library && (
@@ -230,25 +234,25 @@ const Library: React.FC = () => {
               <FilterPill
                 active={quickFilter === 'all'}
                 onClick={() => setQuickFilter('all')}
-                label="All"
+                label={t('library.filters.all')}
                 count={library.length}
               />
               <FilterPill
                 active={quickFilter === 'floor'}
                 onClick={() => setQuickFilter('floor')}
-                label="Floors"
+                label={t('library.filters.floors')}
                 count={floorCount}
               />
               <FilterPill
                 active={quickFilter === 'border'}
                 onClick={() => setQuickFilter('border')}
-                label="Borders"
+                label={t('library.filters.borders')}
                 count={borderCount}
               />
               <FilterPill
                 active={quickFilter === 'user'}
                 onClick={() => setQuickFilter('user')}
-                label="Mine"
+                label={t('library.filters.mine')}
                 count={userCount}
                 disabled={userCount === 0}
               />
@@ -257,7 +261,7 @@ const Library: React.FC = () => {
             <div className="flex items-center gap-2 mb-4">
               <Input
                 ref={searchInputRef}
-                placeholder="Search tiles…  (press / to focus)"
+                placeholder={t('library.searchPlaceholder')}
                 value={globalFilter}
                 onChange={(e) => setGlobalFilter(e.target.value)}
                 className="max-w-sm"
@@ -268,11 +272,11 @@ const Library: React.FC = () => {
                   size="sm"
                   onClick={() => setGlobalFilter('')}
                 >
-                  Clear
+                  {t('library.searchClear')}
                 </Button>
               )}
               <span className="text-sm text-muted-foreground ml-auto">
-                {table.getFilteredRowModel().rows.length} of {library.length}
+                {table.getFilteredRowModel().rows.length} / {library.length}
               </span>
             </div>
 
@@ -323,7 +327,7 @@ const Library: React.FC = () => {
                         colSpan={columns.length}
                         className="text-center text-sm text-muted-foreground py-8"
                       >
-                        No tiles match the search.
+                        {t('library.noMatch')}
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -405,6 +409,7 @@ const ActionsCell: React.FC<{
   onConfirm: (id: string) => void;
   onCancelConfirm: () => void;
 }> = ({ tile, confirmingId, onStartConfirm, onConfirm, onCancelConfirm }) => {
+  const { t } = useTranslation();
   if (tile.source !== 'user') return null;
   const isConfirming = confirmingId === tile.id;
   if (isConfirming) {
@@ -415,10 +420,10 @@ const ActionsCell: React.FC<{
           variant="destructive"
           onClick={() => onConfirm(tile.id)}
         >
-          Confirm
+          {t('common.confirm')}
         </Button>
         <Button size="sm" variant="ghost" onClick={onCancelConfirm}>
-          Cancel
+          {t('common.cancel')}
         </Button>
       </div>
     );
@@ -430,7 +435,7 @@ const ActionsCell: React.FC<{
       className="text-red-600 hover:bg-red-50 hover:text-red-700"
       onClick={() => onStartConfirm(tile.id)}
     >
-      Delete
+      {t('common.delete')}
     </Button>
   );
 };

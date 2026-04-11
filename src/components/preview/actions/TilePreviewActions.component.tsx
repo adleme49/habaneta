@@ -1,15 +1,15 @@
 import domtoimage from 'dom-to-image';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useStore } from '../../../store/store';
 import { buildShareUrl } from '../../../lib/design-url';
 import { Button } from '@/components/ui/button';
 
 const TilePreviewActions: React.FC = () => {
+  const { t } = useTranslation();
   const { openModal, setGridImg, toggleOverlay, getCurrentDesign } = useStore();
   const [shareStatus, setShareStatus] = useState<string | null>(null);
 
-  // Enviroment modal still renders the captured grid composited on
-  // the ambient background, so we keep the dom-to-image path for it.
   const captureAndOpenEnviroment = () => {
     toggleOverlay();
     const grid = document.getElementById('grid');
@@ -26,7 +26,7 @@ const TilePreviewActions: React.FC = () => {
     const url = buildShareUrl(getCurrentDesign());
     try {
       await navigator.clipboard.writeText(url);
-      setShareStatus('Link copied');
+      setShareStatus(t('preview.linkCopied'));
     } catch {
       // Fallback: show the URL so the user can copy it manually.
       setShareStatus(url);
@@ -37,12 +37,12 @@ const TilePreviewActions: React.FC = () => {
   return (
     <div className="flex items-center gap-2 py-2">
       <Button variant="outline" onClick={() => openModal('gallery')}>
-        Gallery
+        {t('preview.gallery')}
       </Button>
       <Button variant="outline" onClick={captureAndOpenEnviroment}>
-        Enviroment
+        {t('preview.environment')}
       </Button>
-      <Button onClick={handleShare}>Share</Button>
+      <Button onClick={handleShare}>{t('preview.share')}</Button>
       {shareStatus && (
         <span
           className="text-xs text-green-700 truncate"

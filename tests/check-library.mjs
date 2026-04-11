@@ -21,12 +21,12 @@ try {
   const rows = await page.locator('tbody tr').count();
   console.log(`   Rows in table: ${rows}`);
 
-  // The counter in the top-right should show "91 of 91" initially.
-  const counter = await page.locator('text=/of 91/').first().textContent();
+  // The counter in the top-right should show "91 / 91" initially.
+  const counter = await page.locator('text=/91 \\/ 91/').first().textContent();
   console.log(`   Counter: "${counter}"`);
 
   console.log('2. Filter by "victorian"');
-  await page.getByPlaceholder('Search tiles…').fill('victorian');
+  await page.getByPlaceholder(/Search tiles/).fill('victorian');
   await page.waitForTimeout(400);
   const filtered = await page.locator('tbody tr').count();
   console.log(`   Rows after filter: ${filtered}`);
@@ -67,7 +67,7 @@ try {
   await page.waitForTimeout(300);
 
   const editorVisible = await page
-    .getByText('Buscador de Lozas')
+    .getByText('Tile Browser')
     .isVisible();
   console.log(`   Back on editor: ${editorVisible}`);
 
