@@ -1,34 +1,47 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import TileItem from './TileItem.component';
 import { useStore } from '../../../store/store';
+import { TileSource } from '../../../lib/library';
+
+/** How many tile thumbnails per virtualized row. */
+const COLUMNS = 2;
 
 /**
- * Rough height of one tile item (including padding) — used as the
- * virtualizer's estimate. The measured size overrides this once each
- * item has rendered, so the value only affects initial scroll math.
+ * Rough height of one virtualized row. Each row fits COLUMNS items,
+ * so it's close to the thumbnail height. `measureElement` overrides
+ * this once the row has rendered for real, so the value only affects
+ * initial scroll math.
  */
-const ESTIMATED_ITEM_HEIGHT = 260;
+const ESTIMATED_ROW_HEIGHT = 140;
 
-/**
- * Approximate number of items to render outside the visible window.
- * Higher = smoother scrolling but more DOM nodes mounted; 2 is plenty
- * for a vertical list where each item is a painted SVG.
- */
 const OVERSCAN = 2;
 
+/**
+ * 2-column virtualized thumbnail grid. We group tiles into fixed-size
+ * row arrays up front so the virtualizer can treat each row as a
+ * single item — this keeps the windowing logic identical to a plain
+ * vertical list without pulling in @tanstack/react-virtual's separate
+ * column virtualizer.
+ */
 const TilesSelector: React.FC = () => {
   const { selectedFamily, tilesForSelectedFamily } = useStore();
   const parentRef = useRef<HTMLDivElement>(null);
 
+  const rows = useMemo<TileSource[][]>(() => {
+    const result: TileSource[][] = [];
+    for (let i = 0; i < tilesForSelectedFamily.length; i += COLUMNS) {
+      result.push(tilesForSelectedFamily.slice(i, i + COLUMNS));
+    }
+    return result;
+  }, [tilesForSelectedFamily]);
+
   const virtualizer = useVirtualizer({
-    count: tilesForSelectedFamily.length,
+    count: rows.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => ESTIMATED_ITEM_HEIGHT,
+    estimateSize: () => ESTIMATED_ROW_HEIGHT,
     overscan: OVERSCAN,
-    // Re-measure when the selected family changes so scroll math stays right
-    // even if the user jumps between families with very different tile sizes.
-    getItemKey: (index) => tilesForSelectedFamily[index]?.id ?? index,
+    getItemKey: (index) => rows[index]?.[0]?.id ?? index,
   });
 
   if (!selectedFamily) {
@@ -55,7 +68,7 @@ const TilesSelector: React.FC = () => {
         }}
       >
         {items.map((virtualItem) => {
-          const source = tilesForSelectedFamily[virtualItem.index];
+          const row = rows[virtualItem.index];
           return (
             <div
               key={virtualItem.key}
@@ -68,8 +81,19 @@ const TilesSelector: React.FC = () => {
                 width: '100%',
                 transform: `translateY(${virtualItem.start}px)`,
               }}
+              className="flex gap-1 px-0.5 pb-1"
             >
-              <TileItem source={source} />
+              {row.map((source) => (
+                <div key={source.id} className="flex-1 min-w-0">
+                  <TileItem source={source} />
+                </div>
+              ))}
+              {/* Fill any empty cells on the last row so items stay
+                  aligned to the left column instead of stretching */}
+              {row.length < COLUMNS &&
+                Array.from({ length: COLUMNS - row.length }).map((_, i) => (
+                  <div key={`fill-${i}`} className="flex-1 min-w-0" />
+                ))}
             </div>
           );
         })}

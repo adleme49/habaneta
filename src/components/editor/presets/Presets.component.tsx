@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useStore } from '../../../store/store';
+import { findSource, TilePreset } from '../../../lib/library';
 import { Button } from '@/components/ui/button';
 
 /**
  * Preset chips + save-as control, shown below the tile in the editor.
  * Hidden when no tile is being edited.
+ *
+ * Each chip previews the preset's full resolved palette (source
+ * defaults ⊕ overrides) as a row of small swatches, followed by the
+ * name and a delete button. Clicking the chip applies the preset.
  */
 const Presets: React.FC = () => {
-  const { editingInstance, presetsForEditing, savePreset, applyPreset, deletePreset } =
-    useStore();
+  const {
+    editingInstance,
+    presetsForEditing,
+    library,
+    savePreset,
+    applyPreset,
+    deletePreset,
+  } = useStore();
 
   const [isNaming, setIsNaming] = useState(false);
   const [name, setName] = useState('');
@@ -79,28 +90,79 @@ const Presets: React.FC = () => {
       ) : (
         <div className="flex flex-wrap gap-2">
           {presetsForEditing.map((preset) => (
-            <div
+            <PresetChip
               key={preset.id}
-              className="group flex items-center gap-1 bg-gray-100 hover:bg-gray-200 rounded-full px-3 py-1 text-sm cursor-pointer"
-              onClick={() => applyPreset(preset)}
-              title={`Apply "${preset.name}"`}
-            >
-              <span>{preset.name}</span>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deletePreset(preset.id);
-                }}
-                className="opacity-40 hover:opacity-100 text-xs leading-none ml-1"
-                title="Delete preset"
-                aria-label={`Delete ${preset.name}`}
-              >
-                ×
-              </button>
-            </div>
+              preset={preset}
+              sourceLayers={
+                findSource(library, preset.sourceId)?.layers ?? {}
+              }
+              onApply={() => applyPreset(preset)}
+              onDelete={() => deletePreset(preset.id)}
+            />
           ))}
         </div>
       )}
+    </div>
+  );
+};
+
+/**
+ * A single preset chip: swatches + name + delete.
+ *
+ * Swatches show the preset's *resolved* palette, not just the
+ * overrides — that way the chip reflects what the tile will look
+ * like after applying, regardless of how many layers were changed.
+ */
+const PresetChip: React.FC<{
+  preset: TilePreset;
+  sourceLayers: Record<string, string>;
+  onApply: () => void;
+  onDelete: () => void;
+}> = ({ preset, sourceLayers, onApply, onDelete }) => {
+  const swatches = useMemo(() => {
+    // Merge source defaults with overrides so the chip represents
+    // the final look. Sort by layer id (st0, st1, ...) for stable
+    // ordering across re-renders.
+    const merged: Record<string, string> = {
+      ...sourceLayers,
+      ...preset.layerOverrides,
+    };
+    const keys = Object.keys(merged).sort((a, b) => {
+      const na = parseInt(a.replace(/^st/, ''), 10);
+      const nb = parseInt(b.replace(/^st/, ''), 10);
+      return (isNaN(na) ? 999 : na) - (isNaN(nb) ? 999 : nb);
+    });
+    return keys.map((k) => merged[k]).slice(0, 6);
+  }, [sourceLayers, preset.layerOverrides]);
+
+  return (
+    <div className="group flex items-center gap-1 bg-gray-100 hover:bg-gray-200 rounded-full pl-1.5 pr-1 py-0.5 text-sm transition-colors">
+      <button
+        type="button"
+        onClick={onApply}
+        className="flex items-center gap-2 py-0.5 pr-1 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+        title={`Apply "${preset.name}"`}
+      >
+        <span className="flex items-center">
+          {swatches.map((color, i) => (
+            <span
+              key={i}
+              className="w-3.5 h-3.5 rounded-full border border-white -ml-1 first:ml-0 block"
+              style={{ backgroundColor: color }}
+            />
+          ))}
+        </span>
+        <span>{preset.name}</span>
+      </button>
+      <button
+        type="button"
+        onClick={onDelete}
+        className="opacity-40 hover:opacity-100 text-xs leading-none w-4 h-4 flex items-center justify-center rounded-full"
+        title="Delete preset"
+        aria-label={`Delete ${preset.name}`}
+      >
+        ×
+      </button>
     </div>
   );
 };

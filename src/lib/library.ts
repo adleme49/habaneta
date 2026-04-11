@@ -14,6 +14,7 @@
 // the rendering path.
 
 import { ITile, Dict } from '../context/interfaces';
+import { loadUserTiles } from './userTiles';
 
 export type TileKind = 'floor' | 'border';
 
@@ -103,19 +104,28 @@ export function paintInstanceLayer(
 
 // ---------- Catalog loading ----------
 
-/**
- * Fetch the built-in tile catalog from public/library.json.
- *
- * Wired into TanStack Query via `useLibraryQuery()` in src/lib/queries.ts
- * so it gets cached, deduped, and automatically invalidated when the
- * admin UI writes new user tiles to IndexedDB.
- */
-export async function fetchBuiltinLibrary(): Promise<TileSource[]> {
+/** Fetch the built-in tile catalog from public/library.json. */
+async function fetchBuiltinLibrary(): Promise<TileSource[]> {
   const res = await fetch('/library.json');
   if (!res.ok) {
     throw new Error(`Failed to load library.json: ${res.status} ${res.statusText}`);
   }
   return (await res.json()) as TileSource[];
+}
+
+/**
+ * Fetch the full tile catalog — builtins from library.json plus any
+ * user tiles from IndexedDB. Wired into TanStack Query via
+ * `useLibraryQuery()` in src/lib/queries.ts so it gets cached,
+ * deduped, and automatically invalidated when a mutation writes a
+ * new user tile.
+ */
+export async function fetchLibrary(): Promise<TileSource[]> {
+  const [builtin, user] = await Promise.all([
+    fetchBuiltinLibrary(),
+    loadUserTiles(),
+  ]);
+  return [...builtin, ...user];
 }
 
 /** List of all family names that contain at least one tile, grouped by kind. */

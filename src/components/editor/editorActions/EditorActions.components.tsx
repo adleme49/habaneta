@@ -3,7 +3,13 @@ import { useStore } from '../../../store/store';
 import { Button } from '@/components/ui/button';
 
 const EditorActions: React.FC = () => {
-  const { editingInstance, editingIndex, commitEditingToRecent } = useStore();
+  const {
+    editingInstance,
+    editingIndex,
+    commitEditingToRecent,
+    resetEditingTile,
+    canResetEditing,
+  } = useStore();
 
   if (!editingInstance) return null;
 
@@ -12,12 +18,17 @@ const EditorActions: React.FC = () => {
   const isEditingRecent = editingIndex !== undefined;
 
   return (
-    <div className="pt-6">
-      <Button
-        disabled={isEditingRecent}
-        onClick={commitEditingToRecent}
-      >
+    <div className="pt-6 flex items-center gap-2">
+      <Button disabled={isEditingRecent} onClick={commitEditingToRecent}>
         {isEditingRecent ? 'Already in recents' : 'Salvar a recientes'}
+      </Button>
+      <Button
+        variant="outline"
+        disabled={!canResetEditing}
+        onClick={resetEditingTile}
+        title={canResetEditing ? 'Clear your color edits' : 'No changes to reset'}
+      >
+        Reset colors
       </Button>
     </div>
   );

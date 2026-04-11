@@ -187,10 +187,16 @@ export interface Store {
   editingIndex?: number;
 
   selectEditingSource: (source: TileSource) => void;
+  /** Pre-select a tile by source id — used by /home?tile=... navigation. */
+  selectEditingSourceById: (sourceId: string) => boolean;
   selectedColor: string;
   setSelectedColor: (color: string) => void;
   paintLayer: (layerId: string) => void;
   commitEditingToRecent: () => void;
+  /** Clear all layer overrides on the current edit, restoring defaults. */
+  resetEditingTile: () => void;
+  /** True when editingInstance has at least one layer override. */
+  canResetEditing: boolean;
 
   // Presets — named color schemes saved per TileSource
   /** All presets (for any source) currently in storage. */
@@ -290,11 +296,34 @@ const StoreProviderInner: React.FC<{
   const [svgHeight, setSvgHeight] = useState<number | undefined>();
 
   // Pick a tile from the browser → fresh instance loaded into editor,
-  // not tied to any recent slot yet.
-  const selectEditingSource = useCallback((source: TileSource) => {
-    setEditingInstance(newInstance(source));
-    dispatch({ type: 'DESELECT' });
-  }, []);
+  // not tied to any recent slot yet. Also sets selectedFamily so the
+  // browser panel reflects where the tile came from.
+  const selectEditingSource = useCallback(
+    (source: TileSource) => {
+      setEditingInstance(newInstance(source));
+      dispatch({ type: 'DESELECT' });
+      setSelectedFamily({
+        name: source.family,
+        kind: source.kind,
+        count: library.filter(
+          (t) => t.family === source.family && t.kind === source.kind
+        ).length,
+      });
+    },
+    [library]
+  );
+
+  // Look up a tile by id and load it into the editor. Returns false
+  // if the id isn't in the library (e.g. stale URL after delete).
+  const selectEditingSourceById = useCallback(
+    (sourceId: string): boolean => {
+      const source = findSource(library, sourceId);
+      if (!source) return false;
+      selectEditingSource(source);
+      return true;
+    },
+    [library, selectEditingSource]
+  );
 
   // Paint a single SVG layer. Updates the editor instance AND — if that
   // instance is currently backed by a recent slot — the slot too.
@@ -311,6 +340,19 @@ const StoreProviderInner: React.FC<{
     },
     [selectedColor, recent.editingIndex]
   );
+
+  // Clear layer overrides on the current edit — restore the source defaults.
+  // If the edit is backed by a recent slot, the slot syncs via UPDATE_EDITING.
+  const resetEditingTile = useCallback(() => {
+    setEditingInstance((prev) => {
+      if (!prev) return prev;
+      const next: TileInstance = { ...prev, layerOverrides: {} };
+      if (recent.editingIndex !== undefined) {
+        dispatch({ type: 'UPDATE_EDITING', instance: next });
+      }
+      return next;
+    });
+  }, [recent.editingIndex]);
 
   // "Salvar a recientes" — commit the current editor instance to a slot.
   const commitEditingToRecent = useCallback(() => {
@@ -432,10 +474,15 @@ const StoreProviderInner: React.FC<{
     editingResolved,
     editingIndex: recent.editingIndex,
     selectEditingSource,
+    selectEditingSourceById,
     selectedColor,
     setSelectedColor,
     paintLayer,
     commitEditingToRecent,
+    resetEditingTile,
+    canResetEditing:
+      !!editingInstance &&
+      Object.keys(editingInstance.layerOverrides).length > 0,
 
     presets,
     presetsForEditing,

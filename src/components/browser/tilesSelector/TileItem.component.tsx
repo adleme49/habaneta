@@ -10,12 +10,14 @@ const TileItem: React.FC<{ source: TileSource }> = ({ source }) => {
   const resolved = resolveTile(source, newInstance(source));
 
   return (
-    <div
-      className="cursor-pointer hover:bg-gray-50 p-1 rounded"
+    <button
+      type="button"
+      className="w-full cursor-pointer hover:bg-gray-50 p-0.5 rounded border border-transparent hover:border-gray-200 transition-colors"
       onClick={() => selectEditingSource(source)}
+      title={source.displayName}
     >
-      <SVGTileBase tile={resolved} style={{ width: '100%', maxWidth: 240 }} />
-    </div>
+      <SVGTileBase tile={resolved} style={{ width: '100%', height: 'auto' }} />
+    </button>
   );
 };
 
