@@ -390,7 +390,7 @@ const StoreProviderInner: React.FC<{
       }
       return { missingSourceIds };
     },
-    [library, setGridBodyRows]
+    [library, setGridBodyRows, setSelectedAmbientId]
   );
 
   // Pick a tile from the browser → fresh instance loaded into editor,

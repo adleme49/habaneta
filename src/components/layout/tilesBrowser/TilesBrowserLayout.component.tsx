@@ -32,10 +32,7 @@ const TilesBrowserLayout: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="px-3 py-3 border-b flex-shrink-0 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-gray-700">
-          {t('browser.title')}
-        </h2>
+      <div className="flex items-center justify-end px-2 pt-2 flex-shrink-0">
         <button
           type="button"
           onClick={toggleBrowserCollapsed}
@@ -46,7 +43,7 @@ const TilesBrowserLayout: React.FC = () => {
           «
         </button>
       </div>
-      <div className="px-2 pt-2 flex-shrink-0">
+      <div className="px-2 flex-shrink-0">
         <Category title={t('browser.tiles')} families={families} kind="floor" />
         <Category title={t('browser.border')} families={families} kind="border" />
       </div>

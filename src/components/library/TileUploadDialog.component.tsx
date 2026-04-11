@@ -252,7 +252,7 @@ const TileUploadDialog: React.FC = () => {
                 />
               ) : (
                 <span className="text-xs text-muted-foreground">
-                  {t('library.upload.pickFilePrompt')}
+                  {t('library.upload.previewEmpty')}
                 </span>
               )}
             </div>

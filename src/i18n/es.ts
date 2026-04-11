@@ -18,7 +18,6 @@ export const es: Translations = {
     library: 'Biblioteca →',
   },
   browser: {
-    title: 'Buscador de Lozas',
     tiles: 'LOZAS',
     border: 'BORDES',
     selectCategory: 'Selecciona una categoría →',
@@ -27,7 +26,6 @@ export const es: Translations = {
     verticalLabel: 'Lozas',
   },
   editor: {
-    title: 'Editor',
     selectTilePrompt: 'Selecciona una loza para editar',
     saveToRecents: 'Salvar a recientes',
     alreadyInRecents: 'Ya está en recientes',
@@ -51,7 +49,6 @@ export const es: Translations = {
     },
   },
   preview: {
-    title: 'Vista previa',
     gridSize: 'Tamaño',
     moreRows: 'Más filas',
     fewerRows: 'Menos filas',
@@ -109,6 +106,7 @@ export const es: Translations = {
       kindFloor: 'Piso',
       kindBorder: 'Borde',
       preview: 'Vista previa',
+      previewEmpty: 'Elige un archivo para previsualizar',
       pickFilePrompt: 'Arrastra un SVG aquí, o haz clic para buscar',
       classHint: 'Las formas deben usar class="colora stN"',
       layersDetected: '{{count}} capas detectadas',

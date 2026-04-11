@@ -176,7 +176,7 @@ try {
   await missingPage.goto(missingUrl, { waitUntil: 'networkidle' });
   await missingPage.waitForTimeout(800);
   const partialNotice = await missingPage
-    .getByText(/partially|Restored|partially/i)
+    .getByText(/partially|Restored/i)
     .isVisible()
     .catch(() => false);
   console.log(`   partial-restore notice visible: ${partialNotice}`);

@@ -16,7 +16,6 @@ export const en = {
     library: 'Library →',
   },
   browser: {
-    title: 'Tile Browser',
     tiles: 'TILES',
     border: 'BORDER',
     selectCategory: 'Select a category →',
@@ -25,7 +24,6 @@ export const en = {
     verticalLabel: 'Tiles',
   },
   editor: {
-    title: 'Editor',
     selectTilePrompt: 'Select a tile to start editing',
     saveToRecents: 'Save to recents',
     alreadyInRecents: 'Already in recents',
@@ -49,7 +47,6 @@ export const en = {
     },
   },
   preview: {
-    title: 'Preview',
     gridSize: 'Grid size',
     moreRows: 'More rows',
     fewerRows: 'Fewer rows',
@@ -107,6 +104,7 @@ export const en = {
       kindFloor: 'Floor',
       kindBorder: 'Border',
       preview: 'Preview',
+      previewEmpty: 'Pick a file to preview',
       pickFilePrompt: 'Drop an SVG here, or click to browse',
       classHint: 'Shapes must use class="colora stN"',
       layersDetected: '{{count}} layers detected',

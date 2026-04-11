@@ -66,8 +66,11 @@ try {
   await page.waitForURL('**/home');
   await page.waitForTimeout(300);
 
+  // No more section headers; confirm we landed back on the editor by
+  // looking for one of the category labels in the browser column.
   const editorVisible = await page
-    .getByText('Tile Browser')
+    .getByText('TILES', { exact: true })
+    .first()
     .isVisible();
   console.log(`   Back on editor: ${editorVisible}`);
 

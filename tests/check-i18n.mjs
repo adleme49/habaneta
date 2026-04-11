@@ -20,33 +20,34 @@ try {
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(300);
 
+  // Section headers were removed from the three columns, so anchor on
+  // copy that still appears: category labels in the browser column and
+  // the Gallery button in the preview actions strip.
   console.log('1. English (default) visible');
-  const enBrowser = await page.getByText('Tile Browser', { exact: true }).isVisible();
-  const enEditor = await page.getByText('Editor', { exact: true }).isVisible();
-  const enPreview = await page.getByText('Preview', { exact: true }).isVisible();
-  console.log(`   browser "Tile Browser": ${enBrowser}`);
-  console.log(`   editor "Editor": ${enEditor}`);
-  console.log(`   preview "Preview": ${enPreview}`);
+  const enBrowser = await page.getByText('TILES', { exact: true }).first().isVisible();
+  const enGallery = await page.getByRole('button', { name: 'Gallery' }).isVisible();
+  console.log(`   browser "TILES": ${enBrowser}`);
+  console.log(`   preview "Gallery": ${enGallery}`);
 
   console.log('2. Click ES in the language switcher');
   await page.getByRole('button', { name: 'ES', exact: true }).click();
   await page.waitForTimeout(300);
 
-  const esBrowser = await page.getByText('Buscador de Lozas').isVisible();
-  const esPreview = await page.getByText('Vista previa').isVisible();
-  console.log(`   browser "Buscador de Lozas": ${esBrowser}`);
-  console.log(`   preview "Vista previa": ${esPreview}`);
+  const esBrowser = await page.getByText('LOZAS', { exact: true }).first().isVisible();
+  const esGallery = await page.getByRole('button', { name: 'Galería' }).isVisible();
+  console.log(`   browser "LOZAS": ${esBrowser}`);
+  console.log(`   preview "Galería": ${esGallery}`);
 
   console.log('3. Reload → Spanish persists');
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(400);
-  const persisted = await page.getByText('Buscador de Lozas').isVisible();
+  const persisted = await page.getByText('LOZAS', { exact: true }).first().isVisible();
   console.log(`   persisted after reload: ${persisted}`);
 
   console.log('4. Switch back to EN');
   await page.getByRole('button', { name: 'EN', exact: true }).click();
   await page.waitForTimeout(200);
-  const backToEn = await page.getByText('Tile Browser').isVisible();
+  const backToEn = await page.getByText('TILES', { exact: true }).first().isVisible();
   console.log(`   back to EN: ${backToEn}`);
 
   // Clean up
