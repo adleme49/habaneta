@@ -59,6 +59,9 @@ export const es: Translations = {
     environment: 'Ambiente',
     share: 'Compartir',
     linkCopied: 'Enlace copiado',
+    shareFallback: 'Portapapeles bloqueado — copia esta URL:',
+    shareRestored: 'Diseño restaurado',
+    sharePartial: 'Restaurado parcialmente — faltan {{count}} loza(s)',
   },
   ambient: {
     scene: 'Escena',

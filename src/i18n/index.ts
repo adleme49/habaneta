@@ -38,6 +38,11 @@ i18n.use(initReactI18next).init({
 });
 
 export function setLanguage(code: LanguageCode) {
+  // Defensive: even though the type says LanguageCode, a runtime
+  // caller (devtools, a stale bookmark, a future feature) could
+  // pass something unknown. Reject silently rather than persist
+  // garbage that readStoredLanguage would then ignore on reload.
+  if (!SUPPORTED_LANGUAGES.some((l) => l.code === code)) return;
   i18n.changeLanguage(code);
   if (typeof localStorage !== 'undefined') {
     localStorage.setItem(STORAGE_KEY, code);

@@ -12,21 +12,29 @@ const LanguageSwitcher: React.FC = () => {
   const active = i18n.language as LanguageCode;
 
   return (
-    <div className="flex items-center gap-0.5 border border-gray-200 rounded-full overflow-hidden">
-      {SUPPORTED_LANGUAGES.map((lang) => (
-        <button
-          key={lang.code}
-          type="button"
-          onClick={() => setLanguage(lang.code)}
-          className={`px-2 py-0.5 text-xs font-medium transition-colors ${
-            active === lang.code
-              ? 'bg-primary text-primary-foreground'
-              : 'text-gray-600 hover:bg-gray-50'
-          }`}
-        >
-          {lang.label}
-        </button>
-      ))}
+    <div
+      className="flex items-center gap-0.5 border border-gray-200 rounded-full overflow-hidden"
+      role="group"
+      aria-label="Language"
+    >
+      {SUPPORTED_LANGUAGES.map((lang) => {
+        const isActive = active === lang.code;
+        return (
+          <button
+            key={lang.code}
+            type="button"
+            onClick={() => setLanguage(lang.code)}
+            aria-pressed={isActive}
+            className={`px-2 py-0.5 text-xs font-medium transition-colors ${
+              isActive
+                ? 'bg-primary text-primary-foreground'
+                : 'text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            {lang.label}
+          </button>
+        );
+      })}
     </div>
   );
 };

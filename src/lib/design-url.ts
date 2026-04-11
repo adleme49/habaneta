@@ -21,7 +21,7 @@
 // the swap before calling atob.
 
 import { TileInstance } from './library';
-import { AmbientId } from './ambients';
+import { AmbientId, ambients } from './ambients';
 
 export interface DesignState {
   floor?: TileInstance;
@@ -39,12 +39,45 @@ interface CompactDesign {
 
 const HASH_PREFIX = 'd=';
 
-export function encodeDesign(state: DesignState): string {
+/**
+ * Defaults that are redundant to ship in a share URL. Callers can
+ * pass these (the store's resting values) and encodeDesign will
+ * skip them to keep URLs short.
+ */
+export interface DesignDefaults {
+  gridBodyRows: number;
+  selectedAmbientId: AmbientId;
+}
+
+export function encodeDesign(
+  state: DesignState,
+  defaults?: DesignDefaults
+): string {
   const compact: CompactDesign = {};
-  if (state.floor) compact.f = { s: state.floor.sourceId, o: state.floor.layerOverrides };
-  if (state.border) compact.b = { s: state.border.sourceId, o: state.border.layerOverrides };
-  if (state.gridBodyRows !== undefined) compact.r = state.gridBodyRows;
-  if (state.selectedAmbientId) compact.a = state.selectedAmbientId;
+  if (state.floor) {
+    compact.f = {
+      s: state.floor.sourceId,
+      o: state.floor.layerOverrides,
+    };
+  }
+  if (state.border) {
+    compact.b = {
+      s: state.border.sourceId,
+      o: state.border.layerOverrides,
+    };
+  }
+  if (
+    state.gridBodyRows !== undefined &&
+    state.gridBodyRows !== defaults?.gridBodyRows
+  ) {
+    compact.r = state.gridBodyRows;
+  }
+  if (
+    state.selectedAmbientId &&
+    state.selectedAmbientId !== defaults?.selectedAmbientId
+  ) {
+    compact.a = state.selectedAmbientId;
+  }
   return base64UrlEncode(JSON.stringify(compact));
 }
 
@@ -60,8 +93,14 @@ export function decodeDesign(encoded: string): DesignState | null {
       state.border = { sourceId: compact.b.s, layerOverrides: compact.b.o ?? {} };
     }
     if (typeof compact.r === 'number') state.gridBodyRows = compact.r;
-    if (compact.a === 'bathroom' || compact.a === 'kitchen') {
-      state.selectedAmbientId = compact.a;
+    // Derive the ambient allowlist from the registry so new ambients
+    // work in share URLs without parallel edits here.
+    const ambientIds = ambients.map((a) => a.id);
+    if (
+      typeof compact.a === 'string' &&
+      (ambientIds as string[]).includes(compact.a)
+    ) {
+      state.selectedAmbientId = compact.a as AmbientId;
     }
     return state;
   } catch {
@@ -74,13 +113,32 @@ export function decodeDesign(encoded: string): DesignState | null {
  * `window.location.origin` so it works in any deploy environment;
  * falls back to a relative /home#... URL in SSR-ish contexts.
  */
-export function buildShareUrl(state: DesignState): string {
-  const encoded = encodeDesign(state);
+export function buildShareUrl(
+  state: DesignState,
+  defaults?: DesignDefaults
+): string {
+  const encoded = encodeDesign(state, defaults);
   const hash = `${HASH_PREFIX}${encoded}`;
   if (typeof window !== 'undefined' && window.location) {
     return `${window.location.origin}/home#${hash}`;
   }
   return `/home#${hash}`;
+}
+
+/**
+ * Remove the design hash from the current URL without triggering a
+ * navigation. Used after applyDesign to prevent the same hash from
+ * being re-applied on remount (e.g. when navigating to /library and
+ * back), which would duplicate the restored tiles into more recent
+ * slots and eventually evict the user's own work.
+ */
+export function clearDesignHash(): void {
+  if (typeof window === 'undefined' || !window.history) return;
+  const hash = window.location.hash.replace(/^#/, '');
+  if (!hash.startsWith(HASH_PREFIX)) return;
+  const cleanUrl =
+    window.location.pathname + window.location.search;
+  window.history.replaceState(null, '', cleanUrl);
 }
 
 /** Parse a design hash out of the current `window.location.hash`. */
@@ -92,17 +150,31 @@ export function readDesignHash(): DesignState | null {
 }
 
 // --- base64url helpers ---
+//
+// JSON.stringify output is NOT ASCII-safe — tile displayNames,
+// family strings, and even some layer hex formats can legitimately
+// contain non-ASCII characters (e.g. a Spanish tile uploaded with
+// `displayName: "Patrón"`). btoa throws on anything above U+00FF,
+// so we round-trip through UTF-8 via encodeURIComponent/escape.
+// This is the standard MDN-recommended "Unicode-safe base64" idiom.
 
 function base64UrlEncode(text: string): string {
-  // btoa handles arbitrary ASCII/Latin-1. JSON.stringify output is
-  // ASCII-safe so this is fine.
-  const b64 = btoa(text);
+  const utf8Safe = encodeURIComponent(text).replace(
+    /%([0-9A-F]{2})/g,
+    (_, p) => String.fromCharCode(parseInt(p, 16))
+  );
+  const b64 = btoa(utf8Safe);
   return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
 function base64UrlDecode(encoded: string): string {
   let b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
-  // Re-pad so atob accepts it.
   while (b64.length % 4) b64 += '=';
-  return atob(b64);
+  const binary = atob(b64);
+  // Reverse of the encode path.
+  const pct = Array.from(binary, (ch) => {
+    const code = ch.charCodeAt(0).toString(16).padStart(2, '0');
+    return `%${code}`;
+  }).join('');
+  return decodeURIComponent(pct);
 }

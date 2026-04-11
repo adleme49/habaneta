@@ -57,6 +57,9 @@ export const en = {
     environment: 'Environment',
     share: 'Share',
     linkCopied: 'Link copied',
+    shareFallback: 'Clipboard blocked — copy this URL:',
+    shareRestored: 'Shared design restored',
+    sharePartial: 'Restored partially — missing {{count}} tile(s)',
   },
   ambient: {
     scene: 'Scene',

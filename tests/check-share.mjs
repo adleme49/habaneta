@@ -100,7 +100,87 @@ try {
   await restored.screenshot({ path: '/tmp/share-restored.png', fullPage: false });
   await restored.close();
 
-  await page.screenshot({ path: '/tmp/share-restored.png', fullPage: false });
+  console.log('5. Hash should be cleared after apply (no re-apply on nav)');
+  // Navigate the restored page to /library and back — if the hash
+  // wasn't cleared, Home would re-mount with #d=... and add the
+  // floor + border AGAIN, so we'd see the recent-slot count jump.
+  const revisit = await ctx.newPage();
+  revisit.on('pageerror', (err) => errors.push(err.message));
+  await revisit.goto(url, { waitUntil: 'networkidle' });
+  await revisit.waitForTimeout(400);
+  await revisit.goto('http://localhost:3000/library', { waitUntil: 'networkidle' });
+  await revisit.waitForTimeout(300);
+  await revisit.goto('http://localhost:3000/home', { waitUntil: 'networkidle' });
+  await revisit.waitForTimeout(400);
+  const revisitHash = await revisit.evaluate(() => window.location.hash);
+  console.log(`   hash after revisit: "${revisitHash}"`);
+  await revisit.close();
+
+  console.log('6. Unicode-safe encode: design with non-ASCII displayName');
+  // Seed a user tile whose displayName contains accented chars,
+  // then build a share URL from it. Before the Unicode fix this
+  // would throw InvalidCharacterError at btoa time.
+  const unicodePage = await ctx.newPage();
+  unicodePage.on('pageerror', (err) => errors.push(err.message));
+  await unicodePage.goto('http://localhost:3000/library', {
+    waitUntil: 'networkidle',
+  });
+  await unicodePage.evaluate(async () => {
+    const { set } = await import('/node_modules/.vite/deps/idb-keyval.js');
+    await set('habaneta:user-tiles', [
+      {
+        id: 'user/patron-floral',
+        kind: 'floor',
+        family: 'Patrón',
+        displayName: 'Patrón floral ñ',
+        svgUrl: '/assets/Tile/Contemporary/l05.svg',
+        layers: { st0: '#ff0000', st1: '#00ff00' },
+        source: 'user',
+      },
+    ]);
+  });
+  await unicodePage.reload({ waitUntil: 'networkidle' });
+  await unicodePage.waitForTimeout(400);
+  // Build a share URL directly via the module — smoke test for
+  // the encoder path, independent of UI state.
+  const unicodeUrl = await unicodePage.evaluate(async () => {
+    const mod = await import('/src/lib/design-url.ts');
+    return mod.buildShareUrl({
+      floor: { sourceId: 'user/patron-floral', layerOverrides: {} },
+    });
+  });
+  console.log(`   non-ASCII share URL length: ${unicodeUrl.length}`);
+  // Round-trip through a fresh page
+  const rt = await ctx.newPage();
+  rt.on('pageerror', (err) => errors.push(err.message));
+  await rt.goto(unicodeUrl, { waitUntil: 'networkidle' });
+  await rt.waitForTimeout(400);
+  const rtErrors = errors.filter((e) => e.includes('InvalidCharacter'));
+  console.log(`   unicode encode errors: ${rtErrors.length}`);
+  await rt.close();
+  await unicodePage.evaluate(async () => {
+    const { del } = await import('/node_modules/.vite/deps/idb-keyval.js');
+    await del('habaneta:user-tiles');
+  });
+  await unicodePage.close();
+
+  console.log('7. Missing-source fallback: unknown sourceId');
+  const missingUrl = await page.evaluate(async () => {
+    const mod = await import('/src/lib/design-url.ts');
+    return mod.buildShareUrl({
+      floor: { sourceId: 'nonexistent/xyz', layerOverrides: {} },
+    });
+  });
+  const missingPage = await ctx.newPage();
+  missingPage.on('pageerror', (err) => errors.push(err.message));
+  await missingPage.goto(missingUrl, { waitUntil: 'networkidle' });
+  await missingPage.waitForTimeout(800);
+  const partialNotice = await missingPage
+    .getByText(/partially|Restored|partially/i)
+    .isVisible()
+    .catch(() => false);
+  console.log(`   partial-restore notice visible: ${partialNotice}`);
+  await missingPage.close();
 
   console.log(`\nErrors: ${errors.length}`);
   errors.forEach((e) => console.log('  ERROR:', e.slice(0, 200)));
