@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Home from './pages/Home';
+import Library from './pages/Library';
 
 import './index.css';
 import './theme/variables.css';
@@ -24,6 +25,7 @@ const App: React.FC = () => (
       <BrowserRouter>
         <Switch>
           <Route path="/home" component={Home} />
+          <Route path="/library" component={Library} />
           <Route exact path="/" render={() => <Redirect to="/home" />} />
         </Switch>
       </BrowserRouter>

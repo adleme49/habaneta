@@ -1,0 +1,65 @@
+import { chromium } from 'playwright';
+
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const errors = [];
+page.on('pageerror', (err) => errors.push(err.message));
+page.on('console', (msg) => {
+  if (msg.type() === 'error') errors.push(msg.text());
+});
+
+try {
+  await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+  await page.waitForTimeout(500);
+
+  console.log('1. Click "Library →" in nav');
+  await page.getByRole('link', { name: /Library/ }).click();
+  await page.waitForURL('**/library');
+  await page.waitForTimeout(500);
+
+  // Row count should equal the 91 tiles in the catalog.
+  const rows = await page.locator('tbody tr').count();
+  console.log(`   Rows in table: ${rows}`);
+
+  // The counter in the top-right should show "91 of 91" initially.
+  const counter = await page.locator('text=/of 91/').first().textContent();
+  console.log(`   Counter: "${counter}"`);
+
+  console.log('2. Filter by "victorian"');
+  await page.getByPlaceholder('Search tiles…').fill('victorian');
+  await page.waitForTimeout(400);
+  const filtered = await page.locator('tbody tr').count();
+  console.log(`   Rows after filter: ${filtered}`);
+
+  console.log('3. Sort by Name');
+  await page.getByRole('button', { name: /^Name/ }).click();
+  await page.waitForTimeout(200);
+  await page.getByRole('button', { name: /^Name/ }).click(); // toggle desc
+  await page.waitForTimeout(200);
+
+  console.log('4. Clear filter');
+  await page.getByRole('button', { name: 'Clear' }).click();
+  await page.waitForTimeout(300);
+  const afterClear = await page.locator('tbody tr').count();
+  console.log(`   Rows after clear: ${afterClear}`);
+
+  console.log('5. Back to editor');
+  await page.getByRole('link', { name: /back to editor/ }).click();
+  await page.waitForURL('**/home');
+  await page.waitForTimeout(300);
+
+  const editorVisible = await page
+    .getByText('Buscador de Lozas')
+    .isVisible();
+  console.log(`   Back on editor: ${editorVisible}`);
+
+  await page.screenshot({ path: '/tmp/library.png', fullPage: true });
+
+  console.log(`\nErrors: ${errors.length}`);
+  errors.forEach((e) => console.log('  ERROR:', e.slice(0, 200)));
+} catch (e) {
+  console.log('FAILED:', e.message);
+  await page.screenshot({ path: '/tmp/library-error.png', fullPage: true });
+} finally {
+  await browser.close();
+}
