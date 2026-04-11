@@ -13,6 +13,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@tanstack/react-query": "^5.97.0",
     "@tanstack/react-query-devtools": "^5.97.0",
+    "@tanstack/react-virtual": "^3.13.23",
     "@uiw/color-convert": "^2.10.1",
     "@uiw/react-color-swatch": "^2.10.1",
     "class-variance-authority": "^0.7.1",
