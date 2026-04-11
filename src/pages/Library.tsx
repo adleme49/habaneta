@@ -19,6 +19,7 @@ import {
 import SVGTileBase from '../components/common/SVGBase.component';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import TileUploadDialog from '../components/library/TileUploadDialog.component';
 import {
   Table,
   TableBody,
@@ -133,11 +134,14 @@ const Library: React.FC = () => {
             ← back to editor
           </Link>
         </div>
-        {library && (
-          <span className="text-sm text-muted-foreground">
-            {library.length} tiles
-          </span>
-        )}
+        <div className="flex items-center gap-3">
+          {library && (
+            <span className="text-sm text-muted-foreground">
+              {library.length} tiles
+            </span>
+          )}
+          <TileUploadDialog />
+        </div>
       </header>
 
       <div className="p-6">
