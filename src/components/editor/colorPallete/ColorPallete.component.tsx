@@ -1,44 +1,90 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useStore } from '../../../store/store';
-import Swatch from '@uiw/react-color-swatch';
 
+/**
+ * Compact color chooser for the tile editor. Three components in
+ * ~120px of vertical space:
+ *
+ *   - Row 1: current color preview + hex input + native picker
+ *   - Row 2-7: 6×6 curated preset grid
+ *
+ * The native <input type="color"> gives users full spectrum access
+ * without bundling a heavy picker library. Hex input accepts any
+ * valid CSS color string. Presets are one-click shortcuts.
+ */
 const ColorPallete: React.FC = () => {
-  const { colors, setSelectedColor } = useStore();
+  const { colors, selectedColor, setSelectedColor } = useStore();
+  const pickerRef = useRef<HTMLInputElement>(null);
 
   const flatColors = useMemo(() => colors.flat(), [colors]);
 
-  const handleChange = (hsva: { h: number; s: number; v: number; a: number }) => {
-    const s = hsva.s / 100;
-    const v = hsva.v / 100;
-    const c = v * s;
-    const x = c * (1 - Math.abs(((hsva.h / 60) % 2) - 1));
-    const m = v - c;
-    let r = 0, g = 0, b = 0;
-    if (hsva.h < 60) { r = c; g = x; b = 0; }
-    else if (hsva.h < 120) { r = x; g = c; b = 0; }
-    else if (hsva.h < 180) { r = 0; g = c; b = x; }
-    else if (hsva.h < 240) { r = 0; g = x; b = c; }
-    else if (hsva.h < 300) { r = x; g = 0; b = c; }
-    else { r = c; g = 0; b = x; }
-    const toHex = (n: number) => Math.round((n + m) * 255).toString(16).padStart(2, '0');
-    setSelectedColor(`#${toHex(r)}${toHex(g)}${toHex(b)}`);
+  const handleHexInput = (value: string) => {
+    const trimmed = value.trim();
+    // Accept with or without leading #, any length (user is still
+    // typing). Only commit if it parses to a valid 3/6/8-digit hex.
+    const normalized = trimmed.startsWith('#') ? trimmed : `#${trimmed}`;
+    if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(normalized)) {
+      setSelectedColor(normalized);
+    }
   };
 
   return (
-    <div className="border-2 border-black p-2">
-      <Swatch
-        colors={flatColors}
-        color="#ffffff"
-        rectProps={{
-          children: null,
-          style: {
-            width: '32px',
-            height: '32px',
-            margin: '2px',
-          },
-        }}
-        onChange={(hsvColor) => handleChange(hsvColor)}
-      />
+    <div className="w-full max-w-[280px] space-y-2">
+      {/* Row 1: preview + hex input + native picker */}
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => pickerRef.current?.click()}
+          className="w-8 h-8 rounded border border-gray-300 shadow-sm flex-shrink-0 cursor-pointer"
+          style={{ backgroundColor: selectedColor }}
+          title="Click to open color picker"
+          aria-label="Open color picker"
+        />
+        <input
+          ref={pickerRef}
+          type="color"
+          value={/^#[0-9a-f]{6}$/i.test(selectedColor) ? selectedColor : '#ffffff'}
+          onChange={(e) => setSelectedColor(e.target.value)}
+          className="sr-only"
+          tabIndex={-1}
+          aria-hidden="true"
+        />
+        <input
+          type="text"
+          value={selectedColor}
+          onChange={(e) => handleHexInput(e.target.value)}
+          className="flex-1 min-w-0 h-8 border rounded px-2 text-xs font-mono"
+          placeholder="#rrggbb"
+          spellCheck={false}
+          aria-label="Hex color value"
+        />
+      </div>
+
+      {/* Row 2: preset grid */}
+      <div
+        className="grid gap-1"
+        style={{ gridTemplateColumns: 'repeat(6, 1fr)' }}
+      >
+        {flatColors.map((color) => {
+          const isActive =
+            color.toLowerCase() === selectedColor.toLowerCase();
+          return (
+            <button
+              key={color}
+              type="button"
+              onClick={() => setSelectedColor(color)}
+              className={`aspect-square rounded border transition-all ${
+                isActive
+                  ? 'ring-2 ring-offset-1 ring-blue-500 border-transparent'
+                  : 'border-gray-200 hover:border-gray-400'
+              }`}
+              style={{ backgroundColor: color }}
+              title={color}
+              aria-label={`Select ${color}`}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };

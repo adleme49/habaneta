@@ -1,22 +1,23 @@
-// Default color palette for the tile editor.
-// 15 rows × 7 colors — originally curated for the 2020 Antique Colonial
-// client install. Will be replaced by theme-aware palettes in the
-// browsing+editing module rework.
+// Curated quick-pick palette for the tile editor.
+//
+// 36 colors in a 6×6 grid spanning the spectrum. Deliberately a
+// broad set of hues rather than 105 shades of brown + blue-gray
+// like the 2020 Antique Colonial catalog — users can always type a
+// hex in the input or open the native color picker for anything
+// else. These are just "one click away" shortcuts for common tile
+// design choices.
 
 export const colors: string[][] = [
-  ['#000000', '#48627d', '#5d7790', '#829db8', '#87a2bd', '#8aa4bb', '#ffffff'],
-  ['#923b44', '#ad505a', '#c3707a', '#cf97a4', '#cfbdc9', '#b8b4c2', '#bdbbc0'],
-  ['#3d3d49', '#585b6c', '#727888', '#a1a3b2', '#979eb0', '#a3a9b9', '#b1b8c2'],
-  ['#574e4f', '#6a6260', '#7d7573', '#a2a1a6', '#b1b0b6', '#b3b6bd', '#b6bdc5'],
-  ['#696353', '#6e6949', '#6f6d56', '#7f816c', '#999d8f', '#b8b9b4', '#b7bbba'],
-  ['#213d86', '#355aa1', '#537db9', '#7196c3', '#9ebcd6', '#aec4d9', '#bacad7'],
-  ['#2c4d70', '#2e5478', '#3f6d91', '#6d99b4', '#87adc4', '#a2bfd1', '#b8cbd9'],
-  ['#bd8c6e', '#ba8e71', '#b2927d', '#b6a89b', '#bcb7b1', '#bbb6b0', '#c9c8c6'],
-  ['#bc826a', '#c4907a', '#c39d89', '#c9b1a4', '#b9b6b1', '#b9bbba', '#c4c8c9'],
-  ['#314977', '#255387', '#4274a7', '#719bc1', '#a6c0db', '#bbccde', '#cdd6e5'],
-  ['#175d52', '#177f68', '#299989', '#56a19d', '#a1bfc1', '#c6d3d9', '#ced8da'],
-  ['#3a5a55', '#3e6455', '#4f806d', '#7da99c', '#8dadaa', '#bbc9ca', '#cdd4da'],
-  ['#978c76', '#a5977c', '#a0997f', '#9e9a91', '#aaaca9', '#a2acae', '#9caeba'],
-  ['#0e556b', '#236b83', '#3f8398', '#6da5bc', '#7dafc8', '#87afc8', '#91aec0'],
-  ['#8a786a', '#92847b', '#9f9188', '#a6a19e', '#a4a4a2', '#a6aaa9', '#9facb4'],
+  // neutrals
+  ['#ffffff', '#e5e5e5', '#a1a1a1', '#525252', '#1f1f1f', '#000000'],
+  // reds & pinks
+  ['#fecaca', '#f87171', '#ef4444', '#b91c1c', '#7f1d1d', '#831843'],
+  // oranges & yellows
+  ['#fed7aa', '#fb923c', '#f97316', '#fbbf24', '#eab308', '#a16207'],
+  // greens
+  ['#bbf7d0', '#86efac', '#22c55e', '#16a34a', '#166534', '#064e3b'],
+  // blues & teals
+  ['#a5f3fc', '#22d3ee', '#3b82f6', '#1d4ed8', '#1e3a8a', '#0f766e'],
+  // purples & browns
+  ['#e9d5ff', '#a855f7', '#6b21a8', '#d6a373', '#92400e', '#451a03'],
 ];

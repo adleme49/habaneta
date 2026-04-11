@@ -1,13 +1,12 @@
 import React from 'react';
-import SelectedColor from '../../editor/selectedColor/SelectedColor.component';
 import ColorPallete from '../../editor/colorPallete/ColorPallete.component';
 import TileEditor from '../../editor/tileEditor/TileEditor.component';
 
 /**
  * Editor section. Sticky header on top, internally-scrollable body.
- * The body stacks palette → tile → actions → presets. Narrow column
- * so we keep things vertical for now; a horizontal palette/tile
- * split can happen when we widen the editor column further.
+ * Body stacks palette → tile → actions → presets. SelectedColor is
+ * no longer rendered separately — the palette's preview row already
+ * shows the active color.
  */
 const TilesEditorLayout: React.FC = () => {
   return (
@@ -16,9 +15,8 @@ const TilesEditorLayout: React.FC = () => {
         <h2 className="text-sm font-semibold text-gray-700">Editor</h2>
       </div>
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
-        <div className="flex flex-col items-center p-4 gap-2">
+        <div className="flex flex-col items-center p-4 gap-3">
           <ColorPallete />
-          <SelectedColor />
           <TileEditor />
         </div>
       </div>
