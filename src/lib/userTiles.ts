@@ -26,7 +26,7 @@ export async function loadUserTiles(): Promise<TileSource[]> {
 }
 
 /** Overwrite the entire user-tile collection. */
-async function saveUserTiles(tiles: TileSource[]): Promise<void> {
+export async function saveUserTiles(tiles: TileSource[]): Promise<void> {
   await set(STORAGE_KEY, tiles);
 }
 
