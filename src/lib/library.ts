@@ -13,8 +13,8 @@
 // eventually load the catalog from JSON or a backend without rewriting
 // the rendering path.
 
-import { tilesFam, borderFam } from '../context/seed';
-import { ITile, IFloor, IBorder, Dict } from '../context/interfaces';
+import libraryJson from '../../public/library.json';
+import { ITile, Dict } from '../context/interfaces';
 
 export type TileKind = 'floor' | 'border';
 
@@ -88,66 +88,15 @@ export function paintInstanceLayer(
   };
 }
 
-// ---------- Seed → library conversion ----------
+// ---------- Static catalog loading ----------
 
 /**
- * Convert the legacy seed.tsx structure into a flat TileSource array.
- * This is a temporary bridge while the catalog still lives in TS; the
- * next phase replaces it with a JSON load.
+ * Load the built-in tile catalog. Today this is a synchronous import
+ * of public/library.json; the next step wraps it in TanStack Query so
+ * user-uploaded tiles (from IndexedDB) can be merged in at runtime.
  */
-export function buildLibraryFromSeed(): TileSource[] {
-  const tiles: TileSource[] = [];
-
-  for (const family of tilesFam) {
-    for (const tile of family.types as IFloor[]) {
-      if (!tile.imgUrl) continue;
-      tiles.push({
-        id: slugFromUrl(tile.imgUrl, family.name),
-        kind: 'floor',
-        family: family.name,
-        displayName: tile.name,
-        svgUrl: tile.imgUrl,
-        layers: { ...(tile.layers ?? {}) },
-        grids: tile.grids,
-        source: 'builtin',
-      });
-    }
-  }
-
-  for (const family of borderFam) {
-    for (const tile of family.types as IBorder[]) {
-      if (!tile.imgUrl) continue;
-      tiles.push({
-        id: slugFromUrl(tile.imgUrl, family.name),
-        kind: 'border',
-        family: family.name,
-        displayName: tile.name,
-        svgUrl: tile.imgUrl,
-        cornerUrl: tile.cornerUrl,
-        cornerInteriorUrl: tile.cornerInteriorUrl,
-        layers: { ...(tile.layers ?? {}) },
-        source: 'builtin',
-      });
-    }
-  }
-
-  return tiles;
-}
-
-/**
- * Derive a stable slug from a tile's imgUrl and family name.
- *   "../assets/Tile/Contemporary/l05.svg"     → "contemporary/l05"
- *   "../assets/Border/Victorian/l49.1.svg"    → "victorian/l49"
- *   "../assets/Tile/Contemporary/l116a.svg"   → "contemporary/l116a"
- * Trailing `.<digit>` (used by border corner variants) is stripped so
- * the three corner files map to a single source.
- */
-function slugFromUrl(url: string, family: string): string {
-  const file = url.split('/').pop() ?? url;
-  const base = file
-    .replace(/\.svg$/, '')
-    .replace(/\.\d+$/, ''); // strip border corner suffix
-  return `${family.toLowerCase()}/${base}`;
+export function getBuiltinLibrary(): TileSource[] {
+  return libraryJson as TileSource[];
 }
 
 /** List of all family names that contain at least one tile, grouped by kind. */

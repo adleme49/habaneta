@@ -10,16 +10,15 @@ import {
   TileSource,
   TileInstance,
   ResolvedTile,
-  TileKind,
   FamilyMeta,
-  buildLibraryFromSeed,
+  getBuiltinLibrary,
   listFamilies,
   findSource,
   newInstance,
   paintInstanceLayer,
   resolveTile,
 } from '../lib/library';
-import { colors as seedColors } from '../context/seed';
+import { colors as seedColors } from '../lib/colors';
 import { getNextGrid } from '../constants/floor';
 
 // -------------- Recent slots (reducer for the non-trivial juggling) --------------
@@ -214,8 +213,8 @@ const StoreContext = createContext<Store | null>(null);
 export const StoreProvider: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
-  // Static library, built once from the seed.
-  const library = useMemo(() => buildLibraryFromSeed(), []);
+  // Static library, loaded once from the built-in catalog.
+  const library = useMemo(() => getBuiltinLibrary(), []);
   const families = useMemo(() => listFamilies(library), [library]);
 
   // Browsing

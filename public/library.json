@@ -1,0 +1,1577 @@
+[
+  {
+    "id": "contemporary/l14",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l14",
+    "svgUrl": "/assets/Tile/Contemporary/l14.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#AF5A4B",
+      "st2": "#C4C3C3",
+      "st3": "#E5DC71",
+      "st4": "#020202",
+      "st5": "#88D1D7",
+      "st6": "#81CBAD",
+      "st7": "#91C365",
+      "st8": "#EEAE3D",
+      "st9": "#6D78B9"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l02",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l02",
+    "svgUrl": "/assets/Tile/Contemporary/l02.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#72B2E1",
+      "st2": "#B4A45F",
+      "st3": "#C2DA73",
+      "st4": "#E8EB95"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l05",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l05",
+    "svgUrl": "/assets/Tile/Contemporary/l05.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#333333",
+      "st2": "#EEE993",
+      "st3": "#B69C77",
+      "st4": "#EA7067",
+      "st5": "#CCCCCC",
+      "st6": "#000000"
+    },
+    "grids": [
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l20",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l20",
+    "svgUrl": "/assets/Tile/Contemporary/l20.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F6E5C2",
+      "st2": "#C1C66C",
+      "st3": "#F1B763",
+      "st4": "#ECEC8B",
+      "st5": "#B98E5C",
+      "st6": "#475137",
+      "st7": "#29776F",
+      "st8": "#E9B68A",
+      "st9": "#231F20"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l21",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l21",
+    "svgUrl": "/assets/Tile/Contemporary/l21.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#A5A5A5",
+      "st2": "#000000"
+    },
+    "grids": [
+      [
+        450,
+        180,
+        720,
+        990
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        90,
+        90,
+        90,
+        90
+      ]
+    ],
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l22",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l22",
+    "svgUrl": "/assets/Tile/Contemporary/l22.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#D6E0F2",
+      "st2": "#E7D8A8",
+      "st3": "#53C1B9"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l25",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l25",
+    "svgUrl": "/assets/Tile/Contemporary/l25.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#E7D8A8",
+      "st2": "#77A9B4",
+      "st3": "#616E77"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l26",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l26",
+    "svgUrl": "/assets/Tile/Contemporary/l26.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F1DCA9",
+      "st2": "#BAE2E8",
+      "st3": "#77A9B4"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l27",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l27",
+    "svgUrl": "/assets/Tile/Contemporary/l27.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#EDCB82",
+      "st2": "#ECDFBB",
+      "st3": "#5B9DA4"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l28",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l28",
+    "svgUrl": "/assets/Tile/Contemporary/l28.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F7F4B8",
+      "st2": "#C0E6EC",
+      "st3": "#77A9B4"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l33",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l33",
+    "svgUrl": "/assets/Tile/Contemporary/l33.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F3E6BC",
+      "st2": "#99999A",
+      "st3": "#F8D993",
+      "st4": "#D5D4CC",
+      "st5": "#F0EE91",
+      "st6": "#8BD4E6",
+      "st7": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l35",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l35",
+    "svgUrl": "/assets/Tile/Contemporary/l35.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#C9AC69",
+      "st2": "#B25538",
+      "st3": "#093542",
+      "st4": "#7894A2",
+      "st5": "#AFA68F"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l36",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l36",
+    "svgUrl": "/assets/Tile/Contemporary/l36.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#ECE973",
+      "st2": "#667A94",
+      "st3": "#EE7C73",
+      "st4": "#94CD8A",
+      "st5": "#DDDDDC",
+      "st6": "#C4E1BC",
+      "st7": "#717373",
+      "st8": "#93A2BA",
+      "st9": "#F7F3AA",
+      "st10": "#C9DADD"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l37",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l37",
+    "svgUrl": "/assets/Tile/Contemporary/l37.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#E5DB92",
+      "st2": "#ECBE6F",
+      "st3": "#A8CD6E",
+      "st4": "#72CEE8",
+      "st5": "#595A5A",
+      "st6": "#C4A06B",
+      "st7": "#C6C4C3",
+      "st8": "#ECE72B",
+      "st9": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l38",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l38",
+    "svgUrl": "/assets/Tile/Contemporary/l38.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#CADADD",
+      "st2": "#6A81A5",
+      "st3": "#EDEB9D",
+      "st4": "#97A88E"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l39",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l39",
+    "svgUrl": "/assets/Tile/Contemporary/l39.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#C5E2BD",
+      "st2": "#F0BA7D",
+      "st3": "#F9D2D2",
+      "st4": "#F49F9F",
+      "st5": "#F4744D"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l41",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l41",
+    "svgUrl": "/assets/Tile/Contemporary/l41.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#CADADD",
+      "st2": "#94A3BB"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l43",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l43",
+    "svgUrl": "/assets/Tile/Contemporary/l43.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#7588BF",
+      "st2": "#D3D3D3",
+      "st3": "#494949",
+      "st4": "#7EAA53",
+      "st5": "#2EE6EF",
+      "st6": "#EAEA86",
+      "st7": "#F22C43",
+      "st8": "#9FA0A0",
+      "st9": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l44",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l44",
+    "svgUrl": "/assets/Tile/Contemporary/l44.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F3D29C",
+      "st2": "#5E6959",
+      "st3": "#EFB97D",
+      "st4": "#9EB2B5",
+      "st5": "#98985F",
+      "st6": "#C9DADD",
+      "st7": "#496791",
+      "st8": "#F4E7CF",
+      "st9": "#EDEB80",
+      "st10": "#ED6F80",
+      "st11": "#64887A",
+      "st12": "#D7E8B9",
+      "st13": "#F7C9D2"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l45",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l45",
+    "svgUrl": "/assets/Tile/Contemporary/l45.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#64887A",
+      "st2": "#667A94",
+      "st3": "#A3C09A",
+      "st4": "#C8D8BF",
+      "st5": "#F4E7CF",
+      "st6": "#99978D",
+      "st7": "#C9DADD"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l46",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l46",
+    "svgUrl": "/assets/Tile/Contemporary/l46.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#E5E563",
+      "st2": "#67ADA9",
+      "st3": "#E8C562",
+      "st4": "#F5E8D0",
+      "st5": "#C5E2BD",
+      "st6": "#667A95",
+      "st7": "#7EA679"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l47",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l47",
+    "svgUrl": "/assets/Tile/Contemporary/l47.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#E97878",
+      "st2": "#C5CB70",
+      "st3": "#6EBCCE",
+      "st4": "#F4E7CF",
+      "st5": "#A6BDAD",
+      "st6": "#98CC72",
+      "st7": "#E1DE4D",
+      "st8": "#E2BB3D",
+      "st9": "#B6B48E"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l48",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l48",
+    "svgUrl": "/assets/Tile/Contemporary/l48.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#7CAD5C",
+      "st2": "#BFBEBE",
+      "st3": "#5E6959"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l50",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l50",
+    "svgUrl": "/assets/Tile/Contemporary/l50.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F4E7CF",
+      "st2": "#CCC7AD",
+      "st3": "#5C80AA"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l58",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l58",
+    "svgUrl": "/assets/Tile/Contemporary/l58.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#6A80A4",
+      "st2": "#F4E7CF",
+      "st3": "#7EA579",
+      "st4": "#C9DADD"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l59",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l59",
+    "svgUrl": "/assets/Tile/Contemporary/l59.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#7E82AD",
+      "st2": "#F4DBB3",
+      "st3": "#A7BEAE",
+      "st4": "#64897A",
+      "st5": "#F7E99A"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l64",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l64",
+    "svgUrl": "/assets/Tile/Contemporary/l64.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#E2E673",
+      "st2": "#7DCED9",
+      "st3": "#7EA579",
+      "st4": "#E47373"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l67",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l67",
+    "svgUrl": "/assets/Tile/Contemporary/l67.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#919191",
+      "st2": "#667A94",
+      "st3": "#F4E7CF",
+      "st4": "#A5BFC8",
+      "st5": "#7AA395"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l69",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l69",
+    "svgUrl": "/assets/Tile/Contemporary/l69.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#231F20"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l72",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l72",
+    "svgUrl": "/assets/Tile/Contemporary/l72.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#EFB97D",
+      "st2": "#F4E7CF",
+      "st3": "#A1BAD3"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l73",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l73",
+    "svgUrl": "/assets/Tile/Contemporary/l73.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#4B5C66",
+      "st2": "#C1E3F4",
+      "st3": "#ADADAD",
+      "st4": "#DBC9A1",
+      "st5": "#87AAC1",
+      "st6": "#847A61",
+      "st7": "#494949",
+      "st8": "#E5E57C"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l75",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l75",
+    "svgUrl": "/assets/Tile/Contemporary/l75.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l80",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l80",
+    "svgUrl": "/assets/Tile/Contemporary/l80.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F8C453",
+      "st2": "#A08D65",
+      "st3": "#F38081",
+      "st4": "#EFED8D",
+      "st5": "#598A9A",
+      "st6": "#4E886A",
+      "st7": "#264048",
+      "st8": "#8BD1F0",
+      "st9": "#F6EB0F",
+      "st10": "#2F513D",
+      "st11": "#96D1AD",
+      "st12": "#B1B28A"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l82",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l82",
+    "svgUrl": "/assets/Tile/Contemporary/l82.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#C2DFA9",
+      "st2": "#3B5636",
+      "st3": "#83BC7A"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l82b",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l82b",
+    "svgUrl": "/assets/Tile/Contemporary/l82b.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#64887A",
+      "st2": "#3A6531",
+      "st3": "#F4E7CF",
+      "st4": "#E6E983",
+      "st5": "#394C45"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l84",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l84",
+    "svgUrl": "/assets/Tile/Contemporary/l84.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#EEBA63",
+      "st2": "#DAE084",
+      "st3": "#7F7F7F",
+      "st4": "#A1BAD3",
+      "st5": "#DAC7A9",
+      "st6": "#7AA395",
+      "st7": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l85",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l85",
+    "svgUrl": "/assets/Tile/Contemporary/l85.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F2F3BB",
+      "st2": "#EC7677",
+      "st3": "#667A94",
+      "st4": "#A5BFC8",
+      "st5": "#C4E1BC",
+      "st6": "#F5EF85"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l86",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l86",
+    "svgUrl": "/assets/Tile/Contemporary/l86.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F3CDA7",
+      "st2": "#F3C43E",
+      "st3": "#1A1F1C",
+      "st4": "#98985F",
+      "st5": "#9DD9E5",
+      "st6": "#C9E1A9",
+      "st7": "#96A78D",
+      "st8": "#F1ED7B",
+      "st9": "#635E4C",
+      "st10": "#A1BAD3",
+      "st11": "#48AA63",
+      "st12": "#EF5253",
+      "st13": "#667A94",
+      "st14": "#F6A3A4"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l87",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l87",
+    "svgUrl": "/assets/Tile/Contemporary/l87.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#8D702B",
+      "st2": "#E2BB3D",
+      "st3": "#56C7EA",
+      "st4": "#993D3D",
+      "st5": "#537B80",
+      "st6": "#313F76",
+      "st7": "#94CA66",
+      "st8": "#EEEA69",
+      "st9": "#C4E1BC"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l88",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l88",
+    "svgUrl": "/assets/Tile/Contemporary/l88.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#77C593",
+      "st2": "#4D5C53",
+      "st3": "#E6E9A5"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l89",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l89",
+    "svgUrl": "/assets/Tile/Contemporary/l89.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#E8EB8E",
+      "st2": "#84AFCB",
+      "st3": "#E2E2E2"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l90",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l90",
+    "svgUrl": "/assets/Tile/Contemporary/l90.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#B9D885",
+      "st2": "#81C891",
+      "st3": "#ACA863",
+      "st4": "#F8E605",
+      "st5": "#EBEA7B",
+      "st6": "#66933F",
+      "st7": "#DDDDDC"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l91",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l91",
+    "svgUrl": "/assets/Tile/Contemporary/l91.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#428B7F",
+      "st2": "#54797B",
+      "st3": "#69C5B5",
+      "st4": "#BEE5ED"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l92",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l92",
+    "svgUrl": "/assets/Tile/Contemporary/l92.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#A4BC75",
+      "st2": "#233030",
+      "st3": "#EDE84C",
+      "st4": "#AFAFAE",
+      "st5": "#4A6F8E",
+      "st6": "#D6ED9D",
+      "st7": "#94D6CD"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l93",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l93",
+    "svgUrl": "/assets/Tile/Contemporary/l93.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#203A3A",
+      "st2": "#708648",
+      "st3": "#75C9D2",
+      "st4": "#427475"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l94",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l94",
+    "svgUrl": "/assets/Tile/Contemporary/l94.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#D72E2C",
+      "st2": "#F59C9E"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l95",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l95",
+    "svgUrl": "/assets/Tile/Contemporary/l95.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#666667",
+      "st2": "#97D7E1",
+      "st3": "#CCCBCB",
+      "st4": "#EEE78D"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l98",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l98",
+    "svgUrl": "/assets/Tile/Contemporary/l98.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#78C2D6",
+      "st2": "#4C7C87",
+      "st3": "#C1C1C1",
+      "st4": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l99",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l99",
+    "svgUrl": "/assets/Tile/Contemporary/l99.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#231F20",
+      "st2": "#7C7A7A"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l100-mod",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l100-mod",
+    "svgUrl": "/assets/Tile/Contemporary/l100-mod.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#8BD36A",
+      "st2": "#A0A0A0",
+      "st3": "#5B5B1D",
+      "st4": "#F2ED8F"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l102",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l102",
+    "svgUrl": "/assets/Tile/Contemporary/l102.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#A6F4F4",
+      "st2": "#458482",
+      "st3": "#1A3534",
+      "st4": "#EFEF7B"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l104",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l104",
+    "svgUrl": "/assets/Tile/Contemporary/l104.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F4CB89",
+      "st2": "#A9FCFA"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l105",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l105",
+    "svgUrl": "/assets/Tile/Contemporary/l105.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#7FEEF7",
+      "st2": "#F4F47F",
+      "st3": "#478D96",
+      "st4": "#BF3232"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l107",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l107",
+    "svgUrl": "/assets/Tile/Contemporary/l107.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#898762",
+      "st2": "#D1D1CF",
+      "st3": "#F7ADA4",
+      "st4": "#8C2D26",
+      "st5": "#A6C658",
+      "st6": "#E5E16A",
+      "st7": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l108",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l108",
+    "svgUrl": "/assets/Tile/Contemporary/l108.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#A3A3A3",
+      "st2": "#BDF9E6",
+      "st3": "#BBE895",
+      "st4": "#F9F3A7",
+      "st5": "#8E8D75",
+      "st6": "#F9BBB9"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l110",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l110",
+    "svgUrl": "/assets/Tile/Contemporary/l110.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#5AA39A",
+      "st2": "#9CFFF1",
+      "st3": "#5FBFD6",
+      "st4": "#F5FC72"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l111",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l111",
+    "svgUrl": "/assets/Tile/Contemporary/l111.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F6AEC3",
+      "st2": "#297D91",
+      "st3": "#E2E775",
+      "st4": "#932727",
+      "st5": "#EF4C4C",
+      "st6": "#3D3D3D"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l112",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l112",
+    "svgUrl": "/assets/Tile/Contemporary/l112.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#EEAF30",
+      "st2": "#F8F299",
+      "st3": "#C9DADD",
+      "st4": "#66ACA8",
+      "st5": "#D2E180",
+      "st6": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l113",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l113",
+    "svgUrl": "/assets/Tile/Contemporary/l113.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#A84E36",
+      "st2": "#519285",
+      "st3": "#8EAF63",
+      "st4": "#CEE18F",
+      "st5": "#EDEC86",
+      "st6": "#B5E0DC"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l115",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l115",
+    "svgUrl": "/assets/Tile/Contemporary/l115.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#3C55A4",
+      "st2": "#98985F",
+      "st3": "#EC1E24",
+      "st4": "#9DCCD7",
+      "st5": "#F7F29F",
+      "st6": "#E2BB3D",
+      "st7": "#3A6C7B",
+      "st8": "#249A5D",
+      "st9": "#D7D7D7",
+      "st10": "#888888",
+      "st11": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l116a",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l116a",
+    "svgUrl": "/assets/Tile/Contemporary/l116a.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#C9DADD"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l116b",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l116b",
+    "svgUrl": "/assets/Tile/Contemporary/l116b.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#C9DADD",
+      "st2": "#96A78D",
+      "st3": "#64887A",
+      "st4": "#F1D9B2",
+      "st5": "#ED7B7B",
+      "st6": "#EAA780"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l116d",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l116d",
+    "svgUrl": "/assets/Tile/Contemporary/l116d.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#C9DADD",
+      "st2": "#F1D9B2",
+      "st3": "#EAA780",
+      "st4": "#ED7B7B",
+      "st5": "#ECE47C",
+      "st6": "#BDB35C",
+      "st7": "#822222"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l117",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l117",
+    "svgUrl": "/assets/Tile/Contemporary/l117.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#61EEF2",
+      "st2": "#EAEAEA",
+      "st3": "#939393",
+      "st4": "#F7CD84",
+      "st5": "#CCCCCC",
+      "st6": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l118",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l118",
+    "svgUrl": "/assets/Tile/Contemporary/l118.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F2EF97",
+      "st2": "#A2A063",
+      "st3": "#A5BFC8",
+      "st4": "#F6E4AC",
+      "st5": "#8CD6F2",
+      "st6": "#366A77"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l123",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l123",
+    "svgUrl": "/assets/Tile/Contemporary/l123.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#1A1F1C"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l124",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l124",
+    "svgUrl": "/assets/Tile/Contemporary/l124.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#9A988E",
+      "st2": "#5E6959",
+      "st3": "#CADADD",
+      "st4": "#64897A"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l127",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l127",
+    "svgUrl": "/assets/Tile/Contemporary/l127.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#FC9808",
+      "st2": "#C9C9C9",
+      "st3": "#232323",
+      "st4": "#667A95",
+      "st5": "#FF7676",
+      "st6": "#A02D2D",
+      "st7": "#F9C78C",
+      "st8": "#FCFC68",
+      "st9": "#A5DB86",
+      "st10": "#FFFFC0",
+      "st11": "#686868",
+      "st12": "#28BF53"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l128",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l128",
+    "svgUrl": "/assets/Tile/Contemporary/l128.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#BCF975",
+      "st2": "#E4F9C7",
+      "st3": "#426325",
+      "st4": "#5F7A67",
+      "st5": "#649139",
+      "st6": "#97EFBB"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l129",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l129",
+    "svgUrl": "/assets/Tile/Contemporary/l129.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#4C473D",
+      "st2": "#F4E9D0"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l130",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l130",
+    "svgUrl": "/assets/Tile/Contemporary/l130.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#BFBFBF",
+      "st2": "#ED7066",
+      "st3": "#707070",
+      "st4": "#913E3A",
+      "st5": "#EAE654",
+      "st6": "#E8B356",
+      "st7": "#F4B7B0",
+      "st8": "#819363",
+      "st9": "#D4F4A2",
+      "st10": "#E0DFDE",
+      "st11": "#8E9AF4",
+      "st12": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l131",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l131",
+    "svgUrl": "/assets/Tile/Contemporary/l131.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#6099A8",
+      "st2": "#98E3F4",
+      "st3": "#EFE86F",
+      "st4": "#465C89",
+      "st5": "#CFF99D",
+      "st6": "#B8F2DC",
+      "st7": "#F2DA99",
+      "st8": "#5E7C35",
+      "st9": "#CECECE",
+      "st10": "#5E5E5D",
+      "st11": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l19",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l19",
+    "svgUrl": "/assets/Tile/Contemporary/l19.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#9FAA9F",
+      "st2": "#A3BFD9",
+      "st3": "#BADFC1",
+      "st4": "#EAD48D",
+      "st5": "#BA834C",
+      "st6": "#CBB582",
+      "st7": "#FDE261",
+      "st8": "#E5E5E4"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "contemporary/l18",
+    "kind": "floor",
+    "family": "Contemporary",
+    "displayName": "Mod. l18",
+    "svgUrl": "/assets/Tile/Contemporary/l18.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#A1D3A3",
+      "st2": "#DADADA",
+      "st3": "#F1E065",
+      "st4": "#E0DB8B",
+      "st5": "#838383",
+      "st6": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "victorian/l49",
+    "kind": "border",
+    "family": "Victorian",
+    "displayName": "Mod. 49",
+    "svgUrl": "/assets/Border/Victorian/l49.1.svg",
+    "cornerUrl": "/assets/Border/Victorian/l49.2.svg",
+    "cornerInteriorUrl": "/assets/Border/Victorian/l49.3.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#8FAD68",
+      "st2": "#428689",
+      "st3": "#54EAAD",
+      "st4": "#FFE106",
+      "st5": "#EFF78D",
+      "st6": "#EDC154",
+      "st7": "#AF3838",
+      "st8": "#ADADAD"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "victorian/l61",
+    "kind": "border",
+    "family": "Victorian",
+    "displayName": "Mod. 61",
+    "svgUrl": "/assets/Border/Victorian/l61.1.svg",
+    "cornerUrl": "/assets/Border/Victorian/l61.2.svg",
+    "cornerInteriorUrl": "/assets/Border/Victorian/l61.3.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#FFD899",
+      "st2": "#84BCD8",
+      "st3": "#E4EA73",
+      "st4": "#89895B",
+      "st5": "#FF9797",
+      "st6": "#FC9500"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "victorian/l62",
+    "kind": "border",
+    "family": "Victorian",
+    "displayName": "Mod. 62",
+    "svgUrl": "/assets/Border/Victorian/l62.1.svg",
+    "cornerUrl": "/assets/Border/Victorian/l62.2.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#455245",
+      "st2": "#A5A2B7",
+      "st3": "#E0FFE8",
+      "st4": "#F8D2DD",
+      "st5": "#B78795"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "victorian/l68",
+    "kind": "border",
+    "family": "Victorian",
+    "displayName": "Mod. 68",
+    "svgUrl": "/assets/Border/Victorian/l68.1.svg",
+    "cornerUrl": "/assets/Border/Victorian/l68.2.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#969696",
+      "st2": "#A09D6D",
+      "st3": "#C2D18C",
+      "st4": "#F4F17F",
+      "st5": "#E5E5E5",
+      "st6": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l130",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 130",
+    "svgUrl": "/assets/Border/Floral/l130.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l130.2.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#D4F4A2",
+      "st2": "#E0DFDE",
+      "st3": "#913E3A",
+      "st4": "#EAE654",
+      "st5": "#8E9AF4",
+      "st6": "#819363",
+      "st7": "#ED7066",
+      "st8": "#F4B7B0",
+      "st9": "#707070",
+      "st10": "#56A5A5",
+      "st11": "#E8B356",
+      "st12": "#ACF460",
+      "st13": "#BFBFBF",
+      "st14": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l126",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 126",
+    "svgUrl": "/assets/Border/Floral/l126.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l126.2.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l125",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 125",
+    "svgUrl": "/assets/Border/Floral/l125.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l125.2.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l87",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 87",
+    "svgUrl": "/assets/Border/Floral/l87.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l87.2.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#EEEA69",
+      "st2": "#C4E1BC",
+      "st3": "#94CA66",
+      "st4": "#537B80",
+      "st5": "#313F76",
+      "st6": "#993D3D",
+      "st7": "#F6F19B"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l84",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 84",
+    "svgUrl": "/assets/Border/Floral/l84.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l84.2.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F4E7CF",
+      "st2": "#F0B961",
+      "st3": "#394C45",
+      "st4": "#3A6531",
+      "st5": "#E6E983",
+      "st6": "#64887A",
+      "st7": "#BCB961",
+      "st8": "#706F4F",
+      "st9": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l84b",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 84b",
+    "svgUrl": "/assets/Border/Floral/l84b.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l84b.2.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#7F7F7F",
+      "st2": "#A1BAD3",
+      "st3": "#DAC7A9",
+      "st4": "#EEBA63",
+      "st5": "#DAE084",
+      "st6": "#7AA395",
+      "st7": "#EE4748",
+      "st8": "#689A4A",
+      "st9": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l3",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 3",
+    "svgUrl": "/assets/Border/Floral/l3.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l3.2.svg",
+    "layers": {
+      "st0": "#D3AC85",
+      "st1": "#8E2424",
+      "st2": "#F7EAB7",
+      "st3": "#5C819E"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l4",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 4",
+    "svgUrl": "/assets/Border/Floral/l4.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l4.2.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#555555",
+      "st2": "#E4E4E4",
+      "st3": "#AFAFAF",
+      "st5": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l6",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 6",
+    "svgUrl": "/assets/Border/Floral/l6.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l6.2.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#E9ED9A",
+      "st2": "#A4E6EA",
+      "st3": "#E0E2E2",
+      "st4": "#757575",
+      "st5": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l29",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 29",
+    "svgUrl": "/assets/Border/Floral/l29.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l29.2.svg",
+    "cornerInteriorUrl": "/assets/Border/Floral/l29.3.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#A5A5A0",
+      "st2": "#A0EFED",
+      "st3": "#B6D37F",
+      "st4": "#EEF2A0",
+      "st5": "#F9B7B7",
+      "st6": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l30",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 30",
+    "svgUrl": "/assets/Border/Floral/l30.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l30.2.svg",
+    "cornerInteriorUrl": "/assets/Border/Floral/l30.3.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#EFC67D",
+      "st2": "#F9C2C2",
+      "st3": "#2AB2BC",
+      "st4": "#818281",
+      "st5": "#B4CC7F",
+      "st6": "#E2E2E2",
+      "st7": "#F9F9AA",
+      "st8": "#FFFFFF"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l31",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 31",
+    "svgUrl": "/assets/Border/Floral/l31.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l31.2.svg",
+    "cornerInteriorUrl": "/assets/Border/Floral/l31.3.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#C9C9C9",
+      "st2": "#FCD465",
+      "st3": "#F9F567",
+      "st4": "#822121",
+      "st5": "#F7A9A9",
+      "st6": "#B6DEF2",
+      "st7": "#000000"
+    },
+    "source": "builtin"
+  },
+  {
+    "id": "floral/l86",
+    "kind": "border",
+    "family": "Floral",
+    "displayName": "Mod. 86",
+    "svgUrl": "/assets/Border/Floral/l86.1.svg",
+    "cornerUrl": "/assets/Border/Floral/l86.2.svg",
+    "cornerInteriorUrl": "/assets/Border/Floral/l86.3.svg",
+    "layers": {
+      "st0": "#FFFFFF",
+      "st1": "#F3CDA7",
+      "st2": "#9DD9E5",
+      "st3": "#1A1F1C",
+      "st4": "#C9E1A9",
+      "st5": "#96A78D",
+      "st6": "#667A94",
+      "st7": "#F6A3A4",
+      "st8": "#F3C43E",
+      "st9": "#F1ED7B",
+      "st10": "#A1BAD3",
+      "st11": "#635E4C"
+    },
+    "source": "builtin"
+  }
+]
