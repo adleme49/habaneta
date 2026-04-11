@@ -40,7 +40,7 @@ try {
 
   // Editor should show a tile now
   const editorHasTile = await page
-    .getByText('Salvar a recientes')
+    .getByText('Save to recents')
     .isVisible();
   console.log(`   Editor ready after click: ${editorHasTile}`);
 

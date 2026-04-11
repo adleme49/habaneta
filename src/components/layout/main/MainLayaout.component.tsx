@@ -3,7 +3,6 @@ import TilesBrowserLayout from '../tilesBrowser/TilesBrowserLayout.component';
 import TilesEditorLayout from '../tilesEditor/TilesEditorLayout.component';
 import TilesPreviewLayout from '../tilesPreview/TilesPreviewLayout.component';
 import EnviromentModal from '../../preview/modals/enviromentsModal/EnviromentModal.component';
-import SaveModal from '../../preview/modals/saveModal/SaveModal.component';
 import GalleryModal from '../../preview/modals/galleryModal/GalleryModal.component';
 import { useStore } from '../../../store/store';
 
@@ -38,7 +37,6 @@ const MainLayout: React.FC = () => {
         </section>
       </div>
       <EnviromentModal />
-      <SaveModal />
       <GalleryModal />
     </>
   );

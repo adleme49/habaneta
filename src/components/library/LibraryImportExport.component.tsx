@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   exportUserTiles,
@@ -8,20 +9,10 @@ import {
 import { queryKeys } from '../../lib/queries';
 import { Button } from '@/components/ui/button';
 
-/**
- * Import / export buttons for the user-tile collection. Shown in
- * the /library page header next to the Upload button.
- *
- *   Export → downloads a JSON file of just the user tiles
- *   Import → file picker → parses, dedupes, merges into IndexedDB,
- *            invalidates the library query so the table + editor
- *            pick up the new rows automatically
- *
- * Import result is surfaced inline next to the buttons.
- */
 const LibraryImportExport: React.FC<{ userTileCount: number }> = ({
   userTileCount,
 }) => {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<string | null>(null);
@@ -36,10 +27,16 @@ const LibraryImportExport: React.FC<{ userTileCount: number }> = ({
   const handleExport = async () => {
     try {
       const count = await exportUserTiles();
-      show(`Exported ${count} tile${count === 1 ? '' : 's'}`);
+      show(
+        count === 1
+          ? t('library.importExport.exported', { count })
+          : t('library.importExport.exportedPlural', { count })
+      );
     } catch (err) {
       show(
-        `Export failed: ${err instanceof Error ? err.message : String(err)}`,
+        t('library.importExport.exportFailed', {
+          error: err instanceof Error ? err.message : String(err),
+        }),
         true
       );
     }
@@ -59,13 +56,21 @@ const LibraryImportExport: React.FC<{ userTileCount: number }> = ({
     try {
       const result: ImportResult = await importUserTiles(file);
       await queryClient.invalidateQueries({ queryKey: queryKeys.library });
-      const parts = [`Imported ${result.added}`];
-      if (result.skipped > 0) parts.push(`skipped ${result.skipped}`);
-      if (result.errors.length > 0) parts.push(`${result.errors.length} errors`);
-      show(parts.join(', '), result.errors.length > 0);
+      let message = t('library.importExport.imported', { count: result.added });
+      if (result.skipped > 0) {
+        message += t('library.importExport.skipped', { count: result.skipped });
+      }
+      if (result.errors.length > 0) {
+        message += t('library.importExport.errors', {
+          count: result.errors.length,
+        });
+      }
+      show(message, result.errors.length > 0);
     } catch (err) {
       show(
-        `Import failed: ${err instanceof Error ? err.message : String(err)}`,
+        t('library.importExport.importFailed', {
+          error: err instanceof Error ? err.message : String(err),
+        }),
         true
       );
     }
@@ -79,10 +84,10 @@ const LibraryImportExport: React.FC<{ userTileCount: number }> = ({
         onClick={handleExport}
         disabled={userTileCount === 0}
       >
-        Export
+        {t('library.importExport.export')}
       </Button>
       <Button variant="outline" size="sm" onClick={handleImportClick}>
-        Import
+        {t('library.importExport.import')}
       </Button>
       <input
         ref={fileInputRef}

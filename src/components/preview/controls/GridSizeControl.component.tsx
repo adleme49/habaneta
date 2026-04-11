@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useStore } from '../../../store/store';
 import {
   MAX_BODY_ROWS,
@@ -6,18 +7,14 @@ import {
 } from '../../../store/store';
 import { Button } from '@/components/ui/button';
 
-/**
- * Stepper for the floor grid body row count. Each "row" is a Body
- * component which itself draws 2 flex rows of tiles, so 3 body rows
- * = 6 actual tile rows. The label shows the logical count.
- */
 const GridSizeControl: React.FC = () => {
+  const { t } = useTranslation();
   const { gridBodyRows, setGridBodyRows } = useStore();
 
   return (
     <div className="flex items-center gap-2 text-sm">
       <span className="text-xs text-muted-foreground uppercase tracking-wide">
-        Grid size
+        {t('preview.gridSize')}
       </span>
       <div className="flex items-center gap-1">
         <Button
@@ -26,7 +23,7 @@ const GridSizeControl: React.FC = () => {
           size="sm"
           onClick={() => setGridBodyRows(gridBodyRows - 1)}
           disabled={gridBodyRows <= MIN_BODY_ROWS}
-          aria-label="Fewer rows"
+          aria-label={t('preview.fewerRows')}
           className="h-7 w-7 p-0"
         >
           −
@@ -40,7 +37,7 @@ const GridSizeControl: React.FC = () => {
           size="sm"
           onClick={() => setGridBodyRows(gridBodyRows + 1)}
           disabled={gridBodyRows >= MAX_BODY_ROWS}
-          aria-label="More rows"
+          aria-label={t('preview.moreRows')}
           className="h-7 w-7 p-0"
         >
           +

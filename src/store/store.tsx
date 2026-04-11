@@ -6,6 +6,7 @@ import React, {
   useReducer,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   TileSource,
   TileInstance,
@@ -26,6 +27,7 @@ import {
 } from '../lib/queries';
 import { colors as seedColors } from '../lib/colors';
 import { Ambient, AmbientId, DEFAULT_AMBIENT_ID, findAmbient } from '../lib/ambients';
+import { DesignState } from '../lib/design-url';
 import { getNextGrid } from '../constants/floor';
 
 /** Range for the user-controlled floor body row count. */
@@ -171,7 +173,7 @@ function recentReducer(state: RecentState, action: RecentAction): RecentState {
 
 // -------------- Store --------------
 
-type ModalName = 'gallery' | 'enviroment' | 'save' | null;
+type ModalName = 'gallery' | 'enviroment' | null;
 
 export interface Store {
   // Library
@@ -233,6 +235,26 @@ export interface Store {
   isBrowserCollapsed: boolean;
   toggleBrowserCollapsed: () => void;
 
+  /**
+   * Apply a decoded DesignState to the live store — restores
+   * floor/border instances (and their layer overrides) to recent
+   * slots, sets grid body rows and ambient. Used by shareable URL
+   * hashes on page load.
+   *
+   * Returns a list of sourceIds that couldn't be resolved against
+   * the current library so callers can warn the user about a
+   * partial restore (e.g. a shared URL references a `user/...`
+   * tile the recipient doesn't have in their IndexedDB).
+   */
+  applyDesign: (design: DesignState) => { missingSourceIds: string[] };
+
+  /**
+   * Snapshot the current live state as a DesignState for encoding
+   * into a share URL. Returns undefined fields for anything that
+   * isn't currently selected.
+   */
+  getCurrentDesign: () => DesignState;
+
   // UI
   modal: ModalName;
   openModal: (modal: Exclude<ModalName, null>) => void;
@@ -256,19 +278,20 @@ export const StoreProvider: React.FC<{ children?: React.ReactNode }> = ({
   // a successful load — rendering a loading/error shell until the
   // catalog is ready keeps the downstream components simple (they can
   // assume `library` is a populated TileSource[]).
+  const { t } = useTranslation();
   const libraryQuery = useLibraryQuery();
 
   if (libraryQuery.isPending) {
     return (
       <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">
-        Loading catalog…
+        {t('library.loading')}
       </div>
     );
   }
   if (libraryQuery.isError || !libraryQuery.data) {
     return (
       <div className="min-h-screen flex items-center justify-center text-sm text-red-600">
-        Failed to load catalog: {String(libraryQuery.error)}
+        {t('library.failed', { error: String(libraryQuery.error) })}
       </div>
     );
   }
@@ -333,6 +356,41 @@ const StoreProviderInner: React.FC<{
   const toggleBrowserCollapsed = useCallback(
     () => setIsBrowserCollapsed((c) => !c),
     []
+  );
+
+  // Apply a decoded DesignState to the store. Commits each instance
+  // as a new recent slot (so it stays editable) and sets the
+  // visualization knobs. Returns the list of sourceIds we couldn't
+  // find in the library so the caller can warn the user about a
+  // partial restore.
+  const applyDesign = useCallback(
+    (design: DesignState) => {
+      const missingSourceIds: string[] = [];
+      if (design.floor) {
+        const source = findSource(library, design.floor.sourceId);
+        if (source) {
+          dispatch({ type: 'ADD', instance: design.floor, source });
+        } else {
+          missingSourceIds.push(design.floor.sourceId);
+        }
+      }
+      if (design.border) {
+        const source = findSource(library, design.border.sourceId);
+        if (source) {
+          dispatch({ type: 'ADD', instance: design.border, source });
+        } else {
+          missingSourceIds.push(design.border.sourceId);
+        }
+      }
+      if (design.gridBodyRows !== undefined) {
+        setGridBodyRows(design.gridBodyRows);
+      }
+      if (design.selectedAmbientId) {
+        setSelectedAmbientId(design.selectedAmbientId);
+      }
+      return { missingSourceIds };
+    },
+    [library, setGridBodyRows, setSelectedAmbientId]
   );
 
   // Pick a tile from the browser → fresh instance loaded into editor,
@@ -501,6 +559,27 @@ const StoreProviderInner: React.FC<{
     return resolveTile(source, editingInstance);
   }, [library, editingInstance]);
 
+  // Snapshot the live store into a DesignState for URL encoding.
+  // Pulls the floor / border instances out of the recent slots
+  // (where they're committed) rather than from the editor buffer,
+  // so "Share" always reflects what's actually on the grid.
+  const getCurrentDesign = useCallback((): DesignState => {
+    const floorInstance =
+      recent.floorIndex !== undefined
+        ? recent.slots[recent.floorIndex] ?? undefined
+        : undefined;
+    const borderInstance =
+      recent.borderIndex !== undefined
+        ? recent.slots[recent.borderIndex] ?? undefined
+        : undefined;
+    return {
+      floor: floorInstance ?? undefined,
+      border: borderInstance ?? undefined,
+      gridBodyRows,
+      selectedAmbientId: selectedAmbient.id,
+    };
+  }, [recent.floorIndex, recent.borderIndex, recent.slots, gridBodyRows, selectedAmbient.id]);
+
   const value: Store = {
     library,
     families,
@@ -544,6 +623,9 @@ const StoreProviderInner: React.FC<{
 
     isBrowserCollapsed,
     toggleBrowserCollapsed,
+
+    applyDesign,
+    getCurrentDesign,
 
     modal,
     openModal: (m) => setModal(m),

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useStore } from '../../../store/store';
 import { findSource, TilePreset } from '../../../lib/library';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,7 @@ import { Button } from '@/components/ui/button';
  * name and a delete button. Clicking the chip applies the preset.
  */
 const Presets: React.FC = () => {
+  const { t } = useTranslation();
   const {
     editingInstance,
     presetsForEditing,
@@ -37,7 +39,7 @@ const Presets: React.FC = () => {
     <div className="pt-4 w-full max-w-md">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-          Presets
+          {t('editor.presets')}
         </h3>
         {!isNaming && (
           <Button
@@ -45,7 +47,7 @@ const Presets: React.FC = () => {
             size="sm"
             onClick={() => setIsNaming(true)}
           >
-            Save as preset
+            {t('editor.saveAsPreset')}
           </Button>
         )}
       </div>
@@ -64,11 +66,11 @@ const Presets: React.FC = () => {
                 setName('');
               }
             }}
-            placeholder="Preset name…"
+            placeholder={t('editor.presetNamePlaceholder')}
             className="flex-1 border rounded px-2 py-1 text-sm"
           />
           <Button size="sm" onClick={handleSave} disabled={!name.trim()}>
-            Save
+            {t('common.save')}
           </Button>
           <Button
             variant="outline"
@@ -78,15 +80,13 @@ const Presets: React.FC = () => {
               setName('');
             }}
           >
-            Cancel
+            {t('common.cancel')}
           </Button>
         </div>
       )}
 
       {presetsForEditing.length === 0 ? (
-        <p className="text-xs text-gray-400">
-          No presets yet for this tile.
-        </p>
+        <p className="text-xs text-gray-400">{t('editor.noPresetsYet')}</p>
       ) : (
         <div className="flex flex-wrap gap-2">
           {presetsForEditing.map((preset) => (

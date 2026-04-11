@@ -5,20 +5,19 @@ import TilePreviewActions from '../../preview/actions/TilePreviewActions.compone
 import GridSizeControl from '../../preview/controls/GridSizeControl.component';
 
 /**
- * Preview section. Sticky header (title + grid size), sticky recent
- * row below, scrollable floor grid in the middle, sticky action
- * buttons at the bottom. No internal layout component may push the
- * page to scroll — everything is bounded.
+ * Preview section. Title header removed — the floor grid itself
+ * makes the column identity obvious. GridSizeControl moves into
+ * the recent-row strip so the stepper remains close to the grid
+ * it controls.
  */
 const TilesPreviewLayout: React.FC = () => {
   return (
     <div className="h-full flex flex-col">
-      <div className="px-4 py-3 border-b flex-shrink-0 flex items-center justify-between bg-white">
-        <h2 className="text-sm font-semibold text-gray-700">Preview</h2>
+      <div className="px-4 pt-3 pb-2 border-b flex-shrink-0 bg-white flex items-center justify-between gap-4">
+        <div className="min-w-0 flex-1">
+          <TileRecent />
+        </div>
         <GridSizeControl />
-      </div>
-      <div className="px-4 pt-3 pb-2 border-b flex-shrink-0 bg-white">
-        <TileRecent />
       </div>
       <div
         id="grid"

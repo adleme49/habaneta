@@ -47,11 +47,11 @@ try {
   await page.waitForTimeout(300);
   await page.locator('.svg-wrapper').first().click();
   await page.waitForTimeout(300);
-  await page.getByText('Salvar a recientes').click();
+  await page.getByText('Save to recents').click();
   await page.waitForTimeout(300);
 
-  console.log('6. Open Enviroment modal');
-  await page.getByRole('button', { name: 'Enviroment' }).click();
+  console.log('6. Open Environment modal');
+  await page.getByRole('button', { name: 'Environment' }).click();
   // Wait for the dom-to-image capture to complete and modal to open
   await page.waitForTimeout(1200);
 

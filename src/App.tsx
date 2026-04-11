@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Home from './pages/Home';
 import Library from './pages/Library';
 
+import './i18n'; // initialize i18next before any component renders
 import './index.css';
 import './theme/variables.css';
 

@@ -1,16 +1,18 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useStore } from '../../../store/store';
 import EditorActions from '../editorActions/EditorActions.components';
 import Presets from '../presets/Presets.component';
 import SVGTilePaint from './svgTile/SVGTilePaint.component';
 
 const TileEditor: React.FC = () => {
+  const { t } = useTranslation();
   const { editingResolved, paintLayer } = useStore();
 
   if (!editingResolved) {
     return (
       <div className="text-center text-sm text-gray-400 py-8">
-        Select a tile to start editing
+        {t('editor.selectTilePrompt')}
       </div>
     );
   }

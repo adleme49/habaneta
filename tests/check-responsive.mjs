@@ -19,7 +19,7 @@ for (const vp of viewports) {
   await page.locator('.svg-wrapper').first().click();
   await page.waitForTimeout(300);
   // Check if save button is visible
-  const saveButton = page.getByText(/Salvar a recientes|Already in recents/);
+  const saveButton = page.getByText(/Save to recents|Already in recents/);
   const visible = await saveButton.isVisible().catch(() => false);
   const box = visible ? await saveButton.boundingBox() : null;
   await page.screenshot({ path: `/tmp/vp-${vp.name}.png`, fullPage: true });

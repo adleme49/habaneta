@@ -1,8 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useStore } from '../../../store/store';
 import { Button } from '@/components/ui/button';
 
 const EditorActions: React.FC = () => {
+  const { t } = useTranslation();
   const {
     editingInstance,
     editingIndex,
@@ -13,22 +15,26 @@ const EditorActions: React.FC = () => {
 
   if (!editingInstance) return null;
 
-  // If the editor is backed by a recent slot, edits already flow through
-  // paintLayer → UPDATE_EDITING, so there's nothing to "save".
   const isEditingRecent = editingIndex !== undefined;
 
   return (
     <div className="pt-6 flex items-center gap-2">
       <Button disabled={isEditingRecent} onClick={commitEditingToRecent}>
-        {isEditingRecent ? 'Already in recents' : 'Salvar a recientes'}
+        {isEditingRecent
+          ? t('editor.alreadyInRecents')
+          : t('editor.saveToRecents')}
       </Button>
       <Button
         variant="outline"
         disabled={!canResetEditing}
         onClick={resetEditingTile}
-        title={canResetEditing ? 'Clear your color edits' : 'No changes to reset'}
+        title={
+          canResetEditing
+            ? t('editor.resetColors')
+            : t('editor.resetColorsNoChanges')
+        }
       >
-        Reset colors
+        {t('editor.resetColors')}
       </Button>
     </div>
   );

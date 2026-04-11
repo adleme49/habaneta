@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   TileSource,
   resolveTile,
@@ -17,17 +18,13 @@ import {
 } from '@/components/ui/dialog';
 
 /**
- * Tile detail drawer shown from the /library page. Lets the user
- * inspect a tile's metadata + full-size preview + layer list
- * without committing to "open in editor" as the only interaction.
- *
- * Controlled: parent Library page owns the `tile` state and clears
- * it (→ dialog closes) on close.
+ * Tile detail drawer shown from the /library page.
  */
 const TileDetailDialog: React.FC<{
   tile: TileSource | null;
   onClose: () => void;
 }> = ({ tile, onClose }) => {
+  const { t } = useTranslation();
   const history = useHistory();
 
   const handleOpenInEditor = () => {
@@ -63,13 +60,19 @@ const TileDetailDialog: React.FC<{
               </div>
 
               <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm self-start">
-                <dt className="text-muted-foreground">Family</dt>
+                <dt className="text-muted-foreground">
+                  {t('library.detail.family')}
+                </dt>
                 <dd>{tile.family}</dd>
-                <dt className="text-muted-foreground">Kind</dt>
+                <dt className="text-muted-foreground">
+                  {t('library.detail.kind')}
+                </dt>
                 <dd className="uppercase text-xs tracking-wide">
                   {tile.kind}
                 </dd>
-                <dt className="text-muted-foreground">Source</dt>
+                <dt className="text-muted-foreground">
+                  {t('library.detail.source')}
+                </dt>
                 <dd>
                   <span
                     className={`text-xs px-2 py-0.5 rounded ${
@@ -81,18 +84,26 @@ const TileDetailDialog: React.FC<{
                     {tile.source}
                   </span>
                 </dd>
-                <dt className="text-muted-foreground">Layers</dt>
+                <dt className="text-muted-foreground">
+                  {t('library.detail.layers')}
+                </dt>
                 <dd>{Object.keys(tile.layers).length}</dd>
                 {tile.grids && (
                   <>
-                    <dt className="text-muted-foreground">Grid patterns</dt>
+                    <dt className="text-muted-foreground">
+                      {t('library.detail.gridPatterns')}
+                    </dt>
                     <dd>{tile.grids.length}</dd>
                   </>
                 )}
                 {tile.cornerUrl && (
                   <>
-                    <dt className="text-muted-foreground">Corner variant</dt>
-                    <dd className="text-xs">yes</dd>
+                    <dt className="text-muted-foreground">
+                      {t('library.detail.cornerVariant')}
+                    </dt>
+                    <dd className="text-xs">
+                      {t('library.detail.cornerVariantYes')}
+                    </dd>
                   </>
                 )}
               </dl>
@@ -100,7 +111,7 @@ const TileDetailDialog: React.FC<{
 
             <div className="mt-2">
               <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                Default palette
+                {t('library.detail.defaultPalette')}
               </h4>
               <div className="flex flex-wrap gap-1.5">
                 {Object.entries(tile.layers).map(([layerId, color]) => (
@@ -122,9 +133,11 @@ const TileDetailDialog: React.FC<{
 
             <DialogFooter>
               <Button variant="outline" onClick={onClose}>
-                Close
+                {t('common.close')}
               </Button>
-              <Button onClick={handleOpenInEditor}>Open in editor</Button>
+              <Button onClick={handleOpenInEditor}>
+                {t('library.detail.openInEditor')}
+              </Button>
             </DialogFooter>
           </>
         )}

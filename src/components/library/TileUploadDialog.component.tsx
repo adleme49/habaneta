@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useForm } from '@tanstack/react-form';
 import { parseSvgFile, ParsedSvg } from '../../lib/svg-parse';
 import { TileSource, resolveTile, newInstance } from '../../lib/library';
@@ -17,17 +18,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-/**
- * Dialog-driven SVG upload flow.
- *
- *   1. User picks an SVG file (file input or drop)
- *   2. parseSvgFile extracts the `st*` layers + default colors
- *   3. A TanStack Form collects displayName / family / kind
- *   4. Live preview on the right renders the parsed SVG
- *   5. Submit → construct TileSource + mutate → library query
- *      refreshes everywhere via invalidation
- */
 const TileUploadDialog: React.FC = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [parsed, setParsed] = useState<ParsedSvg | null>(null);
   const [fileName, setFileName] = useState<string>('');
@@ -58,10 +50,7 @@ const TileUploadDialog: React.FC = () => {
         await saveMutation.mutateAsync(tile);
         resetAndClose();
       } catch {
-        // Keep the dialog open — the mutation's error state is
-        // rendered in the footer below so the user can see what
-        // went wrong (usually QuotaExceededError from IndexedDB).
-        // No resetAndClose so their form input is preserved.
+        // Keep the dialog open — error banner below surfaces the cause.
       }
     },
   });
@@ -80,7 +69,6 @@ const TileUploadDialog: React.FC = () => {
     try {
       const result = await parseSvgFile(file);
       setParsed(result);
-      // Pre-fill displayName from the filename if empty
       if (!form.state.values.displayName) {
         const base = file.name.replace(/\.svg$/i, '');
         form.setFieldValue('displayName', base);
@@ -91,7 +79,6 @@ const TileUploadDialog: React.FC = () => {
     }
   };
 
-  // Build a ResolvedTile-shaped preview out of the parsed SVG
   const previewTile = useMemo(() => {
     if (!parsed) return null;
     const previewSource: TileSource = {
@@ -115,14 +102,13 @@ const TileUploadDialog: React.FC = () => {
       }}
     >
       <DialogTrigger asChild>
-        <Button>Upload tile</Button>
+        <Button>{t('library.upload.trigger')}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Upload a tile</DialogTitle>
+          <DialogTitle>{t('library.upload.title')}</DialogTitle>
           <DialogDescription>
-            Drop an SVG with <code>class="colora stN"</code> shapes. Layers
-            will be auto-detected from the file.
+            {t('library.upload.description')}
           </DialogDescription>
         </DialogHeader>
 
@@ -136,7 +122,7 @@ const TileUploadDialog: React.FC = () => {
         >
           <div className="space-y-3">
             <div>
-              <Label htmlFor="svgfile">SVG file</Label>
+              <Label htmlFor="svgfile">{t('library.upload.svgFile')}</Label>
               <label
                 htmlFor="svgfile"
                 onDragOver={(e) => {
@@ -165,7 +151,11 @@ const TileUploadDialog: React.FC = () => {
                     <div className="text-green-700 font-medium">
                       {fileName}
                     </div>
-                    <div>{Object.keys(parsed.layers).length} layers detected</div>
+                    <div>
+                      {t('library.upload.layersDetected', {
+                        count: Object.keys(parsed.layers).length,
+                      })}
+                    </div>
                   </div>
                 ) : parseError ? (
                   <div className="text-center text-red-600 px-4">
@@ -173,9 +163,9 @@ const TileUploadDialog: React.FC = () => {
                   </div>
                 ) : (
                   <div className="text-center">
-                    <div>Drop an SVG here, or click to browse</div>
+                    <div>{t('library.upload.pickFilePrompt')}</div>
                     <div className="text-[10px] mt-1">
-                      Shapes must use <code>class="colora stN"</code>
+                      {t('library.upload.classHint')}
                     </div>
                   </div>
                 )}
@@ -196,13 +186,15 @@ const TileUploadDialog: React.FC = () => {
               name="displayName"
               children={(field) => (
                 <div>
-                  <Label htmlFor={field.name}>Name</Label>
+                  <Label htmlFor={field.name}>
+                    {t('library.upload.name')}
+                  </Label>
                   <Input
                     id={field.name}
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
-                    placeholder="e.g. Floral pattern 1"
+                    placeholder={t('library.upload.namePlaceholder')}
                     className="mt-1"
                   />
                 </div>
@@ -213,7 +205,9 @@ const TileUploadDialog: React.FC = () => {
               name="family"
               children={(field) => (
                 <div>
-                  <Label htmlFor={field.name}>Family</Label>
+                  <Label htmlFor={field.name}>
+                    {t('library.upload.family')}
+                  </Label>
                   <Input
                     id={field.name}
                     value={field.state.value}
@@ -229,7 +223,9 @@ const TileUploadDialog: React.FC = () => {
               name="kind"
               children={(field) => (
                 <div>
-                  <Label htmlFor={field.name}>Kind</Label>
+                  <Label htmlFor={field.name}>
+                    {t('library.upload.kind')}
+                  </Label>
                   <select
                     id={field.name}
                     value={field.state.value}
@@ -238,8 +234,8 @@ const TileUploadDialog: React.FC = () => {
                     }
                     className="mt-1 h-9 w-full border rounded-md border-input bg-transparent px-3 text-sm"
                   >
-                    <option value="floor">Floor</option>
-                    <option value="border">Border</option>
+                    <option value="floor">{t('library.upload.kindFloor')}</option>
+                    <option value="border">{t('library.upload.kindBorder')}</option>
                   </select>
                 </div>
               )}
@@ -247,7 +243,7 @@ const TileUploadDialog: React.FC = () => {
           </div>
 
           <div className="flex flex-col items-center">
-            <Label className="mb-2">Preview</Label>
+            <Label className="mb-2">{t('library.upload.preview')}</Label>
             <div className="w-[200px] h-[200px] border rounded-md overflow-hidden bg-gray-50 flex items-center justify-center">
               {previewTile ? (
                 <SVGTileBase
@@ -256,7 +252,7 @@ const TileUploadDialog: React.FC = () => {
                 />
               ) : (
                 <span className="text-xs text-muted-foreground">
-                  Pick a file to preview
+                  {t('library.upload.previewEmpty')}
                 </span>
               )}
             </div>
@@ -264,21 +260,25 @@ const TileUploadDialog: React.FC = () => {
 
           {saveMutation.isError && (
             <div className="col-span-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2">
-              Save failed: {String(saveMutation.error)}
+              {t('library.upload.saveFailed', {
+                error: String(saveMutation.error),
+              })}
               {String(saveMutation.error).includes('Quota') && (
-                <> — Try exporting and deleting older uploads first.</>
+                <> — {t('library.upload.quotaHint')}</>
               )}
             </div>
           )}
           <DialogFooter className="col-span-2">
             <Button type="button" variant="outline" onClick={resetAndClose}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               type="submit"
               disabled={!parsed || saveMutation.isPending}
             >
-              {saveMutation.isPending ? 'Saving…' : 'Save tile'}
+              {saveMutation.isPending
+                ? t('library.upload.saving')
+                : t('library.upload.saveTile')}
             </Button>
           </DialogFooter>
         </form>
