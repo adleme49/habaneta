@@ -1,15 +1,21 @@
-import React from 'react';
-import Default from '../../../theme/102.png';
-import { ITile } from '../../../context/interfaces';
+import React, { useMemo } from 'react';
+import { TileInstance, findSource, resolveTile } from '../../../lib/library';
 import { useStore } from '../../../store/store';
 import SVGTileBase from '../../common/SVGBase.component';
 
-const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
-  tile,
+const TileRecentItem: React.FC<{ instance: TileInstance; index: number }> = ({
+  instance,
   index,
 }) => {
-  const { selectRecent, deleteRecent, selectedTileIndex } = useStore();
-  const isActive = selectedTileIndex === index;
+  const { library, selectRecent, deleteRecent, editingIndex } = useStore();
+  const isActive = editingIndex === index;
+
+  const resolved = useMemo(() => {
+    const source = findSource(library, instance.sourceId);
+    return source ? resolveTile(source, instance) : undefined;
+  }, [library, instance]);
+
+  if (!resolved) return null;
 
   return (
     <div
@@ -18,20 +24,7 @@ const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
       }`}
       onClick={() => selectRecent(index)}
     >
-      {tile.layers ? (
-        <SVGTileBase
-          tile={tile}
-          style={{ width: '100%', height: '100%' }}
-        />
-      ) : tile.imgUrl ? (
-        <img
-          src={tile.imgUrl}
-          alt={tile.name}
-          className="w-full h-full object-cover"
-        />
-      ) : (
-        <img src={Default} alt={tile.name} className="w-full h-full object-cover" />
-      )}
+      <SVGTileBase tile={resolved} style={{ width: '100%', height: '100%' }} />
       <button
         onClick={(e) => {
           e.stopPropagation();

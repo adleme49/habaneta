@@ -11,7 +11,7 @@ try {
   await page.waitForTimeout(1000);
 
   console.log('Step 1: Click "Contemporary" category');
-  await page.getByText('Contemporary', { exact: true }).click();
+  await page.getByText(/^Contemporary/).click();
   await page.waitForTimeout(500);
   await page.screenshot({ path: '/tmp/flow-1.png', fullPage: true });
 

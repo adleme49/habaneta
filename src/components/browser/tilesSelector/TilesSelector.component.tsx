@@ -1,10 +1,9 @@
 import React from 'react';
 import TileItem from './TileItem.component';
 import { useStore } from '../../../store/store';
-import { IBorder, IFloor } from '../../../context/interfaces';
 
 const TilesSelector: React.FC = () => {
-  const { selectedFamily } = useStore();
+  const { selectedFamily, tilesForSelectedFamily } = useStore();
 
   if (!selectedFamily) {
     return (
@@ -16,8 +15,8 @@ const TilesSelector: React.FC = () => {
 
   return (
     <div className="max-h-[70vh] overflow-y-auto space-y-1">
-      {selectedFamily.types.map((tile: IFloor | IBorder) => (
-        <TileItem key={tile.name} tile={tile} />
+      {tilesForSelectedFamily.map((source) => (
+        <TileItem key={source.id} source={source} />
       ))}
     </div>
   );
