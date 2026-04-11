@@ -2,20 +2,16 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import MainLayout from '../components/layout/main/MainLayaout.component';
 import NavLayout from '../components/layout/nav/NavLayout.component';
-import LoaderOverlay from '../components/common/Overlay.component';
 import { useStore } from '../store/store';
+import BounceLoader from 'react-spinners/BounceLoader';
 
 const Home: React.FC = () => {
   const { overlay, editingInstance, selectEditingSourceById } = useStore();
   const location = useLocation();
 
   // If the URL carries ?tile=<sourceId>, pre-select that tile in the
-  // editor. Two guards prevent clobbering an in-progress edit:
-  //   - skip if the URL tile is already the one being edited (a
-  //     noop navigation shouldn't reset layerOverrides)
-  //   - effect deps intentionally only include location.search, so
-  //     subsequent editingInstance changes (user picks something
-  //     else) don't re-trigger and undo their choice
+  // editor. Skip if the same tile is already being edited to avoid
+  // clobbering in-progress overrides.
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tileId = params.get('tile');
@@ -26,11 +22,14 @@ const Home: React.FC = () => {
   }, [location.search]);
 
   return (
-    <div className="min-h-screen bg-white">
-      <LoaderOverlay active={overlay}>
-        <NavLayout />
-        <MainLayout />
-      </LoaderOverlay>
+    <div className="h-screen flex flex-col bg-white overflow-hidden">
+      <NavLayout />
+      <MainLayout />
+      {overlay && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <BounceLoader />
+        </div>
+      )}
     </div>
   );
 };

@@ -25,7 +25,13 @@ import {
   useSavePresetMutation,
 } from '../lib/queries';
 import { colors as seedColors } from '../lib/colors';
+import { Ambient, AmbientId, DEFAULT_AMBIENT_ID, findAmbient } from '../lib/ambients';
 import { getNextGrid } from '../constants/floor';
+
+/** Range for the user-controlled floor body row count. */
+export const MIN_BODY_ROWS = 1;
+export const MAX_BODY_ROWS = 6;
+export const DEFAULT_BODY_ROWS = 3;
 
 // -------------- Recent slots (reducer for the non-trivial juggling) --------------
 
@@ -215,6 +221,18 @@ export interface Store {
   selectRecent: (index: number) => void;
   deleteRecent: (index: number) => void;
 
+  // Visualization — grid size + active ambient
+  /** Number of <Body /> row pairs the floor grid renders. */
+  gridBodyRows: number;
+  setGridBodyRows: (n: number) => void;
+  /** Currently chosen ambient scene for the Environment modal. */
+  selectedAmbient: Ambient;
+  setSelectedAmbientId: (id: AmbientId) => void;
+
+  // Layout — collapsible panels
+  isBrowserCollapsed: boolean;
+  toggleBrowserCollapsed: () => void;
+
   // UI
   modal: ModalName;
   openModal: (modal: Exclude<ModalName, null>) => void;
@@ -294,6 +312,28 @@ const StoreProviderInner: React.FC<{
   const [overlay, setOverlay] = useState(false);
   const [gridImg, setGridImg] = useState<string | undefined>();
   const [svgHeight, setSvgHeight] = useState<number | undefined>();
+
+  // Visualization state.
+  const [gridBodyRows, setGridBodyRowsState] = useState<number>(DEFAULT_BODY_ROWS);
+  const setGridBodyRows = useCallback((n: number) => {
+    // Clamp to the documented range so stray callers can't blow up
+    // the render loop with a 10,000-row grid.
+    const clamped = Math.max(MIN_BODY_ROWS, Math.min(MAX_BODY_ROWS, Math.round(n)));
+    setGridBodyRowsState(clamped);
+  }, []);
+
+  const [selectedAmbientId, setSelectedAmbientId] =
+    useState<AmbientId>(DEFAULT_AMBIENT_ID);
+  const selectedAmbient = useMemo(
+    () => findAmbient(selectedAmbientId),
+    [selectedAmbientId]
+  );
+
+  const [isBrowserCollapsed, setIsBrowserCollapsed] = useState<boolean>(false);
+  const toggleBrowserCollapsed = useCallback(
+    () => setIsBrowserCollapsed((c) => !c),
+    []
+  );
 
   // Pick a tile from the browser → fresh instance loaded into editor,
   // not tied to any recent slot yet. Also sets selectedFamily so the
@@ -496,6 +536,14 @@ const StoreProviderInner: React.FC<{
     selectedGrid: recent.selectedGrid,
     selectRecent,
     deleteRecent,
+
+    gridBodyRows,
+    setGridBodyRows,
+    selectedAmbient,
+    setSelectedAmbientId,
+
+    isBrowserCollapsed,
+    toggleBrowserCollapsed,
 
     modal,
     openModal: (m) => setModal(m),
