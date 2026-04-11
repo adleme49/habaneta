@@ -10,7 +10,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useLibraryQuery } from '../lib/queries';
+import { useDeleteUserTileMutation, useLibraryQuery } from '../lib/queries';
 import {
   TileSource,
   resolveTile,
@@ -36,9 +36,14 @@ import {
  */
 const Library: React.FC = () => {
   const { data: library, isPending, isError, error } = useLibraryQuery();
+  const deleteMutation = useDeleteUserTileMutation();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+  const [confirmingDelete, setConfirmingDelete] = useState<string | null>(null);
+
+  const builtinCount = library?.filter((t) => t.source === 'builtin').length ?? 0;
+  const userCount = library?.filter((t) => t.source === 'user').length ?? 0;
 
   const columns = useMemo<ColumnDef<TileSource>[]>(
     () => [
@@ -105,8 +110,51 @@ const Library: React.FC = () => {
           </code>
         ),
       },
+      {
+        id: 'actions',
+        header: '',
+        enableSorting: false,
+        enableColumnFilter: false,
+        cell: ({ row }) => {
+          if (row.original.source !== 'user') return null;
+          const isConfirming = confirmingDelete === row.original.id;
+          if (isConfirming) {
+            return (
+              <div className="flex items-center gap-1">
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => {
+                    deleteMutation.mutate(row.original.id);
+                    setConfirmingDelete(null);
+                  }}
+                >
+                  Confirm
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setConfirmingDelete(null)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            );
+          }
+          return (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="text-red-600 hover:bg-red-50 hover:text-red-700"
+              onClick={() => setConfirmingDelete(row.original.id)}
+            >
+              Delete
+            </Button>
+          );
+        },
+      },
     ],
-    []
+    [confirmingDelete, deleteMutation]
   );
 
   const table = useReactTable({
@@ -137,7 +185,12 @@ const Library: React.FC = () => {
         <div className="flex items-center gap-3">
           {library && (
             <span className="text-sm text-muted-foreground">
-              {library.length} tiles
+              <span className="tabular-nums">{library.length}</span> tiles
+              {userCount > 0 && (
+                <span className="ml-2 text-xs">
+                  ({builtinCount} builtin · {userCount} yours)
+                </span>
+              )}
             </span>
           )}
           <TileUploadDialog />

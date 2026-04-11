@@ -37,7 +37,7 @@ try {
   await page.waitForTimeout(400);
 
   // Detected layer count should be > 0
-  const layerText = await page.locator('text=/detected \\d+ layers/').textContent();
+  const layerText = await page.locator('text=/\\d+ layers detected/').textContent();
   console.log(`   ${layerText}`);
 
   console.log('4. Fill form + submit');
@@ -65,7 +65,23 @@ try {
 
   await page.screenshot({ path: '/tmp/upload-editor.png', fullPage: true });
 
-  // Clean up
+  console.log('7. Back to library, delete the uploaded tile');
+  await page.goto('http://localhost:3000/library', { waitUntil: 'networkidle' });
+  await page.waitForTimeout(500);
+
+  // Click the Delete button on the user-tile row, then Confirm
+  const row = page.locator('tbody tr', { hasText: 'Test Upload' });
+  await row.getByRole('button', { name: 'Delete' }).click();
+  await page.waitForTimeout(200);
+  await row.getByRole('button', { name: 'Confirm' }).click();
+  await page.waitForTimeout(500);
+
+  const afterDeleteRows = await page.locator('tbody tr').count();
+  console.log(`   Rows after delete: ${afterDeleteRows}`);
+  const stillVisible = await page.getByText('Test Upload').isVisible().catch(() => false);
+  console.log(`   "Test Upload" still visible: ${stillVisible}`);
+
+  // Clean up just in case
   await page.evaluate(async () => {
     const { del } = await import('/node_modules/.vite/deps/idb-keyval.js');
     await del('habaneta:user-tiles');

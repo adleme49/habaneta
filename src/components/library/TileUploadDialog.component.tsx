@@ -32,6 +32,7 @@ const TileUploadDialog: React.FC = () => {
   const [parsed, setParsed] = useState<ParsedSvg | null>(null);
   const [fileName, setFileName] = useState<string>('');
   const [parseError, setParseError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const saveMutation = useSaveUserTileMutation();
 
   const form = useForm({
@@ -138,25 +139,59 @@ const TileUploadDialog: React.FC = () => {
           <div className="space-y-3">
             <div>
               <Label htmlFor="svgfile">SVG file</Label>
-              <Input
+              <label
+                htmlFor="svgfile"
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDragging(true);
+                }}
+                onDragLeave={() => setIsDragging(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDragging(false);
+                  const file = e.dataTransfer.files?.[0];
+                  if (file) handleFile(file);
+                }}
+                className={`mt-1 flex h-24 cursor-pointer items-center justify-center rounded-md border-2 border-dashed text-xs text-muted-foreground transition-colors ${
+                  isDragging
+                    ? 'border-primary bg-primary/5 text-primary'
+                    : parseError
+                    ? 'border-red-300 bg-red-50'
+                    : parsed
+                    ? 'border-green-300 bg-green-50'
+                    : 'border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                {parsed && !parseError ? (
+                  <div className="text-center">
+                    <div className="text-green-700 font-medium">
+                      {fileName}
+                    </div>
+                    <div>{Object.keys(parsed.layers).length} layers detected</div>
+                  </div>
+                ) : parseError ? (
+                  <div className="text-center text-red-600 px-4">
+                    {parseError}
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <div>Drop an SVG here, or click to browse</div>
+                    <div className="text-[10px] mt-1">
+                      Shapes must use <code>class="colora stN"</code>
+                    </div>
+                  </div>
+                )}
+              </label>
+              <input
                 id="svgfile"
                 type="file"
                 accept=".svg,image/svg+xml"
+                className="hidden"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) handleFile(file);
                 }}
-                className="mt-1"
               />
-              {fileName && !parseError && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  {fileName} — detected{' '}
-                  {parsed ? Object.keys(parsed.layers).length : 0} layers
-                </p>
-              )}
-              {parseError && (
-                <p className="text-xs text-red-600 mt-1">{parseError}</p>
-              )}
             </div>
 
             <form.Field
