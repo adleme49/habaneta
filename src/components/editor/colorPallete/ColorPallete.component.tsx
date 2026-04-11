@@ -63,7 +63,7 @@ const ColorPallete: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
   return (
-    <div className="w-full space-y-1.5">
+    <div className="w-full max-w-[300px] space-y-1.5">
       {/* Preview + hex input inline, with expand/collapse toggle */}
       <div className="flex items-center gap-1.5">
         <button
