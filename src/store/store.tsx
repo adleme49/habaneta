@@ -26,6 +26,7 @@ import {
 } from '../lib/queries';
 import { colors as seedColors } from '../lib/colors';
 import { Ambient, AmbientId, DEFAULT_AMBIENT_ID, findAmbient } from '../lib/ambients';
+import { DesignState } from '../lib/design-url';
 import { getNextGrid } from '../constants/floor';
 
 /** Range for the user-controlled floor body row count. */
@@ -171,7 +172,7 @@ function recentReducer(state: RecentState, action: RecentAction): RecentState {
 
 // -------------- Store --------------
 
-type ModalName = 'gallery' | 'enviroment' | 'save' | null;
+type ModalName = 'gallery' | 'enviroment' | null;
 
 export interface Store {
   // Library
@@ -232,6 +233,21 @@ export interface Store {
   // Layout — collapsible panels
   isBrowserCollapsed: boolean;
   toggleBrowserCollapsed: () => void;
+
+  /**
+   * Apply a decoded DesignState to the live store — restores
+   * floor/border instances (and their layer overrides) to recent
+   * slots, sets grid body rows and ambient. Used by shareable URL
+   * hashes on page load.
+   */
+  applyDesign: (design: DesignState) => void;
+
+  /**
+   * Snapshot the current live state as a DesignState for encoding
+   * into a share URL. Returns undefined fields for anything that
+   * isn't currently selected.
+   */
+  getCurrentDesign: () => DesignState;
 
   // UI
   modal: ModalName;
@@ -333,6 +349,34 @@ const StoreProviderInner: React.FC<{
   const toggleBrowserCollapsed = useCallback(
     () => setIsBrowserCollapsed((c) => !c),
     []
+  );
+
+  // Apply a decoded DesignState to the store. Shareable URLs
+  // rehydrate on page load by committing each instance as a new
+  // recent slot (so the user can still edit/delete it) and
+  // setting the visualization knobs.
+  const applyDesign = useCallback(
+    (design: DesignState) => {
+      if (design.floor) {
+        const source = findSource(library, design.floor.sourceId);
+        if (source) {
+          dispatch({ type: 'ADD', instance: design.floor, source });
+        }
+      }
+      if (design.border) {
+        const source = findSource(library, design.border.sourceId);
+        if (source) {
+          dispatch({ type: 'ADD', instance: design.border, source });
+        }
+      }
+      if (design.gridBodyRows !== undefined) {
+        setGridBodyRows(design.gridBodyRows);
+      }
+      if (design.selectedAmbientId) {
+        setSelectedAmbientId(design.selectedAmbientId);
+      }
+    },
+    [library, setGridBodyRows]
   );
 
   // Pick a tile from the browser → fresh instance loaded into editor,
@@ -501,6 +545,27 @@ const StoreProviderInner: React.FC<{
     return resolveTile(source, editingInstance);
   }, [library, editingInstance]);
 
+  // Snapshot the live store into a DesignState for URL encoding.
+  // Pulls the floor / border instances out of the recent slots
+  // (where they're committed) rather than from the editor buffer,
+  // so "Share" always reflects what's actually on the grid.
+  const getCurrentDesign = useCallback((): DesignState => {
+    const floorInstance =
+      recent.floorIndex !== undefined
+        ? recent.slots[recent.floorIndex] ?? undefined
+        : undefined;
+    const borderInstance =
+      recent.borderIndex !== undefined
+        ? recent.slots[recent.borderIndex] ?? undefined
+        : undefined;
+    return {
+      floor: floorInstance ?? undefined,
+      border: borderInstance ?? undefined,
+      gridBodyRows,
+      selectedAmbientId: selectedAmbient.id,
+    };
+  }, [recent.floorIndex, recent.borderIndex, recent.slots, gridBodyRows, selectedAmbient.id]);
+
   const value: Store = {
     library,
     families,
@@ -544,6 +609,9 @@ const StoreProviderInner: React.FC<{
 
     isBrowserCollapsed,
     toggleBrowserCollapsed,
+
+    applyDesign,
+    getCurrentDesign,
 
     modal,
     openModal: (m) => setModal(m),
