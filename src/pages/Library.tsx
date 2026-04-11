@@ -35,6 +35,8 @@ import {
  * the catalog. First step of the Input module — upload, edit and
  * delete land in subsequent commits, each gated on this Table view.
  */
+type QuickFilter = 'all' | 'floor' | 'border' | 'user';
+
 const Library: React.FC = () => {
   const history = useHistory();
   const { data: library, isPending, isError, error } = useLibraryQuery();
@@ -42,6 +44,7 @@ const Library: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+  const [quickFilter, setQuickFilter] = useState<QuickFilter>('all');
   const [confirmingDelete, setConfirmingDelete] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -74,6 +77,24 @@ const Library: React.FC = () => {
 
   const builtinCount = library?.filter((t) => t.source === 'builtin').length ?? 0;
   const userCount = library?.filter((t) => t.source === 'user').length ?? 0;
+  const floorCount = library?.filter((t) => t.kind === 'floor').length ?? 0;
+  const borderCount = library?.filter((t) => t.kind === 'border').length ?? 0;
+
+  // Apply the quick filter BEFORE handing data to the table so it
+  // composes cleanly with the global text search and column sorts.
+  const filteredData = useMemo(() => {
+    if (!library) return [];
+    switch (quickFilter) {
+      case 'floor':
+        return library.filter((t) => t.kind === 'floor');
+      case 'border':
+        return library.filter((t) => t.kind === 'border');
+      case 'user':
+        return library.filter((t) => t.source === 'user');
+      default:
+        return library;
+    }
+  }, [library, quickFilter]);
 
   const columns = useMemo<ColumnDef<TileSource>[]>(
     () => [
@@ -188,7 +209,7 @@ const Library: React.FC = () => {
   );
 
   const table = useReactTable({
-    data: library ?? [],
+    data: filteredData,
     columns,
     state: { sorting, columnFilters, globalFilter },
     onSortingChange: setSorting,
@@ -239,6 +260,34 @@ const Library: React.FC = () => {
         )}
         {library && (
           <>
+            <div className="flex items-center gap-1.5 mb-3">
+              <FilterPill
+                active={quickFilter === 'all'}
+                onClick={() => setQuickFilter('all')}
+                label="All"
+                count={library.length}
+              />
+              <FilterPill
+                active={quickFilter === 'floor'}
+                onClick={() => setQuickFilter('floor')}
+                label="Floors"
+                count={floorCount}
+              />
+              <FilterPill
+                active={quickFilter === 'border'}
+                onClick={() => setQuickFilter('border')}
+                label="Borders"
+                count={borderCount}
+              />
+              <FilterPill
+                active={quickFilter === 'user'}
+                onClick={() => setQuickFilter('user')}
+                label="Mine"
+                count={userCount}
+                disabled={userCount === 0}
+              />
+            </div>
+
             <div className="flex items-center gap-2 mb-4">
               <Input
                 ref={searchInputRef}
@@ -344,5 +393,27 @@ const Library: React.FC = () => {
     </div>
   );
 };
+
+const FilterPill: React.FC<{
+  label: string;
+  count: number;
+  active: boolean;
+  onClick: () => void;
+  disabled?: boolean;
+}> = ({ label, count, active, onClick, disabled }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={disabled}
+    className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+      active
+        ? 'bg-primary text-primary-foreground border-primary'
+        : 'bg-background hover:bg-accent border-border text-foreground'
+    } ${disabled ? 'opacity-40 cursor-not-allowed' : ''}`}
+  >
+    {label}
+    <span className="ml-1.5 tabular-nums opacity-80">{count}</span>
+  </button>
+);
 
 export default Library;

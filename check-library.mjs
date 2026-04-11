@@ -43,7 +43,25 @@ try {
   const afterClear = await page.locator('tbody tr').count();
   console.log(`   Rows after clear: ${afterClear}`);
 
-  console.log('5. Back to editor');
+  console.log('5. Click "Floors" pill');
+  await page.getByRole('button', { name: /^Floors/ }).click();
+  await page.waitForTimeout(300);
+  const floorRows = await page.locator('tbody tr').count();
+  console.log(`   Floor rows: ${floorRows}`);
+
+  console.log('6. Click "Borders" pill');
+  await page.getByRole('button', { name: /^Borders/ }).click();
+  await page.waitForTimeout(300);
+  const borderRows = await page.locator('tbody tr').count();
+  console.log(`   Border rows: ${borderRows}`);
+
+  console.log('7. Click "All" pill to reset');
+  await page.getByRole('button', { name: /^All/ }).click();
+  await page.waitForTimeout(300);
+  const allRows = await page.locator('tbody tr').count();
+  console.log(`   All rows: ${allRows}`);
+
+  console.log('8. Back to editor');
   await page.getByRole('link', { name: /back to editor/ }).click();
   await page.waitForURL('**/home');
   await page.waitForTimeout(300);
