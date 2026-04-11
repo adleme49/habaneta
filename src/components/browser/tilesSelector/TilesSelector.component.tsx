@@ -57,7 +57,7 @@ const TilesSelector: React.FC = () => {
   return (
     <div
       ref={parentRef}
-      className="h-[70vh] overflow-y-auto"
+      className="h-full overflow-y-auto"
       style={{ contain: 'strict' }}
     >
       <div
