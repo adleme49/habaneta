@@ -1,13 +1,17 @@
-import React, { useContext } from 'react';
-import GeneralContext from '../../../../context/global/general.context';
+import React from 'react';
+import { useStore } from '../../../../store/store';
 import GalleryModalContent from './GalleryModalContent.component';
 import Modal from '../../../common/Modal.component';
 
 const GalleryModal: React.FC = () => {
-  const { showGalleryModal, closeModals } = useContext(GeneralContext);
+  const { modal, closeModals } = useStore();
 
   return (
-    <Modal isOpen={showGalleryModal} onClose={closeModals} className="w-full h-full">
+    <Modal
+      isOpen={modal === 'gallery'}
+      onClose={closeModals}
+      className="w-full h-full"
+    >
       <GalleryModalContent onClose={closeModals} />
     </Modal>
   );

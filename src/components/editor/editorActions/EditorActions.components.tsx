@@ -1,24 +1,23 @@
-import React, { useContext } from 'react';
-import RecentContext from '../../../context/recent/recent.context';
-import EditorContext from '../../../context/editor/editor.context';
+import React from 'react';
+import { useStore } from '../../../store/store';
 
 const EditorActions: React.FC = () => {
-  const { tile } = useContext(EditorContext);
-  const { addRecent } = useContext(RecentContext);
+  const { editingTile, addRecent, selectedTileIndex } = useStore();
 
-  const handleAddtoRecent = () => {
-    if (tile) {
-      addRecent(tile);
-    }
-  };
+  if (!editingTile) return null;
+
+  // If we're already editing a tile from recent, no need to "save to recent" again
+  // — edits are applied live via paintLayer.
+  const isEditingRecent = selectedTileIndex !== undefined;
 
   return (
-    <div className="pt-8">
+    <div className="pt-6">
       <button
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        onClick={handleAddtoRecent}
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300"
+        disabled={isEditingRecent}
+        onClick={() => addRecent(editingTile)}
       >
-        Salvar a recientes
+        {isEditingRecent ? 'Already in recents' : 'Salvar a recientes'}
       </button>
     </div>
   );

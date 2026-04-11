@@ -1,19 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { IColor } from '../../../context/interfaces';
-import EditorContext from '../../../context/editor/editor.context';
+import { useStore } from '../../../store/store';
 
 const ColorPalleteItem: React.FC<{ color: IColor }> = ({ color }) => {
-  const { setColor } = useContext(EditorContext);
-
-  const handleSetColor = () => {
-    setColor(color.code);
-  };
+  const { setSelectedColor } = useStore();
 
   return (
     <div
       className="h-20 cursor-pointer"
       style={{ background: color.code }}
-      onClick={handleSetColor}
+      onClick={() => setSelectedColor(color.code)}
     />
   );
 };

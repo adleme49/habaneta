@@ -5,17 +5,17 @@ import Home from './pages/Home';
 import './index.css';
 import './theme/variables.css';
 
-import GeneralState from './context/global/general.state';
+import { StoreProvider } from './store/store';
 
 const App: React.FC = () => (
-  <GeneralState>
+  <StoreProvider>
     <BrowserRouter>
       <Switch>
         <Route path="/home" component={Home} />
         <Route exact path="/" render={() => <Redirect to="/home" />} />
       </Switch>
     </BrowserRouter>
-  </GeneralState>
+  </StoreProvider>
 );
 
 export default App;

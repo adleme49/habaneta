@@ -1,17 +1,13 @@
-import React, { useContext, useMemo } from 'react';
-import GeneralContext from '../../../context/global/general.context';
-import EditorContext from '../../../context/editor/editor.context';
+import React, { useMemo } from 'react';
+import { useStore } from '../../../store/store';
 import Swatch from '@uiw/react-color-swatch';
-import { hexToHsva } from '@uiw/color-convert';
 
 const ColorPallete: React.FC = () => {
-  const { colors } = useContext(GeneralContext);
-  const { setColor } = useContext(EditorContext);
+  const { colors, setSelectedColor } = useStore();
 
   const flatColors = useMemo(() => colors.flat(), [colors]);
 
   const handleChange = (hsva: { h: number; s: number; v: number; a: number }) => {
-    // Convert HSVA back to hex
     const s = hsva.s / 100;
     const v = hsva.v / 100;
     const c = v * s;
@@ -25,19 +21,19 @@ const ColorPallete: React.FC = () => {
     else if (hsva.h < 300) { r = x; g = 0; b = c; }
     else { r = c; g = 0; b = x; }
     const toHex = (n: number) => Math.round((n + m) * 255).toString(16).padStart(2, '0');
-    setColor(`#${toHex(r)}${toHex(g)}${toHex(b)}`);
+    setSelectedColor(`#${toHex(r)}${toHex(g)}${toHex(b)}`);
   };
 
   return (
-    <div className="border-2 border-black p-2 w-[450px]">
+    <div className="border-2 border-black p-2">
       <Swatch
         colors={flatColors}
         color="#ffffff"
         rectProps={{
-          children: <Point />,
+          children: null,
           style: {
-            width: '40px',
-            height: '40px',
+            width: '32px',
+            height: '32px',
             margin: '2px',
           },
         }}
@@ -46,21 +42,5 @@ const ColorPallete: React.FC = () => {
     </div>
   );
 };
-
-const Point: React.FC<{ color?: string; checked?: boolean }> = ({ checked }) =>
-  checked ? (
-    <div
-      style={{
-        height: 6,
-        width: 6,
-        borderRadius: '50%',
-        backgroundColor: '#fff',
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-      }}
-    />
-  ) : null;
 
 export default ColorPallete;

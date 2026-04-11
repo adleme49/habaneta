@@ -1,12 +1,12 @@
-import React, { useContext, useState } from 'react';
-import RecentContext from '../../../../context/recent/recent.context';
+import React, { useState } from 'react';
+import { useStore } from '../../../../store/store';
 import TileInfo from './TileInfo.component';
 
 const SaveModalContent: React.FC<{
   onClose: Function;
   gridImg: string | undefined;
 }> = ({ onClose, gridImg }) => {
-  const { selectedBorder, selectedFloor } = useContext(RecentContext);
+  const { selectedBorder, selectedFloor } = useStore();
   const [userInfo, setUserInfo] = useState({});
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {

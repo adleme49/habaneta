@@ -1,21 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import Loading from '../components/layout/loading/Loading.component';
 import MainLayout from '../components/layout/main/MainLayaout.component';
 import NavLayout from '../components/layout/nav/NavLayout.component';
-import Toast from '../components/layout/toast/Toast.component';
-import GeneralContext from '../context/global/general.context';
 import LoaderOverlay from '../components/common/Overlay.component';
+import { useStore } from '../store/store';
 
 const Home: React.FC = () => {
-  const { loading, showOverlay } = useContext(GeneralContext);
-  const [showToast] = useState(false);
+  const { overlay } = useStore();
 
   return (
     <div className="min-h-screen bg-white">
-      <LoaderOverlay active={showOverlay}>
+      <LoaderOverlay active={overlay}>
         <NavLayout />
-        {loading ? <Loading loading={loading} /> : null}
-        {showToast ? <Toast showToast={showToast} /> : null}
+        <Loading loading={false} />
         <MainLayout />
       </LoaderOverlay>
     </div>

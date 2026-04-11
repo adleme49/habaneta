@@ -1,12 +1,10 @@
-import React, { useContext } from 'react';
-import RecentContext from '../../../context/recent/recent.context';
+import React from 'react';
+import { useStore } from '../../../store/store';
 import SimpleGrid from './subGrid/SimpleGrid.component';
 import DoubleGrid from './subGrid/DoubleGrid.component';
 
 const TileGrid: React.FC = () => {
-  const { selectedFloor, selectedBorder, selectedGrid } = useContext(
-    RecentContext
-  );
+  const { selectedFloor, selectedBorder, selectedGrid } = useStore();
 
   return selectedBorder && selectedBorder.cornerInteriorUrl ? (
     <DoubleGrid

@@ -1,47 +1,31 @@
 import domtoimage from 'dom-to-image';
-import React, { useContext } from 'react';
-import GeneralContext from '../../../context/global/general.context';
+import React from 'react';
+import { useStore } from '../../../store/store';
 
 const TilePreviewActions: React.FC = () => {
-  const {
-    setShowEnviromentModal,
-    setShowSaveModal,
-    setShowGalleryModal,
-    saveGridImg,
-    toggleOverlay
-  } = useContext(GeneralContext);
+  const { openModal, setGridImg, toggleOverlay } = useStore();
 
-  const domCapturer = (ModaltoOpen: Function) => {
+  const capture = (modal: 'enviroment' | 'save') => {
     toggleOverlay();
     const grid = document.getElementById('grid');
     if (grid) {
-      domtoimage.toPng(grid).then(dataUrl => {
-        saveGridImg(dataUrl);
+      domtoimage.toPng(grid).then((dataUrl) => {
+        setGridImg(dataUrl);
         toggleOverlay();
-        ModaltoOpen();
+        openModal(modal);
       });
     }
   };
 
-  const onEnviroment = () => {
-    domCapturer(setShowEnviromentModal);
-  };
-  const onSave = () => {
-    domCapturer(setShowSaveModal);
-  };
-  const onGallery = () => {
-    setShowGalleryModal();
-  };
-
   return (
     <div className="flex gap-2 py-4">
-      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={onGallery}>
+      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={() => openModal('gallery')}>
         Gallery
       </button>
-      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={onEnviroment}>
+      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={() => capture('enviroment')}>
         Enviroment
       </button>
-      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={onSave}>
+      <button className="px-4 py-2 border rounded hover:bg-gray-50" onClick={() => capture('save')}>
         Save
       </button>
     </div>

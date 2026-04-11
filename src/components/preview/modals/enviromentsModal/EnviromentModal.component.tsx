@@ -1,15 +1,17 @@
-import React, { useContext } from 'react';
-import GeneralContext from '../../../../context/global/general.context';
+import React from 'react';
+import { useStore } from '../../../../store/store';
 import EnviromentModalContent from './EnviromentModalContent.component';
-import RecentContext from '../../../../context/recent/recent.context';
 import Modal from '../../../common/Modal.component';
 
 export const EnviromentModal: React.FC = () => {
-  const { showEnviromentModal, closeModals, gridImg } = useContext(GeneralContext);
-  const { selectedBorder } = useContext(RecentContext);
+  const { modal, closeModals, gridImg, selectedBorder } = useStore();
 
   return (
-    <Modal isOpen={showEnviromentModal} onClose={closeModals} className="w-[80%] h-[90%]">
+    <Modal
+      isOpen={modal === 'enviroment'}
+      onClose={closeModals}
+      className="w-[80%] h-[90%]"
+    >
       {gridImg ? (
         <EnviromentModalContent
           img={gridImg}

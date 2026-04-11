@@ -1,25 +1,29 @@
-import React, { useContext } from 'react';
-import EditorContext from '../../../context/editor/editor.context';
+import React from 'react';
+import { useStore } from '../../../store/store';
 import EditorActions from '../editorActions/EditorActions.components';
 import SVGTilePaint from './svgTile/SVGTilePaint.component';
 
 const TileEditor: React.FC = () => {
-  const { tile, paintLayer } = useContext(EditorContext);
+  const { editingTile, paintLayer } = useStore();
 
-  const colorLayer = (layerId: string) => {
-    paintLayer(layerId);
-  };
+  if (!editingTile) {
+    return (
+      <div className="text-center text-sm text-gray-400 py-8">
+        Select a tile to start editing
+      </div>
+    );
+  }
 
-  return tile ? (
+  return (
     <>
       <div className="flex justify-center">
-        <SVGTilePaint tile={tile} colorLayer={colorLayer} />
+        <SVGTilePaint tile={editingTile} colorLayer={(id) => paintLayer(id)} />
       </div>
       <div className="flex justify-center">
         <EditorActions />
       </div>
     </>
-  ) : null;
+  );
 };
 
 export default TileEditor;

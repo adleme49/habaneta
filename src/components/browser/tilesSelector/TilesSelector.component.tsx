@@ -1,20 +1,26 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import TileItem from './TileItem.component';
-import GeneralContext from '../../../context/global/general.context';
+import { useStore } from '../../../store/store';
 import { IBorder, IFloor } from '../../../context/interfaces';
 
 const TilesSelector: React.FC = () => {
-  const { selectedFamily } = useContext(GeneralContext);
+  const { selectedFamily } = useStore();
 
-  return selectedFamily ? (
-    <div className="h-[70vh] overflow-y-auto">
-      <div className="space-y-1">
-        {selectedFamily.types.map((tile: IFloor | IBorder) => (
-          <TileItem key={tile.name} tile={tile} />
-        ))}
+  if (!selectedFamily) {
+    return (
+      <div className="text-xs text-gray-400 px-2 py-4">
+        Select a category →
       </div>
+    );
+  }
+
+  return (
+    <div className="max-h-[70vh] overflow-y-auto space-y-1">
+      {selectedFamily.types.map((tile: IFloor | IBorder) => (
+        <TileItem key={tile.name} tile={tile} />
+      ))}
     </div>
-  ) : null;
+  );
 };
 
 export default TilesSelector;

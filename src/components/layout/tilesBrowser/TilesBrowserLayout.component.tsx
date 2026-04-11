@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
-import GeneralContext from '../../../context/global/general.context';
+import React from 'react';
+import { useStore } from '../../../store/store';
 import Category from '../../browser/tilesCategory/TilesCategory.component';
 import TilesSelector from '../../browser/tilesSelector/TilesSelector.component';
 
 const TilesBrowserLayout: React.FC = () => {
-  const { tilesFamilys, borderFamilys } = useContext(GeneralContext);
+  const { tilesFamilys, borderFamilys } = useStore();
 
   return (
     <div>

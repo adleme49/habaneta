@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
-import EditorContext from '../../../context/editor/editor.context';
+import React from 'react';
+import { useStore } from '../../../store/store';
 
 const SelectedColor: React.FC = () => {
-  const { selectedColor } = useContext(EditorContext);
+  const { selectedColor } = useStore();
   return (
-    <div className="flex justify-center py-6">
+    <div className="flex justify-center py-4">
       <div
-        className="h-20 w-20 border border-gray-800"
+        className="h-16 w-16 border border-gray-800"
         style={{ background: selectedColor }}
       />
     </div>
