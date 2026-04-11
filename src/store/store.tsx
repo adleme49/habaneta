@@ -229,6 +229,10 @@ export interface Store {
   selectedAmbient: Ambient;
   setSelectedAmbientId: (id: AmbientId) => void;
 
+  // Layout — collapsible panels
+  isBrowserCollapsed: boolean;
+  toggleBrowserCollapsed: () => void;
+
   // UI
   modal: ModalName;
   openModal: (modal: Exclude<ModalName, null>) => void;
@@ -323,6 +327,12 @@ const StoreProviderInner: React.FC<{
   const selectedAmbient = useMemo(
     () => findAmbient(selectedAmbientId),
     [selectedAmbientId]
+  );
+
+  const [isBrowserCollapsed, setIsBrowserCollapsed] = useState<boolean>(false);
+  const toggleBrowserCollapsed = useCallback(
+    () => setIsBrowserCollapsed((c) => !c),
+    []
   );
 
   // Pick a tile from the browser → fresh instance loaded into editor,
@@ -531,6 +541,9 @@ const StoreProviderInner: React.FC<{
     setGridBodyRows,
     selectedAmbient,
     setSelectedAmbientId,
+
+    isBrowserCollapsed,
+    toggleBrowserCollapsed,
 
     modal,
     openModal: (m) => setModal(m),

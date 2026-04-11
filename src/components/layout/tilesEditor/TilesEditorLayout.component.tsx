@@ -15,7 +15,7 @@ const TilesEditorLayout: React.FC = () => {
         <h2 className="text-sm font-semibold text-gray-700">Editor</h2>
       </div>
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
-        <div className="flex flex-col items-center p-4 gap-3">
+        <div className="flex flex-col p-4 gap-3">
           <ColorPallete />
           <TileEditor />
         </div>

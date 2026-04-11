@@ -60,9 +60,11 @@ const ColorPallete: React.FC = () => {
     }
   };
 
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
+
   return (
-    <div className="w-full max-w-[320px] space-y-1.5">
-      {/* Preview + hex input inline */}
+    <div className="w-full space-y-1.5">
+      {/* Preview + hex input inline, with expand/collapse toggle */}
       <div className="flex items-center gap-1.5">
         <button
           type="button"
@@ -90,9 +92,20 @@ const ColorPallete: React.FC = () => {
           spellCheck={false}
           aria-label="Hex color value"
         />
+        <button
+          type="button"
+          onClick={() => setIsExpanded((v) => !v)}
+          className="w-7 h-7 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50 text-xs text-gray-500 flex-shrink-0"
+          title={isExpanded ? 'Collapse palette' : 'Expand palette'}
+          aria-label={isExpanded ? 'Collapse palette' : 'Expand palette'}
+          aria-expanded={isExpanded}
+        >
+          {isExpanded ? '▾' : '▸'}
+        </button>
       </div>
 
       {/* 9×4 preset grid — compact squares */}
+      {isExpanded && (
       <div
         className="grid gap-[2px]"
         style={{ gridTemplateColumns: 'repeat(9, 1fr)' }}
@@ -118,10 +131,12 @@ const ColorPallete: React.FC = () => {
         })}
       </div>
 
+      )}
+
       {/* Shades ramp: 4 darker + base + 4 lighter variations of the
           currently selected color. Hidden if selectedColor isn't a
           parseable hex (parseable shades list would be empty). */}
-      {shades.length > 0 && (
+      {isExpanded && shades.length > 0 && (
         <div className="pt-1">
           <div className="text-[10px] uppercase tracking-wide text-gray-400 mb-1">
             Shades
