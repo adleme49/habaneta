@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -36,12 +36,41 @@ import {
  * delete land in subsequent commits, each gated on this Table view.
  */
 const Library: React.FC = () => {
+  const history = useHistory();
   const { data: library, isPending, isError, error } = useLibraryQuery();
   const deleteMutation = useDeleteUserTileMutation();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [confirmingDelete, setConfirmingDelete] = useState<string | null>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Keyboard shortcut: "/" focuses the search input (common pattern on
+  // content-heavy pages). Ignored when the user is already typing in
+  // an input or textarea.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== '/') return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      e.preventDefault();
+      searchInputRef.current?.focus();
+      searchInputRef.current?.select();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const openInEditor = (sourceId: string) => {
+    history.push(`/home?tile=${encodeURIComponent(sourceId)}`);
+  };
 
   const builtinCount = library?.filter((t) => t.source === 'builtin').length ?? 0;
   const userCount = library?.filter((t) => t.source === 'user').length ?? 0;
@@ -212,7 +241,8 @@ const Library: React.FC = () => {
           <>
             <div className="flex items-center gap-2 mb-4">
               <Input
-                placeholder="Search tiles…"
+                ref={searchInputRef}
+                placeholder="Search tiles…  (press / to focus)"
                 value={globalFilter}
                 onChange={(e) => setGlobalFilter(e.target.value)}
                 className="max-w-sm"
@@ -283,7 +313,17 @@ const Library: React.FC = () => {
                     </TableRow>
                   ) : (
                     table.getRowModel().rows.map((row) => (
-                      <TableRow key={row.id}>
+                      <TableRow
+                        key={row.id}
+                        className="cursor-pointer"
+                        onClick={(e) => {
+                          // Don't hijack clicks on the action column
+                          // (Delete / Confirm / Cancel buttons).
+                          const target = e.target as HTMLElement;
+                          if (target.closest('button')) return;
+                          openInEditor(row.original.id);
+                        }}
+                      >
                         {row.getVisibleCells().map((cell) => (
                           <TableCell key={cell.id}>
                             {flexRender(

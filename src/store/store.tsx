@@ -187,6 +187,8 @@ export interface Store {
   editingIndex?: number;
 
   selectEditingSource: (source: TileSource) => void;
+  /** Pre-select a tile by source id — used by /home?tile=... navigation. */
+  selectEditingSourceById: (sourceId: string) => boolean;
   selectedColor: string;
   setSelectedColor: (color: string) => void;
   paintLayer: (layerId: string) => void;
@@ -290,11 +292,34 @@ const StoreProviderInner: React.FC<{
   const [svgHeight, setSvgHeight] = useState<number | undefined>();
 
   // Pick a tile from the browser → fresh instance loaded into editor,
-  // not tied to any recent slot yet.
-  const selectEditingSource = useCallback((source: TileSource) => {
-    setEditingInstance(newInstance(source));
-    dispatch({ type: 'DESELECT' });
-  }, []);
+  // not tied to any recent slot yet. Also sets selectedFamily so the
+  // browser panel reflects where the tile came from.
+  const selectEditingSource = useCallback(
+    (source: TileSource) => {
+      setEditingInstance(newInstance(source));
+      dispatch({ type: 'DESELECT' });
+      setSelectedFamily({
+        name: source.family,
+        kind: source.kind,
+        count: library.filter(
+          (t) => t.family === source.family && t.kind === source.kind
+        ).length,
+      });
+    },
+    [library]
+  );
+
+  // Look up a tile by id and load it into the editor. Returns false
+  // if the id isn't in the library (e.g. stale URL after delete).
+  const selectEditingSourceById = useCallback(
+    (sourceId: string): boolean => {
+      const source = findSource(library, sourceId);
+      if (!source) return false;
+      selectEditingSource(source);
+      return true;
+    },
+    [library, selectEditingSource]
+  );
 
   // Paint a single SVG layer. Updates the editor instance AND — if that
   // instance is currently backed by a recent slot — the slot too.
@@ -432,6 +457,7 @@ const StoreProviderInner: React.FC<{
     editingResolved,
     editingIndex: recent.editingIndex,
     selectEditingSource,
+    selectEditingSourceById,
     selectedColor,
     setSelectedColor,
     paintLayer,
