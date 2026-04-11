@@ -193,6 +193,10 @@ export interface Store {
   setSelectedColor: (color: string) => void;
   paintLayer: (layerId: string) => void;
   commitEditingToRecent: () => void;
+  /** Clear all layer overrides on the current edit, restoring defaults. */
+  resetEditingTile: () => void;
+  /** True when editingInstance has at least one layer override. */
+  canResetEditing: boolean;
 
   // Presets — named color schemes saved per TileSource
   /** All presets (for any source) currently in storage. */
@@ -337,6 +341,19 @@ const StoreProviderInner: React.FC<{
     [selectedColor, recent.editingIndex]
   );
 
+  // Clear layer overrides on the current edit — restore the source defaults.
+  // If the edit is backed by a recent slot, the slot syncs via UPDATE_EDITING.
+  const resetEditingTile = useCallback(() => {
+    setEditingInstance((prev) => {
+      if (!prev) return prev;
+      const next: TileInstance = { ...prev, layerOverrides: {} };
+      if (recent.editingIndex !== undefined) {
+        dispatch({ type: 'UPDATE_EDITING', instance: next });
+      }
+      return next;
+    });
+  }, [recent.editingIndex]);
+
   // "Salvar a recientes" — commit the current editor instance to a slot.
   const commitEditingToRecent = useCallback(() => {
     if (!editingInstance) return;
@@ -462,6 +479,10 @@ const StoreProviderInner: React.FC<{
     setSelectedColor,
     paintLayer,
     commitEditingToRecent,
+    resetEditingTile,
+    canResetEditing:
+      !!editingInstance &&
+      Object.keys(editingInstance.layerOverrides).length > 0,
 
     presets,
     presetsForEditing,
