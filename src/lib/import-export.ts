@@ -12,6 +12,7 @@
 
 import { TileSource } from './library';
 import { loadUserTiles, saveUserTiles } from './userTiles';
+import { sanitizeSvg } from './svg-sanitize';
 
 export interface ImportResult {
   added: number;
@@ -73,7 +74,17 @@ export async function importUserTiles(file: File): Promise<ImportResult> {
       skipped++;
       continue;
     }
-    toAdd.push({ ...check.tile, source: 'user' });
+
+    // If svgUrl carries an inline SVG, re-sanitize it. We can't
+    // verify the file origin (JSON is arbitrary) so we treat every
+    // imported payload as untrusted regardless of source.
+    const sanitized = sanitizeImportedSvgUrl(check.tile.svgUrl);
+    if (sanitized === null) {
+      errors.push(`${check.tile.id}: rejected by sanitizer`);
+      continue;
+    }
+
+    toAdd.push({ ...check.tile, svgUrl: sanitized, source: 'user' });
   }
 
   if (toAdd.length > 0) {
@@ -109,6 +120,51 @@ function validateTileSource(val: unknown): ValidationResult {
   if (typeof t.layers !== 'object' || t.layers === null) {
     return { ok: false, reason: `${t.id}: missing layers` };
   }
+  // layers must be Dict<string> — every value a non-empty string.
+  for (const [k, v] of Object.entries(t.layers as Record<string, unknown>)) {
+    if (typeof v !== 'string' || v.length === 0) {
+      return {
+        ok: false,
+        reason: `${t.id}: layer "${k}" is not a non-empty string`,
+      };
+    }
+  }
 
   return { ok: true, tile: val as TileSource };
+}
+
+/**
+ * Inspect an imported svgUrl. Three cases:
+ *
+ *   1. Path under /assets/   — trusted, passthrough
+ *   2. data:image/svg+xml    — decode, run through sanitizer,
+ *                              re-encode. Returns null if unsafe.
+ *   3. Anything else         — null (reject: no http(s), no data URLs
+ *                              with other MIME types, no file:, etc.)
+ */
+function sanitizeImportedSvgUrl(svgUrl: string): string | null {
+  if (svgUrl.startsWith('/assets/')) return svgUrl;
+
+  const dataMatch = svgUrl.match(
+    /^data:image\/svg\+xml(?:;charset=[^,;]+)?(;base64)?,(.*)$/i
+  );
+  if (!dataMatch) return null;
+
+  const isBase64 = !!dataMatch[1];
+  const payload = dataMatch[2];
+  let raw: string;
+  try {
+    raw = isBase64 ? atob(payload) : decodeURIComponent(payload);
+  } catch {
+    return null;
+  }
+
+  let clean: string;
+  try {
+    clean = sanitizeSvg(raw);
+  } catch {
+    return null;
+  }
+
+  return `data:image/svg+xml;utf8,${encodeURIComponent(clean)}`;
 }

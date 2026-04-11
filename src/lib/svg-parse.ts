@@ -12,6 +12,7 @@
 // skipped, missing fills fall back to white.
 
 import { Dict } from '../context/interfaces';
+import { sanitizeSvg } from './svg-sanitize';
 
 /**
  * Result of inspecting an SVG blob.
@@ -32,7 +33,13 @@ export interface ParsedSvg {
  * at all — those get surfaced to the form as validation errors.
  */
 export async function parseSvgFile(file: File): Promise<ParsedSvg> {
-  const svgText = await file.text();
+  const rawText = await file.text();
+
+  // Sanitize BEFORE doing anything else. The sanitized text is what
+  // we parse, store, and render; the raw input is discarded. If
+  // sanitization leaves nothing usable, sanitizeSvg throws.
+  const svgText = sanitizeSvg(rawText);
+
   const parser = new DOMParser();
   const doc = parser.parseFromString(svgText, 'image/svg+xml');
 
