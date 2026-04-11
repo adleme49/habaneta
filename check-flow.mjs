@@ -10,8 +10,8 @@ try {
   await page.goto('http://localhost:3000', { waitUntil: 'networkidle', timeout: 15000 });
   await page.waitForTimeout(1000);
 
-  console.log('Step 1: Click "Traditional" category');
-  await page.getByText('Traditional', { exact: true }).click();
+  console.log('Step 1: Click "Contemporary" category');
+  await page.getByText('Contemporary', { exact: true }).click();
   await page.waitForTimeout(500);
   await page.screenshot({ path: '/tmp/flow-1.png', fullPage: true });
 

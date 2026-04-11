@@ -290,7 +290,7 @@ export const borderFam: IBorderFamily[] = [
 
 export const tilesFam: ITileFamily[] = [
   {
-    name: 'Traditional',
+    name: 'Contemporary',
     type: Floor,
     types: [
       {
@@ -1301,16 +1301,6 @@ export const tilesFam: ITileFamily[] = [
         }
       }
     ]
-  },
-  {
-    name: 'Contemporary',
-    type: Floor,
-    types: []
-  },
-  {
-    name: 'Geometric',
-    type: Floor,
-    types: []
   }
 ];
 
