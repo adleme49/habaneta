@@ -31,11 +31,3 @@ export interface IBorder extends ITile {
   cornerUrl?: string;
   cornerInteriorUrl?: string;
 }
-export interface IColor {
-  name: string;
-  code: string;
-}
-export interface IAction {
-  type: string;
-  payload?: any;
-}

@@ -1,25 +1,19 @@
-import { IonModal } from '@ionic/react';
-import React, { Fragment, useContext } from 'react';
-import GeneralContext from '../../../../context/global/general.context';
-import './../Modal.css';
+import React from 'react';
+import { useStore } from '../../../../store/store';
 import GalleryModalContent from './GalleryModalContent.component';
-const GalleryModal: React.FC = () => {
-  const { showGalleryModal, closeModals } = useContext(GeneralContext);
+import Modal from '../../../common/Modal.component';
 
-  const handelDismiss = () => {
-    closeModals();
-  };
+const GalleryModal: React.FC = () => {
+  const { modal, closeModals } = useStore();
 
   return (
-    <Fragment>
-      <IonModal
-        isOpen={showGalleryModal}
-        onDidDismiss={handelDismiss}
-        cssClass="galleryModal"
-      >
-        <GalleryModalContent onClose={handelDismiss} />
-      </IonModal>
-    </Fragment>
+    <Modal
+      isOpen={modal === 'gallery'}
+      onClose={closeModals}
+      className="w-full h-full"
+    >
+      <GalleryModalContent onClose={closeModals} />
+    </Modal>
   );
 };
 

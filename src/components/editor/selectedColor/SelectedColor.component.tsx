@@ -1,25 +1,16 @@
-import { IonRow } from '@ionic/react';
-import React, { Fragment, useContext } from 'react';
-import EditorContext from '../../../context/editor/editor.context';
+import React from 'react';
+import { useStore } from '../../../store/store';
+
 const SelectedColor: React.FC = () => {
-  const { selectedColor } = useContext(EditorContext);
+  const { selectedColor } = useStore();
   return (
-    <Fragment>
-      <IonRow
-        style={{ padding: '2.5rem 0rem' }}
-        className="ion-justify-content-center"
-      >
-        <div
-          className="border-darken-4"
-          style={{
-            background: `${selectedColor}`,
-            height: '5rem',
-            width: '5rem',
-            border: 'solid 0.1rem'
-          }}
-        ></div>
-      </IonRow>
-    </Fragment>
+    <div className="flex justify-center py-4">
+      <div
+        className="h-16 w-16 border border-gray-800"
+        style={{ background: selectedColor }}
+      />
+    </div>
   );
 };
+
 export default SelectedColor;

@@ -1,34 +1,25 @@
-import React, { Fragment, useContext } from 'react';
-import { IonModal } from '@ionic/react';
-import GeneralContext from '../../../../context/global/general.context';
+import React from 'react';
+import { useStore } from '../../../../store/store';
 import EnviromentModalContent from './EnviromentModalContent.component';
-import RecentContext from '../../../../context/recent/recent.context';
+import Modal from '../../../common/Modal.component';
 
 export const EnviromentModal: React.FC = () => {
-  const { showEnviromentModal, closeModals, gridImg } = useContext(
-    GeneralContext
-  );
-  const { selectedBorder } = useContext(RecentContext);
+  const { modal, closeModals, gridImg, selectedBorder } = useStore();
 
-  const handelDismiss = () => {
-    closeModals();
-  };
   return (
-    <Fragment>
-      <IonModal
-        isOpen={showEnviromentModal}
-        onDidDismiss={handelDismiss}
-        cssClass="enviromentModal"
-      >
-        {gridImg ? (
-          <EnviromentModalContent
-            img={gridImg}
-            onClose={handelDismiss}
-            border={selectedBorder}
-          />
-        ) : null}
-      </IonModal>
-    </Fragment>
+    <Modal
+      isOpen={modal === 'enviroment'}
+      onClose={closeModals}
+      className="w-[80%] h-[90%]"
+    >
+      {gridImg ? (
+        <EnviromentModalContent
+          img={gridImg}
+          onClose={closeModals}
+          border={selectedBorder}
+        />
+      ) : null}
+    </Modal>
   );
 };
 

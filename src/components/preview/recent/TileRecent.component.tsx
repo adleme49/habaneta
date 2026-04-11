@@ -1,27 +1,29 @@
-import { IonCol, IonImg } from '@ionic/react';
-import React, { Fragment, useContext } from 'react';
+import React from 'react';
 import { IBorder, IFloor } from '../../../context/interfaces';
-import empty from '../../../theme/empty.png';
+import { useStore } from '../../../store/store';
 import TileRecentItem from './TileRecentItem.component';
-import RecentContext from '../../../context/recent/recent.context';
 
 const TileRecent: React.FC = () => {
-  const { recent } = useContext(RecentContext);
+  const { recent } = useStore();
 
   return (
-    <Fragment>
-      {recent
-        ? recent.map((tile: IBorder | IFloor, index: number) => {
-            return !tile.name.includes('empty') ? (
-              <TileRecentItem tile={tile} key={index} index={index} />
-            ) : (
-              <IonCol key={index}>
-                <IonImg src={empty} />
-              </IonCol>
-            );
-          })
-        : null}
-    </Fragment>
+    <div className="flex items-center gap-2 flex-wrap">
+      {recent.map((tile, index) => {
+        const isEmpty = tile.name.includes('empty');
+        return isEmpty ? (
+          <div
+            key={index}
+            className="w-14 h-14 bg-gray-200 rounded flex-shrink-0"
+          />
+        ) : (
+          <TileRecentItem
+            tile={tile as IBorder | IFloor}
+            key={index}
+            index={index}
+          />
+        );
+      })}
+    </div>
   );
 };
 

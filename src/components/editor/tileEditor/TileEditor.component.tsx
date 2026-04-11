@@ -1,28 +1,28 @@
-import { IonRow } from '@ionic/react';
-import React, { Fragment, useContext } from 'react';
-import EditorContext from '../../../context/editor/editor.context';
+import React from 'react';
+import { useStore } from '../../../store/store';
 import EditorActions from '../editorActions/EditorActions.components';
 import SVGTilePaint from './svgTile/SVGTilePaint.component';
 
 const TileEditor: React.FC = () => {
-  const { tile, paintLayer } = useContext(EditorContext);
+  const { editingTile, paintLayer } = useStore();
 
-  const colorLayer = (layerId: string) => {
-    paintLayer(layerId);
-  };
+  if (!editingTile) {
+    return (
+      <div className="text-center text-sm text-gray-400 py-8">
+        Select a tile to start editing
+      </div>
+    );
+  }
+
   return (
-    <Fragment>
-      {tile ? (
-        <Fragment>
-          <IonRow className="ion-justify-content-center">
-            <SVGTilePaint tile={tile} colorLayer={colorLayer} />
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <EditorActions />
-          </IonRow>
-        </Fragment>
-      ) : null}
-    </Fragment>
+    <>
+      <div className="flex justify-center">
+        <SVGTilePaint tile={editingTile} colorLayer={(id) => paintLayer(id)} />
+      </div>
+      <div className="flex justify-center">
+        <EditorActions />
+      </div>
+    </>
   );
 };
 

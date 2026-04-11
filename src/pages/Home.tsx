@@ -1,26 +1,19 @@
-import { IonPage } from '@ionic/react';
-import React, { useContext, useState } from 'react';
-import Loading from '../components/layout/loading/Loading.component';
+import React from 'react';
 import MainLayout from '../components/layout/main/MainLayaout.component';
-import NavLayaout from '../components/layout/nav/NavLayout.component';
-import Toast from '../components/layout/toast/Toast.component';
-import GeneralContext from '../context/global/general.context';
+import NavLayout from '../components/layout/nav/NavLayout.component';
 import LoaderOverlay from '../components/common/Overlay.component';
+import { useStore } from '../store/store';
 
 const Home: React.FC = () => {
-  const { loading, showOverlay } = useContext(GeneralContext);
-  const [showToast] = useState(false);
+  const { overlay } = useStore();
 
   return (
-    <IonPage>
-      <LoaderOverlay active={showOverlay}>
-        <NavLayaout />
-        {loading ? <Loading loading={loading} /> : null}
-        {showToast ? <Toast showToast={showToast} /> : null}
-
+    <div className="min-h-screen bg-white">
+      <LoaderOverlay active={overlay}>
+        <NavLayout />
         <MainLayout />
       </LoaderOverlay>
-    </IonPage>
+    </div>
   );
 };
 

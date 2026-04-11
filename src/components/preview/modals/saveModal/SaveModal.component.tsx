@@ -1,30 +1,19 @@
-import React, { Fragment, useContext } from 'react';
-import { IonModal, IonContent } from '@ionic/react';
+import React from 'react';
 import SaveModalContent from './SaveModalContent.component';
-import GeneralContext from '../../../../context/global/general.context';
-import './../Modal.css';
+import { useStore } from '../../../../store/store';
+import Modal from '../../../common/Modal.component';
 
 const SaveModal: React.FC = () => {
-  const { showSaveModal, closeModals, gridImg } = useContext(GeneralContext);
-
-  const handelDismiss = () => {
-    closeModals();
-  };
+  const { modal, closeModals, gridImg } = useStore();
 
   return (
-    <Fragment>
-      <IonContent>
-        <IonModal
-          isOpen={showSaveModal}
-          // isOpen={true}
-
-          onDidDismiss={handelDismiss}
-          cssClass="saveModal"
-        >
-          <SaveModalContent onClose={handelDismiss} gridImg={gridImg} />
-        </IonModal>
-      </IonContent>
-    </Fragment>
+    <Modal
+      isOpen={modal === 'save'}
+      onClose={closeModals}
+      className="w-full h-full"
+    >
+      <SaveModalContent onClose={closeModals} gridImg={gridImg} />
+    </Modal>
   );
 };
 

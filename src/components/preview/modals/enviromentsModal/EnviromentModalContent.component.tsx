@@ -1,66 +1,45 @@
-import {
-  IonButton,
-  IonButtons,
-  IonGrid,
-  IonIcon,
-  IonImg,
-  IonRow,
-  IonTitle,
-  IonToolbar
-} from '@ionic/react';
-import React, { Fragment } from 'react';
+import React from 'react';
 import bano from '../../../../theme/bano.png';
 import { IBorder } from '../../../../context/interfaces';
+
 const EnviromentModalContent: React.FC<{
   onClose: Function;
   img: string;
   border?: IBorder;
 }> = ({ img, onClose, border }) => {
-  const handelDismiss = () => {
-    onClose();
-  };
-
-  const imgStyle = {
+  const imgStyle: React.CSSProperties = {
     position: 'relative',
-    zIndex: '1',
+    zIndex: 1,
     left: '27em',
     top: '27em',
     transform: 'perspective(1200px) rotateX(68deg)'
   };
-  const imgStyleDouble = {
+  const imgStyleDouble: React.CSSProperties = {
     position: 'relative',
-    zIndex: '1',
+    zIndex: 1,
     left: '27em',
     top: '27em',
     transform: 'perspective(1200px) rotateX(68deg) rotateZ(90deg)'
   };
-  const banoStyle = { position: 'absolute', zIndex: '2', width: '80vw' };
+  const banoStyle: React.CSSProperties = { position: 'absolute', zIndex: 2, width: '80vw' };
+
   return (
-    <Fragment>
-      <IonToolbar color="primary">
-        <IonTitle>Enviroments</IonTitle>
-        <IonButtons slot="secondary">
-          <IonButton onClick={handelDismiss}>
-            <IonIcon name="close" slot="icon-only" />
-          </IonButton>
-        </IonButtons>
-      </IonToolbar>
-      <IonGrid
-        fixed={true}
-        style={{ width: '100%' }}
-        className="ion-no-padding ion-no-margin"
-      >
-        <IonRow>
-          <IonImg src={bano} style={banoStyle} />
-          <IonImg
+    <>
+      <div className="bg-blue-500 text-white px-4 py-2 flex justify-between items-center">
+        <span className="font-semibold">Enviroments</span>
+        <button onClick={() => onClose()} className="text-white text-xl">×</button>
+      </div>
+      <div className="w-full p-0 m-0">
+        <div className="flex">
+          <img src={bano} style={banoStyle} alt="environment" />
+          <img
             src={img}
-            style={
-              border && border.cornerInteriorUrl ? imgStyleDouble : imgStyle
-            }
+            style={border && border.cornerInteriorUrl ? imgStyleDouble : imgStyle}
+            alt="grid"
           />
-        </IonRow>
-      </IonGrid>
-    </Fragment>
+        </div>
+      </div>
+    </>
   );
 };
 

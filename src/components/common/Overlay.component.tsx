@@ -1,13 +1,28 @@
 import React from 'react';
 import BounceLoader from 'react-spinners/BounceLoader';
-import LoadingOverlay from 'react-loading-overlay';
 
 const LoaderOverlay: React.FC<{
   active: boolean;
+  children?: React.ReactNode;
 }> = ({ active, children }) => (
-  <LoadingOverlay active={active} spinner={<BounceLoader />}>
+  <div style={{ position: 'relative' }}>
+    {active && (
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'rgba(0, 0, 0, 0.5)',
+          zIndex: 9999,
+        }}
+      >
+        <BounceLoader />
+      </div>
+    )}
     {children}
-  </LoadingOverlay>
+  </div>
 );
 
 export default LoaderOverlay;

@@ -1,21 +1,22 @@
-import React, { useContext } from 'react';
-import { IonItem, IonLabel } from '@ionic/react';
+import React from 'react';
 import { IBorderFamily, ITileFamily } from '../../../context/interfaces';
-import GeneralContext from '../../../context/global/general.context';
+import { useStore } from '../../../store/store';
 
 const CategoryItem: React.FC<{
   categoryItem: IBorderFamily | ITileFamily;
 }> = ({ categoryItem }) => {
-  const { setCurrentFamily } = useContext(GeneralContext);
-
-  const handleClick = () => {
-    setCurrentFamily(categoryItem);
-  };
+  const { setSelectedFamily, selectedFamily } = useStore();
+  const isActive = selectedFamily?.name === categoryItem.name;
 
   return (
-    <IonItem button onClick={handleClick}>
-      <IonLabel>{categoryItem.name}</IonLabel>
-    </IonItem>
+    <li
+      className={`px-3 py-2 cursor-pointer text-sm ${
+        isActive ? 'bg-blue-50 font-medium text-blue-700' : 'hover:bg-gray-100'
+      }`}
+      onClick={() => setSelectedFamily(categoryItem)}
+    >
+      {categoryItem.name}
+    </li>
   );
 };
 

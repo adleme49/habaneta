@@ -1,27 +1,23 @@
-import React, { useContext } from 'react';
-import { IonItem, IonImg } from '@ionic/react';
+import React from 'react';
 import Default from '../../../theme/102.png';
 import { IFloor, IBorder } from '../../../context/interfaces';
-import EditorContext from '../../../context/editor/editor.context';
-import GeneralContext from '../../../context/global/general.context';
+import { useStore } from '../../../store/store';
 import SVGTileBase from '../../common/SVGBase.component';
 
 const TileItem: React.FC<{ tile: IFloor | IBorder }> = ({ tile }) => {
-  const { disableRecent } = useContext(GeneralContext);
-  const { setTile } = useContext(EditorContext);
+  const { selectEditingTile } = useStore();
 
-  const handleClick = () => {
-    disableRecent();
-    setTile(tile);
-  };
   return tile ? (
-    <IonItem onClick={handleClick}>
+    <div
+      className="cursor-pointer hover:bg-gray-50 p-1 rounded"
+      onClick={() => selectEditingTile(tile)}
+    >
       {tile.imgUrl ? (
-        <SVGTileBase tile={tile} style={{ width: 300 }} />
+        <SVGTileBase tile={tile} style={{ width: '100%', maxWidth: 240 }} />
       ) : (
-        <IonImg src={Default} />
+        <img src={Default} alt={tile.name} />
       )}
-    </IonItem>
+    </div>
   ) : null;
 };
 

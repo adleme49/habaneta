@@ -1,54 +1,47 @@
-import React, { Fragment, useContext } from 'react';
-import { IonCol, IonImg, IonBadge } from '@ionic/react';
+import React from 'react';
 import Default from '../../../theme/102.png';
 import { ITile } from '../../../context/interfaces';
-import RecentContext from '../../../context/recent/recent.context';
-import SVGTile from '../../common/SVGTile.component';
+import { useStore } from '../../../store/store';
+import SVGTileBase from '../../common/SVGBase.component';
 
 const TileRecentItem: React.FC<{ tile: ITile; index: number }> = ({
   tile,
-  index
+  index,
 }) => {
-  const { selectLatest, deleteRecent } = useContext(RecentContext);
-
-  const handleDelete = () => {
-    deleteRecent(index);
-  };
-  const onSetCurrentTilefromRecent = () => {
-    selectLatest(index);
-  };
+  const { selectRecent, deleteRecent, selectedTileIndex } = useStore();
+  const isActive = selectedTileIndex === index;
 
   return (
-    <Fragment>
-      <IonCol>
-        {tile.layers ? (
-          <SVGTile tile={tile} onClickHandler={onSetCurrentTilefromRecent} />
-        ) : tile.imgUrl ? (
-          <IonImg
-            src={tile.imgUrl}
-            alt={tile.name}
-            onClick={onSetCurrentTilefromRecent}
-          />
-        ) : (
-          <IonImg src={Default} alt={tile.name} />
-        )}
-
-        <IonBadge
-          onClick={handleDelete}
-          style={{
-            display: 'flex',
-            position: 'absolute',
-            top: '0px',
-            right: '0px',
-            transform: 'scale(2)',
-            zIndex: 2
-          }}
-          color="danger"
-        >
-          X
-        </IonBadge>
-      </IonCol>
-    </Fragment>
+    <div
+      className={`relative w-14 h-14 flex-shrink-0 overflow-hidden rounded cursor-pointer ${
+        isActive ? 'ring-2 ring-blue-500' : ''
+      }`}
+      onClick={() => selectRecent(index)}
+    >
+      {tile.layers ? (
+        <SVGTileBase
+          tile={tile}
+          style={{ width: '100%', height: '100%' }}
+        />
+      ) : tile.imgUrl ? (
+        <img
+          src={tile.imgUrl}
+          alt={tile.name}
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <img src={Default} alt={tile.name} className="w-full h-full object-cover" />
+      )}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          deleteRecent(index);
+        }}
+        className="absolute top-0 right-0 bg-red-500 text-white text-[10px] leading-none w-4 h-4 flex items-center justify-center cursor-pointer"
+      >
+        ×
+      </button>
+    </div>
   );
 };
 

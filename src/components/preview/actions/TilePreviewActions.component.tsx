@@ -1,53 +1,35 @@
-import { IonLabel, IonSegment, IonSegmentButton } from '@ionic/react';
 import domtoimage from 'dom-to-image';
-import React, { Fragment, useContext } from 'react';
-import GeneralContext from '../../../context/global/general.context';
+import React from 'react';
+import { useStore } from '../../../store/store';
+import { Button } from '@/components/ui/button';
 
 const TilePreviewActions: React.FC = () => {
-  const {
-    setShowEnviromentModal,
-    setShowSaveModal,
-    setShowGalleryModal,
-    saveGridImg,
-    toggleOverlay
-  } = useContext(GeneralContext);
+  const { openModal, setGridImg, toggleOverlay } = useStore();
 
-  const domCapturer = (ModaltoOpen: Function) => {
+  const capture = (modal: 'enviroment' | 'save') => {
     toggleOverlay();
     const grid = document.getElementById('grid');
     if (grid) {
-      domtoimage.toPng(grid).then(dataUrl => {
-        saveGridImg(dataUrl);
+      domtoimage.toPng(grid).then((dataUrl) => {
+        setGridImg(dataUrl);
         toggleOverlay();
-        ModaltoOpen();
+        openModal(modal);
       });
     }
   };
 
-  const onEnviroment = () => {
-    domCapturer(setShowEnviromentModal);
-  };
-  const onSave = () => {
-    domCapturer(setShowSaveModal);
-  };
-  const onGallery = () => {
-    setShowGalleryModal();
-  };
-
   return (
-    <Fragment>
-      <IonSegment style={{ padding: '2rem 0rem' }}>
-        <IonSegmentButton onClick={onGallery}>
-          <IonLabel>Gallery</IonLabel>
-        </IonSegmentButton>
-        <IonSegmentButton onClick={onEnviroment}>
-          <IonLabel>Enviroment</IonLabel>
-        </IonSegmentButton>
-        <IonSegmentButton onClick={onSave}>
-          <IonLabel>Save</IonLabel>
-        </IonSegmentButton>
-      </IonSegment>
-    </Fragment>
+    <div className="flex gap-2 py-4">
+      <Button variant="outline" onClick={() => openModal('gallery')}>
+        Gallery
+      </Button>
+      <Button variant="outline" onClick={() => capture('enviroment')}>
+        Enviroment
+      </Button>
+      <Button variant="outline" onClick={() => capture('save')}>
+        Save
+      </Button>
+    </div>
   );
 };
 

@@ -1,24 +1,23 @@
-import React, { Fragment, useContext } from 'react';
-import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
-import RecentContext from '../../../context/recent/recent.context';
-import EditorContext from '../../../context/editor/editor.context';
+import React from 'react';
+import { useStore } from '../../../store/store';
+import { Button } from '@/components/ui/button';
 
 const EditorActions: React.FC = () => {
-  const { tile } = useContext(EditorContext);
-  const { addRecent } = useContext(RecentContext);
-  const handleAddtoRecent = () => {
-    if (tile) {
-      addRecent(tile);
-    }
-  };
+  const { editingTile, addRecent, selectedTileIndex } = useStore();
+
+  if (!editingTile) return null;
+
+  const isEditingRecent = selectedTileIndex !== undefined;
+
   return (
-    <Fragment>
-      <IonSegment style={{ paddingTop: '3em' }}>
-        <IonSegmentButton onClick={handleAddtoRecent} value="Recent">
-          <IonLabel>Salvar a recientes</IonLabel>
-        </IonSegmentButton>
-      </IonSegment>
-    </Fragment>
+    <div className="pt-6">
+      <Button
+        disabled={isEditingRecent}
+        onClick={() => addRecent(editingTile)}
+      >
+        {isEditingRecent ? 'Already in recents' : 'Salvar a recientes'}
+      </Button>
+    </div>
   );
 };
 

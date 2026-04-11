@@ -1,43 +1,8 @@
-import { IColor, IBorderFamily, ITileFamily, ITile } from './interfaces';
+import { IBorderFamily, ITileFamily } from './interfaces';
 import { floorGrid } from '../constants/floor';
 
 export const Border = 'Border';
 export const Floor = 'Floor';
-
-export const DomiColors: IColor[] = [
-  { name: 'red', code: '#F44336' },
-  { name: 'pink', code: '#E91E63' },
-  { name: 'purple', code: '#9C27B0' },
-  { name: 'indigo', code: '#3F51B5' },
-  { name: 'blue', code: '#2196F3' },
-  { name: 'lightblue', code: '#03A9F4' },
-  { name: 'cyan', code: '#00BCD4' },
-  { name: 'teal', code: '#009688' },
-  { name: 'green', code: '#4CAF50' },
-  { name: 'lightgreen', code: '#8BC34A' },
-  { name: 'lime', code: '#CDDC39' },
-  { name: 'yellow', code: '#FFEB3B' },
-  { name: 'amber', code: '#FFC107' },
-  { name: 'orange', code: '#FF9800' },
-  { name: 'deeporange', code: '#FF5722' },
-  { name: 'brown', code: '#795548' },
-  { name: 'grey', code: '#9E9E9E' },
-  { name: 'bluegrey', code: '#607D8B' },
-  { name: 'darken_red', code: '#b71c1c' },
-  { name: 'darken_pink', code: '#880e4f' },
-  { name: 'darken_blue', code: '#0d47a1' },
-  { name: 'darken_amber', code: '#ff6f00' },
-  { name: 'white', code: 'white' },
-  { name: 'black', code: 'black' }
-];
-
-export const emptyTile: ITile = {
-  name: 'None',
-  imgUrl: '../assets/empty.svg',
-  layers: {
-    stEmpty: '#B3B3B3',
-  }
-};
 
 export const borderFam: IBorderFamily[] = [
   {
