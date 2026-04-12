@@ -28,6 +28,7 @@ import {
 } from '../lib/queries';
 import { colors as seedColors } from '../lib/colors';
 import { Ambient, AmbientId, DEFAULT_AMBIENT_ID, findAmbient } from '../lib/ambients';
+import { loadSession, saveSession, SessionState } from '../lib/session';
 import { DesignState } from '../lib/design-url';
 import { getNextGrid } from '../constants/floor';
 
@@ -66,9 +67,16 @@ type RecentAction =
   | { type: 'DELETE'; index: number }
   | { type: 'UPDATE_EDITING'; instance: TileInstance };
 
+// Load any previously persisted session for initial state. Falls back
+// to empty slots + defaults when nothing is saved.
+const _savedSession = loadSession();
+
 const initialRecent: RecentState = {
-  slots: Array(RECENT_SLOT_COUNT).fill(null),
-  selectedGridPos: 0,
+  slots: _savedSession?.slots ?? Array(RECENT_SLOT_COUNT).fill(null),
+  floorIndex: _savedSession?.floorIndex,
+  borderIndex: _savedSession?.borderIndex,
+  selectedGrid: _savedSession?.selectedGrid,
+  selectedGridPos: _savedSession?.selectedGridPos ?? 0,
 };
 
 /** Push a new instance into the slots array, filling empties first. */
@@ -392,8 +400,10 @@ const StoreProviderInner: React.FC<{
   const [isExporting, setIsExporting] = useState(false);
   const [svgHeight, setSvgHeight] = useState<number | undefined>();
 
-  // Visualization state.
-  const [gridBodyRows, setGridBodyRowsState] = useState<number>(DEFAULT_BODY_ROWS);
+  // Visualization state — restored from the saved session when present.
+  const [gridBodyRows, setGridBodyRowsState] = useState<number>(
+    _savedSession?.gridBodyRows ?? DEFAULT_BODY_ROWS
+  );
   const setGridBodyRows = useCallback((n: number) => {
     // Clamp to the documented range so stray callers can't blow up
     // the render loop with a 10,000-row grid.
@@ -402,7 +412,7 @@ const StoreProviderInner: React.FC<{
   }, []);
 
   const [selectedAmbientId, setSelectedAmbientId] =
-    useState<AmbientId>(DEFAULT_AMBIENT_ID);
+    useState<AmbientId>(_savedSession?.selectedAmbientId ?? DEFAULT_AMBIENT_ID);
   const selectedAmbient = useMemo(
     () => findAmbient(selectedAmbientId),
     [selectedAmbientId]
@@ -413,6 +423,22 @@ const StoreProviderInner: React.FC<{
     () => setIsBrowserCollapsed((c) => !c),
     []
   );
+
+  // --- Session persistence ---
+  // Write to localStorage whenever the working state changes so a
+  // page refresh doesn't discard the user's in-progress design.
+  useEffect(() => {
+    const session: SessionState = {
+      slots: recent.slots,
+      floorIndex: recent.floorIndex,
+      borderIndex: recent.borderIndex,
+      selectedGrid: recent.selectedGrid,
+      selectedGridPos: recent.selectedGridPos,
+      gridBodyRows,
+      selectedAmbientId,
+    };
+    saveSession(session);
+  }, [recent, gridBodyRows, selectedAmbientId]);
 
   // Apply a decoded DesignState to the store. Commits each instance
   // as a new recent slot (so it stays editable) and sets the
