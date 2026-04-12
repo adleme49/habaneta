@@ -21,6 +21,10 @@ const EditorActions: React.FC = () => {
   if (!editingInstance) return null;
 
   const isEditingRecent = editingIndex !== undefined;
+  const mod =
+    typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform)
+      ? '⌘'
+      : 'Ctrl';
 
   return (
     <div className="pt-6 flex flex-col gap-2">
@@ -30,7 +34,7 @@ const EditorActions: React.FC = () => {
           size="sm"
           disabled={!canUndo}
           onClick={undo}
-          title={t('editor.undoShortcut')}
+          title={`${t('editor.undo')} (${mod}+Z)`}
           aria-label={t('editor.undo')}
           className="h-8 w-8 p-0"
         >
@@ -41,7 +45,7 @@ const EditorActions: React.FC = () => {
           size="sm"
           disabled={!canRedo}
           onClick={redo}
-          title={t('editor.redoShortcut')}
+          title={`${t('editor.redo')} (${mod}+Y)`}
           aria-label={t('editor.redo')}
           className="h-8 w-8 p-0"
         >

@@ -25,9 +25,7 @@ export const en = {
   },
   editor: {
     undo: 'Undo',
-    undoShortcut: 'Undo (Ctrl+Z)',
     redo: 'Redo',
-    redoShortcut: 'Redo (Ctrl+Y)',
     selectTilePrompt: 'Select a tile to start editing',
     saveToRecents: 'Save to recents',
     alreadyInRecents: 'Already in recents',

@@ -41,6 +41,21 @@ export const MIN_BODY_ROWS = 1;
 export const MAX_BODY_ROWS = 20;
 export const DEFAULT_BODY_ROWS = 3;
 
+// -------------- Undo/redo history for layerOverrides --------------------------
+
+const HISTORY_CAP = 50;
+
+interface OverrideHistory {
+  /** The overrides when this tile was first loaded into the editor. */
+  initial: Record<string, string>;
+  /** Stack of override snapshots after each paint / reset / preset. */
+  stack: Record<string, string>[];
+  /** Current position in stack. -1 means "at initial". */
+  cursor: number;
+}
+
+const emptyHistory: OverrideHistory = { initial: {}, stack: [], cursor: -1 };
+
 // -------------- Recent slots (reducer for the non-trivial juggling) --------------
 
 const RECENT_SLOT_COUNT = 7;
@@ -65,7 +80,8 @@ type RecentAction =
   | { type: 'SELECT'; index: number; source: TileSource }
   | { type: 'DESELECT' }
   | { type: 'DELETE'; index: number }
-  | { type: 'UPDATE_EDITING'; instance: TileInstance };
+  | { type: 'UPDATE_EDITING'; instance: TileInstance }
+  | { type: 'PRUNE_ORPHANS'; library: TileSource[] };
 
 // Load any previously persisted session for initial state. Falls back
 // to empty slots + defaults when nothing is saved.
@@ -176,6 +192,26 @@ function recentReducer(state: RecentState, action: RecentAction): RecentState {
         editingIndex: shift(state.editingIndex),
         floorIndex: shift(state.floorIndex),
         borderIndex: shift(state.borderIndex),
+      };
+    }
+
+    // After the library loads, null out any restored session slots
+    // whose sourceId no longer exists (e.g. user deleted a custom
+    // tile since the last session). Clear indices that pointed at
+    // those now-empty slots.
+    case 'PRUNE_ORPHANS': {
+      const ids = new Set(action.library.map((s) => s.id));
+      const slots = state.slots.map((inst) =>
+        inst && ids.has(inst.sourceId) ? inst : null
+      );
+      const fix = (i?: number) =>
+        i !== undefined && slots[i] === null ? undefined : i;
+      return {
+        ...state,
+        slots,
+        editingIndex: fix(state.editingIndex),
+        floorIndex: fix(state.floorIndex),
+        borderIndex: fix(state.borderIndex),
       };
     }
 
@@ -356,16 +392,6 @@ const StoreProviderInner: React.FC<{
   const [selectedColor, setSelectedColor] = useState<string>('#ffffff');
 
   // ---- Undo/redo history for layerOverrides ----
-  // `initial` is the overrides when the tile was first loaded.
-  // `stack` holds every state after that (paint, reset, preset).
-  // `cursor` is the position in `stack` (-1 = at `initial`).
-  const HISTORY_CAP = 50;
-  interface OverrideHistory {
-    initial: Record<string, string>;
-    stack: Record<string, string>[];
-    cursor: number;
-  }
-  const emptyHistory: OverrideHistory = { initial: {}, stack: [], cursor: -1 };
   const [history, setHistory] = useState<OverrideHistory>(emptyHistory);
 
   const resetHistory = useCallback(
@@ -392,6 +418,18 @@ const StoreProviderInner: React.FC<{
 
   // Recent slots reducer.
   const [recent, dispatch] = useReducer(recentReducer, initialRecent);
+
+  // On first mount, prune any restored session slots whose sourceId
+  // is no longer in the library (e.g. the user deleted a custom tile
+  // since the last session was saved). This must run after the library
+  // is available — StoreProviderInner only mounts once the library
+  // query has resolved, so `library` is guaranteed to be populated.
+  const prunedRef = React.useRef(false);
+  useEffect(() => {
+    if (prunedRef.current) return;
+    prunedRef.current = true;
+    dispatch({ type: 'PRUNE_ORPHANS', library });
+  }, [library]);
 
   // UI state.
   const [modal, setModal] = useState<ModalName>(null);
@@ -492,7 +530,7 @@ const StoreProviderInner: React.FC<{
         ).length,
       });
     },
-    [library]
+    [library, resetHistory]
   );
 
   // Look up a tile by id and load it into the editor. Returns false

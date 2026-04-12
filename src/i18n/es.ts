@@ -27,9 +27,7 @@ export const es: Translations = {
   },
   editor: {
     undo: 'Deshacer',
-    undoShortcut: 'Deshacer (Ctrl+Z)',
     redo: 'Rehacer',
-    redoShortcut: 'Rehacer (Ctrl+Y)',
     selectTilePrompt: 'Selecciona una loza para editar',
     saveToRecents: 'Salvar a recientes',
     alreadyInRecents: 'Ya está en recientes',
