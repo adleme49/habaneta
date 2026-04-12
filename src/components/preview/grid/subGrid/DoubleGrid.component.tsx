@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { IBorder, IFloor } from '../../../../context/interfaces';
 import { useStore } from '../../../../store/store';
@@ -40,7 +40,6 @@ const DoubleGrid: React.FC<{
   }, [gridBodyRows]);
 
   const [scrollElement, setScrollElement] = useState<HTMLElement | null>(null);
-  const measuringRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     setScrollElement(document.getElementById('grid'));
   }, []);
@@ -66,7 +65,7 @@ const DoubleGrid: React.FC<{
 
   if (isExporting || !scrollElement) {
     return (
-      <div ref={measuringRef}>
+      <div>
         {rows.map((row) => (
           <React.Fragment key={row.key}>{renderRow(row)}</React.Fragment>
         ))}

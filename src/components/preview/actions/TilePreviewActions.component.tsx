@@ -25,14 +25,17 @@ const TilePreviewActions: React.FC = () => {
   // select-all + copy from it.
   const [fallbackUrl, setFallbackUrl] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
+  const [isCapturing, setIsCapturing] = useState(false);
   const [exportStatus, setExportStatus] = useState<{
     text: string;
     kind: 'ok' | 'error';
   } | null>(null);
 
   const captureAndOpenEnviroment = async () => {
+    if (isCapturing) return;
     const grid = document.getElementById('grid');
     if (!grid) return;
+    setIsCapturing(true);
     toggleOverlay();
     // Same two-step as handleExport: flip the store flag so the
     // grids render every row plainly, wait for React to commit,
@@ -49,6 +52,7 @@ const TilePreviewActions: React.FC = () => {
     } finally {
       setStoreExporting(false);
       toggleOverlay();
+      setIsCapturing(false);
     }
   };
 
@@ -112,7 +116,11 @@ const TilePreviewActions: React.FC = () => {
         <Button variant="outline" onClick={() => openModal('gallery')}>
           {t('preview.gallery')}
         </Button>
-        <Button variant="outline" onClick={captureAndOpenEnviroment}>
+        <Button
+          variant="outline"
+          onClick={captureAndOpenEnviroment}
+          disabled={isCapturing}
+        >
           {t('preview.environment')}
         </Button>
         <Button

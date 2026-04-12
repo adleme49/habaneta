@@ -85,6 +85,7 @@ try {
     .isVisible()
     .catch(() => false);
   console.log(`   success status visible: ${ok}`);
+  if (!ok) throw new Error('"Design exported" toast not visible after export');
 
   console.log('4. Bump grid to 12 rows (exceeds old cap, uses virtualizer)');
   for (let i = 0; i < 9; i++) {
