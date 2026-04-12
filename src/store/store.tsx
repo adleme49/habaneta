@@ -2,6 +2,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useReducer,
   useState,
@@ -210,6 +211,12 @@ export interface Store {
   /** True when editingInstance has at least one layer override. */
   canResetEditing: boolean;
 
+  // Undo / redo for layer overrides
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
+
   // Presets — named color schemes saved per TileSource
   /** All presets (for any source) currently in storage. */
   presets: TilePreset[];
@@ -340,6 +347,41 @@ const StoreProviderInner: React.FC<{
   const [editingInstance, setEditingInstance] = useState<TileInstance | undefined>();
   const [selectedColor, setSelectedColor] = useState<string>('#ffffff');
 
+  // ---- Undo/redo history for layerOverrides ----
+  // `initial` is the overrides when the tile was first loaded.
+  // `stack` holds every state after that (paint, reset, preset).
+  // `cursor` is the position in `stack` (-1 = at `initial`).
+  const HISTORY_CAP = 50;
+  interface OverrideHistory {
+    initial: Record<string, string>;
+    stack: Record<string, string>[];
+    cursor: number;
+  }
+  const emptyHistory: OverrideHistory = { initial: {}, stack: [], cursor: -1 };
+  const [history, setHistory] = useState<OverrideHistory>(emptyHistory);
+
+  const resetHistory = useCallback(
+    (overrides: Record<string, string>) =>
+      setHistory({ initial: { ...overrides }, stack: [], cursor: -1 }),
+    []
+  );
+
+  const pushHistory = useCallback(
+    (overrides: Record<string, string>) =>
+      setHistory((h) => {
+        // Truncate any forward entries past cursor, then append.
+        const base = h.stack.slice(0, h.cursor + 1);
+        base.push({ ...overrides });
+        // Cap to prevent unbounded growth.
+        if (base.length > HISTORY_CAP) base.shift();
+        return { ...h, stack: base, cursor: base.length - 1 };
+      }),
+    []
+  );
+
+  const canUndo = history.cursor >= 0;
+  const canRedo = history.cursor < history.stack.length - 1;
+
   // Recent slots reducer.
   const [recent, dispatch] = useReducer(recentReducer, initialRecent);
 
@@ -412,7 +454,9 @@ const StoreProviderInner: React.FC<{
   // browser panel reflects where the tile came from.
   const selectEditingSource = useCallback(
     (source: TileSource) => {
-      setEditingInstance(newInstance(source));
+      const inst = newInstance(source);
+      setEditingInstance(inst);
+      resetHistory(inst.layerOverrides);
       dispatch({ type: 'DESELECT' });
       setSelectedFamily({
         name: source.family,
@@ -439,32 +483,93 @@ const StoreProviderInner: React.FC<{
 
   // Paint a single SVG layer. Updates the editor instance AND — if that
   // instance is currently backed by a recent slot — the slot too.
+  // Pushes the new overrides onto the undo history.
   const paintLayer = useCallback(
     (layerId: string) => {
       setEditingInstance((prev) => {
         if (!prev) return prev;
         const next = paintInstanceLayer(prev, layerId, selectedColor);
+        pushHistory(next.layerOverrides);
         if (recent.editingIndex !== undefined) {
           dispatch({ type: 'UPDATE_EDITING', instance: next });
         }
         return next;
       });
     },
-    [selectedColor, recent.editingIndex]
+    [selectedColor, recent.editingIndex, pushHistory]
   );
 
   // Clear layer overrides on the current edit — restore the source defaults.
   // If the edit is backed by a recent slot, the slot syncs via UPDATE_EDITING.
+  // Pushed onto the history stack so the user can undo the reset.
   const resetEditingTile = useCallback(() => {
     setEditingInstance((prev) => {
       if (!prev) return prev;
       const next: TileInstance = { ...prev, layerOverrides: {} };
+      pushHistory(next.layerOverrides);
       if (recent.editingIndex !== undefined) {
         dispatch({ type: 'UPDATE_EDITING', instance: next });
       }
       return next;
     });
+  }, [recent.editingIndex, pushHistory]);
+
+  // Undo: step back one entry in the override history.
+  const undo = useCallback(() => {
+    setHistory((h) => {
+      if (h.cursor < 0) return h; // nothing to undo
+      const newCursor = h.cursor - 1;
+      const overrides = newCursor < 0 ? h.initial : h.stack[newCursor];
+      setEditingInstance((prev) => {
+        if (!prev) return prev;
+        const next: TileInstance = { ...prev, layerOverrides: { ...overrides } };
+        if (recent.editingIndex !== undefined) {
+          dispatch({ type: 'UPDATE_EDITING', instance: next });
+        }
+        return next;
+      });
+      return { ...h, cursor: newCursor };
+    });
   }, [recent.editingIndex]);
+
+  // Redo: step forward one entry in the override history.
+  const redo = useCallback(() => {
+    setHistory((h) => {
+      if (h.cursor >= h.stack.length - 1) return h; // nothing to redo
+      const newCursor = h.cursor + 1;
+      const overrides = h.stack[newCursor];
+      setEditingInstance((prev) => {
+        if (!prev) return prev;
+        const next: TileInstance = { ...prev, layerOverrides: { ...overrides } };
+        if (recent.editingIndex !== undefined) {
+          dispatch({ type: 'UPDATE_EDITING', instance: next });
+        }
+        return next;
+      });
+      return { ...h, cursor: newCursor };
+    });
+  }, [recent.editingIndex]);
+
+  // Ctrl+Z / Ctrl+Y (Cmd on Mac) keyboard shortcuts for undo/redo.
+  // Guarded against <input>/<textarea> targets so typing in a hex
+  // color or preset name field still gets native browser undo.
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      const mod = e.metaKey || e.ctrlKey;
+      if (!mod) return;
+      if (e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        undo();
+      } else if (e.key === 'y' || (e.key === 'z' && e.shiftKey)) {
+        e.preventDefault();
+        redo();
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [undo, redo]);
 
   // "Salvar a recientes" — commit the current editor instance to a slot.
   const commitEditingToRecent = useCallback(() => {
@@ -483,8 +588,9 @@ const StoreProviderInner: React.FC<{
       if (!source) return;
       dispatch({ type: 'SELECT', index, source });
       setEditingInstance(instance);
+      resetHistory(instance.layerOverrides);
     },
-    [recent.slots, library]
+    [recent.slots, library, resetHistory]
   );
 
   const deleteRecent = useCallback((index: number) => {
@@ -518,13 +624,14 @@ const StoreProviderInner: React.FC<{
           ...prev,
           layerOverrides: { ...preset.layerOverrides },
         };
+        pushHistory(next.layerOverrides);
         if (recent.editingIndex !== undefined) {
           dispatch({ type: 'UPDATE_EDITING', instance: next });
         }
         return next;
       });
     },
-    [recent.editingIndex]
+    [recent.editingIndex, pushHistory]
   );
 
   const deletePreset = useCallback(
@@ -616,6 +723,11 @@ const StoreProviderInner: React.FC<{
     canResetEditing:
       !!editingInstance &&
       Object.keys(editingInstance.layerOverrides).length > 0,
+
+    undo,
+    redo,
+    canUndo,
+    canRedo,
 
     presets,
     presetsForEditing,
