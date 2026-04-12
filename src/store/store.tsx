@@ -32,7 +32,11 @@ import { getNextGrid } from '../constants/floor';
 
 /** Range for the user-controlled floor body row count. */
 export const MIN_BODY_ROWS = 1;
-export const MAX_BODY_ROWS = 6;
+// Raised from 6 → 20 after adding row virtualization to SimpleGrid
+// and DoubleGrid. Twenty body rows is ~336 tile slots in the DOM
+// when unvirtualized, which would be noticeably janky; windowed
+// render keeps scrolling smooth regardless.
+export const MAX_BODY_ROWS = 20;
 export const DEFAULT_BODY_ROWS = 3;
 
 // -------------- Recent slots (reducer for the non-trivial juggling) --------------
@@ -264,6 +268,15 @@ export interface Store {
   gridImg?: string;
   setGridImg: (img: string) => void;
 
+  /**
+   * True while an export/snapshot is in flight. SimpleGrid and
+   * DoubleGrid bypass row virtualization when this is set so the
+   * captured PNG contains every row, not just the ones currently
+   * in the scroll viewport.
+   */
+  isExporting: boolean;
+  setIsExporting: (v: boolean) => void;
+
   // Shared SVG sizing
   svgHeight?: number;
   setSvgHeight: (h: number) => void;
@@ -334,6 +347,7 @@ const StoreProviderInner: React.FC<{
   const [modal, setModal] = useState<ModalName>(null);
   const [overlay, setOverlay] = useState(false);
   const [gridImg, setGridImg] = useState<string | undefined>();
+  const [isExporting, setIsExporting] = useState(false);
   const [svgHeight, setSvgHeight] = useState<number | undefined>();
 
   // Visualization state.
@@ -634,6 +648,8 @@ const StoreProviderInner: React.FC<{
     toggleOverlay: () => setOverlay((o) => !o),
     gridImg,
     setGridImg,
+    isExporting,
+    setIsExporting,
 
     svgHeight,
     setSvgHeight,
