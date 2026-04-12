@@ -121,6 +121,21 @@ export const es: Translations = {
       saveFailed: 'Error al guardar: {{error}}',
       quotaHint: 'Intenta exportar y borrar subidas antiguas primero.',
     },
+    imageImport: {
+      trigger: 'Importar imagen',
+      title: 'Importar loza desde imagen',
+      description:
+        'Arrastra una foto de una loza real. Los colores se analizarán y convertirán en capas recoloreables.',
+      imageFile: 'Archivo de imagen',
+      layers: 'Capas',
+      analyze: 'Analizar imagen',
+      processing: 'Analizando…',
+      original: 'Original',
+      result: 'Resultado',
+      pickPrompt: 'Elige una imagen para empezar',
+      layersDetected: '{{count}} capas detectadas',
+      saveTile: 'Guardar loza',
+    },
     importExport: {
       export: 'Exportar',
       import: 'Importar',

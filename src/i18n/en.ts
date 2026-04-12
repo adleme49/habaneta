@@ -119,6 +119,21 @@ export const en = {
       saveFailed: 'Save failed: {{error}}',
       quotaHint: 'Try exporting and deleting older uploads first.',
     },
+    imageImport: {
+      trigger: 'Import image',
+      title: 'Import tile from image',
+      description:
+        'Drop a photo of a real tile. Colors will be analyzed and converted into recolorable layers.',
+      imageFile: 'Image file',
+      layers: 'Layers',
+      analyze: 'Analyze image',
+      processing: 'Analyzing…',
+      original: 'Original',
+      result: 'Result',
+      pickPrompt: 'Pick an image to start',
+      layersDetected: '{{count}} layers detected',
+      saveTile: 'Save tile',
+    },
     importExport: {
       export: 'Export',
       import: 'Import',
