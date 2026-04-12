@@ -24,6 +24,8 @@ export const en = {
     verticalLabel: 'Tiles',
   },
   editor: {
+    undo: 'Undo',
+    redo: 'Redo',
     selectTilePrompt: 'Select a tile to start editing',
     saveToRecents: 'Save to recents',
     alreadyInRecents: 'Already in recents',

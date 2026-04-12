@@ -26,6 +26,8 @@ export const es: Translations = {
     verticalLabel: 'Lozas',
   },
   editor: {
+    undo: 'Deshacer',
+    redo: 'Rehacer',
     selectTilePrompt: 'Selecciona una loza para editar',
     saveToRecents: 'Salvar a recientes',
     alreadyInRecents: 'Ya está en recientes',

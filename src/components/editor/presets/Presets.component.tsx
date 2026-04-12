@@ -119,6 +119,7 @@ const PresetChip: React.FC<{
   onApply: () => void;
   onDelete: () => void;
 }> = ({ preset, sourceLayers, onApply, onDelete }) => {
+  const { t } = useTranslation();
   const swatches = useMemo(() => {
     // Merge source defaults with overrides so the chip represents
     // the final look. Sort by layer id (st0, st1, ...) for stable
@@ -141,7 +142,7 @@ const PresetChip: React.FC<{
         type="button"
         onClick={onApply}
         className="flex items-center gap-2 py-0.5 pr-1 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-        title={`Apply "${preset.name}"`}
+        title={t('editor.applyPreset', { name: preset.name })}
       >
         <span className="flex items-center">
           {swatches.map((color, i) => (
@@ -158,8 +159,8 @@ const PresetChip: React.FC<{
         type="button"
         onClick={onDelete}
         className="opacity-40 hover:opacity-100 text-xs leading-none w-4 h-4 flex items-center justify-center rounded-full"
-        title="Delete preset"
-        aria-label={`Delete ${preset.name}`}
+        title={t('editor.deletePreset', { name: preset.name })}
+        aria-label={t('editor.deletePreset', { name: preset.name })}
       >
         ×
       </button>

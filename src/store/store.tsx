@@ -2,6 +2,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useReducer,
   useState,
@@ -27,6 +28,7 @@ import {
 } from '../lib/queries';
 import { colors as seedColors } from '../lib/colors';
 import { Ambient, AmbientId, DEFAULT_AMBIENT_ID, findAmbient } from '../lib/ambients';
+import { loadSession, saveSession, SessionState } from '../lib/session';
 import { DesignState } from '../lib/design-url';
 import { getNextGrid } from '../constants/floor';
 
@@ -38,6 +40,21 @@ export const MIN_BODY_ROWS = 1;
 // render keeps scrolling smooth regardless.
 export const MAX_BODY_ROWS = 20;
 export const DEFAULT_BODY_ROWS = 3;
+
+// -------------- Undo/redo history for layerOverrides --------------------------
+
+const HISTORY_CAP = 50;
+
+interface OverrideHistory {
+  /** The overrides when this tile was first loaded into the editor. */
+  initial: Record<string, string>;
+  /** Stack of override snapshots after each paint / reset / preset. */
+  stack: Record<string, string>[];
+  /** Current position in stack. -1 means "at initial". */
+  cursor: number;
+}
+
+const emptyHistory: OverrideHistory = { initial: {}, stack: [], cursor: -1 };
 
 // -------------- Recent slots (reducer for the non-trivial juggling) --------------
 
@@ -63,11 +80,19 @@ type RecentAction =
   | { type: 'SELECT'; index: number; source: TileSource }
   | { type: 'DESELECT' }
   | { type: 'DELETE'; index: number }
-  | { type: 'UPDATE_EDITING'; instance: TileInstance };
+  | { type: 'UPDATE_EDITING'; instance: TileInstance }
+  | { type: 'PRUNE_ORPHANS'; library: TileSource[] };
+
+// Load any previously persisted session for initial state. Falls back
+// to empty slots + defaults when nothing is saved.
+const _savedSession = loadSession();
 
 const initialRecent: RecentState = {
-  slots: Array(RECENT_SLOT_COUNT).fill(null),
-  selectedGridPos: 0,
+  slots: _savedSession?.slots ?? Array(RECENT_SLOT_COUNT).fill(null),
+  floorIndex: _savedSession?.floorIndex,
+  borderIndex: _savedSession?.borderIndex,
+  selectedGrid: _savedSession?.selectedGrid,
+  selectedGridPos: _savedSession?.selectedGridPos ?? 0,
 };
 
 /** Push a new instance into the slots array, filling empties first. */
@@ -170,6 +195,26 @@ function recentReducer(state: RecentState, action: RecentAction): RecentState {
       };
     }
 
+    // After the library loads, null out any restored session slots
+    // whose sourceId no longer exists (e.g. user deleted a custom
+    // tile since the last session). Clear indices that pointed at
+    // those now-empty slots.
+    case 'PRUNE_ORPHANS': {
+      const ids = new Set(action.library.map((s) => s.id));
+      const slots = state.slots.map((inst) =>
+        inst && ids.has(inst.sourceId) ? inst : null
+      );
+      const fix = (i?: number) =>
+        i !== undefined && slots[i] === null ? undefined : i;
+      return {
+        ...state,
+        slots,
+        editingIndex: fix(state.editingIndex),
+        floorIndex: fix(state.floorIndex),
+        borderIndex: fix(state.borderIndex),
+      };
+    }
+
     default:
       return state;
   }
@@ -209,6 +254,12 @@ export interface Store {
   resetEditingTile: () => void;
   /** True when editingInstance has at least one layer override. */
   canResetEditing: boolean;
+
+  // Undo / redo for layer overrides
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
 
   // Presets — named color schemes saved per TileSource
   /** All presets (for any source) currently in storage. */
@@ -340,8 +391,45 @@ const StoreProviderInner: React.FC<{
   const [editingInstance, setEditingInstance] = useState<TileInstance | undefined>();
   const [selectedColor, setSelectedColor] = useState<string>('#ffffff');
 
+  // ---- Undo/redo history for layerOverrides ----
+  const [history, setHistory] = useState<OverrideHistory>(emptyHistory);
+
+  const resetHistory = useCallback(
+    (overrides: Record<string, string>) =>
+      setHistory({ initial: { ...overrides }, stack: [], cursor: -1 }),
+    []
+  );
+
+  const pushHistory = useCallback(
+    (overrides: Record<string, string>) =>
+      setHistory((h) => {
+        // Truncate any forward entries past cursor, then append.
+        const base = h.stack.slice(0, h.cursor + 1);
+        base.push({ ...overrides });
+        // Cap to prevent unbounded growth.
+        if (base.length > HISTORY_CAP) base.shift();
+        return { ...h, stack: base, cursor: base.length - 1 };
+      }),
+    []
+  );
+
+  const canUndo = history.cursor >= 0;
+  const canRedo = history.cursor < history.stack.length - 1;
+
   // Recent slots reducer.
   const [recent, dispatch] = useReducer(recentReducer, initialRecent);
+
+  // On first mount, prune any restored session slots whose sourceId
+  // is no longer in the library (e.g. the user deleted a custom tile
+  // since the last session was saved). This must run after the library
+  // is available — StoreProviderInner only mounts once the library
+  // query has resolved, so `library` is guaranteed to be populated.
+  const prunedRef = React.useRef(false);
+  useEffect(() => {
+    if (prunedRef.current) return;
+    prunedRef.current = true;
+    dispatch({ type: 'PRUNE_ORPHANS', library });
+  }, [library]);
 
   // UI state.
   const [modal, setModal] = useState<ModalName>(null);
@@ -350,8 +438,10 @@ const StoreProviderInner: React.FC<{
   const [isExporting, setIsExporting] = useState(false);
   const [svgHeight, setSvgHeight] = useState<number | undefined>();
 
-  // Visualization state.
-  const [gridBodyRows, setGridBodyRowsState] = useState<number>(DEFAULT_BODY_ROWS);
+  // Visualization state — restored from the saved session when present.
+  const [gridBodyRows, setGridBodyRowsState] = useState<number>(
+    _savedSession?.gridBodyRows ?? DEFAULT_BODY_ROWS
+  );
   const setGridBodyRows = useCallback((n: number) => {
     // Clamp to the documented range so stray callers can't blow up
     // the render loop with a 10,000-row grid.
@@ -360,7 +450,7 @@ const StoreProviderInner: React.FC<{
   }, []);
 
   const [selectedAmbientId, setSelectedAmbientId] =
-    useState<AmbientId>(DEFAULT_AMBIENT_ID);
+    useState<AmbientId>(_savedSession?.selectedAmbientId ?? DEFAULT_AMBIENT_ID);
   const selectedAmbient = useMemo(
     () => findAmbient(selectedAmbientId),
     [selectedAmbientId]
@@ -371,6 +461,22 @@ const StoreProviderInner: React.FC<{
     () => setIsBrowserCollapsed((c) => !c),
     []
   );
+
+  // --- Session persistence ---
+  // Write to localStorage whenever the working state changes so a
+  // page refresh doesn't discard the user's in-progress design.
+  useEffect(() => {
+    const session: SessionState = {
+      slots: recent.slots,
+      floorIndex: recent.floorIndex,
+      borderIndex: recent.borderIndex,
+      selectedGrid: recent.selectedGrid,
+      selectedGridPos: recent.selectedGridPos,
+      gridBodyRows,
+      selectedAmbientId,
+    };
+    saveSession(session);
+  }, [recent, gridBodyRows, selectedAmbientId]);
 
   // Apply a decoded DesignState to the store. Commits each instance
   // as a new recent slot (so it stays editable) and sets the
@@ -412,7 +518,9 @@ const StoreProviderInner: React.FC<{
   // browser panel reflects where the tile came from.
   const selectEditingSource = useCallback(
     (source: TileSource) => {
-      setEditingInstance(newInstance(source));
+      const inst = newInstance(source);
+      setEditingInstance(inst);
+      resetHistory(inst.layerOverrides);
       dispatch({ type: 'DESELECT' });
       setSelectedFamily({
         name: source.family,
@@ -422,7 +530,7 @@ const StoreProviderInner: React.FC<{
         ).length,
       });
     },
-    [library]
+    [library, resetHistory]
   );
 
   // Look up a tile by id and load it into the editor. Returns false
@@ -439,32 +547,93 @@ const StoreProviderInner: React.FC<{
 
   // Paint a single SVG layer. Updates the editor instance AND — if that
   // instance is currently backed by a recent slot — the slot too.
+  // Pushes the new overrides onto the undo history.
   const paintLayer = useCallback(
     (layerId: string) => {
       setEditingInstance((prev) => {
         if (!prev) return prev;
         const next = paintInstanceLayer(prev, layerId, selectedColor);
+        pushHistory(next.layerOverrides);
         if (recent.editingIndex !== undefined) {
           dispatch({ type: 'UPDATE_EDITING', instance: next });
         }
         return next;
       });
     },
-    [selectedColor, recent.editingIndex]
+    [selectedColor, recent.editingIndex, pushHistory]
   );
 
   // Clear layer overrides on the current edit — restore the source defaults.
   // If the edit is backed by a recent slot, the slot syncs via UPDATE_EDITING.
+  // Pushed onto the history stack so the user can undo the reset.
   const resetEditingTile = useCallback(() => {
     setEditingInstance((prev) => {
       if (!prev) return prev;
       const next: TileInstance = { ...prev, layerOverrides: {} };
+      pushHistory(next.layerOverrides);
       if (recent.editingIndex !== undefined) {
         dispatch({ type: 'UPDATE_EDITING', instance: next });
       }
       return next;
     });
+  }, [recent.editingIndex, pushHistory]);
+
+  // Undo: step back one entry in the override history.
+  const undo = useCallback(() => {
+    setHistory((h) => {
+      if (h.cursor < 0) return h; // nothing to undo
+      const newCursor = h.cursor - 1;
+      const overrides = newCursor < 0 ? h.initial : h.stack[newCursor];
+      setEditingInstance((prev) => {
+        if (!prev) return prev;
+        const next: TileInstance = { ...prev, layerOverrides: { ...overrides } };
+        if (recent.editingIndex !== undefined) {
+          dispatch({ type: 'UPDATE_EDITING', instance: next });
+        }
+        return next;
+      });
+      return { ...h, cursor: newCursor };
+    });
   }, [recent.editingIndex]);
+
+  // Redo: step forward one entry in the override history.
+  const redo = useCallback(() => {
+    setHistory((h) => {
+      if (h.cursor >= h.stack.length - 1) return h; // nothing to redo
+      const newCursor = h.cursor + 1;
+      const overrides = h.stack[newCursor];
+      setEditingInstance((prev) => {
+        if (!prev) return prev;
+        const next: TileInstance = { ...prev, layerOverrides: { ...overrides } };
+        if (recent.editingIndex !== undefined) {
+          dispatch({ type: 'UPDATE_EDITING', instance: next });
+        }
+        return next;
+      });
+      return { ...h, cursor: newCursor };
+    });
+  }, [recent.editingIndex]);
+
+  // Ctrl+Z / Ctrl+Y (Cmd on Mac) keyboard shortcuts for undo/redo.
+  // Guarded against <input>/<textarea> targets so typing in a hex
+  // color or preset name field still gets native browser undo.
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      const mod = e.metaKey || e.ctrlKey;
+      if (!mod) return;
+      if (e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        undo();
+      } else if (e.key === 'y' || (e.key === 'z' && e.shiftKey)) {
+        e.preventDefault();
+        redo();
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [undo, redo]);
 
   // "Salvar a recientes" — commit the current editor instance to a slot.
   const commitEditingToRecent = useCallback(() => {
@@ -483,8 +652,9 @@ const StoreProviderInner: React.FC<{
       if (!source) return;
       dispatch({ type: 'SELECT', index, source });
       setEditingInstance(instance);
+      resetHistory(instance.layerOverrides);
     },
-    [recent.slots, library]
+    [recent.slots, library, resetHistory]
   );
 
   const deleteRecent = useCallback((index: number) => {
@@ -518,13 +688,14 @@ const StoreProviderInner: React.FC<{
           ...prev,
           layerOverrides: { ...preset.layerOverrides },
         };
+        pushHistory(next.layerOverrides);
         if (recent.editingIndex !== undefined) {
           dispatch({ type: 'UPDATE_EDITING', instance: next });
         }
         return next;
       });
     },
-    [recent.editingIndex]
+    [recent.editingIndex, pushHistory]
   );
 
   const deletePreset = useCallback(
@@ -616,6 +787,11 @@ const StoreProviderInner: React.FC<{
     canResetEditing:
       !!editingInstance &&
       Object.keys(editingInstance.layerOverrides).length > 0,
+
+    undo,
+    redo,
+    canUndo,
+    canRedo,
 
     presets,
     presetsForEditing,
