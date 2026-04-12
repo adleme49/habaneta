@@ -33,13 +33,22 @@ try {
   const afterMinus = await page.locator('[aria-live="polite"]').textContent();
   console.log(`   counter: "${afterMinus}"`);
 
-  console.log('4. "+" button disables at max (6)');
+  console.log('4. "+" past the old 6 cap still works (new cap is 20)');
+  await page.getByLabel('More rows').click();
   await page.getByLabel('More rows').click();
   await page.getByLabel('More rows').click();
   await page.waitForTimeout(200);
-  const atMax = await page.locator('[aria-live="polite"]').textContent();
-  const plusDisabled = await page.getByLabel('More rows').isDisabled();
-  console.log(`   counter: "${atMax}"  +disabled: ${plusDisabled}`);
+  const past6 = await page.locator('[aria-live="polite"]').textContent();
+  console.log(`   counter: "${past6}"`);
+  if (past6 !== '7') {
+    throw new Error(`expected 7 after bumping past old max, got ${past6}`);
+  }
+  // Step back down so the later ambient capture works with a
+  // reasonable grid size.
+  for (let i = 0; i < 4; i++) {
+    await page.getByLabel('Fewer rows').click();
+  }
+  await page.waitForTimeout(150);
 
   // --- Ambient picker ---
   console.log('5. Pick a floor + border so Enviroment capture works');

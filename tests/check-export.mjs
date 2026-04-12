@@ -9,6 +9,16 @@ import { readFile, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
+// PNG dimensions live in the IHDR chunk at bytes 16-23 of the file
+// (big-endian u32 width followed by u32 height). Reading them is a
+// sharper signal than file size because PNG compression of a
+// repeated floor pattern is highly non-linear.
+function pngDimensions(buf) {
+  const width = buf.readUInt32BE(16);
+  const height = buf.readUInt32BE(20);
+  return { width, height };
+}
+
 const browser = await chromium.launch();
 const ctx = await browser.newContext({
   viewport: { width: 1440, height: 900 },
@@ -66,6 +76,8 @@ try {
   ) {
     throw new Error('file is not a PNG (bad magic bytes)');
   }
+  const smallDims = pngDimensions(header);
+  console.log(`   dimensions: ${smallDims.width} x ${smallDims.height}`);
 
   console.log('3. After success, UI shows "Design exported"');
   const ok = await page
@@ -73,6 +85,65 @@ try {
     .isVisible()
     .catch(() => false);
   console.log(`   success status visible: ${ok}`);
+
+  console.log('4. Bump grid to 12 rows (exceeds old cap, uses virtualizer)');
+  for (let i = 0; i < 9; i++) {
+    await page.getByLabel('More rows').click();
+  }
+  await page.waitForTimeout(400);
+  const bigRows = await page.locator('span.tabular-nums').textContent();
+  console.log(`   counter: "${bigRows}"`);
+  if (bigRows !== '12') {
+    throw new Error(`expected 12 rows, got ${bigRows}`);
+  }
+
+  // Prove the virtualizer is actually windowing rows. At 12 body
+  // rows there are 14 logical rows total (top border + 12 + bottom
+  // border). In the 900px viewport we should see substantially
+  // fewer than 14 rendered — closer to 5-8 once the virtualizer
+  // settles.
+  const renderedRows = await page.locator('[data-row-kind]').count();
+  console.log(`   [data-row-kind] rows in DOM: ${renderedRows}`);
+  if (renderedRows >= 14) {
+    throw new Error(
+      `virtualizer is not windowing rows — rendered ${renderedRows} of 14 (expected < 14)`
+    );
+  }
+  if (renderedRows < 2) {
+    throw new Error(
+      `virtualizer rendered too few rows (${renderedRows}) — something is off`
+    );
+  }
+
+  console.log('5. Export a large grid → PNG must include all rows');
+  const download2Promise = page.waitForEvent('download', { timeout: 15000 });
+  await page.getByRole('button', { name: 'Export', exact: true }).click();
+  const download2 = await download2Promise;
+  const savePath2 = join(tmpdir(), download2.suggestedFilename());
+  await download2.saveAs(savePath2);
+  const st2 = await stat(savePath2);
+  console.log(`   saved to ${savePath2} (${st2.size} bytes)`);
+  const header2 = await readFile(savePath2);
+  if (
+    header2[0] !== 0x89 ||
+    header2[1] !== 0x50 ||
+    header2[2] !== 0x4e ||
+    header2[3] !== 0x47
+  ) {
+    throw new Error('large-grid file is not a PNG');
+  }
+  const bigDims = pngDimensions(header2);
+  console.log(`   dimensions: ${bigDims.width} x ${bigDims.height}`);
+  // The 12-row export must be substantially taller than the 3-row
+  // export — capturing only the viewport (the pre-fix bug) would
+  // give nearly identical heights. Assert at least 2x vertical
+  // growth to prove the unvirtualize-for-export path captured all
+  // rows.
+  if (bigDims.height < smallDims.height * 2) {
+    throw new Error(
+      `large-grid export height ${bigDims.height}px is not ≥ 2x small-grid ${smallDims.height}px — virtualize-off path probably broken`
+    );
+  }
 
   console.log(`\nErrors: ${errors.length}`);
   errors.forEach((e) => console.log('  ERROR:', e.slice(0, 200)));
