@@ -67,12 +67,14 @@ export function useSavePresetMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (preset: TilePreset) => addPreset(preset),
-    // Invalidate rather than setQueryData so two racing mutations
-    // (e.g. rapid double-click on "Save") can't write a stale snapshot
-    // over a fresher one — the query refetches from the source of
-    // truth (localStorage) instead.
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: queryKeys.presets });
+    // addPreset / removePreset are synchronous localStorage writes
+    // that return the full updated array. setQueryData applies the
+    // new snapshot to the cache immediately (same render frame) so
+    // the UI never flashes stale data. The old invalidateQueries
+    // approach was async — between the mutation completing and the
+    // refetch landing, the cache still held the previous snapshot.
+    onSuccess: (updated) => {
+      qc.setQueryData(queryKeys.presets, updated);
     },
   });
 }
@@ -81,8 +83,8 @@ export function useDeletePresetMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => removePreset(id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: queryKeys.presets });
+    onSuccess: (updated) => {
+      qc.setQueryData(queryKeys.presets, updated);
     },
   });
 }
