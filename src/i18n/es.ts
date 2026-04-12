@@ -125,7 +125,7 @@ export const es: Translations = {
       trigger: 'Importar imagen',
       title: 'Importar loza desde imagen',
       description:
-        'Arrastra una foto de una loza real. Los colores se analizarán y convertirán en capas recoloreables.',
+        'Elige una foto de una loza real. Los colores se analizarán y convertirán en capas recoloreables.',
       imageFile: 'Archivo de imagen',
       layers: 'Capas',
       analyze: 'Analizar imagen',

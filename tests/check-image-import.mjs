@@ -7,33 +7,6 @@ import { writeFileSync, unlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-// Create a small test PNG with distinct color bands so k-means
-// has real structure to find. We generate a 40×40 image where the
-// top half is red and the bottom half is blue.
-function createTestPng() {
-  // Minimal PNG encoder — we only need RGBA pixels in a valid file.
-  // This produces a valid but uncompressed deflate-stored PNG.
-  const width = 40;
-  const height = 40;
-
-  // Build IDAT payload: each row = filter byte (0x00) + RGBA pixels.
-  const rawRows = [];
-  for (let y = 0; y < height; y++) {
-    const row = [0x00]; // no filter
-    for (let x = 0; x < width; x++) {
-      if (y < height / 2) {
-        row.push(220, 40, 40, 255); // red
-      } else {
-        row.push(40, 40, 220, 255); // blue
-      }
-    }
-    rawRows.push(...row);
-  }
-
-  // We'll use a canvas-based approach via Playwright instead.
-  return { width, height };
-}
-
 const browser = await chromium.launch();
 const ctx = await browser.newContext({
   viewport: { width: 1440, height: 900 },
@@ -94,7 +67,8 @@ try {
   await page.locator('input[type="range"]').fill('4');
   await page.waitForTimeout(100);
   await page.getByRole('button', { name: /Analyze/ }).click();
-  await page.waitForTimeout(1500); // give k-means time
+  // Wait for k-means to complete — the swatches appear when done.
+  await page.waitForSelector('span[title^="#"]', { timeout: 10000 });
 
   // Check layers were detected.
   const layerText = await page.getByText(/layers detected/).textContent();

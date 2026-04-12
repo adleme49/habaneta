@@ -5,6 +5,7 @@ import {
   ImportResult,
 } from '../../lib/image-import';
 import { TileSource, resolveTile, newInstance } from '../../lib/library';
+import { slugify } from '../../lib/utils';
 import { useSaveUserTileMutation } from '../../lib/queries';
 import SVGTileBase from '../common/SVGBase.component';
 import { Button } from '@/components/ui/button';
@@ -38,6 +39,7 @@ const ImageImportDialog: React.FC = () => {
   const saveMutation = useSaveUserTileMutation();
 
   const resetAndClose = () => {
+    if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl);
     setFile(null);
     setImagePreviewUrl(null);
     setResult(null);
@@ -50,6 +52,7 @@ const ImageImportDialog: React.FC = () => {
   };
 
   const handleFile = (f: File) => {
+    if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl);
     setFile(f);
     setImagePreviewUrl(URL.createObjectURL(f));
     setResult(null);
@@ -78,6 +81,8 @@ const ImageImportDialog: React.FC = () => {
     const id = `user/${slugify(displayName || 'imported')}-${Date.now()}`;
     const tile: TileSource = {
       id,
+      // Hardcoded to floor — photos of real tiles are almost always
+      // floor tiles. A kind selector can be added later if needed.
       kind: 'floor',
       family: family.trim() || 'My Imports',
       displayName: displayName.trim() || 'Imported tile',
@@ -132,8 +137,11 @@ const ImageImportDialog: React.FC = () => {
           <div className="space-y-3">
             {/* File picker */}
             <div>
-              <Label>{t('library.imageImport.imageFile')}</Label>
+              <Label htmlFor="image-import-file">
+                {t('library.imageImport.imageFile')}
+              </Label>
               <input
+                id="image-import-file"
                 type="file"
                 accept="image/png,image/jpeg,image/webp,image/bmp,image/gif"
                 className="mt-1 block w-full text-sm file:mr-4 file:rounded file:border file:border-input file:bg-transparent file:px-3 file:py-1 file:text-sm file:cursor-pointer"
@@ -146,10 +154,11 @@ const ImageImportDialog: React.FC = () => {
 
             {/* Layer count slider */}
             <div>
-              <Label>
+              <Label htmlFor="image-import-layers">
                 {t('library.imageImport.layers')}: {layerCount}
               </Label>
               <input
+                id="image-import-layers"
                 type="range"
                 min={MIN_LAYERS}
                 max={MAX_LAYERS}
@@ -279,15 +288,5 @@ const ImageImportDialog: React.FC = () => {
     </Dialog>
   );
 };
-
-function slugify(name: string): string {
-  return (
-    name
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '') || 'tile'
-  );
-}
 
 export default ImageImportDialog;

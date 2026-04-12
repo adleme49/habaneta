@@ -123,7 +123,7 @@ export const en = {
       trigger: 'Import image',
       title: 'Import tile from image',
       description:
-        'Drop a photo of a real tile. Colors will be analyzed and converted into recolorable layers.',
+        'Pick a photo of a real tile. Colors will be analyzed and converted into recolorable layers.',
       imageFile: 'Image file',
       layers: 'Layers',
       analyze: 'Analyze image',

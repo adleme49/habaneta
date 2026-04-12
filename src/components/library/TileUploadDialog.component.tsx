@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from '@tanstack/react-form';
 import { parseSvgFile, ParsedSvg } from '../../lib/svg-parse';
 import { TileSource, resolveTile, newInstance } from '../../lib/library';
+import { slugify } from '../../lib/utils';
 import { useSaveUserTileMutation } from '../../lib/queries';
 import SVGTileBase from '../common/SVGBase.component';
 import { Button } from '@/components/ui/button';
@@ -286,13 +287,5 @@ const TileUploadDialog: React.FC = () => {
     </Dialog>
   );
 };
-
-function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '') || 'tile';
-}
 
 export default TileUploadDialog;
