@@ -22,6 +22,13 @@ const GRID = 80;
 /** Pixels per cell. */
 const CELL_PX = TILE_PX / GRID;
 
+/** Passes of 3×3 majority filter applied to the label grid post-cluster. */
+const MAJORITY_PASSES = 3;
+
+/** Remove connected components smaller than this many cells (fights
+ *  speckle that survives the majority filter on noisy photos). */
+const MIN_COMPONENT_CELLS = 6;
+
 // ---- Public API ----
 
 export interface ImportResult {
@@ -80,7 +87,9 @@ export async function importImageAsTile(
   const pixels = rasterize(img, { autoCrop });
   if (autoLevels) applyAutoLevels(pixels);
 
-  // Average pixel colors within each cell (sRGB 8-bit).
+  // Average pixel colors within each cell (sRGB 8-bit). The 5×5 box
+  // implicit in downsample already smooths pixel-level JPEG noise; a
+  // separate pre-blur is not worth the cost in color bleed at edges.
   let cellRgb = downsample(pixels);
 
   // Enforce symmetry by averaging cells that should look the same.
@@ -102,12 +111,16 @@ export async function importImageAsTile(
   // Build grid of layer assignments.
   let grid: number[][] = toGrid(assignments);
 
-  // Two passes of 3×3 majority filter. One pass kills isolated speckle;
-  // the second pass smooths the boundary itself so long straight edges
-  // don't wobble ±1 cell — critical for tiles that repeat across a
-  // grid where any wiggle tiles visibly.
-  grid = majorityFilter(grid, centroids.length);
-  grid = majorityFilter(grid, centroids.length);
+  // Multi-pass 3×3 majority filter. Each pass smooths one extra cell
+  // of boundary wobble. Three passes is enough to clean up real tile
+  // photos without erasing intricate motifs.
+  for (let p = 0; p < MAJORITY_PASSES; p++) {
+    grid = majorityFilter(grid, centroids.length);
+  }
+  // Drop tiny speckled regions that survived the mode filter. A small
+  // island or thin bridge between regions is almost always photo noise,
+  // not a real feature — reassign to the dominant neighbor.
+  grid = removeSmallComponents(grid, centroids.length, MIN_COMPONENT_CELLS);
 
   // Derive hex colors from OKLAB centroids.
   const layers: Record<string, string> = {};
@@ -587,6 +600,71 @@ function majorityFilter(grid: number[][], k: number): number[][] {
   return out;
 }
 
+/**
+ * Find connected components smaller than `minSize` cells and reassign
+ * each of their cells to the most common neighboring label. Kills
+ * thin bridges and isolated specks that survived the majority filter
+ * on noisy photo inputs.
+ */
+function removeSmallComponents(
+  grid: number[][],
+  k: number,
+  minSize: number
+): number[][] {
+  const rows = grid.length;
+  const cols = grid[0].length;
+  const visited = new Uint8Array(rows * cols);
+  const out = grid.map((r) => [...r]);
+
+  // Flood-fill each unvisited cell to find its component.
+  for (let r0 = 0; r0 < rows; r0++) {
+    for (let c0 = 0; c0 < cols; c0++) {
+      if (visited[r0 * cols + c0]) continue;
+      const label = grid[r0][c0];
+      const stack: Array<[number, number]> = [[r0, c0]];
+      const cells: Array<[number, number]> = [];
+      while (stack.length) {
+        const [r, c] = stack.pop()!;
+        const idx = r * cols + c;
+        if (visited[idx]) continue;
+        if (grid[r][c] !== label) continue;
+        visited[idx] = 1;
+        cells.push([r, c]);
+        if (r > 0) stack.push([r - 1, c]);
+        if (r < rows - 1) stack.push([r + 1, c]);
+        if (c > 0) stack.push([r, c - 1]);
+        if (c < cols - 1) stack.push([r, c + 1]);
+      }
+      if (cells.length >= minSize) continue;
+
+      // Count neighbor labels of the small component.
+      const neighborCounts = new Array<number>(k).fill(0);
+      for (const [r, c] of cells) {
+        const ns: Array<[number, number]> = [
+          [r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1],
+        ];
+        for (const [nr, nc] of ns) {
+          if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+          const nLabel = grid[nr][nc];
+          if (nLabel !== label) neighborCounts[nLabel]++;
+        }
+      }
+      let bestLabel = label;
+      let bestCount = -1;
+      for (let i = 0; i < k; i++) {
+        if (i === label) continue;
+        if (neighborCounts[i] > bestCount) {
+          bestCount = neighborCounts[i];
+          bestLabel = i;
+        }
+      }
+      if (bestLabel === label) continue; // isolated — no other neighbors
+      for (const [r, c] of cells) out[r][c] = bestLabel;
+    }
+  }
+  return out;
+}
+
 // ---- SVG generation ----
 
 /**
@@ -725,9 +803,10 @@ function simplifyPolygon(loop: Point[]): Point[] {
   return douglasPeuckerClosed(collinear, DP_EPSILON);
 }
 
-/** Epsilon in cell-corner units. 0.7 flattens single-cell zigzags
- *  (deviation = 1 unit) while preserving crisp 90° corners. */
-const DP_EPSILON = 0.7;
+/** Epsilon in cell-corner units. 1.5 flattens small boundary wiggles
+ *  typical of photo inputs while preserving crisp 90° corners (whose
+ *  distance from a diagonal chord is always ≥ their cell radius). */
+const DP_EPSILON = 1.5;
 
 function dropCollinear(loop: Point[]): Point[] {
   const n = loop.length;
