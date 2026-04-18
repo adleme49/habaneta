@@ -38,7 +38,9 @@ const ImageImportDialog: React.FC = () => {
   const [layerCount, setLayerCount] = useState(DEFAULT_LAYERS);
   const [symmetry, setSymmetry] = useState<Symmetry>('none');
   const [autoCrop, setAutoCrop] = useState(true);
-  const [autoLevels, setAutoLevels] = useState(true);
+  // Default OFF: auto-levels distorts limited-palette tiles (scans,
+  // renders, clean graphics). Opt-in for dim/washed photos.
+  const [autoLevels, setAutoLevels] = useState(false);
   const [result, setResult] = useState<ImportResult | null>(null);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,7 +63,7 @@ const ImageImportDialog: React.FC = () => {
     setLayerCount(DEFAULT_LAYERS);
     setSymmetry('none');
     setAutoCrop(true);
-    setAutoLevels(true);
+    setAutoLevels(false);
     setProcessing(false);
     setOpen(false);
   };

@@ -55,7 +55,8 @@ export interface ImportOptions {
   symmetry?: Symmetry;
   /** Trim uniform borders/grout from the image (default true). */
   autoCrop?: boolean;
-  /** Per-channel percentile stretch (white balance + exposure) (default true). */
+  /** Luminance percentile stretch. Off by default — useful for dim photos,
+   * but skipped automatically on limited-palette / high-contrast inputs. */
   autoLevels?: boolean;
 }
 
@@ -72,7 +73,7 @@ export async function importImageAsTile(
     maxIterations = 25,
     symmetry = 'none',
     autoCrop = true,
-    autoLevels = true,
+    autoLevels = false,
   } = options;
 
   const img = await loadImage(file);
@@ -89,12 +90,23 @@ export async function importImageAsTile(
   const cellLab: Vec3[] = cellRgb.map(rgbToOklab);
 
   // K-means in OKLAB space.
-  const { assignments, centroids } = kmeans(cellLab, layerCount, maxIterations);
+  const kmeansResult = kmeans(cellLab, layerCount, maxIterations);
+
+  // Drop any cluster that has zero assignments — empty clusters would
+  // otherwise produce bogus swatches and unused layer ids.
+  const { assignments, centroids } = dropEmptyClusters(
+    kmeansResult.assignments,
+    kmeansResult.centroids
+  );
 
   // Build grid of layer assignments.
   let grid: number[][] = toGrid(assignments);
 
-  // Smooth speckle with a 3×3 mode filter.
+  // Two passes of 3×3 majority filter. One pass kills isolated speckle;
+  // the second pass smooths the boundary itself so long straight edges
+  // don't wobble ±1 cell — critical for tiles that repeat across a
+  // grid where any wiggle tiles visibly.
+  grid = majorityFilter(grid, centroids.length);
   grid = majorityFilter(grid, centroids.length);
 
   // Derive hex colors from OKLAB centroids.
@@ -113,6 +125,31 @@ export async function importImageAsTile(
     grid,
     minCentroidDistance: minPairwiseDistance(centroids),
   };
+}
+
+/**
+ * Remove clusters that had zero points assigned, remapping assignment
+ * indices so the remaining clusters stay contiguous (0..n-1).
+ */
+function dropEmptyClusters(
+  assignments: number[],
+  centroids: Vec3[]
+): { assignments: number[]; centroids: Vec3[] } {
+  const counts = new Array<number>(centroids.length).fill(0);
+  for (const a of assignments) counts[a]++;
+
+  const remap = new Array<number>(centroids.length).fill(-1);
+  const keptCentroids: Vec3[] = [];
+  for (let i = 0; i < centroids.length; i++) {
+    if (counts[i] === 0) continue;
+    remap[i] = keptCentroids.length;
+    keptCentroids.push(centroids[i]);
+  }
+  if (keptCentroids.length === centroids.length) {
+    return { assignments, centroids };
+  }
+  const newAssignments = assignments.map((a) => remap[a]);
+  return { assignments: newAssignments, centroids: keptCentroids };
 }
 
 function minPairwiseDistance(points: Vec3[]): number {
@@ -260,35 +297,59 @@ function colStdDev(
 }
 
 /**
- * Per-channel 1%–99% percentile stretch. Acts as white-balance +
- * exposure correction: pure whites map to 255, pure blacks to 0, and
- * the middle is expanded to fill the dynamic range.
+ * Luminance-only 1%–99% percentile stretch. Computes a luminance
+ * histogram, picks the low/high percentiles, then remaps each pixel
+ * by scaling all 3 channels uniformly by (newL / oldL). This stretches
+ * contrast without shifting hue or saturation.
+ *
+ * Previous version stretched each R/G/B channel independently, which
+ * catastrophically hue-shifted limited-palette images (a yellow+white
+ * checkerboard turned red+cyan because the blue channel's narrow range
+ * got blown up). Luminance-only stretch is the correct photo-neutral
+ * equivalent of a global curves adjustment.
  */
 function applyAutoLevels(pixels: Uint8ClampedArray): void {
   const total = pixels.length / 4;
-  for (let ch = 0; ch < 3; ch++) {
-    const hist = new Uint32Array(256);
-    for (let i = ch; i < pixels.length; i += 4) hist[pixels[i]]++;
+  if (total === 0) return;
 
-    const loTarget = Math.floor(total * 0.01);
-    const hiTarget = Math.floor(total * 0.99);
-    let cum = 0, lo = 0, hi = 255;
-    for (let v = 0; v < 256; v++) {
-      cum += hist[v];
-      if (cum >= loTarget) { lo = v; break; }
-    }
-    cum = 0;
-    for (let v = 0; v < 256; v++) {
-      cum += hist[v];
-      if (cum >= hiTarget) { hi = v; break; }
-    }
+  // Rec. 709 luminance weights for sRGB.
+  const lumAt = (i: number) =>
+    0.2126 * pixels[i] + 0.7152 * pixels[i + 1] + 0.0722 * pixels[i + 2];
 
-    if (hi <= lo) continue;
-    const scale = 255 / (hi - lo);
-    for (let i = ch; i < pixels.length; i += 4) {
-      const nv = (pixels[i] - lo) * scale;
-      pixels[i] = Math.max(0, Math.min(255, Math.round(nv)));
-    }
+  // Build luminance histogram at 8-bit resolution.
+  const hist = new Uint32Array(256);
+  for (let i = 0; i < pixels.length; i += 4) {
+    hist[Math.round(lumAt(i)) & 0xff]++;
+  }
+
+  const loTarget = Math.floor(total * 0.01);
+  const hiTarget = Math.floor(total * 0.99);
+  let cum = 0, lo = 0, hi = 255;
+  for (let v = 0; v < 256; v++) {
+    cum += hist[v];
+    if (cum >= loTarget) { lo = v; break; }
+  }
+  cum = 0;
+  for (let v = 0; v < 256; v++) {
+    cum += hist[v];
+    if (cum >= hiTarget) { hi = v; break; }
+  }
+  const range = hi - lo;
+  // Skip when the range is too narrow (blows up near-uniform images) OR
+  // when the would-be stretch factor is large. A large factor means the
+  // image already uses a limited palette (a 2-color tile, a render) and
+  // stretching would distort colors rather than correct exposure.
+  if (range < 8) return;
+  const stretchFactor = 255 / range;
+  if (stretchFactor > 2) return;
+  for (let i = 0; i < pixels.length; i += 4) {
+    const L = lumAt(i);
+    if (L <= 0) continue; // pure black — leave alone
+    const Lnew = Math.max(0, Math.min(255, ((L - lo) * 255) / range));
+    const factor = Lnew / L;
+    pixels[i]     = Math.max(0, Math.min(255, Math.round(pixels[i]     * factor)));
+    pixels[i + 1] = Math.max(0, Math.min(255, Math.round(pixels[i + 1] * factor)));
+    pixels[i + 2] = Math.max(0, Math.min(255, Math.round(pixels[i + 2] * factor)));
   }
 }
 
@@ -459,6 +520,13 @@ function kmeansppInit(points: Vec3[], k: number): Vec3[] {
 
     let total = 0;
     for (let i = 0; i < n; i++) total += dist[i];
+    // Degenerate case: every remaining point is already a centroid, so
+    // nothing is "far." Fall back to a random point rather than always
+    // picking index 0 (which would duplicate the first centroid).
+    if (total <= 0) {
+      centroids.push([...points[Math.floor(Math.random() * n)]]);
+      continue;
+    }
     let r = Math.random() * total;
     let picked = 0;
     for (let i = 0; i < n; i++) {
@@ -540,7 +608,7 @@ function buildSvg(grid: number[][], centroids: Vec3[]): string {
     const hex = oklabToHex(centroids[layer]);
     const d = loops
       .map((loop) => {
-        const simplified = simplifyCollinear(loop);
+        const simplified = simplifyPolygon(loop);
         const head = simplified[0];
         const parts: string[] = [`M${head[0] * CELL_PX} ${head[1] * CELL_PX}`];
         for (let i = 1; i < simplified.length; i++) {
@@ -647,8 +715,21 @@ function dirIndex(dx: number, dy: number): number {
   return 3;
 }
 
-/** Remove vertices where incoming and outgoing segments are collinear. */
-function simplifyCollinear(loop: Point[]): Point[] {
+/** Polygon simplification: drop collinear vertices, then Douglas–Peucker
+ *  with an epsilon just below 1 cell, so single-cell boundary jitters
+ *  flatten while genuine 90° corners remain. Keeps tiles from wobbling
+ *  when repeated across a grid. */
+function simplifyPolygon(loop: Point[]): Point[] {
+  const collinear = dropCollinear(loop);
+  if (collinear.length < 4) return collinear;
+  return douglasPeuckerClosed(collinear, DP_EPSILON);
+}
+
+/** Epsilon in cell-corner units. 0.7 flattens single-cell zigzags
+ *  (deviation = 1 unit) while preserving crisp 90° corners. */
+const DP_EPSILON = 0.7;
+
+function dropCollinear(loop: Point[]): Point[] {
   const n = loop.length;
   if (n < 3) return loop;
   const out: Point[] = [];
@@ -658,10 +739,74 @@ function simplifyCollinear(loop: Point[]): Point[] {
     const next = loop[(i + 1) % n];
     const dx1 = cur[0] - prev[0], dy1 = cur[1] - prev[1];
     const dx2 = next[0] - cur[0], dy2 = next[1] - cur[1];
-    if (dx1 * dy2 - dy1 * dx2 === 0) continue; // collinear → drop vertex
+    if (dx1 * dy2 - dy1 * dx2 === 0) continue;
     out.push(cur);
   }
   return out;
+}
+
+/**
+ * Douglas-Peucker simplification for a closed polygon. To avoid the
+ * arbitrary-starting-point problem, we split the loop at the two
+ * farthest-apart vertices (which are guaranteed to be real corners),
+ * simplify each arc, and rejoin.
+ */
+function douglasPeuckerClosed(loop: Point[], epsilon: number): Point[] {
+  const n = loop.length;
+  if (n < 4) return loop;
+
+  // Find the two farthest points — they survive any simplification.
+  let aIdx = 0, bIdx = 0, bestSq = -1;
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const dx = loop[i][0] - loop[j][0];
+      const dy = loop[i][1] - loop[j][1];
+      const d = dx * dx + dy * dy;
+      if (d > bestSq) { bestSq = d; aIdx = i; bIdx = j; }
+    }
+  }
+  const arc1: Point[] = [];
+  const arc2: Point[] = [];
+  for (let i = aIdx; i !== bIdx; i = (i + 1) % n) arc1.push(loop[i]);
+  arc1.push(loop[bIdx]);
+  for (let i = bIdx; i !== aIdx; i = (i + 1) % n) arc2.push(loop[i]);
+  arc2.push(loop[aIdx]);
+
+  const simp1 = dpOpen(arc1, epsilon);
+  const simp2 = dpOpen(arc2, epsilon);
+  // Stitch: simp1 ends at bIdx which equals simp2[0]; skip duplicate.
+  return [...simp1.slice(0, -1), ...simp2.slice(0, -1)];
+}
+
+function dpOpen(pts: Point[], epsilon: number): Point[] {
+  if (pts.length < 3) return pts;
+  const first = pts[0];
+  const last = pts[pts.length - 1];
+  let maxD = 0;
+  let maxI = 0;
+  for (let i = 1; i < pts.length - 1; i++) {
+    const d = perpDist(pts[i], first, last);
+    if (d > maxD) { maxD = d; maxI = i; }
+  }
+  if (maxD > epsilon) {
+    const left = dpOpen(pts.slice(0, maxI + 1), epsilon);
+    const right = dpOpen(pts.slice(maxI), epsilon);
+    return [...left.slice(0, -1), ...right];
+  }
+  return [first, last];
+}
+
+function perpDist(p: Point, a: Point, b: Point): number {
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  const len2 = dx * dx + dy * dy;
+  if (len2 === 0) {
+    const ex = p[0] - a[0], ey = p[1] - a[1];
+    return Math.sqrt(ex * ex + ey * ey);
+  }
+  // Perpendicular distance from p to line a→b.
+  const num = Math.abs(dy * p[0] - dx * p[1] + b[0] * a[1] - b[1] * a[0]);
+  return num / Math.sqrt(len2);
 }
 
 // ---- Color space conversions ----
