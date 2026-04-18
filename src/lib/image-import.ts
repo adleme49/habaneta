@@ -498,8 +498,11 @@ function majorityFilter(grid: number[][], k: number): number[][] {
 // ---- SVG generation ----
 
 /**
- * Emit one <rect> per horizontal run of same-layer cells. Reduces element
- * count by ~5–10× vs one rect per cell while keeping output identical.
+ * Emit one <path> per layer, where the path is the traced contour of
+ * every connected region assigned to that layer. Multiple disjoint
+ * regions become separate subpaths ('M ... Z M ... Z') on the same
+ * path. Produces dramatically cleaner output than a rect mosaic and
+ * works naturally with fill-rule="evenodd" for holes.
  */
 function buildSvg(grid: number[][], centroids: Vec3[]): string {
   const lines: string[] = [];
@@ -508,29 +511,133 @@ function buildSvg(grid: number[][], centroids: Vec3[]): string {
   );
 
   for (let layer = 0; layer < centroids.length; layer++) {
+    const loops = tracePolygons(grid, layer);
+    if (loops.length === 0) continue;
     const hex = oklabToHex(centroids[layer]);
-    for (let row = 0; row < GRID; row++) {
-      let col = 0;
-      while (col < GRID) {
-        if (grid[row][col] !== layer) {
-          col++;
-          continue;
+    const d = loops
+      .map((loop) => {
+        const simplified = simplifyCollinear(loop);
+        const head = simplified[0];
+        const parts: string[] = [`M${head[0] * CELL_PX} ${head[1] * CELL_PX}`];
+        for (let i = 1; i < simplified.length; i++) {
+          const p = simplified[i];
+          parts.push(`L${p[0] * CELL_PX} ${p[1] * CELL_PX}`);
         }
-        const runStart = col;
-        while (col < GRID && grid[row][col] === layer) col++;
-        const runLen = col - runStart;
-        const x = runStart * CELL_PX;
-        const y = row * CELL_PX;
-        const width = runLen * CELL_PX;
-        lines.push(
-          `  <rect x="${x}" y="${y}" width="${width}" height="${CELL_PX}" fill="${hex}" class="colora st${layer}"/>`
-        );
-      }
-    }
+        parts.push('Z');
+        return parts.join(' ');
+      })
+      .join(' ');
+    lines.push(
+      `  <path d="${d}" fill="${hex}" fill-rule="evenodd" class="colora st${layer}"/>`
+    );
   }
 
   lines.push('</svg>');
   return lines.join('\n');
+}
+
+// ---- Contour tracing ----
+
+type Point = [number, number];
+
+/**
+ * Trace the boundary polygons of every connected region assigned to
+ * `layer`. Each polygon is a closed loop of grid-aligned points (in
+ * cell-corner coordinates, 0..GRID). Walks oriented boundary edges
+ * so that interior is on the left of travel; at pinch points picks
+ * the tightest clockwise turn to keep loops disjoint.
+ */
+function tracePolygons(grid: number[][], layer: number): Point[][] {
+  const rows = grid.length;
+  const cols = grid[0].length;
+
+  // Collect every oriented boundary edge. For each cell of `layer`,
+  // emit any of its 4 edges whose neighbor across that edge is either
+  // off-grid or a different layer. Orientation goes CCW around each
+  // cell, so interior ends up on the left of the travel direction.
+  const edges: Array<[Point, Point]> = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (grid[r][c] !== layer) continue;
+      if (r === 0 || grid[r - 1][c] !== layer) edges.push([[c, r], [c + 1, r]]);
+      if (c === cols - 1 || grid[r][c + 1] !== layer)
+        edges.push([[c + 1, r], [c + 1, r + 1]]);
+      if (r === rows - 1 || grid[r + 1][c] !== layer)
+        edges.push([[c + 1, r + 1], [c, r + 1]]);
+      if (c === 0 || grid[r][c - 1] !== layer)
+        edges.push([[c, r + 1], [c, r]]);
+    }
+  }
+
+  // Index edges by their start point for chaining.
+  const startMap = new Map<string, Array<[Point, Point]>>();
+  for (const e of edges) {
+    const k = keyPoint(e[0]);
+    let list = startMap.get(k);
+    if (!list) startMap.set(k, (list = []));
+    list.push(e);
+  }
+  const used = new Set<string>();
+
+  const loops: Point[][] = [];
+  for (const seed of edges) {
+    if (used.has(keyEdge(seed))) continue;
+    const loop: Point[] = [seed[0]];
+    let cur: [Point, Point] = seed;
+    while (true) {
+      used.add(keyEdge(cur));
+      loop.push(cur[1]);
+      if (cur[1][0] === seed[0][0] && cur[1][1] === seed[0][1]) {
+        loop.pop();
+        break;
+      }
+      const options = startMap.get(keyPoint(cur[1])) ?? [];
+      const inDir = dirIndex(cur[1][0] - cur[0][0], cur[1][1] - cur[0][1]);
+      // Pick the outgoing edge with the smallest clockwise turn.
+      let best: [Point, Point] | null = null;
+      let bestTurn = 99;
+      for (const cand of options) {
+        if (used.has(keyEdge(cand))) continue;
+        const outDir = dirIndex(cand[1][0] - cand[0][0], cand[1][1] - cand[0][1]);
+        const turn = (outDir - inDir + 4) % 4;
+        if (turn < bestTurn) { bestTurn = turn; best = cand; }
+      }
+      if (!best) break;
+      cur = best;
+    }
+    if (loop.length >= 3) loops.push(loop);
+  }
+  return loops;
+}
+
+function keyPoint(p: Point): string {
+  return `${p[0]},${p[1]}`;
+}
+function keyEdge(e: [Point, Point]): string {
+  return `${e[0][0]},${e[0][1]}>${e[1][0]},${e[1][1]}`;
+}
+function dirIndex(dx: number, dy: number): number {
+  if (dx > 0) return 0;
+  if (dy > 0) return 1;
+  if (dx < 0) return 2;
+  return 3;
+}
+
+/** Remove vertices where incoming and outgoing segments are collinear. */
+function simplifyCollinear(loop: Point[]): Point[] {
+  const n = loop.length;
+  if (n < 3) return loop;
+  const out: Point[] = [];
+  for (let i = 0; i < n; i++) {
+    const prev = loop[(i - 1 + n) % n];
+    const cur = loop[i];
+    const next = loop[(i + 1) % n];
+    const dx1 = cur[0] - prev[0], dy1 = cur[1] - prev[1];
+    const dx2 = next[0] - cur[0], dy2 = next[1] - cur[1];
+    if (dx1 * dy2 - dy1 * dx2 === 0) continue; // collinear → drop vertex
+    out.push(cur);
+  }
+  return out;
 }
 
 // ---- Color space conversions ----
