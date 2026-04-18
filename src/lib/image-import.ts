@@ -16,18 +16,24 @@
 /** Tile canvas size in pixels. */
 const TILE_PX = 400;
 
-/** Grid resolution: number of cells per axis. 80 → up to 6400 cells. */
-const GRID = 80;
+/** Grid resolution: number of cells per axis. 160 → 25,600 cells.
+ *  Finer analysis than a rendering surface needs, but it matters at
+ *  tile seams — when the imported tile repeats across a floor, seam
+ *  quantization error equals CELL_PX. Half the cell size → half the
+ *  visible mismatch. */
+const GRID = 160;
 
-/** Pixels per cell. */
+/** Pixels per cell (float-safe — downsample reads integer bounds). */
 const CELL_PX = TILE_PX / GRID;
 
-/** Passes of 3×3 majority filter applied to the label grid post-cluster. */
-const MAJORITY_PASSES = 3;
+/** Passes of 3×3 majority filter applied to the label grid post-cluster.
+ *  At GRID=160 each pass smooths ~CELL_PX·2=5 px of wobble; 5 passes
+ *  handles typical photo noise while keeping motifs intact. */
+const MAJORITY_PASSES = 5;
 
-/** Remove connected components smaller than this many cells (fights
- *  speckle that survives the majority filter on noisy photos). */
-const MIN_COMPONENT_CELLS = 6;
+/** Remove connected components smaller than this many cells. Scales
+ *  as cell-count (area) — was 6 at GRID=80, so 6·(160/80)²=24 here. */
+const MIN_COMPONENT_CELLS = 24;
 
 // ---- Public API ----
 
@@ -368,17 +374,21 @@ function applyAutoLevels(pixels: Uint8ClampedArray): void {
 
 // ---- Downsampling ----
 
-/** Average the pixel colors within each CELL_PX × CELL_PX cell. */
+/** Average the pixel colors within each cell. Uses integer pixel
+ *  bounds derived from the fractional CELL_PX so non-integer cell
+ *  sizes work cleanly (e.g. CELL_PX=2.5 for GRID=160, TILE_PX=400). */
 function downsample(pixels: Uint8ClampedArray): Vec3[] {
   const cells: Vec3[] = [];
   for (let row = 0; row < GRID; row++) {
+    const y0 = Math.floor(row * CELL_PX);
+    const y1 = Math.max(y0 + 1, Math.floor((row + 1) * CELL_PX));
     for (let col = 0; col < GRID; col++) {
+      const x0 = Math.floor(col * CELL_PX);
+      const x1 = Math.max(x0 + 1, Math.floor((col + 1) * CELL_PX));
       let rSum = 0, gSum = 0, bSum = 0, count = 0;
-      const y0 = row * CELL_PX;
-      const x0 = col * CELL_PX;
-      for (let dy = 0; dy < CELL_PX; dy++) {
-        for (let dx = 0; dx < CELL_PX; dx++) {
-          const i = ((y0 + dy) * TILE_PX + (x0 + dx)) * 4;
+      for (let y = y0; y < y1; y++) {
+        for (let x = x0; x < x1; x++) {
+          const i = (y * TILE_PX + x) * 4;
           rSum += pixels[i];
           gSum += pixels[i + 1];
           bSum += pixels[i + 2];
@@ -857,14 +867,14 @@ function snapAxisAligned(loop: Point[]): Point[] {
 const SNAP_RATIO = 4;
 
 /** Minimum length (cell units) of a segment's major axis to be a
- *  snap candidate. Long runs (tile borders) are >> this; short
- *  chords of small curves are < this, so circles stay round. */
-const SNAP_MIN_LEN = 10;
+ *  snap candidate. Scaled with GRID so the physical threshold
+ *  (~50 px) matches what worked at GRID=80. */
+const SNAP_MIN_LEN = 20;
 
-/** Epsilon in cell-corner units. 1.5 flattens small boundary wiggles
- *  typical of photo inputs while preserving crisp 90° corners (whose
- *  distance from a diagonal chord is always ≥ their cell radius). */
-const DP_EPSILON = 1.5;
+/** Douglas-Peucker epsilon in cell-corner units. Scales with GRID so
+ *  the physical tolerance (~7.5 px here at GRID=160) matches what
+ *  was used at GRID=80 — same visible smoothing, finer quantization. */
+const DP_EPSILON = 3.0;
 
 function dropCollinear(loop: Point[]): Point[] {
   const n = loop.length;
