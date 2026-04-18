@@ -142,6 +142,8 @@ export const es: Translations = {
       autoCrop: 'Recortar bordes automáticamente',
       autoLevels: 'Equilibrar colores automáticamente',
       similarColorsHint: 'Sugerencia: hay colores similares — prueba con menos capas.',
+      resolution: 'Resolución',
+      resolutionHint: 'Mayor = bordes más nítidos, análisis más lento.',
     },
     importExport: {
       export: 'Exportar',

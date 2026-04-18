@@ -11,40 +11,47 @@
 //   5. 3×3 majority filter to smooth speckle at color boundaries
 //   6. Emit SVG with horizontal run-merged <rect>s per layer
 
-// ---- Constants ----
+// ---- Configuration ----
 
-/** Tile canvas size in pixels. Raised to 1024 so the analyzer can
- *  use the full resolution of typical source photos (400–1000px
- *  tile shots). For smaller sources the browser will upscale into
- *  this canvas with no gain in real detail, but it's harmless. */
-const TILE_PX = 1024;
+/** Default analyzer resolution in pixels. Can be overridden per-call
+ *  via ImportOptions.tilePx. Also serves as the SVG viewBox size.
+ *  With GRID = tilePx (per-pixel sampling), raising tilePx means the
+ *  analyzer can use more of the source image's real detail — up to
+ *  the source's native resolution. Beyond that it's interpolation. */
+const DEFAULT_TILE_PX = 1024;
 
-/** Output-grid resolution. GRID=TILE_PX → CELL_PX=1 px, i.e. one
- *  analyzer cell per canvas pixel. Beyond this we'd be sub-pixel
- *  sampling the same information in finer buckets — no quality
- *  win, just wasted compute. */
-const GRID = 1024;
+/** Allowed values exposed in the UI. Below 256 isn't worth analyzing;
+ *  above 2048 the main-thread compute blows past a second even with
+ *  the two-stage k-means. */
+export const TILE_PX_CHOICES = [256, 512, 1024, 1536, 2048] as const;
+export type TilePxChoice = (typeof TILE_PX_CHOICES)[number];
 
 /** Lower grid used only for k-means clustering. Colors are a global
  *  property — we don't need every pixel to identify them. Running
  *  k-means at GRID_KMEANS and then assigning at GRID keeps compute
- *  sane: 6,400 cells for iterative k-means, 102,400 cells for the
- *  single-pass assignment + post-processing. */
+ *  sane no matter how high tilePx goes. */
 const GRID_KMEANS = 80;
 
-/** Pixels per cell (float-safe — downsample reads integer bounds). */
-const CELL_PX = TILE_PX / GRID;
-
-/** Passes of 3×3 majority filter applied to the label grid post-cluster.
- *  Each pass smooths exactly one cell of wobble. At TILE_PX=1024 that
- *  is 0.1% of tile width, so 20 passes ≈ 2% smoothing — cleans photo
- *  noise while keeping motifs intact. */
-const MAJORITY_PASSES = 20;
-
-/** Remove connected components smaller than this many cells (= px²
- *  since CELL_PX=1). 400 px² is a ~20×20 region — below this and
- *  a blob is almost always speckle, not a real feature. */
-const MIN_COMPONENT_CELLS = 400;
+/** Derive runtime thresholds from tilePx. Keeping most thresholds in
+ *  absolute pixels so noise smoothing stays physically sensible
+ *  across resolutions; tile-border snap scales with tilePx because
+ *  borders are a fraction of the tile, not an absolute length. */
+function thresholdsFor(tilePx: number) {
+  return {
+    /** Each pass of 3×3 majority filter smooths ~1 px. 8 passes kills
+     *  typical JPEG/glaze noise without erasing real motifs. */
+    majorityPasses: 8,
+    /** Speckle below this many square pixels is treated as noise. */
+    minComponentCells: 200,
+    /** Polygon simplification tolerance (pixels). Constant physical
+     *  tolerance — about 12 px of jitter collapses at any tilePx. */
+    dpEpsilon: 12,
+    /** Minimum horizontal/vertical run length (pixels) to snap to
+     *  an axis-aligned edge. Scales with tilePx: tile borders are a
+     *  fraction of the tile, not a fixed length. */
+    snapMinLen: Math.max(32, Math.round(tilePx * 0.125)),
+  };
+}
 
 // ---- Public API ----
 
@@ -82,6 +89,10 @@ export interface ImportOptions {
   /** Luminance percentile stretch. Off by default — useful for dim photos,
    * but skipped automatically on limited-palette / high-contrast inputs. */
   autoLevels?: boolean;
+  /** Analyzer/output resolution in pixels (also the SVG viewBox size).
+   *  Larger = better fidelity on high-resolution source photos but more
+   *  compute. See TILE_PX_CHOICES for the UI-exposed steps. */
+  tilePx?: number;
 }
 
 /**
@@ -98,18 +109,23 @@ export async function importImageAsTile(
     symmetry = 'none',
     autoCrop = true,
     autoLevels = false,
+    tilePx = DEFAULT_TILE_PX,
   } = options;
 
+  // GRID = tilePx gives per-pixel analysis (CELL_PX = 1).
+  const grid_res = tilePx;
+  const th = thresholdsFor(tilePx);
+
   const img = await loadImage(file);
-  const pixels = rasterize(img, { autoCrop });
+  const pixels = rasterize(img, { autoCrop, tilePx });
   if (autoLevels) applyAutoLevels(pixels);
 
   // --- Two-stage clustering ---
   // Stage 1: run k-means at a small grid to find color centroids.
   // Colors are a global property of the image; we don't need
   // every pixel to identify them. Iterative k-means on 6,400 cells
-  // is ~15× cheaper than on 102,400.
-  let clusterCellsRgb = downsample(pixels, GRID_KMEANS);
+  // is cheap at any tilePx.
+  let clusterCellsRgb = downsample(pixels, GRID_KMEANS, tilePx);
   if (symmetry !== 'none') {
     clusterCellsRgb = enforceSymmetry(clusterCellsRgb, symmetry, GRID_KMEANS);
   }
@@ -126,9 +142,9 @@ export async function importImageAsTile(
   // color and assign it to the nearest centroid (single pass — no
   // iteration). This is what the majority filter, contour tracing,
   // and edge snapping operate on.
-  let assignCellsRgb = downsample(pixels, GRID);
+  let assignCellsRgb = downsample(pixels, grid_res, tilePx);
   if (symmetry !== 'none') {
-    assignCellsRgb = enforceSymmetry(assignCellsRgb, symmetry, GRID);
+    assignCellsRgb = enforceSymmetry(assignCellsRgb, symmetry, grid_res);
   }
   const assignments = assignNearest(
     assignCellsRgb.map(rgbToOklab),
@@ -136,18 +152,18 @@ export async function importImageAsTile(
   );
 
   // Build grid of layer assignments at the high resolution.
-  let grid: number[][] = toGrid(assignments);
+  let grid: number[][] = toGrid(assignments, grid_res);
 
   // Multi-pass 3×3 majority filter. Each pass smooths one extra cell
   // of boundary wobble. Three passes is enough to clean up real tile
   // photos without erasing intricate motifs.
-  for (let p = 0; p < MAJORITY_PASSES; p++) {
+  for (let p = 0; p < th.majorityPasses; p++) {
     grid = majorityFilter(grid, centroids.length);
   }
   // Drop tiny speckled regions that survived the mode filter. A small
   // island or thin bridge between regions is almost always photo noise,
   // not a real feature — reassign to the dominant neighbor.
-  grid = removeSmallComponents(grid, centroids.length, MIN_COMPONENT_CELLS);
+  grid = removeSmallComponents(grid, centroids.length, th.minComponentCells);
 
   // Derive hex colors from OKLAB centroids.
   const layers: Record<string, string> = {};
@@ -155,7 +171,7 @@ export async function importImageAsTile(
     layers[`st${i}`] = oklabToHex(centroids[i]);
   }
 
-  const svgText = buildSvg(grid, centroids);
+  const svgText = buildSvg(grid, centroids, tilePx, th);
   const svgDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svgText)}`;
 
   return {
@@ -230,7 +246,7 @@ function loadImage(file: File): Promise<HTMLImageElement> {
  */
 function rasterize(
   img: HTMLImageElement,
-  { autoCrop }: { autoCrop: boolean }
+  { autoCrop, tilePx }: { autoCrop: boolean; tilePx: number }
 ): Uint8ClampedArray {
   const sw = img.naturalWidth || img.width;
   const sh = img.naturalHeight || img.height;
@@ -242,11 +258,11 @@ function rasterize(
   }
 
   const canvas = document.createElement('canvas');
-  canvas.width = TILE_PX;
-  canvas.height = TILE_PX;
+  canvas.width = tilePx;
+  canvas.height = tilePx;
   const ctx = canvas.getContext('2d')!;
-  ctx.drawImage(img, sx, sy, srcW, srcH, 0, 0, TILE_PX, TILE_PX);
-  return ctx.getImageData(0, 0, TILE_PX, TILE_PX).data;
+  ctx.drawImage(img, sx, sy, srcW, srcH, 0, 0, tilePx, tilePx);
+  return ctx.getImageData(0, 0, tilePx, tilePx).data;
 }
 
 /**
@@ -396,10 +412,14 @@ function applyAutoLevels(pixels: Uint8ClampedArray): void {
 // ---- Downsampling ----
 
 /** Average the pixel colors within each cell at resolution `grid`.
- *  Uses integer pixel bounds so non-integer cell sizes (e.g.
- *  CELL_PX=1.25 for GRID=320, TILE_PX=400) work correctly. */
-function downsample(pixels: Uint8ClampedArray, grid: number): Vec3[] {
-  const cellPx = TILE_PX / grid;
+ *  Uses integer pixel bounds so non-integer cell sizes work correctly
+ *  (e.g. tilePx=1024 with grid=80 has cellPx=12.8). */
+function downsample(
+  pixels: Uint8ClampedArray,
+  grid: number,
+  tilePx: number
+): Vec3[] {
+  const cellPx = tilePx / grid;
   const cells: Vec3[] = [];
   for (let row = 0; row < grid; row++) {
     const y0 = Math.floor(row * cellPx);
@@ -410,7 +430,7 @@ function downsample(pixels: Uint8ClampedArray, grid: number): Vec3[] {
       let rSum = 0, gSum = 0, bSum = 0, count = 0;
       for (let y = y0; y < y1; y++) {
         for (let x = x0; x < x1; x++) {
-          const i = (y * TILE_PX + x) * 4;
+          const i = (y * tilePx + x) * 4;
           rSum += pixels[i];
           gSum += pixels[i + 1];
           bSum += pixels[i + 2];
@@ -488,16 +508,16 @@ function enforceSymmetry(cells: Vec3[], kind: Symmetry, grid: number): Vec3[] {
   return out;
 }
 
-function toGrid(assignments: number[]): number[][] {
-  const grid: number[][] = [];
-  for (let row = 0; row < GRID; row++) {
+function toGrid(assignments: number[], grid: number): number[][] {
+  const out: number[][] = [];
+  for (let row = 0; row < grid; row++) {
     const r: number[] = [];
-    for (let col = 0; col < GRID; col++) {
-      r.push(assignments[row * GRID + col]);
+    for (let col = 0; col < grid; col++) {
+      r.push(assignments[row * grid + col]);
     }
-    grid.push(r);
+    out.push(r);
   }
-  return grid;
+  return out;
 }
 
 // ---- K-means clustering (generic on 3-D vectors) ----
@@ -721,24 +741,30 @@ function removeSmallComponents(
  * path. Produces dramatically cleaner output than a rect mosaic and
  * works naturally with fill-rule="evenodd" for holes.
  */
-function buildSvg(grid: number[][], centroids: Vec3[]): string {
+function buildSvg(
+  grid: number[][],
+  centroids: Vec3[],
+  tilePx: number,
+  th: ReturnType<typeof thresholdsFor>
+): string {
   const lines: string[] = [];
   lines.push(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${TILE_PX} ${TILE_PX}">`
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${tilePx} ${tilePx}">`
   );
 
+  // Since GRID = tilePx, cell-corner coords are pixel coords: no scaling.
   for (let layer = 0; layer < centroids.length; layer++) {
     const loops = tracePolygons(grid, layer);
     if (loops.length === 0) continue;
     const hex = oklabToHex(centroids[layer]);
     const d = loops
       .map((loop) => {
-        const simplified = simplifyPolygon(loop);
+        const simplified = simplifyPolygon(loop, th.dpEpsilon, th.snapMinLen);
         const head = simplified[0];
-        const parts: string[] = [`M${head[0] * CELL_PX} ${head[1] * CELL_PX}`];
+        const parts: string[] = [`M${head[0]} ${head[1]}`];
         for (let i = 1; i < simplified.length; i++) {
           const p = simplified[i];
-          parts.push(`L${p[0] * CELL_PX} ${p[1] * CELL_PX}`);
+          parts.push(`L${p[0]} ${p[1]}`);
         }
         parts.push('Z');
         return parts.join(' ');
@@ -841,14 +867,16 @@ function dirIndex(dx: number, dy: number): number {
 }
 
 /** Polygon simplification: drop collinear vertices, run Douglas-Peucker,
- *  then snap near-axis-aligned segments to true horizontal/vertical.
- *  The snap pass is what finally straightens the tile borders that
- *  the user could still see wobbling after DP alone. */
-function simplifyPolygon(loop: Point[]): Point[] {
+ *  then snap near-axis-aligned segments to true horizontal/vertical. */
+function simplifyPolygon(
+  loop: Point[],
+  dpEpsilon: number,
+  snapMinLen: number
+): Point[] {
   const collinear = dropCollinear(loop);
   if (collinear.length < 4) return collinear;
-  const simplified = douglasPeuckerClosed(collinear, DP_EPSILON);
-  return snapAxisAligned(simplified);
+  const simplified = douglasPeuckerClosed(collinear, dpEpsilon);
+  return snapAxisAligned(simplified, snapMinLen);
 }
 
 /**
@@ -861,7 +889,7 @@ function simplifyPolygon(loop: Point[]): Point[] {
  * Diagonal or curved regions accumulate no votes on the relevant
  * axis and are left untouched.
  */
-function snapAxisAligned(loop: Point[]): Point[] {
+function snapAxisAligned(loop: Point[], snapMinLen: number): Point[] {
   const n = loop.length;
   if (n < 3) return loop;
 
@@ -877,11 +905,11 @@ function snapAxisAligned(loop: Point[]): Point[] {
     // Only snap runs that are *long* on their major axis. Short
     // segments in small curves stay untouched so small circles/arcs
     // don't get polygonized.
-    if (dx >= SNAP_MIN_LEN && dy * SNAP_RATIO <= dx) {
+    if (dx >= snapMinLen && dy * SNAP_RATIO <= dx) {
       const medY = (a[1] + b[1]) / 2;
       yVotes[i].push(medY);
       yVotes[(i + 1) % n].push(medY);
-    } else if (dy >= SNAP_MIN_LEN && dx * SNAP_RATIO <= dy) {
+    } else if (dy >= snapMinLen && dx * SNAP_RATIO <= dy) {
       const medX = (a[0] + b[0]) / 2;
       xVotes[i].push(medX);
       xVotes[(i + 1) % n].push(medX);
@@ -902,16 +930,6 @@ function snapAxisAligned(loop: Point[]): Point[] {
  *  4 means segments flatter than ~14° count as horizontal. Segments
  *  at 45° or steeper stay as-is (preserves real diagonals). */
 const SNAP_RATIO = 4;
-
-/** Minimum length (cell units = px) of a segment's major axis to be
- *  a snap candidate. At TILE_PX=1024 this is ~12% of tile width —
- *  long borders snap, short curve chords stay curved. */
-const SNAP_MIN_LEN = 128;
-
-/** Douglas-Peucker epsilon in cell-corner units (= px). At TILE_PX=1024
- *  this is under 2% of tile width — tight enough to preserve real
- *  tile detail, big enough to collapse single-pixel boundary jitters. */
-const DP_EPSILON = 18.0;
 
 function dropCollinear(loop: Point[]): Point[] {
   const n = loop.length;

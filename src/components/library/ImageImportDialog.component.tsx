@@ -4,6 +4,8 @@ import {
   importImageAsTile,
   ImportResult,
   Symmetry,
+  TILE_PX_CHOICES,
+  TilePxChoice,
 } from '../../lib/image-import';
 import { TileSource, resolveTile, newInstance } from '../../lib/library';
 import { slugify } from '../../lib/utils';
@@ -31,6 +33,7 @@ const DEFAULT_LAYERS = 5;
 const LIVE_PREVIEW_DEBOUNCE_MS = 700;
 /** Show a "reduce layers" hint when any two centroids are closer than this (OKLAB). */
 const SIMILAR_COLOR_THRESHOLD = 0.04;
+const DEFAULT_TILE_PX: TilePxChoice = 1024;
 
 const ImageImportDialog: React.FC = () => {
   const { t } = useTranslation();
@@ -43,6 +46,7 @@ const ImageImportDialog: React.FC = () => {
   // Default OFF: auto-levels distorts limited-palette tiles (scans,
   // renders, clean graphics). Opt-in for dim/washed photos.
   const [autoLevels, setAutoLevels] = useState(false);
+  const [tilePx, setTilePx] = useState<TilePxChoice>(DEFAULT_TILE_PX);
   const [result, setResult] = useState<ImportResult | null>(null);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,6 +70,7 @@ const ImageImportDialog: React.FC = () => {
     setSymmetry('none');
     setAutoCrop(true);
     setAutoLevels(false);
+    setTilePx(DEFAULT_TILE_PX);
     setProcessing(false);
     setOpen(false);
   };
@@ -92,6 +97,7 @@ const ImageImportDialog: React.FC = () => {
         symmetry,
         autoCrop,
         autoLevels,
+        tilePx,
       });
       // Drop the result if a newer request has started meanwhile.
       if (id !== requestId.current) return;
@@ -115,7 +121,7 @@ const ImageImportDialog: React.FC = () => {
     return () => clearTimeout(t);
     // processImage is defined inline and captures current state.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [file, layerCount, symmetry, autoCrop, autoLevels]);
+  }, [file, layerCount, symmetry, autoCrop, autoLevels, tilePx]);
 
   const handleSave = async () => {
     if (!result) return;
@@ -228,6 +234,28 @@ const ImageImportDialog: React.FC = () => {
                 <option value="2fold">{t('library.imageImport.symmetry2fold')}</option>
                 <option value="4fold">{t('library.imageImport.symmetry4fold')}</option>
               </select>
+            </div>
+
+            {/* Resolution selector */}
+            <div>
+              <Label htmlFor="image-import-resolution">
+                {t('library.imageImport.resolution')}
+              </Label>
+              <select
+                id="image-import-resolution"
+                value={tilePx}
+                onChange={(e) => setTilePx(Number(e.target.value) as TilePxChoice)}
+                className="mt-1 block w-full rounded border border-input bg-transparent px-3 py-1 text-sm"
+              >
+                {TILE_PX_CHOICES.map((px) => (
+                  <option key={px} value={px}>
+                    {px}×{px}
+                  </option>
+                ))}
+              </select>
+              <div className="text-[10px] text-muted-foreground mt-0.5">
+                {t('library.imageImport.resolutionHint')}
+              </div>
             </div>
 
             {/* Preprocessing toggles */}

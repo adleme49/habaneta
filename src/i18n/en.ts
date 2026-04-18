@@ -140,6 +140,8 @@ export const en = {
       autoCrop: 'Auto-crop borders',
       autoLevels: 'Auto-balance colors',
       similarColorsHint: 'Tip: some colors look similar — try fewer layers.',
+      resolution: 'Resolution',
+      resolutionHint: 'Higher = sharper edges, slower analysis.',
     },
     importExport: {
       export: 'Export',
