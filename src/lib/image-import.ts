@@ -16,24 +16,29 @@
 /** Tile canvas size in pixels. */
 const TILE_PX = 400;
 
-/** Grid resolution: number of cells per axis. 160 → 25,600 cells.
- *  Finer analysis than a rendering surface needs, but it matters at
- *  tile seams — when the imported tile repeats across a floor, seam
- *  quantization error equals CELL_PX. Half the cell size → half the
- *  visible mismatch. */
-const GRID = 160;
+/** Output-grid resolution. 320 → 102,400 cells, CELL_PX=1.25 px.
+ *  At this density tile-seam quantization is under a display pixel
+ *  when the tile renders at typical floor-preview sizes. */
+const GRID = 320;
+
+/** Lower grid used only for k-means clustering. Colors are a global
+ *  property — we don't need every pixel to identify them. Running
+ *  k-means at GRID_KMEANS and then assigning at GRID keeps compute
+ *  sane: 6,400 cells for iterative k-means, 102,400 cells for the
+ *  single-pass assignment + post-processing. */
+const GRID_KMEANS = 80;
 
 /** Pixels per cell (float-safe — downsample reads integer bounds). */
 const CELL_PX = TILE_PX / GRID;
 
 /** Passes of 3×3 majority filter applied to the label grid post-cluster.
- *  At GRID=160 each pass smooths ~CELL_PX·2=5 px of wobble; 5 passes
+ *  At GRID=320 each pass smooths ~CELL_PX·2=2.5 px of wobble; 8 passes
  *  handles typical photo noise while keeping motifs intact. */
-const MAJORITY_PASSES = 5;
+const MAJORITY_PASSES = 8;
 
 /** Remove connected components smaller than this many cells. Scales
- *  as cell-count (area) — was 6 at GRID=80, so 6·(160/80)²=24 here. */
-const MIN_COMPONENT_CELLS = 24;
+ *  as cell-count (area) — was 6 at GRID=80, so 6·(320/80)²=96 here. */
+const MIN_COMPONENT_CELLS = 96;
 
 // ---- Public API ----
 
@@ -93,28 +98,38 @@ export async function importImageAsTile(
   const pixels = rasterize(img, { autoCrop });
   if (autoLevels) applyAutoLevels(pixels);
 
-  // Average pixel colors within each cell (sRGB 8-bit). The 5×5 box
-  // implicit in downsample already smooths pixel-level JPEG noise; a
-  // separate pre-blur is not worth the cost in color bleed at edges.
-  let cellRgb = downsample(pixels);
+  // --- Two-stage clustering ---
+  // Stage 1: run k-means at a small grid to find color centroids.
+  // Colors are a global property of the image; we don't need
+  // every pixel to identify them. Iterative k-means on 6,400 cells
+  // is ~15× cheaper than on 102,400.
+  let clusterCellsRgb = downsample(pixels, GRID_KMEANS);
+  if (symmetry !== 'none') {
+    clusterCellsRgb = enforceSymmetry(clusterCellsRgb, symmetry, GRID_KMEANS);
+  }
+  const clusterCellsLab = clusterCellsRgb.map(rgbToOklab);
+  const kmeansResult = kmeans(clusterCellsLab, layerCount, maxIterations);
 
-  // Enforce symmetry by averaging cells that should look the same.
-  if (symmetry !== 'none') cellRgb = enforceSymmetry(cellRgb, symmetry);
-
-  // Convert to OKLAB for perceptual clustering.
-  const cellLab: Vec3[] = cellRgb.map(rgbToOklab);
-
-  // K-means in OKLAB space.
-  const kmeansResult = kmeans(cellLab, layerCount, maxIterations);
-
-  // Drop any cluster that has zero assignments — empty clusters would
-  // otherwise produce bogus swatches and unused layer ids.
-  const { assignments, centroids } = dropEmptyClusters(
+  // Drop any cluster that ended up empty during the k-means run.
+  const { centroids } = dropEmptyClusters(
     kmeansResult.assignments,
     kmeansResult.centroids
   );
 
-  // Build grid of layer assignments.
+  // Stage 2: at the high output grid, compute each cell's average
+  // color and assign it to the nearest centroid (single pass — no
+  // iteration). This is what the majority filter, contour tracing,
+  // and edge snapping operate on.
+  let assignCellsRgb = downsample(pixels, GRID);
+  if (symmetry !== 'none') {
+    assignCellsRgb = enforceSymmetry(assignCellsRgb, symmetry, GRID);
+  }
+  const assignments = assignNearest(
+    assignCellsRgb.map(rgbToOklab),
+    centroids
+  );
+
+  // Build grid of layer assignments at the high resolution.
   let grid: number[][] = toGrid(assignments);
 
   // Multi-pass 3×3 majority filter. Each pass smooths one extra cell
@@ -374,17 +389,18 @@ function applyAutoLevels(pixels: Uint8ClampedArray): void {
 
 // ---- Downsampling ----
 
-/** Average the pixel colors within each cell. Uses integer pixel
- *  bounds derived from the fractional CELL_PX so non-integer cell
- *  sizes work cleanly (e.g. CELL_PX=2.5 for GRID=160, TILE_PX=400). */
-function downsample(pixels: Uint8ClampedArray): Vec3[] {
+/** Average the pixel colors within each cell at resolution `grid`.
+ *  Uses integer pixel bounds so non-integer cell sizes (e.g.
+ *  CELL_PX=1.25 for GRID=320, TILE_PX=400) work correctly. */
+function downsample(pixels: Uint8ClampedArray, grid: number): Vec3[] {
+  const cellPx = TILE_PX / grid;
   const cells: Vec3[] = [];
-  for (let row = 0; row < GRID; row++) {
-    const y0 = Math.floor(row * CELL_PX);
-    const y1 = Math.max(y0 + 1, Math.floor((row + 1) * CELL_PX));
-    for (let col = 0; col < GRID; col++) {
-      const x0 = Math.floor(col * CELL_PX);
-      const x1 = Math.max(x0 + 1, Math.floor((col + 1) * CELL_PX));
+  for (let row = 0; row < grid; row++) {
+    const y0 = Math.floor(row * cellPx);
+    const y1 = Math.max(y0 + 1, Math.floor((row + 1) * cellPx));
+    for (let col = 0; col < grid; col++) {
+      const x0 = Math.floor(col * cellPx);
+      const x1 = Math.max(x0 + 1, Math.floor((col + 1) * cellPx));
       let rSum = 0, gSum = 0, bSum = 0, count = 0;
       for (let y = y0; y < y1; y++) {
         for (let x = x0; x < x1; x++) {
@@ -401,6 +417,21 @@ function downsample(pixels: Uint8ClampedArray): Vec3[] {
   return cells;
 }
 
+/** Single-pass assignment: for each cell, return the index of the
+ *  nearest centroid in OKLAB space. Used in the two-stage pipeline. */
+function assignNearest(cells: Vec3[], centroids: Vec3[]): number[] {
+  const out = new Array<number>(cells.length);
+  for (let i = 0; i < cells.length; i++) {
+    let best = 0, bestD = Infinity;
+    for (let c = 0; c < centroids.length; c++) {
+      const d = distSq(cells[i], centroids[c]);
+      if (d < bestD) { bestD = d; best = c; }
+    }
+    out[i] = best;
+  }
+  return out;
+}
+
 /**
  * Average each cell with its symmetry partners so the cluster input
  * already respects the tile's symmetry. Huge denoising win on real
@@ -409,29 +440,29 @@ function downsample(pixels: Uint8ClampedArray): Vec3[] {
  *   2fold → 180° rotation (c -> GRID-1-c, r -> GRID-1-r)
  *   4fold → 90°/180°/270° rotations
  */
-function enforceSymmetry(cells: Vec3[], kind: Symmetry): Vec3[] {
+function enforceSymmetry(cells: Vec3[], kind: Symmetry, grid: number): Vec3[] {
   if (kind === 'none') return cells;
   const out: Vec3[] = cells.map((c) => [...c] as Vec3);
-  const seen = new Uint8Array(GRID * GRID);
+  const seen = new Uint8Array(grid * grid);
 
   const rotations: ((r: number, c: number) => [number, number])[] =
     kind === '2fold'
-      ? [(r, c) => [r, c], (r, c) => [GRID - 1 - r, GRID - 1 - c]]
+      ? [(r, c) => [r, c], (r, c) => [grid - 1 - r, grid - 1 - c]]
       : [
           (r, c) => [r, c],
-          (r, c) => [c, GRID - 1 - r],
-          (r, c) => [GRID - 1 - r, GRID - 1 - c],
-          (r, c) => [GRID - 1 - c, r],
+          (r, c) => [c, grid - 1 - r],
+          (r, c) => [grid - 1 - r, grid - 1 - c],
+          (r, c) => [grid - 1 - c, r],
         ];
 
-  for (let r = 0; r < GRID; r++) {
-    for (let c = 0; c < GRID; c++) {
-      const idx = r * GRID + c;
+  for (let r = 0; r < grid; r++) {
+    for (let c = 0; c < grid; c++) {
+      const idx = r * grid + c;
       if (seen[idx]) continue;
       const orbit: number[] = [];
       for (const rot of rotations) {
         const [rr, cc] = rot(r, c);
-        orbit.push(rr * GRID + cc);
+        orbit.push(rr * grid + cc);
       }
       // Average colors across the orbit.
       let sr = 0, sg = 0, sb = 0;
@@ -868,13 +899,13 @@ const SNAP_RATIO = 4;
 
 /** Minimum length (cell units) of a segment's major axis to be a
  *  snap candidate. Scaled with GRID so the physical threshold
- *  (~50 px) matches what worked at GRID=80. */
-const SNAP_MIN_LEN = 20;
+ *  (~50 px) matches what worked at lower grids. */
+const SNAP_MIN_LEN = 40;
 
 /** Douglas-Peucker epsilon in cell-corner units. Scales with GRID so
- *  the physical tolerance (~7.5 px here at GRID=160) matches what
- *  was used at GRID=80 — same visible smoothing, finer quantization. */
-const DP_EPSILON = 3.0;
+ *  the physical tolerance (~7.5 px here at GRID=320) matches what
+ *  was used at lower grids — same visible smoothing, finer quantization. */
+const DP_EPSILON = 6.0;
 
 function dropCollinear(loop: Point[]): Point[] {
   const n = loop.length;
