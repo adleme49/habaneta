@@ -13,14 +13,17 @@
 
 // ---- Constants ----
 
-/** Tile canvas size in pixels. */
-const TILE_PX = 400;
+/** Tile canvas size in pixels. Raised to 1024 so the analyzer can
+ *  use the full resolution of typical source photos (400–1000px
+ *  tile shots). For smaller sources the browser will upscale into
+ *  this canvas with no gain in real detail, but it's harmless. */
+const TILE_PX = 1024;
 
-/** Output-grid resolution. GRID=TILE_PX=400 → CELL_PX=1 px — every
- *  cell is one source pixel. This is the finest quantization
- *  possible without oversampling the source image; any further
- *  push would require raising TILE_PX itself. */
-const GRID = 400;
+/** Output-grid resolution. GRID=TILE_PX → CELL_PX=1 px, i.e. one
+ *  analyzer cell per canvas pixel. Beyond this we'd be sub-pixel
+ *  sampling the same information in finer buckets — no quality
+ *  win, just wasted compute. */
+const GRID = 1024;
 
 /** Lower grid used only for k-means clustering. Colors are a global
  *  property — we don't need every pixel to identify them. Running
@@ -33,13 +36,15 @@ const GRID_KMEANS = 80;
 const CELL_PX = TILE_PX / GRID;
 
 /** Passes of 3×3 majority filter applied to the label grid post-cluster.
- *  At GRID=400 each pass smooths ~2 px of wobble; 10 passes cleans
- *  photo noise while keeping motifs intact. */
-const MAJORITY_PASSES = 10;
+ *  Each pass smooths exactly one cell of wobble. At TILE_PX=1024 that
+ *  is 0.1% of tile width, so 20 passes ≈ 2% smoothing — cleans photo
+ *  noise while keeping motifs intact. */
+const MAJORITY_PASSES = 20;
 
-/** Remove connected components smaller than this many cells. Scales
- *  as cell-count (area) — was 6 at GRID=80, so 6·(400/80)²=150 here. */
-const MIN_COMPONENT_CELLS = 150;
+/** Remove connected components smaller than this many cells (= px²
+ *  since CELL_PX=1). 400 px² is a ~20×20 region — below this and
+ *  a blob is almost always speckle, not a real feature. */
+const MIN_COMPONENT_CELLS = 400;
 
 // ---- Public API ----
 
@@ -898,15 +903,15 @@ function snapAxisAligned(loop: Point[]): Point[] {
  *  at 45° or steeper stay as-is (preserves real diagonals). */
 const SNAP_RATIO = 4;
 
-/** Minimum length (cell units) of a segment's major axis to be a
- *  snap candidate. Scaled with GRID so the physical threshold
- *  (~50 px) matches what worked at lower grids. */
-const SNAP_MIN_LEN = 50;
+/** Minimum length (cell units = px) of a segment's major axis to be
+ *  a snap candidate. At TILE_PX=1024 this is ~12% of tile width —
+ *  long borders snap, short curve chords stay curved. */
+const SNAP_MIN_LEN = 128;
 
-/** Douglas-Peucker epsilon in cell-corner units. Scales with GRID so
- *  the physical tolerance (~7.5 px here at GRID=400) matches what
- *  was used at lower grids — same visible smoothing, finer quantization. */
-const DP_EPSILON = 7.5;
+/** Douglas-Peucker epsilon in cell-corner units (= px). At TILE_PX=1024
+ *  this is under 2% of tile width — tight enough to preserve real
+ *  tile detail, big enough to collapse single-pixel boundary jitters. */
+const DP_EPSILON = 18.0;
 
 function dropCollinear(loop: Point[]): Point[] {
   const n = loop.length;

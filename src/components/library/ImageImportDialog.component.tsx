@@ -25,8 +25,10 @@ import { Label } from '@/components/ui/label';
 const MIN_LAYERS = 2;
 const MAX_LAYERS = 10;
 const DEFAULT_LAYERS = 5;
-/** Delay before auto-re-analyzing after parameter changes. */
-const LIVE_PREVIEW_DEBOUNCE_MS = 400;
+/** Delay before auto-re-analyzing after parameter changes. Tuned
+ *  against the measured pipeline latency at TILE_PX=1024 (~1s) so
+ *  rapid scrubs don't pile up overlapping runs. */
+const LIVE_PREVIEW_DEBOUNCE_MS = 700;
 /** Show a "reduce layers" hint when any two centroids are closer than this (OKLAB). */
 const SIMILAR_COLOR_THRESHOLD = 0.04;
 
