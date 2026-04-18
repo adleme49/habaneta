@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   importImageAsTile,
@@ -25,6 +25,10 @@ import { Label } from '@/components/ui/label';
 const MIN_LAYERS = 2;
 const MAX_LAYERS = 10;
 const DEFAULT_LAYERS = 5;
+/** Delay before auto-re-analyzing after parameter changes. */
+const LIVE_PREVIEW_DEBOUNCE_MS = 400;
+/** Show a "reduce layers" hint when any two centroids are closer than this (OKLAB). */
+const SIMILAR_COLOR_THRESHOLD = 0.04;
 
 const ImageImportDialog: React.FC = () => {
   const { t } = useTranslation();
@@ -41,6 +45,10 @@ const ImageImportDialog: React.FC = () => {
   const [displayName, setDisplayName] = useState('');
   const [family, setFamily] = useState('My Imports');
   const saveMutation = useSaveUserTileMutation();
+  // Monotonic id: discard completed runs that no longer match the latest
+  // request, so stale results don't overwrite newer ones when the user
+  // scrubs parameters quickly.
+  const requestId = useRef(0);
 
   const resetAndClose = () => {
     if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl);
@@ -71,6 +79,7 @@ const ImageImportDialog: React.FC = () => {
 
   const processImage = async () => {
     if (!file) return;
+    const id = ++requestId.current;
     setProcessing(true);
     setError(null);
     try {
@@ -80,13 +89,29 @@ const ImageImportDialog: React.FC = () => {
         autoCrop,
         autoLevels,
       });
+      // Drop the result if a newer request has started meanwhile.
+      if (id !== requestId.current) return;
       setResult(res);
     } catch (e) {
+      if (id !== requestId.current) return;
       setError(e instanceof Error ? e.message : String(e));
     } finally {
-      setProcessing(false);
+      if (id === requestId.current) setProcessing(false);
     }
   };
+
+  // Debounced live preview: re-analyze whenever the file or parameters
+  // change. Keeps the explicit "Analyze" button available for re-rolling
+  // the stochastic k-means.
+  useEffect(() => {
+    if (!file) return;
+    const t = setTimeout(() => {
+      processImage();
+    }, LIVE_PREVIEW_DEBOUNCE_MS);
+    return () => clearTimeout(t);
+    // processImage is defined inline and captures current state.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [file, layerCount, symmetry, autoCrop, autoLevels]);
 
   const handleSave = async () => {
     if (!result) return;
@@ -272,6 +297,12 @@ const ImageImportDialog: React.FC = () => {
                       />
                     ))}
                   </div>
+                  {result.minCentroidDistance < SIMILAR_COLOR_THRESHOLD &&
+                    layerCount > MIN_LAYERS && (
+                      <div className="text-[11px] text-amber-700 mt-1">
+                        {t('library.imageImport.similarColorsHint')}
+                      </div>
+                    )}
                 </div>
               </>
             )}

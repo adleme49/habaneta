@@ -141,6 +141,7 @@ export const es: Translations = {
       symmetry4fold: '4 ejes (90°)',
       autoCrop: 'Recortar bordes automáticamente',
       autoLevels: 'Equilibrar colores automáticamente',
+      similarColorsHint: 'Sugerencia: hay colores similares — prueba con menos capas.',
     },
     importExport: {
       export: 'Exportar',

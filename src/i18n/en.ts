@@ -139,6 +139,7 @@ export const en = {
       symmetry4fold: '4-fold (90°)',
       autoCrop: 'Auto-crop borders',
       autoLevels: 'Auto-balance colors',
+      similarColorsHint: 'Tip: some colors look similar — try fewer layers.',
     },
     importExport: {
       export: 'Export',

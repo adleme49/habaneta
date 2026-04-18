@@ -31,6 +31,12 @@ export interface ImportResult {
   layers: Record<string, string>;
   /** The quantized image as a grid of layer assignments (for debugging). */
   grid: number[][];
+  /**
+   * Minimum pairwise OKLAB distance among centroids. Small values
+   * (~<0.04) mean two layers look very similar — a UI hint that the
+   * user may want to reduce layerCount.
+   */
+  minCentroidDistance: number;
 }
 
 /**
@@ -100,7 +106,25 @@ export async function importImageAsTile(
   const svgText = buildSvg(grid, centroids);
   const svgDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svgText)}`;
 
-  return { svgDataUrl, svgText, layers, grid };
+  return {
+    svgDataUrl,
+    svgText,
+    layers,
+    grid,
+    minCentroidDistance: minPairwiseDistance(centroids),
+  };
+}
+
+function minPairwiseDistance(points: Vec3[]): number {
+  if (points.length < 2) return Infinity;
+  let min = Infinity;
+  for (let i = 0; i < points.length; i++) {
+    for (let j = i + 1; j < points.length; j++) {
+      const d = Math.sqrt(distSq(points[i], points[j]));
+      if (d < min) min = d;
+    }
+  }
+  return min;
 }
 
 // ---- Image loading ----
