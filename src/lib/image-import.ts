@@ -5,22 +5,19 @@
 //
 // Pipeline:
 //   1. Render image to a canvas at TILE_PX × TILE_PX
-//   2. Downsample to a GRID × GRID cell grid (average color per cell)
-//   3. K-means clustering on cell colors → N layers
-//   4. For each layer, emit <rect> elements for its cells
-//   5. Wrap in an SVG with viewBox="0 0 TILE_PX TILE_PX"
-//
-// The "mosaic of rects" approach is simple, produces manageable SVGs
-// (~GRID² rects max), and visually suits a tile design tool. Contour
-// tracing can be added later for smoother output.
+//   2. Downsample to GRID × GRID cells (average color per cell)
+//   3. Convert cells to OKLAB for perceptually-uniform clustering
+//   4. K-means++ in OKLAB → N layers
+//   5. 3×3 majority filter to smooth speckle at color boundaries
+//   6. Emit SVG with horizontal run-merged <rect>s per layer
 
 // ---- Constants ----
 
 /** Tile canvas size in pixels. */
 const TILE_PX = 400;
 
-/** Grid resolution: number of cells per axis. 40 → 1600 cells max. */
-const GRID = 40;
+/** Grid resolution: number of cells per axis. 80 → up to 6400 cells. */
+const GRID = 80;
 
 /** Pixels per cell. */
 const CELL_PX = TILE_PX / GRID;
@@ -28,9 +25,7 @@ const CELL_PX = TILE_PX / GRID;
 // ---- Public API ----
 
 export interface ImportResult {
-  /** Data-URL SVG ready to use as a TileSource.svgUrl. */
   svgDataUrl: string;
-  /** Raw SVG markup. */
   svgText: string;
   /** Detected layers: layer id → hex color. */
   layers: Record<string, string>;
@@ -41,44 +36,42 @@ export interface ImportResult {
 export interface ImportOptions {
   /** Number of color clusters / layers. Default 5. */
   layerCount?: number;
-  /** K-means iteration cap. Default 20. */
+  /** K-means iteration cap. Default 25. */
   maxIterations?: number;
 }
 
 /**
  * Process a raster image file into an SVG tile with recolorable layers.
- * Runs entirely on the client via canvas + k-means.
+ * Runs entirely on the client via canvas + k-means (OKLAB distance).
  */
 export async function importImageAsTile(
   file: File,
   options: ImportOptions = {}
 ): Promise<ImportResult> {
-  const { layerCount = 5, maxIterations = 20 } = options;
+  const { layerCount = 5, maxIterations = 25 } = options;
 
-  // 1. Load image to canvas
   const img = await loadImage(file);
   const pixels = rasterize(img);
 
-  // 2. Downsample to cell grid
-  const cellColors = downsample(pixels);
+  // Average pixel colors within each cell (sRGB 8-bit).
+  const cellRgb = downsample(pixels);
 
-  // 3. K-means clustering
-  const { assignments, centroids } = kmeans(cellColors, layerCount, maxIterations);
+  // Convert to OKLAB for perceptual clustering.
+  const cellLab: Vec3[] = cellRgb.map(rgbToOklab);
 
-  // 4. Build grid of layer assignments
-  const grid: number[][] = [];
-  for (let row = 0; row < GRID; row++) {
-    const r: number[] = [];
-    for (let col = 0; col < GRID; col++) {
-      r.push(assignments[row * GRID + col]);
-    }
-    grid.push(r);
-  }
+  // K-means in OKLAB space.
+  const { assignments, centroids } = kmeans(cellLab, layerCount, maxIterations);
 
-  // 5. Generate SVG
+  // Build grid of layer assignments.
+  let grid: number[][] = toGrid(assignments);
+
+  // Smooth speckle with a 3×3 mode filter.
+  grid = majorityFilter(grid, centroids.length);
+
+  // Derive hex colors from OKLAB centroids.
   const layers: Record<string, string> = {};
   for (let i = 0; i < centroids.length; i++) {
-    layers[`st${i}`] = rgbToHex(centroids[i]);
+    layers[`st${i}`] = oklabToHex(centroids[i]);
   }
 
   const svgText = buildSvg(grid, centroids);
@@ -105,10 +98,6 @@ function loadImage(file: File): Promise<HTMLImageElement> {
   });
 }
 
-/**
- * Draw the image onto a TILE_PX × TILE_PX canvas and return the
- * pixel data as a flat Uint8ClampedArray (RGBA, row-major).
- */
 function rasterize(img: HTMLImageElement): Uint8ClampedArray {
   const canvas = document.createElement('canvas');
   canvas.width = TILE_PX;
@@ -121,8 +110,8 @@ function rasterize(img: HTMLImageElement): Uint8ClampedArray {
 // ---- Downsampling ----
 
 /** Average the pixel colors within each CELL_PX × CELL_PX cell. */
-function downsample(pixels: Uint8ClampedArray): [number, number, number][] {
-  const cells: [number, number, number][] = [];
+function downsample(pixels: Uint8ClampedArray): Vec3[] {
+  const cells: Vec3[] = [];
   for (let row = 0; row < GRID; row++) {
     for (let col = 0; col < GRID; col++) {
       let rSum = 0, gSum = 0, bSum = 0, count = 0;
@@ -137,46 +126,51 @@ function downsample(pixels: Uint8ClampedArray): [number, number, number][] {
           count++;
         }
       }
-      cells.push([
-        Math.round(rSum / count),
-        Math.round(gSum / count),
-        Math.round(bSum / count),
-      ]);
+      cells.push([rSum / count, gSum / count, bSum / count]);
     }
   }
   return cells;
 }
 
-// ---- K-means clustering ----
+function toGrid(assignments: number[]): number[][] {
+  const grid: number[][] = [];
+  for (let row = 0; row < GRID; row++) {
+    const r: number[] = [];
+    for (let col = 0; col < GRID; col++) {
+      r.push(assignments[row * GRID + col]);
+    }
+    grid.push(r);
+  }
+  return grid;
+}
 
-type RGB = [number, number, number];
+// ---- K-means clustering (generic on 3-D vectors) ----
+
+type Vec3 = [number, number, number];
 
 function kmeans(
-  points: RGB[],
+  points: Vec3[],
   k: number,
   maxIter: number
-): { assignments: number[]; centroids: RGB[] } {
+): { assignments: number[]; centroids: Vec3[] } {
   const n = points.length;
   if (k >= n) {
-    // Degenerate: more clusters than points — each point is its own.
     return {
       assignments: points.map((_, i) => Math.min(i, k - 1)),
-      centroids: points.slice(0, k).map((p) => [...p] as RGB),
+      centroids: points.slice(0, k).map((p) => [...p] as Vec3),
     };
   }
 
-  // Initialize centroids via k-means++ for better convergence.
   const centroids = kmeansppInit(points, k);
   const assignments = new Array<number>(n).fill(0);
 
   for (let iter = 0; iter < maxIter; iter++) {
-    // Assign each point to nearest centroid.
     let changed = false;
     for (let i = 0; i < n; i++) {
       let bestDist = Infinity;
       let bestC = 0;
       for (let c = 0; c < k; c++) {
-        const d = colorDistSq(points[i], centroids[c]);
+        const d = distSq(points[i], centroids[c]);
         if (d < bestDist) {
           bestDist = d;
           bestC = c;
@@ -190,7 +184,6 @@ function kmeans(
 
     if (!changed) break;
 
-    // Recompute centroids.
     const sums = Array.from({ length: k }, () => [0, 0, 0]);
     const counts = new Array<number>(k).fill(0);
     for (let i = 0; i < n; i++) {
@@ -203,9 +196,9 @@ function kmeans(
     for (let c = 0; c < k; c++) {
       if (counts[c] === 0) continue;
       centroids[c] = [
-        Math.round(sums[c][0] / counts[c]),
-        Math.round(sums[c][1] / counts[c]),
-        Math.round(sums[c][2] / counts[c]),
+        sums[c][0] / counts[c],
+        sums[c][1] / counts[c],
+        sums[c][2] / counts[c],
       ];
     }
   }
@@ -213,25 +206,22 @@ function kmeans(
   return { assignments, centroids };
 }
 
-/** K-means++ initialization: pick centroids spread across color space. */
-function kmeansppInit(points: RGB[], k: number): RGB[] {
+/** K-means++ initialization: pick centroids spread across vector space. */
+function kmeansppInit(points: Vec3[], k: number): Vec3[] {
   const n = points.length;
-  const centroids: RGB[] = [];
+  const centroids: Vec3[] = [];
 
-  // First centroid: random point.
   const first = Math.floor(Math.random() * n);
   centroids.push([...points[first]]);
 
   const dist = new Float64Array(n).fill(Infinity);
 
   for (let c = 1; c < k; c++) {
-    // Update distances to nearest existing centroid.
     const last = centroids[c - 1];
     for (let i = 0; i < n; i++) {
-      dist[i] = Math.min(dist[i], colorDistSq(points[i], last));
+      dist[i] = Math.min(dist[i], distSq(points[i], last));
     }
 
-    // Weighted random selection proportional to distance².
     let total = 0;
     for (let i = 0; i < n; i++) total += dist[i];
     let r = Math.random() * total;
@@ -249,32 +239,80 @@ function kmeansppInit(points: RGB[], k: number): RGB[] {
   return centroids;
 }
 
-function colorDistSq(a: RGB, b: RGB): number {
-  const dr = a[0] - b[0];
-  const dg = a[1] - b[1];
-  const db = a[2] - b[2];
-  return dr * dr + dg * dg + db * db;
+function distSq(a: Vec3, b: Vec3): number {
+  const d0 = a[0] - b[0];
+  const d1 = a[1] - b[1];
+  const d2 = a[2] - b[2];
+  return d0 * d0 + d1 * d1 + d2 * d2;
+}
+
+// ---- Majority (mode) filter ----
+
+/**
+ * Replace each cell with the most common layer in its 3×3 neighborhood.
+ * Kills isolated speckle at cluster boundaries. Single pass.
+ */
+function majorityFilter(grid: number[][], k: number): number[][] {
+  const rows = grid.length;
+  const cols = grid[0].length;
+  const out: number[][] = Array.from({ length: rows }, () => new Array(cols).fill(0));
+  const counts = new Array<number>(k).fill(0);
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      counts.fill(0);
+      for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+          const rr = r + dr;
+          const cc = c + dc;
+          if (rr < 0 || rr >= rows || cc < 0 || cc >= cols) continue;
+          counts[grid[rr][cc]]++;
+        }
+      }
+      // Find mode, break ties by preferring the current cell's label so
+      // stable regions don't drift.
+      let best = grid[r][c];
+      let bestCount = counts[best];
+      for (let i = 0; i < k; i++) {
+        if (counts[i] > bestCount) {
+          bestCount = counts[i];
+          best = i;
+        }
+      }
+      out[r][c] = best;
+    }
+  }
+  return out;
 }
 
 // ---- SVG generation ----
 
-function buildSvg(grid: number[][], centroids: RGB[]): string {
+/**
+ * Emit one <rect> per horizontal run of same-layer cells. Reduces element
+ * count by ~5–10× vs one rect per cell while keeping output identical.
+ */
+function buildSvg(grid: number[][], centroids: Vec3[]): string {
   const lines: string[] = [];
   lines.push(
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${TILE_PX} ${TILE_PX}">`
   );
 
-  // Group rects by layer so the SVG structure matches what the editor
-  // expects: all shapes for a layer share the same `colora stN` class.
   for (let layer = 0; layer < centroids.length; layer++) {
-    const hex = rgbToHex(centroids[layer]);
+    const hex = oklabToHex(centroids[layer]);
     for (let row = 0; row < GRID; row++) {
-      for (let col = 0; col < GRID; col++) {
-        if (grid[row][col] !== layer) continue;
-        const x = col * CELL_PX;
+      let col = 0;
+      while (col < GRID) {
+        if (grid[row][col] !== layer) {
+          col++;
+          continue;
+        }
+        const runStart = col;
+        while (col < GRID && grid[row][col] === layer) col++;
+        const runLen = col - runStart;
+        const x = runStart * CELL_PX;
         const y = row * CELL_PX;
+        const width = runLen * CELL_PX;
         lines.push(
-          `  <rect x="${x}" y="${y}" width="${CELL_PX}" height="${CELL_PX}" fill="${hex}" class="colora st${layer}"/>`
+          `  <rect x="${x}" y="${y}" width="${width}" height="${CELL_PX}" fill="${hex}" class="colora st${layer}"/>`
         );
       }
     }
@@ -284,14 +322,72 @@ function buildSvg(grid: number[][], centroids: RGB[]): string {
   return lines.join('\n');
 }
 
-// ---- Helpers ----
+// ---- Color space conversions ----
+//
+// sRGB ↔ linear RGB ↔ OKLAB. OKLAB is perceptually uniform, so Euclidean
+// distance in OKLAB matches human judgments of "how different these colors
+// look" much better than raw RGB distance.
 
-function rgbToHex(rgb: RGB): string {
+function srgbToLinear(c: number): number {
+  const cn = c / 255;
+  return cn <= 0.04045 ? cn / 12.92 : Math.pow((cn + 0.055) / 1.055, 2.4);
+}
+
+function linearToSrgb(c: number): number {
+  const v = c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+  return Math.max(0, Math.min(255, Math.round(v * 255)));
+}
+
+function rgbToOklab(rgb: Vec3): Vec3 {
+  const r = srgbToLinear(rgb[0]);
+  const g = srgbToLinear(rgb[1]);
+  const b = srgbToLinear(rgb[2]);
+
+  const l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b;
+  const m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b;
+  const s = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b;
+
+  const l_ = Math.cbrt(l);
+  const m_ = Math.cbrt(m);
+  const s_ = Math.cbrt(s);
+
+  return [
+    0.2104542553 * l_ + 0.793617785 * m_ - 0.0040720468 * s_,
+    1.9779984951 * l_ - 2.428592205 * m_ + 0.4505937099 * s_,
+    0.0259040371 * l_ + 0.7827717662 * m_ - 0.808675766 * s_,
+  ];
+}
+
+function oklabToRgb(lab: Vec3): Vec3 {
+  const L = lab[0];
+  const a = lab[1];
+  const b = lab[2];
+
+  const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+  const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+  const s_ = L - 0.0894841775 * a - 1.291485548 * b;
+
+  const l = l_ * l_ * l_;
+  const m = m_ * m_ * m_;
+  const s = s_ * s_ * s_;
+
+  return [
+    linearToSrgb(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+    linearToSrgb(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+    linearToSrgb(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s),
+  ];
+}
+
+function oklabToHex(lab: Vec3): string {
+  return rgbToHex(oklabToRgb(lab));
+}
+
+function rgbToHex(rgb: Vec3): string {
   return (
     '#' +
     rgb
       .map((v) =>
-        Math.max(0, Math.min(255, v))
+        Math.max(0, Math.min(255, Math.round(v)))
           .toString(16)
           .padStart(2, '0')
       )
