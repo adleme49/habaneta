@@ -793,15 +793,73 @@ function dirIndex(dx: number, dy: number): number {
   return 3;
 }
 
-/** Polygon simplification: drop collinear vertices, then Douglas–Peucker
- *  with an epsilon just below 1 cell, so single-cell boundary jitters
- *  flatten while genuine 90° corners remain. Keeps tiles from wobbling
- *  when repeated across a grid. */
+/** Polygon simplification: drop collinear vertices, run Douglas-Peucker,
+ *  then snap near-axis-aligned segments to true horizontal/vertical.
+ *  The snap pass is what finally straightens the tile borders that
+ *  the user could still see wobbling after DP alone. */
 function simplifyPolygon(loop: Point[]): Point[] {
   const collinear = dropCollinear(loop);
   if (collinear.length < 4) return collinear;
-  return douglasPeuckerClosed(collinear, DP_EPSILON);
+  const simplified = douglasPeuckerClosed(collinear, DP_EPSILON);
+  return snapAxisAligned(simplified);
 }
+
+/**
+ * For each segment of the polygon, if it's "essentially horizontal"
+ * (|dx|/|dy| ≥ SNAP_RATIO) or "essentially vertical", cast votes for
+ * its endpoints to share a common y (horizontal) or common x
+ * (vertical). After scanning all segments, each vertex is reassigned
+ * to the average of its votes. On a rectangular region every vertex
+ * gets exactly one x vote and one y vote, producing a perfect rect.
+ * Diagonal or curved regions accumulate no votes on the relevant
+ * axis and are left untouched.
+ */
+function snapAxisAligned(loop: Point[]): Point[] {
+  const n = loop.length;
+  if (n < 3) return loop;
+
+  const xVotes: number[][] = Array.from({ length: n }, () => []);
+  const yVotes: number[][] = Array.from({ length: n }, () => []);
+
+  for (let i = 0; i < n; i++) {
+    const a = loop[i];
+    const b = loop[(i + 1) % n];
+    const dx = Math.abs(b[0] - a[0]);
+    const dy = Math.abs(b[1] - a[1]);
+    if (dx === 0 && dy === 0) continue;
+    // Only snap runs that are *long* on their major axis. Short
+    // segments in small curves stay untouched so small circles/arcs
+    // don't get polygonized.
+    if (dx >= SNAP_MIN_LEN && dy * SNAP_RATIO <= dx) {
+      const medY = (a[1] + b[1]) / 2;
+      yVotes[i].push(medY);
+      yVotes[(i + 1) % n].push(medY);
+    } else if (dy >= SNAP_MIN_LEN && dx * SNAP_RATIO <= dy) {
+      const medX = (a[0] + b[0]) / 2;
+      xVotes[i].push(medX);
+      xVotes[(i + 1) % n].push(medX);
+    }
+  }
+
+  return loop.map((p, i) => {
+    const xs = xVotes[i];
+    const ys = yVotes[i];
+    return [
+      xs.length ? xs.reduce((s, v) => s + v, 0) / xs.length : p[0],
+      ys.length ? ys.reduce((s, v) => s + v, 0) / ys.length : p[1],
+    ] as Point;
+  });
+}
+
+/** Slope cutoff for axis-alignment: |long|/|short| must be ≥ this.
+ *  4 means segments flatter than ~14° count as horizontal. Segments
+ *  at 45° or steeper stay as-is (preserves real diagonals). */
+const SNAP_RATIO = 4;
+
+/** Minimum length (cell units) of a segment's major axis to be a
+ *  snap candidate. Long runs (tile borders) are >> this; short
+ *  chords of small curves are < this, so circles stay round. */
+const SNAP_MIN_LEN = 10;
 
 /** Epsilon in cell-corner units. 1.5 flattens small boundary wiggles
  *  typical of photo inputs while preserving crisp 90° corners (whose

@@ -41,12 +41,12 @@ try {
 
   await page.getByRole('button', { name: 'Import image' }).click();
   await page.waitForTimeout(200);
-  await page.locator('input[type="file"][accept*="image/png"]').setInputFiles(testImagePath);
-  await page.waitForTimeout(200);
   await page.locator('input[type="range"]').fill('3');
   await page.locator('#image-import-symmetry').selectOption('4fold');
-  await page.getByRole('button', { name: /Analyze/ }).click();
+  await page.locator('input[type="file"][accept*="image/png"]').setInputFiles(testImagePath);
   await page.waitForSelector('span[title^="#"]', { timeout: 15000 });
+  // Wait for any late debounced re-run to settle.
+  await page.waitForTimeout(1500);
 
   const counts = await page.evaluate(() => {
     const svg = document.querySelector('[role="dialog"] svg');
