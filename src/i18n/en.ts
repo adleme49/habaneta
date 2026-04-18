@@ -137,6 +137,8 @@ export const en = {
       symmetryNone: 'None',
       symmetry2fold: '2-fold (180°)',
       symmetry4fold: '4-fold (90°)',
+      autoCrop: 'Auto-crop borders',
+      autoLevels: 'Auto-balance colors',
     },
     importExport: {
       export: 'Export',

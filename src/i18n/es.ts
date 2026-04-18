@@ -139,6 +139,8 @@ export const es: Translations = {
       symmetryNone: 'Ninguna',
       symmetry2fold: '2 ejes (180°)',
       symmetry4fold: '4 ejes (90°)',
+      autoCrop: 'Recortar bordes automáticamente',
+      autoLevels: 'Equilibrar colores automáticamente',
     },
     importExport: {
       export: 'Exportar',

@@ -47,6 +47,10 @@ export interface ImportOptions {
   maxIterations?: number;
   /** Symmetry to enforce on the input (default 'none'). */
   symmetry?: Symmetry;
+  /** Trim uniform borders/grout from the image (default true). */
+  autoCrop?: boolean;
+  /** Per-channel percentile stretch (white balance + exposure) (default true). */
+  autoLevels?: boolean;
 }
 
 /**
@@ -57,10 +61,17 @@ export async function importImageAsTile(
   file: File,
   options: ImportOptions = {}
 ): Promise<ImportResult> {
-  const { layerCount = 5, maxIterations = 25, symmetry = 'none' } = options;
+  const {
+    layerCount = 5,
+    maxIterations = 25,
+    symmetry = 'none',
+    autoCrop = true,
+    autoLevels = true,
+  } = options;
 
   const img = await loadImage(file);
-  const pixels = rasterize(img);
+  const pixels = rasterize(img, { autoCrop });
+  if (autoLevels) applyAutoLevels(pixels);
 
   // Average pixel colors within each cell (sRGB 8-bit).
   let cellRgb = downsample(pixels);
@@ -110,13 +121,151 @@ function loadImage(file: File): Promise<HTMLImageElement> {
   });
 }
 
-function rasterize(img: HTMLImageElement): Uint8ClampedArray {
+/**
+ * Draw the image onto a TILE_PX × TILE_PX canvas and return the pixel
+ * data as a flat Uint8ClampedArray (RGBA, row-major). When autoCrop is
+ * on, trims uniform borders (photo edge, grout) from the source before
+ * scaling, so the tile fills the analysis area.
+ */
+function rasterize(
+  img: HTMLImageElement,
+  { autoCrop }: { autoCrop: boolean }
+): Uint8ClampedArray {
+  const sw = img.naturalWidth || img.width;
+  const sh = img.naturalHeight || img.height;
+
+  let sx = 0, sy = 0, srcW = sw, srcH = sh;
+  if (autoCrop) {
+    const cropped = detectCropBounds(img, sw, sh);
+    sx = cropped.x; sy = cropped.y; srcW = cropped.w; srcH = cropped.h;
+  }
+
   const canvas = document.createElement('canvas');
   canvas.width = TILE_PX;
   canvas.height = TILE_PX;
   const ctx = canvas.getContext('2d')!;
-  ctx.drawImage(img, 0, 0, TILE_PX, TILE_PX);
+  ctx.drawImage(img, sx, sy, srcW, srcH, 0, 0, TILE_PX, TILE_PX);
   return ctx.getImageData(0, 0, TILE_PX, TILE_PX).data;
+}
+
+/**
+ * Detect the bounding box of "content" in the image by walking inward
+ * from each edge and skipping rows/cols whose pixel stddev is below a
+ * threshold (i.e. near-uniform strips — grout, photo border, matte).
+ */
+function detectCropBounds(
+  img: HTMLImageElement,
+  sw: number,
+  sh: number
+): { x: number; y: number; w: number; h: number } {
+  // Analyze at a moderate resolution to keep it cheap.
+  const aw = Math.min(sw, 200);
+  const ah = Math.min(sh, 200);
+  const canvas = document.createElement('canvas');
+  canvas.width = aw; canvas.height = ah;
+  const ctx = canvas.getContext('2d')!;
+  ctx.drawImage(img, 0, 0, aw, ah);
+  const data = ctx.getImageData(0, 0, aw, ah).data;
+
+  const STDDEV_THRESHOLD = 14; // below this, treat as uniform.
+
+  // Per-row stats.
+  const rowStd = new Float32Array(ah);
+  for (let y = 0; y < ah; y++) rowStd[y] = rowStdDev(data, aw, y);
+  const colStd = new Float32Array(aw);
+  for (let x = 0; x < aw; x++) colStd[x] = colStdDev(data, aw, ah, x);
+
+  let top = 0, bottom = ah - 1, left = 0, right = aw - 1;
+  while (top < ah / 2 && rowStd[top] < STDDEV_THRESHOLD) top++;
+  while (bottom > ah / 2 && rowStd[bottom] < STDDEV_THRESHOLD) bottom--;
+  while (left < aw / 2 && colStd[left] < STDDEV_THRESHOLD) left++;
+  while (right > aw / 2 && colStd[right] < STDDEV_THRESHOLD) right--;
+
+  // Don't crop more aggressively than 20% of each side; if we hit the
+  // midpoint it means the image really is that uniform — give up.
+  const maxTrim = 0.2;
+  top = Math.min(top, Math.floor(ah * maxTrim));
+  left = Math.min(left, Math.floor(aw * maxTrim));
+  bottom = Math.max(bottom, Math.ceil(ah * (1 - maxTrim)) - 1);
+  right = Math.max(right, Math.ceil(aw * (1 - maxTrim)) - 1);
+
+  // Map analysis-space bounds back to source-image space.
+  return {
+    x: Math.round((left / aw) * sw),
+    y: Math.round((top / ah) * sh),
+    w: Math.round(((right - left + 1) / aw) * sw),
+    h: Math.round(((bottom - top + 1) / ah) * sh),
+  };
+}
+
+function rowStdDev(data: Uint8ClampedArray, w: number, y: number): number {
+  let mean = 0;
+  for (let x = 0; x < w; x++) {
+    const i = (y * w + x) * 4;
+    mean += (data[i] + data[i + 1] + data[i + 2]) / 3;
+  }
+  mean /= w;
+  let v = 0;
+  for (let x = 0; x < w; x++) {
+    const i = (y * w + x) * 4;
+    const lum = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    v += (lum - mean) * (lum - mean);
+  }
+  return Math.sqrt(v / w);
+}
+
+function colStdDev(
+  data: Uint8ClampedArray,
+  w: number,
+  h: number,
+  x: number
+): number {
+  let mean = 0;
+  for (let y = 0; y < h; y++) {
+    const i = (y * w + x) * 4;
+    mean += (data[i] + data[i + 1] + data[i + 2]) / 3;
+  }
+  mean /= h;
+  let v = 0;
+  for (let y = 0; y < h; y++) {
+    const i = (y * w + x) * 4;
+    const lum = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    v += (lum - mean) * (lum - mean);
+  }
+  return Math.sqrt(v / h);
+}
+
+/**
+ * Per-channel 1%–99% percentile stretch. Acts as white-balance +
+ * exposure correction: pure whites map to 255, pure blacks to 0, and
+ * the middle is expanded to fill the dynamic range.
+ */
+function applyAutoLevels(pixels: Uint8ClampedArray): void {
+  const total = pixels.length / 4;
+  for (let ch = 0; ch < 3; ch++) {
+    const hist = new Uint32Array(256);
+    for (let i = ch; i < pixels.length; i += 4) hist[pixels[i]]++;
+
+    const loTarget = Math.floor(total * 0.01);
+    const hiTarget = Math.floor(total * 0.99);
+    let cum = 0, lo = 0, hi = 255;
+    for (let v = 0; v < 256; v++) {
+      cum += hist[v];
+      if (cum >= loTarget) { lo = v; break; }
+    }
+    cum = 0;
+    for (let v = 0; v < 256; v++) {
+      cum += hist[v];
+      if (cum >= hiTarget) { hi = v; break; }
+    }
+
+    if (hi <= lo) continue;
+    const scale = 255 / (hi - lo);
+    for (let i = ch; i < pixels.length; i += 4) {
+      const nv = (pixels[i] - lo) * scale;
+      pixels[i] = Math.max(0, Math.min(255, Math.round(nv)));
+    }
+  }
 }
 
 // ---- Downsampling ----

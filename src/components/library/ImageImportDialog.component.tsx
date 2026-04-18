@@ -33,6 +33,8 @@ const ImageImportDialog: React.FC = () => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [layerCount, setLayerCount] = useState(DEFAULT_LAYERS);
   const [symmetry, setSymmetry] = useState<Symmetry>('none');
+  const [autoCrop, setAutoCrop] = useState(true);
+  const [autoLevels, setAutoLevels] = useState(true);
   const [result, setResult] = useState<ImportResult | null>(null);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,6 +52,8 @@ const ImageImportDialog: React.FC = () => {
     setFamily('My Imports');
     setLayerCount(DEFAULT_LAYERS);
     setSymmetry('none');
+    setAutoCrop(true);
+    setAutoLevels(true);
     setProcessing(false);
     setOpen(false);
   };
@@ -70,7 +74,12 @@ const ImageImportDialog: React.FC = () => {
     setProcessing(true);
     setError(null);
     try {
-      const res = await importImageAsTile(file, { layerCount, symmetry });
+      const res = await importImageAsTile(file, {
+        layerCount,
+        symmetry,
+        autoCrop,
+        autoLevels,
+      });
       setResult(res);
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -190,6 +199,26 @@ const ImageImportDialog: React.FC = () => {
                 <option value="2fold">{t('library.imageImport.symmetry2fold')}</option>
                 <option value="4fold">{t('library.imageImport.symmetry4fold')}</option>
               </select>
+            </div>
+
+            {/* Preprocessing toggles */}
+            <div className="flex flex-col gap-1 text-sm">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={autoCrop}
+                  onChange={(e) => setAutoCrop(e.target.checked)}
+                />
+                <span>{t('library.imageImport.autoCrop')}</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={autoLevels}
+                  onChange={(e) => setAutoLevels(e.target.checked)}
+                />
+                <span>{t('library.imageImport.autoLevels')}</span>
+              </label>
             </div>
 
             {/* Process button */}
