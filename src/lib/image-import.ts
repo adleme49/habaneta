@@ -16,10 +16,11 @@
 /** Tile canvas size in pixels. */
 const TILE_PX = 400;
 
-/** Output-grid resolution. 320 → 102,400 cells, CELL_PX=1.25 px.
- *  At this density tile-seam quantization is under a display pixel
- *  when the tile renders at typical floor-preview sizes. */
-const GRID = 320;
+/** Output-grid resolution. GRID=TILE_PX=400 → CELL_PX=1 px — every
+ *  cell is one source pixel. This is the finest quantization
+ *  possible without oversampling the source image; any further
+ *  push would require raising TILE_PX itself. */
+const GRID = 400;
 
 /** Lower grid used only for k-means clustering. Colors are a global
  *  property — we don't need every pixel to identify them. Running
@@ -32,13 +33,13 @@ const GRID_KMEANS = 80;
 const CELL_PX = TILE_PX / GRID;
 
 /** Passes of 3×3 majority filter applied to the label grid post-cluster.
- *  At GRID=320 each pass smooths ~CELL_PX·2=2.5 px of wobble; 8 passes
- *  handles typical photo noise while keeping motifs intact. */
-const MAJORITY_PASSES = 8;
+ *  At GRID=400 each pass smooths ~2 px of wobble; 10 passes cleans
+ *  photo noise while keeping motifs intact. */
+const MAJORITY_PASSES = 10;
 
 /** Remove connected components smaller than this many cells. Scales
- *  as cell-count (area) — was 6 at GRID=80, so 6·(320/80)²=96 here. */
-const MIN_COMPONENT_CELLS = 96;
+ *  as cell-count (area) — was 6 at GRID=80, so 6·(400/80)²=150 here. */
+const MIN_COMPONENT_CELLS = 150;
 
 // ---- Public API ----
 
@@ -900,12 +901,12 @@ const SNAP_RATIO = 4;
 /** Minimum length (cell units) of a segment's major axis to be a
  *  snap candidate. Scaled with GRID so the physical threshold
  *  (~50 px) matches what worked at lower grids. */
-const SNAP_MIN_LEN = 40;
+const SNAP_MIN_LEN = 50;
 
 /** Douglas-Peucker epsilon in cell-corner units. Scales with GRID so
- *  the physical tolerance (~7.5 px here at GRID=320) matches what
+ *  the physical tolerance (~7.5 px here at GRID=400) matches what
  *  was used at lower grids — same visible smoothing, finer quantization. */
-const DP_EPSILON = 6.0;
+const DP_EPSILON = 7.5;
 
 function dropCollinear(loop: Point[]): Point[] {
   const n = loop.length;
