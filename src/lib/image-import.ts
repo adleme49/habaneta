@@ -33,11 +33,20 @@ export interface ImportResult {
   grid: number[][];
 }
 
+/**
+ * Symmetry to assume when preprocessing. Enforcing symmetry averages
+ * equivalent cells, which denoises photos dramatically since the same
+ * motif repeats at multiple positions in a real tile.
+ */
+export type Symmetry = 'none' | '2fold' | '4fold';
+
 export interface ImportOptions {
   /** Number of color clusters / layers. Default 5. */
   layerCount?: number;
   /** K-means iteration cap. Default 25. */
   maxIterations?: number;
+  /** Symmetry to enforce on the input (default 'none'). */
+  symmetry?: Symmetry;
 }
 
 /**
@@ -48,13 +57,16 @@ export async function importImageAsTile(
   file: File,
   options: ImportOptions = {}
 ): Promise<ImportResult> {
-  const { layerCount = 5, maxIterations = 25 } = options;
+  const { layerCount = 5, maxIterations = 25, symmetry = 'none' } = options;
 
   const img = await loadImage(file);
   const pixels = rasterize(img);
 
   // Average pixel colors within each cell (sRGB 8-bit).
-  const cellRgb = downsample(pixels);
+  let cellRgb = downsample(pixels);
+
+  // Enforce symmetry by averaging cells that should look the same.
+  if (symmetry !== 'none') cellRgb = enforceSymmetry(cellRgb, symmetry);
 
   // Convert to OKLAB for perceptual clustering.
   const cellLab: Vec3[] = cellRgb.map(rgbToOklab);
@@ -130,6 +142,56 @@ function downsample(pixels: Uint8ClampedArray): Vec3[] {
     }
   }
   return cells;
+}
+
+/**
+ * Average each cell with its symmetry partners so the cluster input
+ * already respects the tile's symmetry. Huge denoising win on real
+ * tile photos since the same motif usually repeats across quadrants.
+ *
+ *   2fold → 180° rotation (c -> GRID-1-c, r -> GRID-1-r)
+ *   4fold → 90°/180°/270° rotations
+ */
+function enforceSymmetry(cells: Vec3[], kind: Symmetry): Vec3[] {
+  if (kind === 'none') return cells;
+  const out: Vec3[] = cells.map((c) => [...c] as Vec3);
+  const seen = new Uint8Array(GRID * GRID);
+
+  const rotations: ((r: number, c: number) => [number, number])[] =
+    kind === '2fold'
+      ? [(r, c) => [r, c], (r, c) => [GRID - 1 - r, GRID - 1 - c]]
+      : [
+          (r, c) => [r, c],
+          (r, c) => [c, GRID - 1 - r],
+          (r, c) => [GRID - 1 - r, GRID - 1 - c],
+          (r, c) => [GRID - 1 - c, r],
+        ];
+
+  for (let r = 0; r < GRID; r++) {
+    for (let c = 0; c < GRID; c++) {
+      const idx = r * GRID + c;
+      if (seen[idx]) continue;
+      const orbit: number[] = [];
+      for (const rot of rotations) {
+        const [rr, cc] = rot(r, c);
+        orbit.push(rr * GRID + cc);
+      }
+      // Average colors across the orbit.
+      let sr = 0, sg = 0, sb = 0;
+      for (const i of orbit) {
+        sr += cells[i][0];
+        sg += cells[i][1];
+        sb += cells[i][2];
+      }
+      const n = orbit.length;
+      const avg: Vec3 = [sr / n, sg / n, sb / n];
+      for (const i of orbit) {
+        out[i] = [...avg];
+        seen[i] = 1;
+      }
+    }
+  }
+  return out;
 }
 
 function toGrid(assignments: number[]): number[][] {

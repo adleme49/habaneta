@@ -135,6 +135,10 @@ export const es: Translations = {
       pickPrompt: 'Elige una imagen para empezar',
       layersDetected: '{{count}} capas detectadas',
       saveTile: 'Guardar loza',
+      symmetry: 'Simetría',
+      symmetryNone: 'Ninguna',
+      symmetry2fold: '2 ejes (180°)',
+      symmetry4fold: '4 ejes (90°)',
     },
     importExport: {
       export: 'Exportar',

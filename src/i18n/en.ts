@@ -133,6 +133,10 @@ export const en = {
       pickPrompt: 'Pick an image to start',
       layersDetected: '{{count}} layers detected',
       saveTile: 'Save tile',
+      symmetry: 'Symmetry',
+      symmetryNone: 'None',
+      symmetry2fold: '2-fold (180°)',
+      symmetry4fold: '4-fold (90°)',
     },
     importExport: {
       export: 'Export',

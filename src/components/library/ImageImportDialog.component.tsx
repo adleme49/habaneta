@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   importImageAsTile,
   ImportResult,
+  Symmetry,
 } from '../../lib/image-import';
 import { TileSource, resolveTile, newInstance } from '../../lib/library';
 import { slugify } from '../../lib/utils';
@@ -31,6 +32,7 @@ const ImageImportDialog: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [layerCount, setLayerCount] = useState(DEFAULT_LAYERS);
+  const [symmetry, setSymmetry] = useState<Symmetry>('none');
   const [result, setResult] = useState<ImportResult | null>(null);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,6 +49,7 @@ const ImageImportDialog: React.FC = () => {
     setDisplayName('');
     setFamily('My Imports');
     setLayerCount(DEFAULT_LAYERS);
+    setSymmetry('none');
     setProcessing(false);
     setOpen(false);
   };
@@ -67,7 +70,7 @@ const ImageImportDialog: React.FC = () => {
     setProcessing(true);
     setError(null);
     try {
-      const res = await importImageAsTile(file, { layerCount });
+      const res = await importImageAsTile(file, { layerCount, symmetry });
       setResult(res);
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -170,6 +173,23 @@ const ImageImportDialog: React.FC = () => {
                 <span>{MIN_LAYERS}</span>
                 <span>{MAX_LAYERS}</span>
               </div>
+            </div>
+
+            {/* Symmetry selector */}
+            <div>
+              <Label htmlFor="image-import-symmetry">
+                {t('library.imageImport.symmetry')}
+              </Label>
+              <select
+                id="image-import-symmetry"
+                value={symmetry}
+                onChange={(e) => setSymmetry(e.target.value as Symmetry)}
+                className="mt-1 block w-full rounded border border-input bg-transparent px-3 py-1 text-sm"
+              >
+                <option value="none">{t('library.imageImport.symmetryNone')}</option>
+                <option value="2fold">{t('library.imageImport.symmetry2fold')}</option>
+                <option value="4fold">{t('library.imageImport.symmetry4fold')}</option>
+              </select>
             </div>
 
             {/* Process button */}
