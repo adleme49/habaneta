@@ -29,13 +29,13 @@ try {
   const emptyText = await page.getByText(/No presets yet/).isVisible();
   console.log(`   Preset panel visible, empty: ${emptyText}`);
 
-  console.log('2. Click "Save as preset" → name → save');
-  await page.getByRole('button', { name: 'Save as preset' }).click();
-  await page.waitForTimeout(200);
-  const nameInput = page.getByPlaceholder('Preset name…');
-  await nameInput.fill('Ocean blue');
-  await nameInput.press('Enter');
+  console.log('2. Click "+ New preset" → name → Save in modal');
+  await page.getByRole('button', { name: /New preset/ }).click();
   await page.waitForTimeout(300);
+  const nameInput = page.locator('#preset-name-input');
+  await nameInput.fill('Ocean blue');
+  await page.getByRole('button', { name: /^Save$/ }).click();
+  await page.waitForTimeout(400);
   await page.screenshot({ path: '/tmp/presets-1-saved.png', fullPage: true });
 
   // Chip should appear
@@ -55,7 +55,10 @@ try {
   console.log(`   After reload, "Ocean blue" chip visible: ${persistedVisible}`);
   await page.screenshot({ path: '/tmp/presets-2-reloaded.png', fullPage: true });
 
-  console.log('4. Delete the preset');
+  console.log('4. Delete the preset (hover reveals the × button)');
+  const chip = page.locator('div').filter({ hasText: /^Ocean blue$/ }).first();
+  await chip.hover();
+  await page.waitForTimeout(200);
   await page.getByLabel('Delete Ocean blue').click();
   await page.waitForTimeout(300);
   const afterDelete = await page.getByText(/No presets yet/).isVisible();
@@ -67,6 +70,7 @@ try {
 } catch (e) {
   console.log('FAILED:', e.message);
   await page.screenshot({ path: '/tmp/presets-error.png', fullPage: true });
+  process.exitCode = 1;
 } finally {
   await browser.close();
 }
