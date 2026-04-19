@@ -22,6 +22,7 @@ import {
 } from '../lib/library';
 import {
   useDeletePresetMutation,
+  useRenamePresetMutation,
   useLibraryQuery,
   usePresetsQuery,
   useSavePresetMutation,
@@ -269,6 +270,7 @@ export interface Store {
   savePreset: (name: string) => void;
   applyPreset: (preset: TilePreset) => void;
   deletePreset: (id: string) => void;
+  renamePreset: (id: string, name: string) => void;
 
   // Recent slots + grid output
   recent: Array<TileInstance | null>;
@@ -386,6 +388,7 @@ const StoreProviderInner: React.FC<{
   const presetsQuery = usePresetsQuery();
   const savePresetMutation = useSavePresetMutation();
   const deletePresetMutation = useDeletePresetMutation();
+  const renamePresetMutation = useRenamePresetMutation();
   const presets = presetsQuery.data ?? [];
 
   // Browsing
@@ -737,6 +740,15 @@ const StoreProviderInner: React.FC<{
     [recent.editingIndex, pushHistory]
   );
 
+  const renamePresetCb = useCallback(
+    (id: string, name: string) => {
+      const trimmed = name.trim();
+      if (!trimmed) return;
+      renamePresetMutation.mutate({ id, name: trimmed });
+    },
+    [renamePresetMutation]
+  );
+
   const deletePreset = useCallback(
     (id: string) => {
       deletePresetMutation.mutate(id);
@@ -838,6 +850,7 @@ const StoreProviderInner: React.FC<{
     savePreset,
     applyPreset,
     deletePreset,
+    renamePreset: renamePresetCb,
 
     recent: recent.slots,
     floorIndex: recent.floorIndex,

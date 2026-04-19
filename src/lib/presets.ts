@@ -45,3 +45,13 @@ export function removePreset(id: string): TilePreset[] {
   savePresets(next);
   return next;
 }
+
+/** Rename a preset by id. No-op if the id is unknown. Returns the
+ *  full updated collection. */
+export function renamePreset(id: string, name: string): TilePreset[] {
+  const next = loadPresets().map((p) =>
+    p.id === id ? { ...p, name } : p
+  );
+  savePresets(next);
+  return next;
+}
