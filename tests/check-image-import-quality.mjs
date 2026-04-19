@@ -77,13 +77,16 @@ try {
   await dialog.screenshot({ path: '/tmp/image-import-quality.png' });
   console.log('screenshot → /tmp/image-import-quality.png');
 
-  // Extract result SVG size (inner <rect> count) for sanity.
-  const rectCount = await page.evaluate(() => {
+  // Extract result SVG shape summary.
+  const shape = await page.evaluate(() => {
     const svg = document.querySelector('[role="dialog"] svg');
-    if (!svg) return -1;
-    return svg.querySelectorAll('rect').length;
+    if (!svg) return null;
+    return {
+      paths: svg.querySelectorAll('path').length,
+      rects: svg.querySelectorAll('rect').length,
+    };
   });
-  console.log('result SVG <rect> count:', rectCount);
+  console.log('result SVG:', shape);
 
   console.log('\nErrors:', errors.length);
   errors.forEach((e) => console.log('  ERROR:', e.slice(0,200)));

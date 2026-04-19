@@ -58,6 +58,10 @@ try {
     };
   });
   console.log('SVG stats:', counts);
+  // Regression guards: contour tracing must emit <path> elements, not
+  // the legacy <rect> mosaic.
+  if (!counts || counts.paths === 0) throw new Error('expected >0 <path>');
+  if (counts.rects !== 0) throw new Error('unexpected <rect>; should be all paths');
 
   await page.getByRole('dialog').screenshot({ path: '/tmp/image-import-paths.png' });
   console.log('screenshot → /tmp/image-import-paths.png');

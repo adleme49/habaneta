@@ -4,12 +4,23 @@
 // into an SVG with `colora stN` layers that the editor can recolor.
 //
 // Pipeline:
-//   1. Render image to a canvas at TILE_PX × TILE_PX
-//   2. Downsample to GRID × GRID cells (average color per cell)
-//   3. Convert cells to OKLAB for perceptually-uniform clustering
-//   4. K-means++ in OKLAB → N layers
-//   5. 3×3 majority filter to smooth speckle at color boundaries
-//   6. Emit SVG with horizontal run-merged <rect>s per layer
+//   1. Load + rasterize source to a tilePx×tilePx canvas
+//      (optionally auto-cropped on uniform borders).
+//   2. Optional luminance-only auto-levels (skipped on limited-palette
+//      or already-high-contrast inputs).
+//   3. Two-stage clustering:
+//      - Stage 1: downsample to 80×80 and run iterative k-means++ in
+//        OKLAB to find color centroids. Drop empty clusters.
+//      - Stage 2: downsample to tilePx×tilePx and single-pass assign
+//        each cell to its nearest centroid.
+//   4. Optional symmetry averaging (2-fold or 4-fold) applied at both
+//      stages before/after downsample.
+//   5. Multi-pass 3×3 majority filter + small-component removal to
+//      smooth boundary speckle.
+//   6. Contour-trace each layer's connected regions into polygons.
+//   7. Drop collinear vertices, Douglas–Peucker simplify, snap
+//      near-axis-aligned segments to true horizontal/vertical.
+//   8. Emit one <path> per layer with fill-rule="evenodd".
 
 // ---- Configuration ----
 
@@ -60,8 +71,6 @@ export interface ImportResult {
   svgText: string;
   /** Detected layers: layer id → hex color. */
   layers: Record<string, string>;
-  /** The quantized image as a grid of layer assignments (for debugging). */
-  grid: number[][];
   /**
    * Minimum pairwise OKLAB distance among centroids. Small values
    * (~<0.04) mean two layers look very similar — a UI hint that the
@@ -113,7 +122,7 @@ export async function importImageAsTile(
   } = options;
 
   // GRID = tilePx gives per-pixel analysis (CELL_PX = 1).
-  const grid_res = tilePx;
+  const gridRes = tilePx;
   const th = thresholdsFor(tilePx);
 
   const img = await loadImage(file);
@@ -132,8 +141,9 @@ export async function importImageAsTile(
   const clusterCellsLab = clusterCellsRgb.map(rgbToOklab);
   const kmeansResult = kmeans(clusterCellsLab, layerCount, maxIterations);
 
-  // Drop any cluster that ended up empty during the k-means run.
-  const { centroids } = dropEmptyClusters(
+  // Drop any cluster that ended up empty during the k-means run —
+  // its centroid would otherwise produce a phantom swatch.
+  const centroids = dropEmptyCentroids(
     kmeansResult.assignments,
     kmeansResult.centroids
   );
@@ -142,9 +152,9 @@ export async function importImageAsTile(
   // color and assign it to the nearest centroid (single pass — no
   // iteration). This is what the majority filter, contour tracing,
   // and edge snapping operate on.
-  let assignCellsRgb = downsample(pixels, grid_res, tilePx);
+  let assignCellsRgb = downsample(pixels, gridRes, tilePx);
   if (symmetry !== 'none') {
-    assignCellsRgb = enforceSymmetry(assignCellsRgb, symmetry, grid_res);
+    assignCellsRgb = enforceSymmetry(assignCellsRgb, symmetry, gridRes);
   }
   const assignments = assignNearest(
     assignCellsRgb.map(rgbToOklab),
@@ -152,7 +162,7 @@ export async function importImageAsTile(
   );
 
   // Build grid of layer assignments at the high resolution.
-  let grid: number[][] = toGrid(assignments, grid_res);
+  let grid: number[][] = toGrid(assignments, gridRes);
 
   // Multi-pass 3×3 majority filter. Each pass smooths one extra cell
   // of boundary wobble. Three passes is enough to clean up real tile
@@ -178,34 +188,19 @@ export async function importImageAsTile(
     svgDataUrl,
     svgText,
     layers,
-    grid,
     minCentroidDistance: minPairwiseDistance(centroids),
   };
 }
 
 /**
- * Remove clusters that had zero points assigned, remapping assignment
- * indices so the remaining clusters stay contiguous (0..n-1).
+ * Return the subset of centroids that had at least one assigned point
+ * in the stage-1 clustering. Empty-cluster centroids would otherwise
+ * appear as swatches the user could click but never see in the output.
  */
-function dropEmptyClusters(
-  assignments: number[],
-  centroids: Vec3[]
-): { assignments: number[]; centroids: Vec3[] } {
+function dropEmptyCentroids(assignments: number[], centroids: Vec3[]): Vec3[] {
   const counts = new Array<number>(centroids.length).fill(0);
   for (const a of assignments) counts[a]++;
-
-  const remap = new Array<number>(centroids.length).fill(-1);
-  const keptCentroids: Vec3[] = [];
-  for (let i = 0; i < centroids.length; i++) {
-    if (counts[i] === 0) continue;
-    remap[i] = keptCentroids.length;
-    keptCentroids.push(centroids[i]);
-  }
-  if (keptCentroids.length === centroids.length) {
-    return { assignments, centroids };
-  }
-  const newAssignments = assignments.map((a) => remap[a]);
-  return { assignments: newAssignments, centroids: keptCentroids };
+  return centroids.filter((_, i) => counts[i] > 0);
 }
 
 function minPairwiseDistance(points: Vec3[]): number {
@@ -738,8 +733,14 @@ function removeSmallComponents(
  * Emit one <path> per layer, where the path is the traced contour of
  * every connected region assigned to that layer. Multiple disjoint
  * regions become separate subpaths ('M ... Z M ... Z') on the same
- * path. Produces dramatically cleaner output than a rect mosaic and
- * works naturally with fill-rule="evenodd" for holes.
+ * path. Uses fill-rule="evenodd" so holes render correctly.
+ *
+ * SECURITY INVARIANT: every value interpolated into this SVG must be
+ * derived from validated internal state (integer coords, numeric
+ * layer indices, hex colors produced by `rgbToHex`). The output is
+ * stored as a data:image/svg+xml URL and NOT run through sanitizeSvg,
+ * so adding user-controlled text (display name, family, etc.) to the
+ * SVG without escaping would introduce an XSS vector.
  */
 function buildSvg(
   grid: number[][],
