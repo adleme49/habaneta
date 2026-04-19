@@ -110,7 +110,7 @@ const TileDetailDialog: React.FC<{
             </div>
 
             <div className="mt-2">
-              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+              <h4 className="text-xs font-semibold text-gray-500 mb-2">
                 {t('library.detail.defaultPalette')}
               </h4>
               <div className="flex flex-wrap gap-1.5">

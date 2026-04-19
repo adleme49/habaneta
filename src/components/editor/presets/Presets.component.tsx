@@ -38,7 +38,7 @@ const Presets: React.FC = () => {
   return (
     <div className="pt-4 w-full max-w-md">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        <h3 className="text-xs font-semibold text-gray-500">
           {t('editor.presets')}
         </h3>
         {!isNaming && (
