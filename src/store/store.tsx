@@ -30,7 +30,7 @@ import { colors as seedColors } from '../lib/colors';
 import { Ambient, AmbientId, DEFAULT_AMBIENT_ID, findAmbient } from '../lib/ambients';
 import { loadSession, saveSession, SessionState } from '../lib/session';
 import { DesignState } from '../lib/design-url';
-import { getNextGrid } from '../constants/floor';
+import { getNextGrid, findGridPattern, GridPattern } from '../constants/floor';
 
 /** Range for the user-controlled floor body row count. */
 export const MIN_BODY_ROWS = 1;
@@ -272,11 +272,24 @@ export interface Store {
 
   // Recent slots + grid output
   recent: Array<TileInstance | null>;
+  /** Index of the recent slot currently rendered as the floor. */
+  floorIndex?: number;
+  /** Index of the recent slot currently rendered as the border. */
+  borderIndex?: number;
   selectedFloor?: ResolvedTile;
   selectedBorder?: ResolvedTile;
+  /** Effective grid pattern angles passed to the floor renderer.
+   *  Derived from selectedGridPatternId (global override) when set,
+   *  else from the currently active floor tile's `grids` list. */
   selectedGrid?: number[];
   selectRecent: (index: number) => void;
   deleteRecent: (index: number) => void;
+
+  /** Id of the globally-selected grid pattern, or undefined when
+   *  "Auto" (let the tile's own grids[] drive). */
+  selectedGridPatternId?: string;
+  /** Set (or clear with undefined) the global grid pattern override. */
+  setSelectedGridPatternId: (id: string | undefined) => void;
 
   // Visualization — grid size + active ambient
   /** Number of <Body /> row pairs the floor grid renders. */
@@ -456,6 +469,24 @@ const StoreProviderInner: React.FC<{
     [selectedAmbientId]
   );
 
+  // Global grid-pattern override. When set, the floor renders this
+  // pattern regardless of what the currently selected floor tile's
+  // `grids` list contained. Undefined = tile-driven (legacy behavior).
+  const [selectedGridPatternId, setSelectedGridPatternId] = useState<
+    string | undefined
+  >(_savedSession?.selectedGridPatternId);
+
+  // Effective grid passed to the renderer: the override's angles when
+  // a pattern is explicitly picked; otherwise the per-tile cycling
+  // array maintained by the recent reducer.
+  const effectiveGrid = useMemo<number[] | undefined>(() => {
+    if (selectedGridPatternId) {
+      const p: GridPattern | undefined = findGridPattern(selectedGridPatternId);
+      if (p) return [...p.angles];
+    }
+    return recent.selectedGrid;
+  }, [selectedGridPatternId, recent.selectedGrid]);
+
   const [isBrowserCollapsed, setIsBrowserCollapsed] = useState<boolean>(false);
   const toggleBrowserCollapsed = useCallback(
     () => setIsBrowserCollapsed((c) => !c),
@@ -472,11 +503,12 @@ const StoreProviderInner: React.FC<{
       borderIndex: recent.borderIndex,
       selectedGrid: recent.selectedGrid,
       selectedGridPos: recent.selectedGridPos,
+      selectedGridPatternId,
       gridBodyRows,
       selectedAmbientId,
     };
     saveSession(session);
-  }, [recent, gridBodyRows, selectedAmbientId]);
+  }, [recent, selectedGridPatternId, gridBodyRows, selectedAmbientId]);
 
   // Apply a decoded DesignState to the store. Commits each instance
   // as a new recent slot (so it stays editable) and sets the
@@ -507,6 +539,13 @@ const StoreProviderInner: React.FC<{
       }
       if (design.selectedAmbientId) {
         setSelectedAmbientId(design.selectedAmbientId);
+      }
+      // Only accept pattern ids that exist in the registry; unknown
+      // ids (older/newer client) silently fall back to tile-driven.
+      if (design.selectedGridPatternId) {
+        if (findGridPattern(design.selectedGridPatternId)) {
+          setSelectedGridPatternId(design.selectedGridPatternId);
+        }
       }
       return { missingSourceIds };
     },
@@ -762,8 +801,9 @@ const StoreProviderInner: React.FC<{
       border: borderInstance ?? undefined,
       gridBodyRows,
       selectedAmbientId: selectedAmbient.id,
+      selectedGridPatternId,
     };
-  }, [recent.floorIndex, recent.borderIndex, recent.slots, gridBodyRows, selectedAmbient.id]);
+  }, [recent.floorIndex, recent.borderIndex, recent.slots, gridBodyRows, selectedAmbient.id, selectedGridPatternId]);
 
   const value: Store = {
     library,
@@ -800,11 +840,16 @@ const StoreProviderInner: React.FC<{
     deletePreset,
 
     recent: recent.slots,
+    floorIndex: recent.floorIndex,
+    borderIndex: recent.borderIndex,
     selectedFloor,
     selectedBorder,
-    selectedGrid: recent.selectedGrid,
+    selectedGrid: effectiveGrid,
     selectRecent,
     deleteRecent,
+
+    selectedGridPatternId,
+    setSelectedGridPatternId,
 
     gridBodyRows,
     setGridBodyRows,

@@ -182,6 +182,41 @@ try {
   console.log(`   partial-restore notice visible: ${partialNotice}`);
   await missingPage.close();
 
+  console.log('8. Share URL round-trips selectedGridPatternId');
+  // Build a URL with pinwheel pattern, load it on a fresh page,
+  // confirm the dropdown reflects the restored value.
+  const patternUrl = await page.evaluate(async () => {
+    const mod = await import('/src/lib/design-url.ts');
+    return mod.buildShareUrl({
+      floor: { sourceId: 'contemporary/l01', layerOverrides: {} },
+      selectedGridPatternId: 'pinwheel',
+    });
+  });
+  const decodedPayload = Buffer.from(
+    patternUrl.split('#d=')[1].replace(/-/g, '+').replace(/_/g, '/').padEnd(
+      patternUrl.split('#d=')[1].length +
+        ((4 - (patternUrl.split('#d=')[1].length % 4)) % 4),
+      '='
+    ),
+    'base64'
+  ).toString('utf8');
+  console.log(`   payload: ${decodedPayload}`);
+  if (!decodedPayload.includes('"g":"pinwheel"')) {
+    throw new Error('expected "g":"pinwheel" in encoded payload');
+  }
+  const patternPage = await ctx.newPage();
+  patternPage.on('pageerror', (err) => errors.push(err.message));
+  await patternPage.goto(patternUrl, { waitUntil: 'networkidle' });
+  await patternPage.waitForTimeout(800);
+  const restoredPattern = await patternPage
+    .locator('#grid-pattern-select')
+    .inputValue();
+  console.log(`   restored pattern: ${restoredPattern}`);
+  if (restoredPattern !== 'pinwheel') {
+    throw new Error(`expected pinwheel, got ${restoredPattern}`);
+  }
+  await patternPage.close();
+
   console.log(`\nErrors: ${errors.length}`);
   errors.forEach((e) => console.log('  ERROR:', e.slice(0, 200)));
 } catch (e) {

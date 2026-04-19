@@ -17,6 +17,9 @@ export interface SessionState {
   borderIndex?: number;
   selectedGrid?: number[];
   selectedGridPos: number;
+  /** Globally selected grid pattern id (overrides per-tile grids when
+   *  set). Undefined = tile-driven. See constants/floor.tsx. */
+  selectedGridPatternId?: string;
   gridBodyRows: number;
   selectedAmbientId: AmbientId;
 }

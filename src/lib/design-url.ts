@@ -13,7 +13,8 @@
 //     f?: { s: sourceId, o: Dict<string> },  // floor instance
 //     b?: { s: sourceId, o: Dict<string> },  // border instance
 //     r?: number,                             // grid body rows
-//     a?: AmbientId                           // selected ambient
+//     a?: AmbientId,                          // selected ambient
+//     g?: string                              // grid pattern id
 //   }
 //
 // Base64 is URL-unsafe by default (contains `/` and `+`), so we
@@ -28,6 +29,9 @@ export interface DesignState {
   border?: TileInstance;
   gridBodyRows?: number;
   selectedAmbientId?: AmbientId;
+  /** Grid pattern id from constants/floor.tsx (e.g. 'pinwheel'). When
+   *  omitted or unknown, the recipient keeps tile-driven defaults. */
+  selectedGridPatternId?: string;
 }
 
 interface CompactDesign {
@@ -35,6 +39,7 @@ interface CompactDesign {
   b?: { s: string; o: Record<string, string> };
   r?: number;
   a?: AmbientId;
+  g?: string;
 }
 
 const HASH_PREFIX = 'd=';
@@ -78,6 +83,11 @@ export function encodeDesign(
   ) {
     compact.a = state.selectedAmbientId;
   }
+  // Only encode the pattern id when it's explicitly set — Auto
+  // (undefined) is the default.
+  if (state.selectedGridPatternId) {
+    compact.g = state.selectedGridPatternId;
+  }
   return base64UrlEncode(JSON.stringify(compact));
 }
 
@@ -101,6 +111,11 @@ export function decodeDesign(encoded: string): DesignState | null {
       (ambientIds as string[]).includes(compact.a)
     ) {
       state.selectedAmbientId = compact.a as AmbientId;
+    }
+    if (typeof compact.g === 'string' && compact.g.length > 0) {
+      // Validation of the id against the registry happens in the
+      // store; unknown ids gracefully fall back to tile-driven.
+      state.selectedGridPatternId = compact.g;
     }
     return state;
   } catch {
