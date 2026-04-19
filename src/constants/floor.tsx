@@ -35,8 +35,6 @@ export const GRID_PATTERNS: readonly GridPattern[] = [
   { id: 'checkerboard', i18nKey: 'checkerboard', angles: CHECKERBOARD },
 ];
 
-export const DEFAULT_GRID_PATTERN_ID = 'pinwheel';
-
 export const findGridPattern = (id: string): GridPattern | undefined =>
   GRID_PATTERNS.find((p) => p.id === id);
 
