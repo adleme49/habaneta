@@ -37,6 +37,11 @@ export const en = {
     noPresetsYet: 'No presets yet for this tile.',
     applyPreset: 'Apply "{{name}}"',
     deletePreset: 'Delete {{name}}',
+    myColors: 'My colors',
+    myColorsEmpty: 'Saved colors will appear here.',
+    addCurrent: 'Add',
+    addCurrentColor: 'Save current color to My colors',
+    removeSavedColor: 'Remove from My colors',
     palette: {
       expand: 'Expand palette',
       collapse: 'Collapse palette',

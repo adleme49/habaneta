@@ -39,6 +39,11 @@ export const es: Translations = {
     noPresetsYet: 'Aún no hay presets para esta loza.',
     applyPreset: 'Aplicar "{{name}}"',
     deletePreset: 'Borrar {{name}}',
+    myColors: 'Mis colores',
+    myColorsEmpty: 'Los colores guardados aparecerán aquí.',
+    addCurrent: 'Añadir',
+    addCurrentColor: 'Guardar el color actual en Mis colores',
+    removeSavedColor: 'Quitar de Mis colores',
     palette: {
       expand: 'Expandir paleta',
       collapse: 'Colapsar paleta',
