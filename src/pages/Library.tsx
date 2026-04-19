@@ -20,6 +20,7 @@ import SVGTileBase from '../components/common/SVGBase.component';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import TileUploadDialog from '../components/library/TileUploadDialog.component';
+import ImageImportDialog from '../components/library/ImageImportDialog.component';
 import LibraryImportExport from '../components/library/LibraryImportExport.component';
 import TileDetailDialog from '../components/library/TileDetailDialog.component';
 import {
@@ -213,6 +214,7 @@ const Library: React.FC = () => {
             </span>
           )}
           <LibraryImportExport userTileCount={userCount} />
+          <ImageImportDialog />
           <TileUploadDialog />
         </div>
       </header>
