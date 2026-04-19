@@ -4,23 +4,20 @@ import { useStore } from '../../../store/store';
 import { GRID_PATTERNS } from '../../../constants/floor';
 
 /**
- * Global grid-pattern selector. Sits next to the grid-size stepper.
- * Value "auto" means "tile-driven" (store keeps selectedGridPatternId
- * undefined), any other value picks a registry pattern whose angles
- * override the floor rendering.
+ * Global grid-pattern selector. "Auto" = tile-driven (store keeps
+ * selectedGridPatternId undefined); any other value overrides the
+ * floor rendering with that registry pattern's angles.
  */
 const GridPatternControl: React.FC = () => {
   const { t } = useTranslation();
   const { selectedGridPatternId, setSelectedGridPatternId } = useStore();
 
   return (
-    <div className="flex items-center gap-2 text-sm">
-      <label
-        htmlFor="grid-pattern-select"
-        className="text-xs text-muted-foreground uppercase tracking-wide"
-      >
-        {t('preview.gridPattern')}
-      </label>
+    <label
+      htmlFor="grid-pattern-select"
+      className="flex items-center gap-1.5 text-sm text-gray-700"
+    >
+      <span>{t('preview.gridPattern')}</span>
       <select
         id="grid-pattern-select"
         value={selectedGridPatternId ?? 'auto'}
@@ -28,7 +25,7 @@ const GridPatternControl: React.FC = () => {
           const v = e.target.value;
           setSelectedGridPatternId(v === 'auto' ? undefined : v);
         }}
-        className="rounded border border-input bg-transparent px-2 py-1 text-sm"
+        className="rounded border border-input bg-white px-2 py-1 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
       >
         <option value="auto">{t('preview.gridPatterns.auto')}</option>
         {GRID_PATTERNS.map((p) => (
@@ -37,7 +34,7 @@ const GridPatternControl: React.FC = () => {
           </option>
         ))}
       </select>
-    </div>
+    </label>
   );
 };
 
