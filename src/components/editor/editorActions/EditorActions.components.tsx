@@ -4,6 +4,12 @@ import { Undo2, Redo2 } from 'lucide-react';
 import { useStore } from '../../../store/store';
 import { Button } from '@/components/ui/button';
 
+/**
+ * One-line action bar under the tile canvas. Left cluster = local
+ * edits (undo / redo / reset); right = "Save to recents" primary
+ * action. Keeps the editor column tight by avoiding a vertical
+ * stack of buttons.
+ */
 const EditorActions: React.FC = () => {
   const { t } = useTranslation();
   const {
@@ -27,7 +33,7 @@ const EditorActions: React.FC = () => {
       : 'Ctrl';
 
   return (
-    <div className="pt-6 flex flex-col gap-2">
+    <div className="w-full flex items-center gap-2">
       <div className="flex items-center gap-1">
         <Button
           variant="outline"
@@ -61,11 +67,17 @@ const EditorActions: React.FC = () => {
               ? t('editor.resetColors')
               : t('editor.resetColorsNoChanges')
           }
+          className="h-8"
         >
           {t('editor.resetColors')}
         </Button>
       </div>
-      <Button disabled={isEditingRecent} onClick={commitEditingToRecent}>
+      <Button
+        size="sm"
+        disabled={isEditingRecent}
+        onClick={commitEditingToRecent}
+        className="ml-auto h-8"
+      >
         {isEditingRecent
           ? t('editor.alreadyInRecents')
           : t('editor.saveToRecents')}
