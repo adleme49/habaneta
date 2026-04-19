@@ -3,6 +3,7 @@ import TileRecent from '../../preview/recent/TileRecent.component';
 import TileGrid from '../../preview/grid/TileGrid.component';
 import TilePreviewActions from '../../preview/actions/TilePreviewActions.component';
 import GridSizeControl from '../../preview/controls/GridSizeControl.component';
+import GridPatternControl from '../../preview/controls/GridPatternControl.component';
 
 /**
  * Preview section. Title header removed — the floor grid itself
@@ -17,7 +18,10 @@ const TilesPreviewLayout: React.FC = () => {
         <div className="min-w-0 flex-1">
           <TileRecent />
         </div>
-        <GridSizeControl />
+        <div className="flex items-center gap-4">
+          <GridPatternControl />
+          <GridSizeControl />
+        </div>
       </div>
       <div
         id="grid"

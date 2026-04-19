@@ -50,6 +50,16 @@ export const en = {
   },
   preview: {
     gridSize: 'Grid size',
+    gridPattern: 'Pattern',
+    gridPatterns: {
+      auto: 'Auto',
+      simple: 'Simple',
+      rotated: 'Rotated',
+      pinwheel: 'Pinwheel',
+      mirrorX: 'Mirror ↕',
+      mirrorY: 'Mirror ↔',
+      checkerboard: 'Checkerboard',
+    },
     moreRows: 'More rows',
     fewerRows: 'Fewer rows',
     gallery: 'Gallery',

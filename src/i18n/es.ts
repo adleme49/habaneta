@@ -52,6 +52,16 @@ export const es: Translations = {
   },
   preview: {
     gridSize: 'Tamaño',
+    gridPattern: 'Patrón',
+    gridPatterns: {
+      auto: 'Auto',
+      simple: 'Simple',
+      rotated: 'Rotado',
+      pinwheel: 'Molinillo',
+      mirrorX: 'Espejo ↕',
+      mirrorY: 'Espejo ↔',
+      checkerboard: 'Damero',
+    },
     moreRows: 'Más filas',
     fewerRows: 'Menos filas',
     gallery: 'Galería',
