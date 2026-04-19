@@ -49,6 +49,11 @@ export const en = {
     },
   },
   preview: {
+    recentsEmpty: 'Picked tiles will appear here.',
+    roleFloor: 'Floor',
+    roleBorder: 'Border',
+    onGrid: 'On the grid',
+    removeRecent: 'Remove from recents',
     gridSize: 'Grid size',
     gridPattern: 'Pattern',
     gridPatterns: {

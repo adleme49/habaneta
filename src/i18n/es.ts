@@ -51,6 +51,11 @@ export const es: Translations = {
     },
   },
   preview: {
+    recentsEmpty: 'Las lozas elegidas aparecerán aquí.',
+    roleFloor: 'Loza',
+    roleBorder: 'Cenefa',
+    onGrid: 'En la cuadrícula',
+    removeRecent: 'Quitar de recientes',
     gridSize: 'Tamaño',
     gridPattern: 'Patrón',
     gridPatterns: {

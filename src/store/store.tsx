@@ -272,6 +272,10 @@ export interface Store {
 
   // Recent slots + grid output
   recent: Array<TileInstance | null>;
+  /** Index of the recent slot currently rendered as the floor. */
+  floorIndex?: number;
+  /** Index of the recent slot currently rendered as the border. */
+  borderIndex?: number;
   selectedFloor?: ResolvedTile;
   selectedBorder?: ResolvedTile;
   /** Effective grid pattern angles passed to the floor renderer.
@@ -836,6 +840,8 @@ const StoreProviderInner: React.FC<{
     deletePreset,
 
     recent: recent.slots,
+    floorIndex: recent.floorIndex,
+    borderIndex: recent.borderIndex,
     selectedFloor,
     selectedBorder,
     selectedGrid: effectiveGrid,
