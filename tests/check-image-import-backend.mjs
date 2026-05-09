@@ -1,0 +1,230 @@
+// End-to-end smoke for the backend-driven image import flow:
+//   import → recolor → adjust lighting → save → reopen in editor →
+//   commit to floor → set rotation pattern → assert recolor + rotation
+//   propagate to the floor preview.
+//
+// Skips cleanly when habaneta-backend is unreachable, so this can run
+// in CI environments where only the frontend is up.
+
+import { chromium } from 'playwright';
+
+const BACKEND_URL = process.env.VITE_HABANETA_API ?? 'http://localhost:8080';
+const FRONTEND_URL = 'http://localhost:3000';
+
+async function backendReachable() {
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 1500);
+    const res = await fetch(`${BACKEND_URL}/healthz`, { signal: ctrl.signal });
+    clearTimeout(t);
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+if (!(await backendReachable())) {
+  console.log(`[skip] habaneta-backend not reachable at ${BACKEND_URL}/healthz`);
+  process.exit(0);
+}
+
+const browser = await chromium.launch();
+const ctx = await browser.newContext({
+  viewport: { width: 1440, height: 900 },
+  acceptDownloads: true,
+});
+const page = await ctx.newPage();
+const errors = [];
+page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
+page.on('console', (m) => {
+  if (m.type() === 'error') errors.push(`console.error: ${m.text()}`);
+});
+
+function fail(msg) {
+  throw new Error(msg);
+}
+
+let exitCode = 0;
+try {
+  await page.goto(`${FRONTEND_URL}/library`, { waitUntil: 'networkidle' });
+
+  // Reset prior user tiles for a clean slate.
+  await page.evaluate(async () => {
+    const { del } = await import('https://esm.sh/idb-keyval@6');
+    await del('habaneta:user-tiles');
+  });
+  await page.reload({ waitUntil: 'networkidle' });
+
+  // ---- 1. Submit + verify v2 atom shape + auto-layers ----
+  await page.getByRole('button', { name: 'Import image' }).click();
+  await page.waitForSelector('#image-import-file');
+  await page.locator('#image-import-file').setInputFiles('public/assets/Gallery/f3.jpeg');
+  await page.waitForSelector('div[role="dialog"] svg use', { timeout: 60000 });
+
+  const atomStats = await page.evaluate(() => {
+    const symbol = document.querySelector('div[role="dialog"] svg symbol');
+    return symbol
+      ? {
+          layerPaths: symbol.querySelectorAll('path[class^="layer-"]').length,
+          contourPaths: symbol.querySelectorAll('path[class="contour"]').length,
+        }
+      : null;
+  });
+  if (!atomStats || atomStats.layerPaths < 2) {
+    fail(`expected ≥2 layer paths in v2 atom, got ${JSON.stringify(atomStats)}`);
+  }
+  if (atomStats.contourPaths !== 1) {
+    fail(`expected 1 contour path with default params, got ${atomStats.contourPaths}`);
+  }
+
+  // Quality badge: default flow runs auto-layer detection.
+  const qualityText = await page
+    .locator('[data-testid="quality-badge"]')
+    .innerText();
+  if (!/auto/i.test(qualityText)) {
+    fail(`expected "(auto)" in quality badge, got "${qualityText}"`);
+  }
+
+  // ---- 2. Recolor a swatch -> CSS var cascades ----
+  await page.evaluate(() => {
+    const inputs = document.querySelectorAll('div[role="dialog"] label input[type="color"]');
+    const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+    setter.call(inputs[0], '#ff00ff');
+    inputs[0].dispatchEvent(new Event('input', { bubbles: true }));
+    inputs[0].dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForTimeout(150);
+  let cssVar = await page.evaluate(() =>
+    document
+      .querySelector('div[role="dialog"] div[style*="--habaneta-layer-0"]')
+      ?.style.getPropertyValue('--habaneta-layer-0')
+      .trim()
+  );
+  if (cssVar !== '#ff00ff') {
+    fail(`recolor didn't cascade to --habaneta-layer-0; got ${cssVar}`);
+  }
+
+  // ---- 3. Lighting sliders move non-pinned layers, leave pinned alone ----
+  const beforeLayer1 = await page.evaluate(() =>
+    document
+      .querySelector('div[role="dialog"] div[style*="--habaneta-layer-0"]')
+      ?.style.getPropertyValue('--habaneta-layer-1')
+      .trim()
+  );
+  for (const id of ['#image-import-exposure', '#image-import-warmth', '#image-import-saturation']) {
+    await page.evaluate(({ id, value }) => {
+      const inp = document.querySelector(id);
+      const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+      setter.call(inp, value);
+      inp.dispatchEvent(new Event('input', { bubbles: true }));
+      inp.dispatchEvent(new Event('change', { bubbles: true }));
+    }, { id, value: '0.5' });
+  }
+  await page.waitForTimeout(150);
+  const afterLayer0 = await page.evaluate(() =>
+    document
+      .querySelector('div[role="dialog"] div[style*="--habaneta-layer-0"]')
+      ?.style.getPropertyValue('--habaneta-layer-0')
+      .trim()
+  );
+  const afterLayer1 = await page.evaluate(() =>
+    document
+      .querySelector('div[role="dialog"] div[style*="--habaneta-layer-0"]')
+      ?.style.getPropertyValue('--habaneta-layer-1')
+      .trim()
+  );
+  if (afterLayer0 !== '#ff00ff') {
+    fail(`pinned layer-0 should survive slider drag; got ${afterLayer0}`);
+  }
+  if (!beforeLayer1 || afterLayer1 === beforeLayer1) {
+    fail(`expected layer-1 to shift after lighting sliders; before=${beforeLayer1} after=${afterLayer1}`);
+  }
+  // Reset adjustments before saving so the persisted color = pinned override
+  // for layer-0 + adjusted-baseline for the rest. We assert the whole shape
+  // by simply confirming the pinned magenta survives the save.
+  await page.getByRole('button', { name: /^Reset$/ }).click();
+  await page.waitForTimeout(100);
+
+  // ---- 4. Save -> IndexedDB shape ----
+  const stamp = Date.now();
+  const tileName = `backend-smoke-${stamp}`;
+  await page.locator('#image-import-name').fill(tileName);
+  await page.getByRole('button', { name: /Save tile/i }).click();
+  await page.waitForSelector('div[role="dialog"]', { state: 'detached', timeout: 10000 });
+
+  const saved = await page.evaluate(async (name) => {
+    const { get } = await import('https://esm.sh/idb-keyval@6');
+    const all = (await get('habaneta:user-tiles')) || [];
+    return all.find((t) => t.displayName === name);
+  }, tileName);
+  if (!saved) fail('saved tile not found in IndexedDB');
+  if (!saved.pipeline) fail('saved tile missing pipeline field');
+  if (saved.layers['layer-0'] !== '#ff00ff') {
+    fail(`layer-0 override not persisted; got ${saved.layers['layer-0']}`);
+  }
+
+  // ---- 5. Editor + rotation pattern ----
+  await page.getByRole('button', { name: /Mine/ }).click();
+  await page.waitForTimeout(150);
+  await page.locator(`text=${tileName}`).first().click();
+  await page.waitForTimeout(200);
+  await page.getByRole('button', { name: /Open in editor/ }).click();
+  await page.waitForSelector('svg path[class^="layer-"]', { timeout: 5000 });
+  await page.getByRole('button', { name: /Save to recents/i }).click();
+  await page.waitForTimeout(300);
+  await page.locator('#grid-pattern-select').selectOption('pinwheel');
+  await page.waitForTimeout(400);
+
+  const rotProbe = await page.evaluate(() => {
+    const wrappers = Array.from(
+      document.querySelectorAll('div[style*="--habaneta-layer-0"]')
+    );
+    const rotated = wrappers.filter((w) =>
+      /transform:\s*rotate\([^0]/.test(w.getAttribute('style') ?? '')
+    );
+    return { wrapperCount: wrappers.length, rotatedCount: rotated.length };
+  });
+  if (rotProbe.wrapperCount === 0) fail('no v2 wrappers in floor preview');
+  if (rotProbe.rotatedCount === 0) {
+    fail(`expected non-zero rotation on at least one v2 wrapper; got ${JSON.stringify(rotProbe)}`);
+  }
+
+  // The pinned magenta should still be in effect on the floor preview.
+  const floorVar = await page.evaluate(() =>
+    document
+      .querySelectorAll('div[style*="--habaneta-layer-0"]')[0]
+      ?.style.getPropertyValue('--habaneta-layer-0')
+      .trim()
+  );
+  if (floorVar !== '#ff00ff') {
+    fail(`floor preview lost the pinned override; got ${floorVar}`);
+  }
+
+  // ---- 6. PNG export of a v2 design fires and produces a valid PNG ----
+  const downloadPromise = page.waitForEvent('download', { timeout: 15000 });
+  await page.getByRole('button', { name: /^Export$/i }).click();
+  const download = await downloadPromise;
+  const buf = await download.createReadStream().then(async (s) => {
+    const chunks = [];
+    for await (const c of s) chunks.push(c);
+    return Buffer.concat(chunks);
+  });
+  // PNG signature: 89 50 4E 47 0D 0A 1A 0A
+  const sig = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+  if (buf.length < 100) fail(`PNG export too small: ${buf.length} bytes`);
+  for (let i = 0; i < sig.length; i++) {
+    if (buf[i] !== sig[i]) fail(`PNG signature mismatch at byte ${i}: ${buf[i]} vs ${sig[i]}`);
+  }
+
+  console.log('image-import-backend smoke: ok');
+  if (errors.length) {
+    console.error('runtime errors:', errors);
+    exitCode = 1;
+  }
+} catch (err) {
+  console.error('image-import-backend smoke failed:', err.message ?? err);
+  exitCode = 1;
+} finally {
+  await browser.close();
+  process.exit(exitCode);
+}

@@ -15,6 +15,7 @@
 
 import { ITile, Dict } from '../context/interfaces';
 import { loadUserTiles } from './userTiles';
+import type { PipelineOutput } from './habanetaBackend';
 
 export type TileKind = 'floor' | 'border';
 
@@ -26,10 +27,28 @@ export interface TileSource {
   svgUrl: string;                  // primary SVG path (relative to index.html)
   cornerUrl?: string;              // border variants
   cornerInteriorUrl?: string;
-  layers: Dict<string>;            // default colors by layer id (st0, st1...)
+  // Default colors by layer id. Keying convention varies by source:
+  //   - Builtin tiles: legacy `stN` keys (paired with `colora` class
+  //     on each path; `paintLayer` walks `class="colora stN"`).
+  //   - v2 user tiles (pipeline-driven): `layer-N` keys + optional
+  //     `contour` (paths use `class="layer-N"` / `class="contour"`;
+  //     CompositionCanvas binds them to `--habaneta-layer-N` /
+  //     `--habaneta-contour` CSS variables).
+  // Render dispatch in `<SVGTileBase>` branches on `pipeline` presence
+  // so the two conventions never share a code path. Anything that
+  // walks `Object.keys(layers)` blindly should know which it has.
+  layers: Dict<string>;
   grids?: number[][];              // floor rotation patterns
   tags?: string[];
   source: 'builtin' | 'user';
+  /**
+   * Backend pipeline output, when this tile was produced by the
+   * habaneta-backend image-import service. Carried alongside `svgUrl`
+   * so the existing renderer keeps working today, and so the future
+   * recolor / multi-atom / lattice-aware render path can branch on
+   * its presence without re-importing the source image.
+   */
+  pipeline?: PipelineOutput;
 }
 
 export interface TileInstance {
@@ -84,6 +103,7 @@ export function resolveTile(
     layers: { ...source.layers, ...instance.layerOverrides },
     grids: source.grids,
     _sourceId: source.id,
+    pipeline: source.pipeline,
   };
 }
 
