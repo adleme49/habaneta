@@ -23,6 +23,14 @@ npm run build      # type-check + production build
 npm run preview    # serve the build locally
 ```
 
+### Backend
+
+The image-import flow ("Import image" in the library) talks to a separate Rust service — `habaneta-backend` (`~/projects/habaneta/habaneta-backend`). The frontend reaches it at `http://localhost:8080` by default and falls back to that when the env var is unset.
+
+Override with `VITE_HABANETA_API` to point at a different host, e.g. for staging or a remote dev box. See `.env.example`.
+
+If the backend is unreachable when the import dialog opens, the dialog surfaces a banner instead of the file picker — start the service and retry.
+
 ## Smoke tests
 
 The `check-*.mjs` scripts at the repo root launch a headless Chromium against a running dev server and capture screenshots + console errors. They're used during development instead of manual browser refreshes.

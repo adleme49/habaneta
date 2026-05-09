@@ -11,6 +11,15 @@
 // vectors. We additionally block href/xlink:href that aren't internal
 // fragment references, because an <image href="http://attacker..."
 // /> would still leak a tracking beacon.
+//
+// Concurrency caveat: this helper installs a hook on the *singleton*
+// DOMPurify instance via `addHook` and removes it in `finally`. Calls
+// from a single JS turn are safe (the addHook → sanitize → removeHook
+// runs synchronously before the event loop yields). If a future code
+// path runs `sanitizeSvg` concurrently across `await` boundaries (e.g.
+// parallel-parsing many atoms in a v3 multi-atom pipeline), the hook
+// state will interleave. Switch to `DOMPurify(window).sanitize(...)`
+// per-call instances if that day comes.
 
 import DOMPurify from 'dompurify';
 

@@ -1,3 +1,5 @@
+import type { PipelineOutput } from '../lib/habanetaBackend';
+
 export type Dict<T> = { [key: string]: T };
 
 export interface IFamily {
@@ -20,6 +22,13 @@ export interface ITile {
   imgUrl?: string;
   svgUrl?: string;
   type?: 'Border' | 'Floor';
+  /**
+   * Backend pipeline output for tiles produced by the image-import
+   * service. When present, the SVG renderer should bypass the legacy
+   * `paintLayer`/`<ReactSVG>` injection path and render via
+   * `<CompositionCanvas>` so classed paths recolor through CSS vars.
+   */
+  pipeline?: PipelineOutput;
 }
 export interface IFloor extends ITile {
   rotation?: boolean;

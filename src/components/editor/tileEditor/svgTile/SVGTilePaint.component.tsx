@@ -2,16 +2,39 @@ import React from 'react';
 import { ReactSVG } from 'react-svg';
 import { ITile } from '../../../../context/interfaces';
 import { getColorShapes, paintLayer } from '../../../../helpers';
+import CompositionCanvas from '../../../common/CompositionCanvas.component';
 
 const SVGTilePaint: React.FC<{
   tile: ITile;
   colorLayer: (layerId: string) => void;
 }> = ({ tile, colorLayer }) => {
+  // v2 path: render via CompositionCanvas and extract the click target's
+  // class name directly. The v2 atom uses `class="layer-N"` /
+  // `class="contour"` (single class), so we pass it through unchanged
+  // — the legacy `class="colora stN"` two-class extraction doesn't
+  // apply.
+  if (tile.pipeline) {
+    return (
+      <div
+        className="w-full max-w-[480px] aspect-square mx-auto"
+        onClick={(event) => {
+          const cls = (event.target as Element).getAttribute?.('class') ?? '';
+          if (cls === 'contour' || /^layer-\d+$/.test(cls)) {
+            colorLayer(cls);
+          }
+        }}
+      >
+        <CompositionCanvas
+          pipeline={tile.pipeline}
+          mode="single"
+          layers={tile.layers}
+        />
+      </div>
+    );
+  }
+
   if (!tile.imgUrl) return null;
   return (
-    // Responsive square container — fills its column up to 480px.
-    // The injected SVG stretches to 100% of this box via inline style,
-    // and the viewBox keeps its aspect ratio intact.
     <div className="w-full max-w-[480px] aspect-square mx-auto">
       <ReactSVG
         src={tile.imgUrl}

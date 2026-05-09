@@ -25,6 +25,7 @@ const SVGTile: React.FC<{
     <SVGTileBase
       tile={tile}
       url={url}
+      rotation={rotation}
       style={{
         height: svgHeight,
         width: 'auto',
