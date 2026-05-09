@@ -2,36 +2,36 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from '../../../store/store';
 import EditorActions from '../editorActions/EditorActions.components';
-import Presets from '../presets/Presets.component';
 import SVGTilePaint from './svgTile/SVGTilePaint.component';
 
+/**
+ * The tile canvas + action bar. Presets and palette are rendered as
+ * siblings by TilesEditorLayout so they can bracket the tile (presets
+ * on top, palette on bottom) without this component having to know
+ * about them.
+ */
 const TileEditor: React.FC = () => {
   const { t } = useTranslation();
   const { editingResolved, paintLayer } = useStore();
 
   if (!editingResolved) {
     return (
-      <div className="text-center text-sm text-gray-400 py-8">
+      <div className="w-full text-center text-sm text-gray-400 py-16">
         {t('editor.selectTilePrompt')}
       </div>
     );
   }
 
   return (
-    <>
-      <div className="flex justify-center">
+    <div className="w-full flex flex-col items-center gap-2">
+      <div className="flex justify-center w-full">
         <SVGTilePaint
           tile={editingResolved}
           colorLayer={(id) => paintLayer(id)}
         />
       </div>
-      <div className="flex justify-center">
-        <EditorActions />
-      </div>
-      <div className="flex justify-center">
-        <Presets />
-      </div>
-    </>
+      <EditorActions />
+    </div>
   );
 };
 

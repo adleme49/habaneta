@@ -11,7 +11,12 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { fetchLibrary, TileSource, TilePreset } from './library';
-import { addPreset, loadPresets, removePreset } from './presets';
+import {
+  addPreset,
+  loadPresets,
+  removePreset,
+  renamePreset,
+} from './presets';
 import { addUserTile, removeUserTile } from './userTiles';
 
 export const queryKeys = {
@@ -83,6 +88,17 @@ export function useDeletePresetMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => removePreset(id),
+    onSuccess: (updated) => {
+      qc.setQueryData(queryKeys.presets, updated);
+    },
+  });
+}
+
+export function useRenamePresetMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, name }: { id: string; name: string }) =>
+      renamePreset(id, name),
     onSuccess: (updated) => {
       qc.setQueryData(queryKeys.presets, updated);
     },

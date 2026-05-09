@@ -1,6 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useStore } from '../../../store/store';
 import { generateShades } from '../../../lib/color-math';
+import {
+  loadUserColors,
+  saveUserColors,
+  addUserColor,
+  removeUserColor,
+} from '../../../lib/user-colors';
 
 /**
  * Compact color chooser for the tile editor. Two rows of chrome
@@ -15,10 +22,30 @@ import { generateShades } from '../../../lib/color-math';
  * the visible grid small.
  */
 const ColorPallete: React.FC = () => {
+  const { t } = useTranslation();
   const { colors, selectedColor, setSelectedColor } = useStore();
   const pickerRef = useRef<HTMLInputElement>(null);
 
   const flatColors = useMemo(() => colors.flat(), [colors]);
+
+  // Persistent "My colors" row, hydrated from localStorage on mount.
+  // Kept in local state (not the global store) because nothing else
+  // needs to read or mutate it.
+  const [userColors, setUserColors] = useState<string[]>(() => loadUserColors());
+  useEffect(() => {
+    saveUserColors(userColors);
+  }, [userColors]);
+
+  const handleAddCurrent = () => {
+    setUserColors((prev) => addUserColor(prev, selectedColor));
+  };
+  const handleRemoveUserColor = (color: string) => {
+    setUserColors((prev) => removeUserColor(prev, color));
+  };
+
+  const isCurrentSaved = userColors.some(
+    (c) => c.toLowerCase() === selectedColor.toLowerCase()
+  );
 
   // `shadesBase` is the color the shades row is centered on. It's
   // independent of `selectedColor` so that clicking WITHIN the
@@ -138,7 +165,7 @@ const ColorPallete: React.FC = () => {
           parseable hex (parseable shades list would be empty). */}
       {isExpanded && shades.length > 0 && (
         <div className="pt-1">
-          <div className="text-[10px] uppercase tracking-wide text-gray-400 mb-1">
+          <div className="text-[10px] font-medium text-gray-500 mb-1">
             Shades
           </div>
           <div
@@ -165,6 +192,87 @@ const ColorPallete: React.FC = () => {
               );
             })}
           </div>
+        </div>
+      )}
+
+      {/* My colors: persistent per-user palette row. Mirrors the
+          conventions used by the recents strip — hover-reveal delete
+          on each swatch, single italic empty-state line, + button
+          tucked at the end. */}
+      {isExpanded && (
+        <div className="pt-1">
+          <div className="flex items-center justify-between mb-1">
+            <div className="text-[10px] font-medium text-gray-500">
+              {t('editor.myColors')}
+            </div>
+            <button
+              type="button"
+              onClick={handleAddCurrent}
+              disabled={isCurrentSaved}
+              className="text-[10px] text-gray-500 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed"
+              title={t('editor.addCurrentColor')}
+              aria-label={t('editor.addCurrentColor')}
+            >
+              + {t('editor.addCurrent')}
+            </button>
+          </div>
+          {userColors.length === 0 ? (
+            <div className="text-[10px] italic text-gray-400">
+              {t('editor.myColorsEmpty')}
+            </div>
+          ) : (
+            <div
+              className="grid gap-[2px]"
+              style={{ gridTemplateColumns: 'repeat(9, 1fr)' }}
+            >
+              {userColors.map((color) => {
+                const isActive =
+                  color.toLowerCase() === selectedColor.toLowerCase();
+                return (
+                  <div
+                    key={color}
+                    className={`group relative aspect-square rounded-sm transition-all ${
+                      isActive
+                        ? 'ring-2 ring-offset-1 ring-blue-500 z-10'
+                        : 'hover:ring-1 hover:ring-gray-400'
+                    }`}
+                    style={{ backgroundColor: color }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => pickBase(color)}
+                      className="absolute inset-0 rounded-sm"
+                      title={color}
+                      aria-label={`Select ${color}`}
+                    />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveUserColor(color);
+                      }}
+                      className="absolute top-0 right-0 w-3 h-3 flex items-center justify-center text-gray-500 bg-white/85 rounded-bl opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+                      title={t('editor.removeSavedColor')}
+                      aria-label={t('editor.removeSavedColor')}
+                    >
+                      <svg
+                        width="7"
+                        height="7"
+                        viewBox="0 0 10 10"
+                        aria-hidden
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      >
+                        <path d="M2 2 L8 8 M8 2 L2 8" />
+                      </svg>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </div>
