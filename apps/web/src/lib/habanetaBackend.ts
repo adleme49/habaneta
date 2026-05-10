@@ -1,85 +1,29 @@
 // Client for the habaneta-backend image-processing service.
 //
-// The backend turns a photograph of a real-world tile into a recolorable
-// SVG composition: a list of `atoms` (vector tiles) and a `composition`
-// describing how those atoms repeat across a 2D lattice. v1 always
-// returns a single atom + 1×1 lattice + empty palette, but the renderer
-// is built to handle the general case so multi-atom output drops in
-// without UI changes.
+// Wire types live in `@habaneta/api-types` so they're shared with the
+// mobile app. This module only owns the runtime client (fetch, polling,
+// abort handling, error class).
 
-export type Vec2 = [number, number];
+export type {
+  Atom,
+  Cell,
+  Composition,
+  JobParams,
+  JobStatus,
+  JobStatusResponse,
+  Lattice,
+  Pattern,
+  PipelineOutput,
+  Transform,
+  Vec2,
+} from '@habaneta/api-types';
 
-export type Transform =
-  | { kind: 'identity' }
-  | { kind: 'rotate'; degrees: number }
-  | { kind: 'reflect'; axis_degrees: number };
-
-export interface Atom {
-  id: string;
-  /** Raw SVG markup. v1 wraps a base64-embedded raster as a placeholder. */
-  svg: string;
-}
-
-export interface Lattice {
-  basis_a: Vec2;
-  basis_b: Vec2;
-}
-
-export interface Cell {
-  atom_id: string;
-  position: Vec2;
-  transform: Transform;
-}
-
-export interface Composition {
-  lattice: Lattice;
-  cells: Cell[];
-}
-
-export interface PipelineOutput {
-  atoms: Atom[];
-  composition: Composition;
-  /**
-   * Layer colors, indexed by N (paths in atoms carry `class="layer-N"`).
-   * Frontend treats `palette.length` as authoritative — the backend may
-   * clamp the user's requested layer count, or auto-detect it entirely.
-   */
-  palette: { hex: string }[];
-  /**
-   * Color of the contour layer (paths carry `class="contour"`). Null when
-   * the contour pass was disabled by params or no thin components survived
-   * the thickness gate.
-   */
-  contour: { hex: string } | null;
-  /**
-   * Backend-reported pipeline metadata. `passes` lists the named stages
-   * that actually ran (e.g. `"bilateral"`, `"contour"`, `"auto_layers"`).
-   * `"auto_layers"` is emitted iff k was auto-detected — otherwise the
-   * user-supplied `params.layers` was honored.
-   */
-  quality?: { passes: string[] };
-}
-
-/**
- * Optional per-job parameters for `POST /v1/jobs`. Send only fields the
- * user explicitly changed; omitted fields fall back to server defaults.
- * Setting `contour: null` disables the contour pass entirely.
- */
-export interface JobParams {
-  target_px?: number;
-  layers?: number;
-  denoise?: number;
-  min_region_px?: number;
-  auto_levels?: boolean;
-  contour?: { sensitivity?: number; max_thickness?: number } | null;
-}
-
-export type JobStatus = 'queued' | 'running' | 'done' | 'failed';
-
-export interface JobStatusResponse {
-  status: JobStatus;
-  error?: string;
-}
+import type {
+  JobParams,
+  JobStatus,
+  JobStatusResponse,
+  PipelineOutput,
+} from '@habaneta/api-types';
 
 const BASE_URL =
   (import.meta.env.VITE_HABANETA_API as string | undefined) ??

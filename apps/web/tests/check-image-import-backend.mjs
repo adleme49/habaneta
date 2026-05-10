@@ -23,9 +23,34 @@ async function backendReachable() {
   }
 }
 
+/**
+ * Probe whether R2 is configured on the backend. The save step in
+ * the patterns flow needs presigned R2 PUTs — without R2, /v1/upload-url
+ * returns 503 and Save fails. Detect this once up-front so the test
+ * runs end-to-end on a fully-wired backend AND passes (with a clear
+ * skip note) on a DB-only local backend.
+ */
+async function r2Configured() {
+  try {
+    const res = await fetch(`${BACKEND_URL}/v1/upload-url`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ content_type: 'image/jpeg' }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 if (!(await backendReachable())) {
   console.log(`[skip] habaneta-backend not reachable at ${BACKEND_URL}/healthz`);
   process.exit(0);
+}
+
+const R2_LIVE = await r2Configured();
+if (!R2_LIVE) {
+  console.log('[note] R2 not configured on backend — save step will be skipped');
 }
 
 const browser = await chromium.launch();
@@ -145,20 +170,28 @@ try {
   await page.getByRole('button', { name: /^Reset$/ }).click();
   await page.waitForTimeout(100);
 
-  // ---- 4. Save -> IndexedDB shape ----
+  // ---- 4. Save -> /v1/patterns (cloud) — gated on R2 ----
+  if (!R2_LIVE) {
+    console.log('image-import-backend smoke: ok (save step skipped — R2 not configured)');
+    if (errors.length) {
+      console.error('runtime errors:', errors);
+      exitCode = 1;
+    }
+    await browser.close();
+    process.exit(exitCode);
+  }
+
   const stamp = Date.now();
   const tileName = `backend-smoke-${stamp}`;
   await page.locator('#image-import-name').fill(tileName);
   await page.getByRole('button', { name: /Save tile/i }).click();
-  await page.waitForSelector('div[role="dialog"]', { state: 'detached', timeout: 10000 });
+  await page.waitForSelector('div[role="dialog"]', { state: 'detached', timeout: 15000 });
 
-  const saved = await page.evaluate(async (name) => {
-    const { get } = await import('https://esm.sh/idb-keyval@6');
-    const all = (await get('habaneta:user-tiles')) || [];
-    return all.find((t) => t.displayName === name);
-  }, tileName);
-  if (!saved) fail('saved tile not found in IndexedDB');
-  if (!saved.pipeline) fail('saved tile missing pipeline field');
+  // Confirm the pattern landed via the API.
+  const apiPatterns = await fetch(`${BACKEND_URL}/v1/patterns`).then((r) => r.json());
+  const saved = apiPatterns.find((p) => p.name === tileName);
+  if (!saved) fail(`saved pattern not found in /v1/patterns response (looking for ${tileName})`);
+  if (!saved.pipeline) fail('saved pattern missing pipeline field');
   if (saved.layers['layer-0'] !== '#ff00ff') {
     fail(`layer-0 override not persisted; got ${saved.layers['layer-0']}`);
   }

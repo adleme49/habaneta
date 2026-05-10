@@ -8,10 +8,10 @@ import {
   PipelineOutput,
   runImageImport,
 } from '../../lib/habanetaBackend';
-import { TileSource } from '../../lib/library';
+import type { NewPattern } from '../../lib/patternsApi';
 import { Dict } from '../../context/interfaces';
 import { slugify } from '../../lib/utils';
-import { useSaveUserTileMutation } from '../../lib/queries';
+import { useSavePatternMutation } from '../../lib/queries';
 import {
   adjustHex,
   isNeutral,
@@ -78,7 +78,7 @@ const ImageImportDialog: React.FC = () => {
   // null = not yet checked; true/false = result of last health check.
   const [backendUp, setBackendUp] = useState<boolean | null>(null);
   const abortRef = useRef<AbortController | null>(null);
-  const saveMutation = useSaveUserTileMutation();
+  const saveMutation = useSavePatternMutation();
 
   const reset = () => {
     abortRef.current?.abort();
@@ -204,17 +204,19 @@ const ImageImportDialog: React.FC = () => {
   };
 
   const handleSave = async () => {
-    if (!pipeline) return;
+    if (!pipeline || !file) return;
     try {
-      await saveMutation.mutateAsync(
-        pipelineToTileSource(
+      await saveMutation.mutateAsync({
+        file,
+        body: pipelineToPatternRequest(
           pipeline,
           displayName,
           family,
           overrides,
-          adjustments
-        )
-      );
+          adjustments,
+          file
+        ),
+      });
       close();
     } catch {
       /* error banner shown via mutation state */
@@ -665,47 +667,48 @@ function statusLabel(
 }
 
 /**
- * Adapt a backend PipelineOutput into a TileSource for the existing
- * IndexedDB-backed library.
+ * Adapt a backend PipelineOutput into the body for `POST /v1/patterns`.
  *
- * `svgUrl` is a *placeholder* — the v2-aware renderer (`<SVGTileBase>`)
- * dispatches on `tile.pipeline` first and never reads it. Storing the
- * full atom SVG here would add hundreds of KB per tile to IndexedDB
- * for no rendering benefit. The schema field stays populated with a
- * minimal valid SVG so any legacy code path that defensively reads it
- * gets something well-formed.
+ * The effective layer colors are computed here (lighting adjustments
+ * baked in, user pin-overrides on top) and persisted in `layers`. The
+ * slider state itself doesn't survive — once saved, the pattern looks
+ * exactly like what the user sees in the dialog right now.
+ *
+ * Capture metadata: photo is required, geo/place are filled by the
+ * mobile client (this web dialog has no GPS context, so they stay
+ * null here). `captured_at` falls back to the file's `lastModified`
+ * timestamp when available — gives photos imported from a phone
+ * camera roll a sensible "captured at" without prompting.
  */
-function pipelineToTileSource(
+function pipelineToPatternRequest(
   pipeline: PipelineOutput,
   displayName: string,
   family: string,
   overrides: Dict<string>,
-  adjustments: PaletteAdjustments
-): TileSource {
+  adjustments: PaletteAdjustments,
+  file: File
+): Omit<NewPattern, 'photo_key'> {
   const atom = pipeline.atoms[0];
   if (!atom) throw new Error('PipelineOutput has no atoms');
   const layers: Dict<string> = {};
   pipeline.palette.forEach((entry, i) => {
     const key = `layer-${i}`;
-    // Persist the *effective* color: lighting adjustments baked in,
-    // user overrides on top. The saved tile renders identically to
-    // what the user sees in the dialog without carrying the slider
-    // state forward.
     layers[key] = overrides[key] ?? adjustHex(entry.hex, adjustments);
   });
   if (pipeline.contour) {
     layers.contour =
       overrides.contour ?? adjustHex(pipeline.contour.hex, adjustments);
   }
+  const capturedAt = file.lastModified
+    ? new Date(file.lastModified).toISOString()
+    : new Date().toISOString();
   return {
-    id: `user/${slugify(displayName || 'imported')}-${Date.now()}`,
-    kind: 'floor',
+    name: displayName.trim() || slugify(file.name) || 'Imported tile',
     family: family.trim() || 'My Imports',
-    displayName: displayName.trim() || 'Imported tile',
-    svgUrl: PIPELINE_PLACEHOLDER_SVG_URL,
-    layers,
-    source: 'user',
+    kind: 'floor',
+    captured_at: capturedAt,
     pipeline,
+    layers,
   };
 }
 
@@ -736,12 +739,5 @@ function qualityLabel(
     ? `${head} · ${t('library.imageImport.appliedPrefix')} ${applied.join(', ')}`
     : head;
 }
-
-/** Inline 1×1 transparent SVG. Cheaper than encoding the real atom. */
-const PIPELINE_PLACEHOLDER_SVG_URL =
-  'data:image/svg+xml;utf8,' +
-  encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"/>'
-  );
 
 export default ImageImportDialog;

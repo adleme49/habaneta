@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "Habaneta",
+    "slug": "habaneta-mobile",
+    "scheme": "habaneta",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "bundleIdentifier": "com.habaneta.mobile",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Take a photo of a tiled surface to capture a pattern.",
+        "NSPhotoLibraryUsageDescription": "Pick a photo of a tiled surface from your library.",
+        "NSLocationWhenInUseUsageDescription": "Tag captured patterns with where you found them. Optional — you can skip this."
+      }
+    },
+    "android": {
+      "package": "com.habaneta.mobile",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Pick a photo of a tiled surface to capture a pattern.",
+          "cameraPermission": "Take a photo of a tiled surface."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Tag captured patterns with where you found them."
+        }
+      ]
+    ],
+    "extra": {
+      "habanetaApi": "http://localhost:8080"
+    }
+  }
+}
