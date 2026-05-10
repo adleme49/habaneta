@@ -106,6 +106,41 @@ const TileDetailDialog: React.FC<{
                     </dd>
                   </>
                 )}
+                {tile.captured && (
+                  <>
+                    <dt className="text-muted-foreground">
+                      {t('library.detail.capturedAt')}
+                    </dt>
+                    <dd className="text-xs">
+                      {new Date(tile.captured.at).toLocaleString()}
+                    </dd>
+                    {tile.captured.placeName && (
+                      <>
+                        <dt className="text-muted-foreground">
+                          {t('library.detail.place')}
+                        </dt>
+                        <dd className="text-xs">{tile.captured.placeName}</dd>
+                      </>
+                    )}
+                    {tile.captured.geoLat != null && tile.captured.geoLng != null && (
+                      <>
+                        <dt className="text-muted-foreground">
+                          {t('library.detail.location')}
+                        </dt>
+                        <dd className="text-xs">
+                          <a
+                            href={`https://www.openstreetmap.org/?mlat=${tile.captured.geoLat}&mlon=${tile.captured.geoLng}#map=18/${tile.captured.geoLat}/${tile.captured.geoLng}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="underline text-blue-600"
+                          >
+                            {tile.captured.geoLat.toFixed(4)}, {tile.captured.geoLng.toFixed(4)}
+                          </a>
+                        </dd>
+                      </>
+                    )}
+                  </>
+                )}
               </dl>
             </div>
 
