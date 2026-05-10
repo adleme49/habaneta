@@ -7,18 +7,32 @@ on:
       - "apps/web/**"
       - "packages/**"
       - "pnpm-lock.yaml"
+      - ".github/workflows/deploy-web.yml"
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        options: [staging, production]
 
-# Cloudflare Pages deploy via Wrangler. Set these repository secrets
-# before this workflow goes live:
-#   CLOUDFLARE_API_TOKEN     — scoped to Pages:Edit
+# Branch routing:
+#   develop → staging    Cloudflare Pages project: habaneta-staging
+#   main    → production                            habaneta-production
+#
+# GitHub Environments scope per-env secrets:
+#   CLOUDFLARE_API_TOKEN     scoped to Pages:Edit (can be the same token in both envs)
 #   CLOUDFLARE_ACCOUNT_ID
-#   PAGES_PROJECT_NAME       — e.g. "habaneta"
-#   VITE_HABANETA_API        — public URL of the deployed backend
+#   PAGES_PROJECT_NAME       e.g. "habaneta-staging" or "habaneta-production"
+#   VITE_HABANETA_API        e.g. "https://habaneta-backend-staging.fly.dev"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: >-
+      ${{ github.event_name == 'workflow_dispatch'
+          && inputs.environment
+          || (github.ref == 'refs/heads/main' && 'production' || 'staging') }}
     steps:
       - uses: actions/checkout@v4
 
