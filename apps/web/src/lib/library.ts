@@ -16,6 +16,7 @@
 import { ITile, Dict } from '../context/interfaces';
 import { loadUserTiles } from './userTiles';
 import type { PipelineOutput } from './habanetaBackend';
+import { listPatterns, type PatternResponse } from './patternsApi';
 
 export type TileKind = 'floor' | 'border';
 
@@ -49,6 +50,19 @@ export interface TileSource {
    * its presence without re-importing the source image.
    */
   pipeline?: PipelineOutput;
+  /**
+   * Capture metadata for cloud-saved patterns. Set when the pattern
+   * was imported via the photo-hunt flow (mobile or web). Empty for
+   * builtin tiles. Surface in the detail dialog; the renderer ignores it.
+   */
+  captured?: {
+    at: string; // ISO timestamp
+    geoLat?: number | null;
+    geoLng?: number | null;
+    placeName?: string | null;
+  };
+  /** 1-hour signed URL pointing at the original photo on R2. */
+  photoUrl?: string | null;
 }
 
 export interface TileInstance {
@@ -134,18 +148,62 @@ async function fetchBuiltinLibrary(): Promise<TileSource[]> {
 }
 
 /**
- * Fetch the full tile catalog — builtins from library.json plus any
- * user tiles from IndexedDB. Wired into TanStack Query via
- * `useLibraryQuery()` in src/lib/queries.ts so it gets cached,
- * deduped, and automatically invalidated when a mutation writes a
- * new user tile.
+ * Fetch the full tile catalog — builtins from `public/library.json`
+ * plus user-saved patterns from the cloud backend (`GET /v1/patterns`).
+ * Patterns are mapped into the `TileSource` shape so the existing
+ * render path keeps working unchanged. The dispatch in `<SVGTileBase>`
+ * branches on `tile.pipeline` for v2-aware rendering.
+ *
+ * Backend-down handling: the patterns fetch is best-effort. If it
+ * fails (network, 503, CORS), we log and return only the builtin
+ * catalog rather than failing the whole library page. The image-import
+ * dialog has its own pre-flight backend check, so users see a clear
+ * error there if they try to capture.
  */
 export async function fetchLibrary(): Promise<TileSource[]> {
-  const [builtin, user] = await Promise.all([
+  const [builtin, idbTiles, patterns] = await Promise.all([
     fetchBuiltinLibrary(),
     loadUserTiles(),
+    listPatterns().catch((err) => {
+      // eslint-disable-next-line no-console
+      console.warn('[library] failed to fetch patterns from backend:', err);
+      return [] as PatternResponse[];
+    }),
   ]);
-  return [...builtin, ...user];
+  return [...builtin, ...idbTiles, ...patterns.map(patternToTileSource)];
+}
+
+/** Inline 1×1 transparent SVG. v2 tiles render via `pipeline`, not `svgUrl`. */
+const PIPELINE_PLACEHOLDER_SVG_URL =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"/>'
+  );
+
+/**
+ * Adapt a backend `PatternResponse` into the `TileSource` shape that
+ * the existing library / editor render code expects. The pipeline
+ * rides along in `tile.pipeline` so `<SVGTileBase>` dispatches to
+ * `<CompositionCanvas>` automatically.
+ */
+function patternToTileSource(p: PatternResponse): TileSource {
+  return {
+    id: `pattern/${p.id}`,
+    kind: (p.kind === 'border' ? 'border' : 'floor') as TileKind,
+    family: p.family,
+    displayName: p.name,
+    svgUrl: PIPELINE_PLACEHOLDER_SVG_URL,
+    layers: (p.layers ?? {}) as Dict<string>,
+    source: 'user',
+    pipeline: p.pipeline,
+    captured: {
+      at: p.captured_at,
+      geoLat: p.geo_lat,
+      geoLng: p.geo_lng,
+      placeName: p.place_name,
+    },
+    photoUrl: p.photo_url ?? null,
+  };
 }
 
 /** List of all family names that contain at least one tile, grouped by kind. */
