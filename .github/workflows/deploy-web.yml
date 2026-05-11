@@ -50,8 +50,8 @@ jobs:
           VITE_HABANETA_API: ${{ secrets.VITE_HABANETA_API }}
         run: pnpm --filter @habaneta/web build
 
-      - uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy apps/web/dist --project-name=${{ secrets.PAGES_PROJECT_NAME }}
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm dlx wrangler@3 pages deploy apps/web/dist --project-name=${{ secrets.PAGES_PROJECT_NAME }} --branch=${{ github.ref_name }}
