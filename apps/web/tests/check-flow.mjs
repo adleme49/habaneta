@@ -7,7 +7,7 @@ page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text());
 page.on('pageerror', err => errors.push(err.message));
 
 try {
-  await page.goto('http://localhost:3000', { waitUntil: 'networkidle', timeout: 15000 });
+  await page.goto(`${process.env.WEB_URL || 'http://localhost:3000'}`, { waitUntil: 'networkidle', timeout: 15000 });
   await page.waitForTimeout(1000);
 
   console.log('Step 1: Click "Contemporary" category');

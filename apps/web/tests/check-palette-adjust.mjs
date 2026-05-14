@@ -8,7 +8,7 @@
 
 import { chromium } from 'playwright';
 
-const FRONTEND_URL = 'http://localhost:3000';
+const FRONTEND_URL = `${process.env.WEB_URL || 'http://localhost:3000'}`;
 
 async function devReachable() {
   try {

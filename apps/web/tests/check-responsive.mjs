@@ -11,7 +11,7 @@ const viewports = [
 for (const vp of viewports) {
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
   const page = await ctx.newPage();
-  await page.goto('http://localhost:3000', { waitUntil: 'networkidle', timeout: 15000 });
+  await page.goto(`${process.env.WEB_URL || 'http://localhost:3000'}`, { waitUntil: 'networkidle', timeout: 15000 });
   await page.waitForTimeout(800);
   // Simulate the full flow at this viewport
   await page.getByText(/^Contemporary/).click();

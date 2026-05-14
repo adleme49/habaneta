@@ -73,7 +73,7 @@ page.on('dialog', async (dialog) => {
 });
 
 try {
-  await page.goto('http://localhost:3000/library', { waitUntil: 'networkidle' });
+  await page.goto(`${process.env.WEB_URL || 'http://localhost:3000'}/library`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(400);
 
   // Clean slate

@@ -10,7 +10,7 @@ page.on('console', (msg) => {
 });
 
 try {
-  await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+  await page.goto(`${process.env.WEB_URL || 'http://localhost:3000'}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(500);
 
   // Clean slate

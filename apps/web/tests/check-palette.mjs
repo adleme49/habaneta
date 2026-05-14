@@ -14,7 +14,7 @@ page.on('pageerror', (e) => errors.push(e.message));
 page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
 
 try {
-  await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+  await page.goto(`${process.env.WEB_URL || 'http://localhost:3000'}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(500);
 
   // Load a tile so the editor/palette become interactive.

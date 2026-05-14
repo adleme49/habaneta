@@ -32,7 +32,7 @@ page.on('console', (msg) => {
 });
 
 try {
-  await page.goto('http://localhost:3000/home', { waitUntil: 'networkidle' });
+  await page.goto(`${process.env.WEB_URL || 'http://localhost:3000'}/home`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(400);
 
   console.log('1. Pick a floor and save to recents');
