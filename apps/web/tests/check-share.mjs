@@ -16,7 +16,7 @@ page.on('console', (msg) => {
 });
 
 try {
-  await page.goto('http://localhost:3000/home', { waitUntil: 'networkidle' });
+  await page.goto(`${process.env.WEB_URL || 'http://localhost:3000'}/home`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(400);
 
   console.log('1. Pick a floor + border and save to recents');
@@ -108,9 +108,9 @@ try {
   revisit.on('pageerror', (err) => errors.push(err.message));
   await revisit.goto(url, { waitUntil: 'networkidle' });
   await revisit.waitForTimeout(400);
-  await revisit.goto('http://localhost:3000/library', { waitUntil: 'networkidle' });
+  await revisit.goto(`${process.env.WEB_URL || 'http://localhost:3000'}/library`, { waitUntil: 'networkidle' });
   await revisit.waitForTimeout(300);
-  await revisit.goto('http://localhost:3000/home', { waitUntil: 'networkidle' });
+  await revisit.goto(`${process.env.WEB_URL || 'http://localhost:3000'}/home`, { waitUntil: 'networkidle' });
   await revisit.waitForTimeout(400);
   const revisitHash = await revisit.evaluate(() => window.location.hash);
   console.log(`   hash after revisit: "${revisitHash}"`);
@@ -122,7 +122,7 @@ try {
   // would throw InvalidCharacterError at btoa time.
   const unicodePage = await ctx.newPage();
   unicodePage.on('pageerror', (err) => errors.push(err.message));
-  await unicodePage.goto('http://localhost:3000/library', {
+  await unicodePage.goto(`${process.env.WEB_URL || 'http://localhost:3000'}/library`, {
     waitUntil: 'networkidle',
   });
   await unicodePage.evaluate(async () => {

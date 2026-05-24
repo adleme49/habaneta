@@ -11,7 +11,7 @@ page.on('console', (msg) => {
 });
 
 try {
-  await page.goto('http://localhost:3000/library', { waitUntil: 'networkidle' });
+  await page.goto(`${process.env.WEB_URL || 'http://localhost:3000'}/library`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(500);
 
   // Clean slate — remove any user tiles from a previous run.
@@ -57,7 +57,7 @@ try {
   // Check the library query invalidation worked — the new tile should
   // also be visible back on the editor page in the browser panel.
   console.log('6. Navigate back to editor');
-  await page.goto('http://localhost:3000/home', { waitUntil: 'networkidle' });
+  await page.goto(`${process.env.WEB_URL || 'http://localhost:3000'}/home`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(400);
 
   const newFamilyInEditor = await page.getByText(/^Uploads/).isVisible();
@@ -66,7 +66,7 @@ try {
   await page.screenshot({ path: '/tmp/upload-editor.png', fullPage: true });
 
   console.log('7. Back to library, delete the uploaded tile');
-  await page.goto('http://localhost:3000/library', { waitUntil: 'networkidle' });
+  await page.goto(`${process.env.WEB_URL || 'http://localhost:3000'}/library`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(500);
 
   // Click the Delete button on the user-tile row, then Confirm

@@ -6,7 +6,7 @@ const errors = [];
 page.on('pageerror', err => errors.push(err.message));
 
 try {
-  await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+  await page.goto(`${process.env.WEB_URL || 'http://localhost:3000'}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(500);
 
   console.log('1. Click Contemporary (floor category)');

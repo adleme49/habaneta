@@ -9,7 +9,7 @@
 import { chromium } from 'playwright';
 
 const BACKEND_URL = process.env.VITE_HABANETA_API ?? 'http://localhost:8080';
-const FRONTEND_URL = 'http://localhost:3000';
+const FRONTEND_URL = `${process.env.WEB_URL || 'http://localhost:3000'}`;
 
 async function backendReachable() {
   try {
